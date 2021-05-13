@@ -1681,6 +1681,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       |<--------+  Token: 0x5e
 |       |       | 2.05    |  OSCORE: {piv: 301 ; ...}
+|       |       |         |  Max-Age: 0
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
@@ -1741,6 +1742,9 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The proxy adds C1 to
 |       |       |         |   its list of observers.)
+|       |       |         |
+|<--------------|         |
+|       |  ACK  |         |
 :       :       :         :
 :       :       :         :
 :       :       :         :
@@ -1773,6 +1777,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       |<--------+  Token: 0x5e
 |       |       | 2.05    |  OSCORE: {piv: 401 ; ...}
+|       |       |         |  Max-Age: 0
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
@@ -1828,11 +1833,8 @@ C1      C2      P         S
 |       |       |         |   observers, and serves the cached
 |       |       |         |   response)
 |       |       |         |
-|       |<------+         |  Token: 0x02
-|       | 2.05  |         |  OSCORE: {piv: 301 ; ...}
-|       |       |         |  <Other class U/I options>
-|       |       |         |  0xff
-|       |       |         |  (Same as earlier to C1)
+|       |<------|         |
+|       |  ACK  |         |
 :       :       :         :
 :       :       :         :
 :       :       :         :
@@ -1892,6 +1894,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Revised protection of the error response to the phantom cancellation request.
 
 * Alignment to other Group-OSCORE-related documents.
+
+* Fixed example with proxy and Group OSCORE.
 
 * Editorial improvements.
 
