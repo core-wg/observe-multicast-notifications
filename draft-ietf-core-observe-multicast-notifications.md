@@ -146,11 +146,11 @@ For instance, in CoAP publish-subscribe {{I-D.ietf-core-coap-pubsub}}, multiple 
 
 A different use case concerns clients observing a same registration resource at the CoRE Resource Directory {{I-D.ietf-core-resource-directory}}. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups {{I-D.ietf-core-oscore-groupcomm}}, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager {{I-D.tiloca-core-oscore-discovery}}.
 
-More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This specification fills this gap and provides the following twofold contribution.
+More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This document fills this gap and provides the following twofold contribution.
 
 First, it updates {{RFC7252}} and {{RFC7641}}, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g. over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of an informative unicast response sent by the server to each observer client.
 
-Second, this specification defines how to use Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the informative unicast response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.
+Second, this document defines how to use Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the informative unicast response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.
 
 ## Terminology ## {#terminology}
 
@@ -158,7 +158,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 Readers are expected to be familiar with terms and concepts described in CoAP {{RFC7252}}, group communication for CoAP {{I-D.ietf-core-groupcomm-bis}}, Observe {{RFC7641}}, CBOR {{RFC8949}}, OSCORE {{RFC8613}}, and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
-This specification additionally defines the following terminology.
+This document additionally defines the following terminology.
 
 * Traditional observation. A resource observation associated to a single observer client, as defined in {{RFC7641}}.
 
@@ -266,23 +266,23 @@ req_info = (
 
 The 'srv_addr' element of 'tp_info' specifies the addressing information of the server, and includes at least one element 'tp_id' which is formatted as follows.
 
-* 'tp_id' : this element is a CBOR integer, which specifies the transport protocol used to transport the CoAP response from the server, i.e. a multicast notification in this specification.
+* 'tp_id' : this element is a CBOR integer, which specifies the transport protocol used to transport the CoAP response from the server, i.e. a multicast notification in this document.
 
-   This element takes value from the "Value" column of the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this specification. This element MUST be present. The value of this element determines:
+   This element takes value from the "Value" column of the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this document. This element MUST be present. The value of this element determines:
 
     - How many elements are required to follow in 'srv_addr', as well as what information they convey, their encoding and their semantics.
 
     - How many elements are required in the 'req_info' element of the 'tp_info' array, as well as what information they convey, their encoding and their semantics.
 
-    This specification registers the integer value 1 ("UDP") to be used as value for the 'tp_id' element, when CoAP responses are transported over UDP. In such a case, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
+    This document registers the integer value 1 ("UDP") to be used as value for the 'tp_id' element, when CoAP responses are transported over UDP. In such a case, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
 
     Future specifications that consider CoAP multicast notifications transported over different transport protocols MUST:
 
-    * Register an entry with an integer value to be used for 'tp_id', in the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this specification.
+    * Register an entry with an integer value to be used for 'tp_id', in the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this document.
 
     * Accordingly, define the elements of the 'tp_info' CBOR array, i.e. the elements following 'tp_id' in 'srv_addr' as well as the elements in 'req_info', as to what information they convey, their encoding and their semantics.
 
-The 'req_info' element of 'tp_info' specifies transport-specific information related to a pertinent request message, i.e. the phantom observation request in this specification. The exact format of 'req_info' depends on the value of 'tp_id'.
+The 'req_info' element of 'tp_info' specifies transport-specific information related to a pertinent request message, i.e. the phantom observation request in this document. The exact format of 'req_info' depends on the value of 'tp_id'.
 
 Given a specific value of 'tp_id', the complete set of elements composing 'srv_addr' and 'req_info' in the 'tp_info' CBOR array is indicated by the two columns "Srv Addr" and "Req Info" of the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}}, respectively.
 
@@ -366,7 +366,7 @@ used.
 
 At any point in time, the server may want to cancel a group observation of a target resource. For instance, the server may realize that no clients or not enough clients are interested in taking part in the group observation anymore. A possible approach that the server can use to assess this is defined in {{sec-rough-counting}}.
 
-In order to cancel the group observation, the server sends to itself a phantom cancellation request, i.e. a GET request with an Observe option set to 1 (deregister), without transmitting it on the wire. As per {{Section 3.6 of RFC7641}}, all other options MUST be identical to those in the phantom registration request, except for the set of ETag Options. This request has the same Token value T of the phantom registration request, and is addressed to the resource for which the server wants to end the group observation, as if sent by the group of observers, i.e. with the multicast IP address GRP_ADDR as source address and the port number GRP_PORT as source port.
+In order to cancel the group observation, the server sends to itself a phantom cancellation request, i.e. a GET request with an Observe option set to 1 (deregister), without transmitting it on the wire. As per {{Section 3.6 of RFC7641}}, all other options MUST be identical to those in the phantom registration request, except for the set of ETag Options. This request has the same Token value T of the phantom registration request, and is addressed to the resource for which the server wants to cancel the group observation, as if sent by the group of observers, i.e. with the multicast IP address GRP_ADDR as source address and the port number GRP_PORT as source port.
 
 After that, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated.  The response has no payload, and is sent to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. As per {{RFC7641}}, this response does not include an Observe option. Finally, the server releases the resources allocated for the group observation, and especially frees up the Token value T used at its CoAP endpoint.
 
@@ -424,7 +424,7 @@ In case the server has canceled a group observation as defined in {{ssec-server-
 
 # Web Linking # {#sec-web-linking}
 
-The possible use of multicast notifications in a group observation may be indicated by a target "grp_obs" attribute in a web link {{RFC8288}} to a resource, e.g. using a link-format document {{RFC6690}} if the resource is accessible over CoAP.
+The possible use of multicast notifications in a group observation may be indicated by a target "grp_obs" attribute in a web link {{RFC8288}} to a resource, e.g. using a link-format document {{RFC6690}}.
 
 The "grp_obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e. it does not include any information required to participate in a group observation, and to receive and process multicast notifications.
 
@@ -504,8 +504,6 @@ C_2     ----------------- [ Unicast ] ------------------------> S  /r
  |                          (S increments the observer counter  |
  |                           for the group observation of /r .) |
  |                                                              |
-
-
  |                                                              |
 C_2 <-------------------- [ Unicast ] ---------------------     S
  |  5.03                                                        |
@@ -520,6 +518,15 @@ C_2 <-------------------- [ Unicast ] ---------------------     S
  |  }                                                           |
  |                                                              |
  |          (The value of the resource /r changes to "5678".)   |
+ |                                                              |
+
+
+
+
+
+
+
+
  |                                                              |
 C_1                                                             |
  +  <------------------- [ Multicast ] --------------------     S
@@ -536,15 +543,17 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
 
 # Rough Counting of Clients in the Group Observation {#sec-rough-counting}
 
-To allow the server to keep an estimate of interested clients without creating undue traffic on the network, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
+## Multicast-Response-Feedback-Divider Option
 
-The option is called Multicast-Response-Feedback-Divider. As summarized in {{mrfd-table}}, the option is not critical but proxy-unsafe, and integer valued.
+In order to allow the server to keep an estimate of interested clients without creating undue traffic on the network, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
+
+The option is called Multicast-Response-Feedback-Divider. As summarized in {{mrfd-table}}, the option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
 
 ~~~~~~~~~~
 +-----+---+---+---+---+---------------------+--------+------+---------+
 | No. | C | U | N | R | Name                | Format | Len. | Default |
 +-----+---+---+---+---+---------------------+--------+------+---------+
-| TBD |   | x |   |   | Multicast-Response- | uint   | 0-1  | (none)  |
+| TBD |   | x | - |   | Multicast-Response- | uint   | 0-1  | (none)  |
 |     |   |   |   |   | Feedback-Divider    |        |      |         |
 +-----+---+---+---+---+---------------------+--------+------+---------+
 
@@ -562,13 +571,13 @@ The client picks an integer random number I, from 0 inclusive to the number Z = 
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e. a GET request with an Observe option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless the source IP address and port number of the received multicast notification.
 
-Since the observation registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same token.
+Since the observation registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
 
 The client MUST ignore the Multicast-Response-Feedback-Divider option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
 
 As the Multicast-Response-Feedback-Divider option is unsafe to forward, a proxy needs to answer it on its own, and is later counted as a single client.
 
-{{appendix-psuedo-code-counting-client}} provides a description in pseudo-code of the operations above performed by the client.
+{{appendix-psuedo-code-counting-client}} and {{appendix-psuedo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
 
 ## Processing on the Server Side
 
@@ -608,7 +617,7 @@ Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirma
 
 Then, the server computes a feedback indicator as E = R * (2 ** Q), where "**" is the exponentiation operator. According to what defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g. after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e. R = 0, or by the value of the ratios (E/N) and (N/E).
 
-Finally, the server computes a new estimated count of the observers. To this end the server first consider COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
+Finally, the server computes a new estimated count of the observers. To this end, the server first consider COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
 
 In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D > 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server MUST hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, and assesses it for possibly canceling the group observation (see {{ssec-server-side-cancellation}}).
 
@@ -626,9 +635,9 @@ A server can protect multicast notifications by using Group OSCORE {{I-D.ietf-co
 
 In some settings, the OSCORE group to refer to can be pre-configured on the clients and the server. In such a case, a server which is aware of such pre-configuration can simply assume a client to be already member of the correct OSCORE group.
 
-In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same and/or other servers to access their resources.
+In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server and/or with other servers to access their resources.
 
-Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{I-D.ietf-ace-oauth-authz}}. Further details on how to discover the OSCORE group and join it are out of the scope of this specification.
+Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{I-D.ietf-ace-oauth-authz}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
 
 If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.
 
@@ -636,7 +645,7 @@ To this end, alternative security protocols than Group OSCORE, such as OSCORE {{
 
 ## Signaling the OSCORE Group in the Informative Response ## {#sec-inf-response}
 
-This section describes a mechanism for the server to communicate to the client what OSCORE group to join in order to decrypt and verify the multicast notifications protected with group OSCORE. The client MAY use the information provided by the server to start the ACE joining procedure described in {{I-D.ietf-ace-key-groupcomm-oscore}}. This mechanism is OPTIONAL to support for the client and server.
+This section describes a mechanism for the server to communicate to the client what OSCORE group to join in order to decrypt and verify the multicast notifications protected with Group OSCORE. The client MAY use the information provided by the server to start the ACE joining procedure described in {{I-D.ietf-ace-key-groupcomm-oscore}}. This mechanism is OPTIONAL to support for the client and server.
 
 Additionally to what defined in {{sec-server-side}}, the CBOR map in the informative response payload contains the following fields, whose CBOR labels are defined in {{informative-response-params}}.
 
@@ -793,9 +802,6 @@ C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |                                                              |
  |              (S allocates the available Token value 0x7b .)  |
  |                                                              |
-
-
-
  |                                                              |
  |      (S sends to itself a phantom observation request PH_REQ |
  |       as coming from the IP multicast address GRP_ADDR .)    |
@@ -860,6 +866,9 @@ C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |                                                              |
  |                          (S increments the observer counter  |
  |                           for the group observation of /r .) |
+ |                                                              |
+
+
  |                                                              |
 C_2 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |  2.05 (Content)                                              |
@@ -951,11 +960,11 @@ Upon receiving the informative response, the client does not configure an observ
 
 Details on the additional message exchange and processing are defined in {{intermediaries-e2e-security-processing}}.
 
-## The Listen-To-Multicast-Responses Option {#ltmr-option}
+## Listen-To-Multicast-Responses Option {#ltmr-option}
 
-To allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.
+In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.
 
-The option is called Listen-To-Multicast-Responses and is intended only for requests. As summarized in {{ltmr-table}}, the option is critical and proxy-unsafe.
+The option is called Listen-To-Multicast-Responses and is intended only for requests. As summarized in {{ltmr-table}}, the option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
 
 ~~~~~~~~~~
 +-----+---+---+---+---+-------------------+--------+--------+---------+
@@ -989,7 +998,7 @@ Once received the informative response, the origin client proceeds in a differen
 
    - The Token is chosen as the client sees fit. In fact, there is no reason for this Token to be the same as the phantom request's.
 
-   - The Code field, the outer CoAP options and the encrypted payload (containing inner options, AEAD tag etc.) are the same of the phantom request used for the group observation. That is, they are as specified in the 'ph_req' parameter of the received informative response.
+   - The outer Code field, the outer CoAP options and the encrypted payload with AEAD tag (protecting the inner Code, the inner CoAP options and the possible plain CoAP payload) concatenated with the counter signature are the same of the phantom request used for the group observation. That is, they are as specified in the 'ph_req' parameter of the received informative response.
 
    - An outer Observe option is included and set to 0 (Register). This will usually be set in the phantom request already.
 
@@ -1009,7 +1018,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy removes the Listen-To-Multicast-Responses option from the ticket request, and extracts the conveyed transport-specific information.
 
-* The proxy rebuilds the phantom request associated to the group observation, by using the ticket request as directly providing the required transport-independent information. This includes the outer Code field, the outer CoAP options and the encrypted payload concatenated with the counter signature.
+* The proxy rebuilds the phantom request associated to the group observation, by using the ticket request as directly providing the required transport-independent information. This includes the outer Code field, the outer CoAP options and the encrypted payload with AEAD tag concatenated with the counter signature.
 
 * The proxy configures an observation of the target resource at the origin server, acting as a client directly taking part in the group observation. To this end, the proxy uses the rebuilt phantom request and the transport-specific information retrieved from the Listen-To-Multicast-Responses Option. The particular way to achieve this is implementation specific.
 
@@ -1019,32 +1028,32 @@ An example is provided in {{intermediaries-example-e2e-security}}.
 
 # Informative Response Parameters {#informative-response-params}
 
-This specification defines a number of fields used in the informative response message defined in {{ssec-server-side-informative}}.
+This document defines a number of fields used in the informative response message defined in {{ssec-server-side-informative}}.
 
 The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name. Note that the media type application/informative-response+cbor MUST be used when these fields are transported.
 
  Name           | CBOR Key | CBOR Type         | Reference
 ----------------|----------|-------------------|---------------
- tp_info        | 1        | array             | {{ssec-server-side-informative}}
- ph_req         | 2        | byte string       | {{ssec-server-side-informative}}
- last_notif     | 3        | byte string       | {{ssec-server-side-informative}}
- join_uri       | 4        | text string       | {{sec-inf-response}}
- sec_gp         | 5        | text string       | {{sec-inf-response}}
- as_uri         | 6        | text string       | {{sec-inf-response}}
- cs_alg         | 7        | int / text string | {{sec-inf-response}}
- cs_crv         | 8        | int / text string | {{sec-inf-response}}
- cs_kty         | 9        | int / text string | {{sec-inf-response}}
- cs_kenc        | 10       | int               | {{sec-inf-response}}
- alg            | 11       | int / text string | {{sec-inf-response}}
- hkdf           | 12       | int / text string | {{sec-inf-response}}
- gp_material    | 13       | map               | {{self-managed-oscore-group}}
- srv_pub_key    | 14       | byte string       | {{self-managed-oscore-group}}
- srv_identifier | 15       | byte string       | {{self-managed-oscore-group}}
- exp            | 16       | uint              | {{self-managed-oscore-group}}
+ tp_info        | 0        | array             | {{ssec-server-side-informative}}
+ ph_req         | 1        | byte string       | {{ssec-server-side-informative}}
+ last_notif     | 2        | byte string       | {{ssec-server-side-informative}}
+ join_uri       | 3        | text string       | {{sec-inf-response}}
+ sec_gp         | 4        | text string       | {{sec-inf-response}}
+ as_uri         | 5        | text string       | {{sec-inf-response}}
+ cs_alg         | 6        | int / text string | {{sec-inf-response}}
+ cs_crv         | 7        | int / text string | {{sec-inf-response}}
+ cs_kty         | 8        | int / text string | {{sec-inf-response}}
+ cs_kenc        | 9        | int               | {{sec-inf-response}}
+ alg            | 10       | int / text string | {{sec-inf-response}}
+ hkdf           | 11       | int / text string | {{sec-inf-response}}
+ gp_material    | 12       | map               | {{self-managed-oscore-group}}
+ srv_pub_key    | 13       | byte string       | {{self-managed-oscore-group}}
+ srv_identifier | 14       | byte string       | {{self-managed-oscore-group}}
+ exp            | 15       | uint              | {{self-managed-oscore-group}}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
-This specification defines some values of transport protocol identifiers to use within the 'tp_info' parameter of the informative response message defined in {{ssec-server-side-informative}} of this specification.
+This document defines some values of transport protocol identifiers to use within the 'tp_info' parameter of the informative response message defined in {{ssec-server-side-informative}}.
 
 According to the encoding specified in {{sssec-transport-specific-encoding}}, these values are used for the 'tp_id' element of 'srv_addr', under the 'tp_info' parameter.
 
@@ -1093,7 +1102,7 @@ This document has the following actions for IANA.
 
 ## Media Type Registrations {#media-type}
 
-This specification registers the media type 'application/informative-response+cbor' for error messages as informative response defined in {{ssec-server-side-informative}} of this specification, when carrying parameters encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
+This document registers the media type 'application/informative-response+cbor' for error messages as informative response defined in {{ssec-server-side-informative}}, when carrying parameters encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
 
 * Type name: application
 
@@ -1127,6 +1136,8 @@ This specification registers the media type 'application/informative-response+cb
 
 * Change controller: IESG
 
+* Provisional registration?  No
+
 ## CoAP Content-Formats Registry {#content-format}
 
 IANA is asked to add the following entry to the "CoAP Content-Formats" sub-registry defined in {{Section 12.3 of RFC7252}}, within the "Constrained RESTful Environments (CoRE) Parameters" registry.
@@ -1141,7 +1152,7 @@ Reference: \[this document\]
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
-This specification establishes the "Informative Response Parameters" IANA registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document establishes the "Informative Response Parameters" IANA registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
 
 The columns of this registry are:
 
@@ -1157,7 +1168,7 @@ This registry has been initially populated by the values in {{informative-respon
 
 ## CoAP Transport Information Registry {#iana-transport-protocol-identifiers}
 
-This specification defines the subregistry "CoAP Transport Information" within the "CoRE Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document defines the subregistry "CoAP Transport Information" within the "CoRE Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
 
@@ -1211,7 +1222,7 @@ While the clients usually receive the phantom registration request and other inf
 
 ## Topic Discovery in Publish-Subscribe Settings
 
-In a Publish-Subscribe scenario ({{I-D.ietf-core-coap-pubsub}}), a group observation can be discovered along with topic metadata. For instance, a discovery step can make the following metadata available.
+In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata. For instance, a discovery step can make the following metadata available.
 
 This example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
@@ -1265,7 +1276,7 @@ Response:
 ~~~~~~~~~~~
 {: #discovery-introspection title="Group observation discovery with server introspection"}
 
-For example, a network sniffer could offer sending such a request when unknown multicast notifications are seen on a network. Consequently, it can associate those notifications with a URI, or decrypt them, if member of the correct OSCORE group.
+For example, a network sniffer could offer sending such a request when unknown multicast notifications are seen in a network. Consequently, it can associate those notifications with a URI, or decrypt them, if member of the correct OSCORE group.
 
 # Pseudo-Code for Rough Counting of Clients # {#appendix-psuedo-code-counting}
 
@@ -1454,13 +1465,13 @@ After the time indicated in the 'exp' field:
 
    - The server MUST update the Master Secret.
 
-   - The server MUST update the ID Context (Gid). Consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}, the server MUST assign an ID Context that it has never assigned before in the OSCORE group.
+   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}.
 
    - The server MAY update the Master Salt.
 
 * The client MUST stop using the keying material and MAY re-register the observation at the server.
 
-Before the key material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current key material. In particular, this is an informative response (see {{ssec-server-side-informative}}) and contains the abovementioned parameters for the next group keying material to be used. Alternatively, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
+Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) and contains the abovementioned parameters for the next group keying material to be used. Alternatively, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
 Applications requiring backward security and forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g. the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in {{sec-inf-response}}.
 
@@ -1651,7 +1662,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (Register),
-|       |       |         |    Uri-Path: r
+|       |       |         |    Uri-Path: r,
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |  <Counter signature>
