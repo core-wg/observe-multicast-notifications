@@ -1891,6 +1891,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised protection of the error response to the phantom cancellation request.
 
+* Alignment to other Group-OSCORE-related documents.
+
 * Editorial improvements.
 
 # Acknowledgments # {#acknowldegment}
