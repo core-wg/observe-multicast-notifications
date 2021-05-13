@@ -717,7 +717,9 @@ Note that these same values are used to protect each and every multicast notific
 
 When canceling a group observation (see {{ssec-server-side-cancellation}}), the phantom cancellation request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-Like defined in {{ssec-server-side-request-oscore}} for the phantom registration request, the server protects the phantom cancellation request as per {{Section 8.1 of I-D.ietf-core-oscore-groupcomm}}, by using its Sender Context and consuming its current Sender Sequence number in the OSCORE group, from its Sender Context. The following, corresponding multicast error response defined in {{ssec-server-side-cancellation}} is also protected with Group OSCORE, as per {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}}.
+Like defined in {{ssec-server-side-request-oscore}} for the phantom registration request, the server protects the phantom cancellation request as per {{Section 8.1 of I-D.ietf-core-oscore-groupcomm}}, by using its Sender Context and consuming its current Sender Sequence number in the OSCORE group, from its Sender Context.
+
+The following, corresponding multicast error response defined in {{ssec-server-side-cancellation}} is also protected with Group OSCORE, as per {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}}. In particular, the server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response. This is required, since the client has never seen that request, and thus cannot build the AEAD nonce based on the Partial IV of the phantom cancellation request.
 
 Note that, differently from the multicast notifications, this multicast error response will be the only one securely paired with the phantom cancellation request.
 
@@ -1886,6 +1888,8 @@ Unlike in the unprotected example in {{intermediaries-example}}, the proxy does 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -00 to -01 ## {#sec-00-01}
+
+* Revised protection of the error response to the phantom cancellation request.
 
 * Editorial improvements.
 
