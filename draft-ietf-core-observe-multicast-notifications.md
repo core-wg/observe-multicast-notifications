@@ -487,6 +487,7 @@ C_1 <-------------------- [ Unicast ] ---------------------     S
  |  5.03                                                        |
  |  Token: 0x4a                                                 |
  |  Content-Format: application/informative-response+cbor       |
+ |  Max-Age: 0                                                  |
  |  <Other options>                                             |
  |  Payload: {                                                  |
  |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
@@ -509,6 +510,7 @@ C_2 <-------------------- [ Unicast ] ---------------------     S
  |  5.03                                                        |
  |  Token: 0x01                                                 |
  |  Content-Format: application/informative-response+cbor       |
+ |  Max-Age: 0                                                  |
  |  <Other options>                                             |
  |  Payload: {                                                  |
  |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
@@ -789,7 +791,6 @@ The following notation is used for the payload of the informative responses:
 
 ~~~~~~~~~~~
 
-
 C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
  |  Token: 0x4a                                                 |
@@ -836,6 +837,7 @@ C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |  2.05 (Content)                                              |
  |  Token: 0x4a                                                 |
  |  OSCORE: {piv: 301; ...}                                     |
+ |  Max-Age: 0                                                  |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -852,7 +854,6 @@ C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |      sec_gp     : "myGroup"                                  |
  |    }                                                         |
  |  }                                                           |
- |                                                              |
  |                                                              |
 C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
@@ -869,13 +870,11 @@ C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |                          (S increments the observer counter  |
  |                           for the group observation of /r .) |
  |                                                              |
-
-
- |                                                              |
 C_2 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |  2.05 (Content)                                              |
  |  Token: 0x01                                                 |
  |  OSCORE: {piv: 401; ...}                                     |
+ |  Max-Age: 0                                                  |
  |  <Other class U/I options>                                   |
  |  0xff,                                                       |
  |  Encrypted_payload {                                         |
@@ -892,7 +891,6 @@ C_2 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |      sec_gp     : "myGroup"                                  |
  |    }                                                         |
  |  }                                                           |
- |                                                              |
  |                                                              |
  |            (The value of the resource /r changes to "5678".) |
  |                                                              |
@@ -1497,6 +1495,9 @@ Unless explicitly indicated, all messages transmitted on the wire are sent over 
 
 ~~~~~~~~~~~
 
+
+
+
 C1     C2     P        S
 |      |      |        |
 |      |      |        | (The value of the resource /r is "1234")
@@ -1504,6 +1505,7 @@ C1     C2     P        S
 +------------>|        |  Token: 0x4a
 | GET  |      |        |  Observe: 0 (Register)
 |      |      |        |  Proxy-Uri: coap://sensor.example/r
+|      |      |        |
 |      |      |        |
 |      |      +------->|  Token: 0x5e
 |      |      | GET    |  Observe: 0 (Register)
@@ -1515,6 +1517,10 @@ C1     C2     P        S
 |      |      |        |  (S sends to itself a phantom observation
 |      |      |        |  request PH_REQ as coming from the
 |      |      |        |  IP multicast address GRP_ADDR)
+|      |      |        |
+|      |      |        |
+|      |      |        |
+|      |      |        |
 |      |      |        |
 |      |      |  ------+
 |      |      | /      |
@@ -1533,6 +1539,7 @@ C1     C2     P        S
 |      |      |<-------+  Token: 0x5e
 |      |      | 5.03   |  Content-Format: application/
 |      |      |        |     informative-response+cbor
+|      |      |        |  Max-Age: 0
 |      |      |        |  <Other options>
 |      |      |        |  Payload: {
 |      |      |        |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,
@@ -1704,9 +1711,6 @@ C1      C2      P         S
 |       |       |         |    }
 |       |       |         |  }
 |       |       |         |
-
-
-
 |       |       |         |
 |<--------------+         |  Token: 0x4a
 | 2.05  |       |         |  OSCORE: {piv: 301 ; ...}
@@ -1742,6 +1746,11 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The proxy adds C1 to
 |       |       |         |   its list of observers.)
+|       |       |         |
+
+
+
+
 |       |       |         |
 |<--------------|         |
 |       |  ACK  |         |
@@ -1895,7 +1904,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Alignment to other Group-OSCORE-related documents.
 
-* Fixed example with proxy and Group OSCORE.
+* Fixed in the examples.
 
 * Editorial improvements.
 
