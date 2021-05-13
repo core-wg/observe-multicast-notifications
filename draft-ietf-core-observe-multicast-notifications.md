@@ -1437,13 +1437,13 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-    - 'ms', 'contexId', 'cs_alg', 'cs_params', 'cs_key_params', 'cs_key_enc'. These elements MUST be included.
+    - 'ms', 'contexId', 'cs_alg', 'cs_params', 'cs_key_enc'. These elements MUST be included.
 
     - 'hkdf', 'alg', 'salt'. These elements MAY be included.
 
    The following elements of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-    - 'group_senderId', 'ecdh_alg', 'ecdh_params', 'ecdh_key_params'.
+    - 'group_senderId', 'ecdh_alg', 'ecdh_params'.
 
 * 'srv_pub_key': this element is a CBOR byte string, which wraps the serialization of the public key that the server uses in the OSCORE group. If the public key of the server is encoded as a COSE\_Key (see the 'cs_key_enc' element of the 'gp_material' parameter), it includes 'kid' specifying the Sender ID that the server has in the OSCORE group.
 
