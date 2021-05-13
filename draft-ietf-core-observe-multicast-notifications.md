@@ -751,7 +751,7 @@ Once completed step 2, the client decrypts and verifies the rebuilt phantom regi
 
 After having successfully processed the informative response as defined in {{ssec-client-side-informative-oscore}}, the client will decrypt and verify every multicast notification for the target resource as defined in {{Section 8.4 of I-D.ietf-core-oscore-groupcomm}}, with the following difference.
 
-The client MUST set the two 'external_aad' defined in {{Sections 4.3.1 and 4.3.2 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
+For both decryption and counter signature verification, the client MUST set the 'external_aad' defined in {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
 
 * 'request_kid' takes the value of the 'kid' field from the OSCORE option of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
