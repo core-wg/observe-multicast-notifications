@@ -654,9 +654,9 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'cs_params', encoded as a CBOR array and including the following two elements:
 
-         - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+        - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-         - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
+        - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
    * Optionally, 'cs_kenc', with value the encoding of the public keys used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Confirmation Key' column of the "CWT Confirmation Method" registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
 
@@ -664,7 +664,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'hkdf', with value the COSE HKDF algorithm {{I-D.ietf-cose-rfc8152bis-algs}}, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-The values of 'cs_alg', 'cs_alg_crv', 'cs_key_kty', 'cs_key_crv' and 'cs_key_kenc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
+The values of 'cs_alg', 'cs_params' and 'cs_key_kenc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
 
 The values of 'cs_alg', 'alg' and 'hkdf' provide an early knowledge of the algorithms used in the OSCORE group. Thus, the client is able to decide whether to actually proceed with the (ACE) join process, depending on its support for the indicated algorithms.
 
@@ -1034,15 +1034,14 @@ The table below summarizes them and specifies the CBOR key to use instead of the
  sec_gp         | 4        | text string       | {{sec-inf-response}}
  as_uri         | 5        | text string       | {{sec-inf-response}}
  cs_alg         | 6        | int / text string | {{sec-inf-response}}
- cs_crv         | 7        | int / text string | {{sec-inf-response}}
- cs_kty         | 8        | int / text string | {{sec-inf-response}}
- cs_kenc        | 9        | int               | {{sec-inf-response}}
- alg            | 10       | int / text string | {{sec-inf-response}}
- hkdf           | 11       | int / text string | {{sec-inf-response}}
- gp_material    | 12       | map               | {{self-managed-oscore-group}}
- srv_pub_key    | 13       | byte string       | {{self-managed-oscore-group}}
- srv_identifier | 14       | byte string       | {{self-managed-oscore-group}}
- exp            | 15       | uint              | {{self-managed-oscore-group}}
+ cs_params      | 7        | array             | {{sec-inf-response}}
+ cs_kenc        | 8        | int               | {{sec-inf-response}}
+ alg            | 9        | int / text string | {{sec-inf-response}}
+ hkdf           | 10       | int / text string | {{sec-inf-response}}
+ gp_material    | 11       | map               | {{self-managed-oscore-group}}
+ srv_pub_key    | 12       | byte string       | {{self-managed-oscore-group}}
+ srv_identifier | 13       | byte string       | {{self-managed-oscore-group}}
+ exp            | 14       | uint              | {{self-managed-oscore-group}}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
