@@ -61,7 +61,6 @@ author:
 normative:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-core-oscore-groupcomm:
-  I-D.ietf-cose-rfc8152bis-struct:
   I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-ace-oscore-profile:
@@ -89,12 +88,6 @@ normative:
     date: false
     title: COSE Key Types
     target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
-  COSE.Elliptic.Curves:
-    author:
-      org: IANA
-    date: false
-    title: COSE Elliptic Curves
-    target: https://www.iana.org/assignments/cose/cose.xhtml#elliptic-curves
 
 informative:
   I-D.ietf-ace-oauth-authz:
@@ -659,11 +652,11 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'cs_alg', with value the COSE algorithm {{I-D.ietf-cose-rfc8152bis-algs}} used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'cs_alg_crv', with value the elliptic curve (if applicable) for the COSE algorithm {{I-D.ietf-cose-rfc8152bis-algs}} used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Elliptic Curve" registry {{COSE.Elliptic.Curves}}.
+   * Optionally, 'cs_params', encoded as a CBOR array and including the following two elements:
 
-   * Optionally, 'cs_key_kty', with value the COSE key type {{I-D.ietf-cose-rfc8152bis-struct}} of countersignature keys used to countersign messages in the OSCORE group, encoded as a CBOR text string or an integer. The value is taken from the 'Value' column of the "COSE Key Types" registry {{COSE.Key.Types}}.
+         - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
 
-   * Optionally, 'cs_key_crv', with value the elliptic curve (if applicable) of countersignature keys used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Elliptic Curve" registry {{COSE.Elliptic.Curves}}.
+         - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
    * Optionally, 'cs_kenc', with value the encoding of the public keys used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Confirmation Key' column of the "CWT Confirmation Method" registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
 
