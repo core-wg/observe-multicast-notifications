@@ -1552,12 +1552,16 @@ C1     C2     P        S
 |      |      |        |
 |      |      |        |
 |<------------+        |  Token: 0x4a
-| 2.05 |      |        |  Content-Format: application/cbor
+| 2.05 |      |        |  Observe: 54120
+|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
+|      |      |        |
 :      :      :        :
 :      :      :        :
 :      :      :        :
+|      |      |        |
+|      |      |        |
 |      +----->|        |  Token: 0x01
 |      | GET  |        |  Observe: 0 (Register)
 |      |      |        |  Proxy-Uri: coap://sensor.example/r
@@ -1565,16 +1569,16 @@ C1     C2     P        S
 |      |      |        |  (The proxy has a fresh cache representation)
 |      |      |        |
 |      |<-----+        |  Token: 0x01
-|      | 2.05 |        |  Content-Format: application/cbor
+|      | 2.05 |        |  Observe: 54120
+|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
-|      |      |        |
-
 |      |      |        |
 :      :      :        :
 :      :      :        :  (The value of the resource
 :      :      :        :  /r changes to "5678".)
-:      :      :  (*)   :
+:      :      :        :
+|      |      |  (*)   |
 |      |      |<-------+  Token: 0x7b
 |      |      | 2.05   |  Observe: 11
 |      |      |        |  Content-Format: application/cbor
@@ -1592,6 +1596,7 @@ C1     C2     P        S
 |      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "5678"
+|      |      |        |
 
 
 (*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT
@@ -1668,7 +1673,6 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Counter signature>
 |       |       |         |
-|       |       |         |
 |       |       |         |  (S steps SN_5 in the Group OSCORE
 |       |       |         |   Security Context : SN_5 <== 502)
 |       |       |         |
@@ -1676,7 +1680,6 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (S increments the observer counter
 |       |       |         |  for the group observation of /r)
-|       |       |         |
 |       |       |         |
 |       |       |<--------+  Token: 0x5e
 |       |       | 2.05    |  OSCORE: {piv: 301 ; ...}
@@ -1703,17 +1706,16 @@ C1      C2      P         S
 |       |       |         |    }
 |       |       |         |  }
 |       |       |         |
-|       |       |         |
 |<--------------+         |  Token: 0x4a
 | 2.05  |       |         |  OSCORE: {piv: 301 ; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
-|       |       |         |
 +-------------->|         |  Token: 0x4b
 | FETCH |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ; ...}
+|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
+|       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  Listen-To-
@@ -1739,7 +1741,7 @@ C1      C2      P         S
 |       |       |         |  (The proxy adds C1 to
 |       |       |         |   its list of observers.)
 |       |       |         |
-
+|       |       |         |
 
 
 
@@ -1749,6 +1751,7 @@ C1      C2      P         S
 :       :       :         :
 :       :       :         :
 :       :       :         :
+|       |       |         |
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Observe: 0 (Register)
 |       |       |         |  OSCORE: {kid: 2 ; piv: 201 ; ...}
@@ -1763,7 +1766,7 @@ C1      C2      P         S
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
-|       |       +-------->|  Token: 0x5e
+|       |       +-------->|  Token: 0x5f
 |       |       | FETCH   |  Observe: 0 (Register)
 |       |       |         |  OSCORE: {kid: 2 ; piv: 201 ; ...}
 |       |       |         |  Uri-Host: sensor.example
@@ -1776,7 +1779,7 @@ C1      C2      P         S
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
-|       |       |<--------+  Token: 0x5e
+|       |       |<--------+  Token: 0x5f
 |       |       | 2.05    |  OSCORE: {piv: 401 ; ...}
 |       |       |         |  Max-Age: 0
 |       |       |         |  <Other class U/I options>
@@ -1807,11 +1810,10 @@ C1      C2      P         S
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
-
-|       |       |         |
 |       +------>|         |  Token: 0x02
 |       | FETCH |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ; ...}
+|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
+|       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  Listen-To-
@@ -1830,19 +1832,16 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Counter signature>
 |       |       |         |
-|       |       |         |  (The proxy adds C2 to its list of
-|       |       |         |   observers, and serves the cached
-|       |       |         |   response)
+|       |       |         |  (The proxy adds C2 to
+|       |       |         |   its list of observers.)
 |       |       |         |
 |       |<------|         |
 |       |  ACK  |         |
-:       :       :         :
-:       :       :         :
-:       :       :         :
-|       |       |         |  (The value of the resource
-|       |       |         |  /r changes to "5678".)
 |       |       |         |
-|       |       |         |
+:       :       :         :
+:       :       :         :  (The value of the resource
+:       :       :         :  /r changes to "5678".)
+:       :       :         :
 |       |       |   (*)   |
 |       |       |<--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
@@ -1860,14 +1859,14 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Counter signature>
 |       |       |         |
-|       |       |         |
 |<--------------+         |  Token: 0x4b
 | 2.05  |       |         |  Observe: 54123
 |       |       |         |  OSCORE: {kid: 5; piv: 502 ;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
-|       |       |         |  (Same Encrypted_payload)
+|       |       |         |  (Same Encrypted_payload
+|       |       |         |   and counter signature)
 |       |       |         |
 |       |<------+         |  Token: 0x02
 |       | 2.05  |         |  Observe: 54123
@@ -1875,7 +1874,9 @@ C1      C2      P         S
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
-|       |       |         |  (Same Encrypted_payload)
+|       |       |         |  (Same Encrypted_payload
+|       |       |         |   and counter signature)
+|       |       |         |
 
 
 (*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT and protected
