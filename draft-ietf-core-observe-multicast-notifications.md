@@ -1435,9 +1435,9 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
     - 'hkdf', 'alg', 'salt'. These elements MAY be included.
 
-   The following elements of the Group_OSCORE_Input_Material object MUST NOT be included.
+   The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-    - 'group_senderId', 'ecdh_alg', 'ecdh_params'.
+   If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST be included. Otherwise, they MUST NOT be included.
 
 * 'srv_pub_key': this element is a CBOR byte string, which wraps the serialization of the public key that the server uses in the OSCORE group. If the public key of the server is encoded as a COSE\_Key (see the 'cs_key_enc' element of the 'gp_material' parameter), it includes 'kid' specifying the Sender ID that the server has in the OSCORE group.
 
@@ -1502,7 +1502,6 @@ C1     C2     P        S
 | GET  |      |        |  Observe: 0 (Register)
 |      |      |        |  Proxy-Uri: coap://sensor.example/r
 |      |      |        |
-|      |      |        |
 |      |      +------->|  Token: 0x5e
 |      |      | GET    |  Observe: 0 (Register)
 |      |      |        |  Uri-Host: sensor.example
@@ -1513,10 +1512,6 @@ C1     C2     P        S
 |      |      |        |  (S sends to itself a phantom observation
 |      |      |        |  request PH_REQ as coming from the
 |      |      |        |  IP multicast address GRP_ADDR)
-|      |      |        |
-|      |      |        |
-|      |      |        |
-|      |      |        |
 |      |      |        |
 |      |      |  ------+
 |      |      | /      |
