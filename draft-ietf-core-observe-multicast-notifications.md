@@ -1481,7 +1481,7 @@ If Group OSCORE is used to protect the group observation (see {{sec-secured-noti
 
 Note that, if the optimization defined in {{self-managed-oscore-group}} is also used, the error informative response from the server has to include additional information, i.e. the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.3.1 of I-D.amsuess-core-cachable-oscore}}).
 
-This optimization allows the server to not provide the same full phantom observation request to each client in the error informative response (see {{ssec-server-side-informative}}). That is, the informative response does not need to include the 'ph_req' parameter, but only the 'tp_info' parameter specifying the transport-specific information and (optionally) the 'last_notif' parameter specifying the latest sent multicast notification.
+This optimization allows the server to not provide the same full phantom observation request to each client in the error informative response (see {{ssec-server-side-informative}}). That is, the informative response does not need to convey the full phantom request in the 'ph_req' parameter, but only the 'tp_info' parameter specifying the transport-specific information and (optionally) the 'last_notif' parameter specifying the latest sent multicast notification.
 
 # Example with a Proxy {#intermediaries-example}
 
