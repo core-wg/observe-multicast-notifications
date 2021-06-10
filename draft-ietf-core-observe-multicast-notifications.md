@@ -1070,7 +1070,11 @@ The table below summarizes them, specifies the integer value to use instead of t
 
 The same security considerations from {{RFC7252}}{{RFC7641}}{{I-D.ietf-core-groupcomm-bis}}{{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}} hold for this document.
 
-If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server. This prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request. Thus, it ensures secure binding between every multicast notification for a same observed resource and the phantom registration request that started the group observation of that resource.
+If multicast notifications are protected using Group OSCORE as per {{sec-secured-notifications}}, the following applies.
+
+* The original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server. This prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request. Thus, it ensures secure binding between every multicast notification for a same observed resource and the phantom registration request that started the group observation of that resource.
+
+* A re-registration request, possibly including the Multicast-Response-Feedback-Divider option to support the rough counting of clients (see {{sec-rough-counting}}), MUST also be secured.
 
 To this end, clients and servers SHOULD use OSCORE or Group OSCORE, so ensuring that the secure binding above is enforced end-to-end between the server and each observing client.
 
