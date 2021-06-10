@@ -787,7 +787,7 @@ The following notation is used for the payload of the informative responses:
 C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
  |  Token: 0x4a                                                 |
- |  OSCORE: {kid: 1 ; piv: 101 ; ...}                           |
+ |  OSCORE: {kid: 1; piv: 101; ...}                             |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -806,7 +806,7 @@ C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |    \-------------------------------------------------------> |  /r
  |                           0.05 (FETCH)                       |
  |                           Token: 0x7b                        |
- |                           OSCORE: {kid: 5 ; piv: 501 ;       |
+ |                           OSCORE: {kid: 5 ; piv: 501;        |
  |                                    kid context: 57ab2e; ...} |
  |                           <Other class U/I options>          |
  |                           0xff                               |
@@ -851,7 +851,7 @@ C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
 C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
  |  Token: 0x01                                                 |
- |  OSCORE: {kid: 2 ; piv: 201 ; ...}                           |
+ |  OSCORE: {kid: 2; piv: 201; ...}                             |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -892,13 +892,13 @@ C_1                                                             |
 C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
  |  2.05 (Content)                                              |
  |  Token: 0x7b                                                 |
- |  OSCORE: {kid: 5; piv: 502 ;                                 |
+ |  OSCORE: {kid: 5; piv: 502;                                  |
  |           kid context: 57ab2e; ...}                          |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
  |    2.05 (Content),                                           |
- |    Observe: 11,                                              |
+ |    Observe: [empty],                                         |
  |    Content-Format: application/cbor,                         |
  |    <Other class E options>,                                  |
  |    0xff,                                                     |
@@ -1623,7 +1623,7 @@ C1      C2      P         S
 |       |       |         |
 +-------------->|         |  Token: 0x4a
 | FETCH |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 1 ; piv: 101 ; ...}
+|       |       |         |  OSCORE: {kid: 1; piv: 101; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
@@ -1637,7 +1637,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       +-------->|  Token: 0x5e
 |       |       | FETCH   |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 1 ; piv: 101 ; ...}
+|       |       |         |  OSCORE: {kid: 1; piv: 101; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1660,7 +1660,7 @@ C1      C2      P         S
 |       |       | /       |
 |       |       | \------>|  Token: 0x7b
 |       |       |   FETCH |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
+|       |       |         |  OSCORE: {kid: 5; piv: 501;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
@@ -1682,7 +1682,7 @@ C1      C2      P         S
 |       |       |         |  for the group observation of /r)
 |       |       |         |
 |       |       |<--------+  Token: 0x5e
-|       |       | 2.05    |  OSCORE: {piv: 301 ; ...}
+|       |       | 2.05    |  OSCORE: {piv: 301; ...}
 |       |       |         |  Max-Age: 0
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1707,14 +1707,14 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |
 |<--------------+         |  Token: 0x4a
-| 2.05  |       |         |  OSCORE: {piv: 301 ; ...}
+| 2.05  |       |         |  OSCORE: {piv: 301; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
 +-------------->|         |  Token: 0x4b
 | FETCH |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
+|       |       |         |  OSCORE: {kid: 5 ; piv: 501;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
@@ -1754,7 +1754,7 @@ C1      C2      P         S
 |       |       |         |
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 2 ; piv: 201 ; ...}
+|       |       |         |  OSCORE: {kid: 2; piv: 201; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
@@ -1768,7 +1768,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       +-------->|  Token: 0x5f
 |       |       | FETCH   |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 2 ; piv: 201 ; ...}
+|       |       |         |  OSCORE: {kid: 2; piv: 201; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1780,7 +1780,7 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |
 |       |       |<--------+  Token: 0x5f
-|       |       | 2.05    |  OSCORE: {piv: 401 ; ...}
+|       |       | 2.05    |  OSCORE: {piv: 401; ...}
 |       |       |         |  Max-Age: 0
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1805,14 +1805,14 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |
 |       |<------+         |  Token: 0x01
-|       | 2.05  |         |  OSCORE: {piv: 401 ; ...}
+|       | 2.05  |         |  OSCORE: {piv: 401; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
 |       +------>|         |  Token: 0x02
 |       | FETCH |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
+|       |       |         |  OSCORE: {kid: 5; piv: 501;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
@@ -1845,13 +1845,13 @@ C1      C2      P         S
 |       |       |   (*)   |
 |       |       |<--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ;
+|       |       |         |  OSCORE: {kid: 5; piv: 502;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    2.05 (Content),
-|       |       |         |    Observe: 11,
+|       |       |         |    Observe: [empty],
 |       |       |         |    Content-Format: application/cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
@@ -1861,7 +1861,7 @@ C1      C2      P         S
 |       |       |         |
 |<--------------+         |  Token: 0x4b
 | 2.05  |       |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ;
+|       |       |         |  OSCORE: {kid: 5; piv: 502;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1870,7 +1870,7 @@ C1      C2      P         S
 |       |       |         |
 |       |<------+         |  Token: 0x02
 |       | 2.05  |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ;
+|       |       |         |  OSCORE: {kid: 5; piv: 502;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
