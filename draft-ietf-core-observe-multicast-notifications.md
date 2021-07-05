@@ -670,7 +670,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'sign_enc_alg', with value the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'sign_alg', with value the Signature Algorithm used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+   * Optionally, 'sign_alg', with value the Signature Algorithm used to sign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
    * Optionally, 'sign_params', encoded as a CBOR array and including the following two elements:
 
@@ -712,7 +712,7 @@ Optionally, the informative response includes information on the OSCORE group to
 
 The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The process described in {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and countersign the multicast notification (see Sections 4.3.1 and 4.3.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+The process described in {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see Sections 4.3.1 and 4.3.2 of {{I-D.ietf-core-oscore-groupcomm}}).
 
 *  The 'request_kid' is the 'kid' value in the OSCORE option of the phantom registration request, i.e., the Sender ID of the server.
 
@@ -923,7 +923,7 @@ C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
 ~~~~~~~~~~~
 {: #example-oscore title="Example of group observation with Group OSCORE"}
 
-The two external_aad used to encrypt and countersign the multicast notification above have 'request\_kid' = 5, 'request\_piv' = 501 and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv' and 'kid context' field of the OSCORE option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external\_aad for decrypting and verifying this multicast notification and the following ones.
+The two external_aad used to encrypt and sign the multicast notification above have 'request\_kid' = 5, 'request\_piv' = 501 and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv' and 'kid context' field of the OSCORE option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external\_aad for decrypting and verifying this multicast notification and the following ones.
 
 # Intermediaries {#intermediaries}
 
