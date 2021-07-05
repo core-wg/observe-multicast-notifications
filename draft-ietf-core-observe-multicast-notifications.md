@@ -61,7 +61,6 @@ author:
 normative:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-core-oscore-groupcomm:
-  I-D.ietf-cose-rfc8152bis-algs:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-ace-oscore-profile:
   RFC2119:
@@ -88,6 +87,12 @@ normative:
     date: false
     title: COSE Key Types
     target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
+  COSE.Header.Parameters:
+    author:
+      org: IANA
+    date: false
+    title: COSE Header Parameters
+    target: https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
 
 informative:
   I-D.ietf-ace-oauth-authz:
@@ -97,11 +102,14 @@ informative:
   I-D.ietf-tls-dtls13:
   I-D.ietf-core-coral:
   I-D.amsuess-core-cachable-oscore:
+  I-D.ietf-rats-uccs:
+  I-D.ietf-cose-cbor-encoded-cert:
   RFC6347:
   RFC6690:
   RFC7519:
+  RFC7925:
   RFC8610:
-  RFC8747:
+  RFC8392:
   MOBICOM99:
     author:
       -
@@ -650,23 +658,29 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'as_uri', with value the URI of the Authorization Server associated to the Group Manager for the OSCORE group, encoded as a CBOR text string.
 
-   * Optionally, 'cs_alg', with value the COSE algorithm {{I-D.ietf-cose-rfc8152bis-algs}} used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+   * Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'cs_params', encoded as a CBOR array and including the following two elements:
+   * Optionally, 'pub_key_enc', with value the encoding of the public keys used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
-        - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'cs_alg', as specified for that algorithm in the "Capabilities" column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+      At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
-        - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'cs_alg', as specified for that key type in the "Capabilities" column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
+        \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
 
-   * Optionally, 'cs_kenc', with value the encoding of the public keys used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Confirmation Key' column of the "CWT Confirmation Method" registry defined in {{RFC8747}}. Future specifications may define additional values for this parameter.
+        \[ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
 
-   * Optionally, 'alg', with value the COSE AEAD algorithm {{I-D.ietf-cose-rfc8152bis-algs}}, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+   * Optionally, 'sign_enc_alg', with value the Signature Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'hkdf', with value the COSE HKDF algorithm {{I-D.ietf-cose-rfc8152bis-algs}}, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+   * Optionally, 'sign_alg', with value the Signature Algorithm used to countersign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-The values of 'cs_alg', 'cs_params' and 'cs_key_kenc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
+   * Optionally, 'sign_params', encoded as a CBOR array and including the following two elements:
 
-The values of 'cs_alg', 'alg' and 'hkdf' provide an early knowledge of the algorithms used in the OSCORE group. Thus, the client is able to decide whether to actually proceed with the (ACE) join process, depending on its support for the indicated algorithms.
+        - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the 'Capabilities' column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+
+        - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
+
+The values of 'sign_alg', 'sign_params' and 'pub_key_kenc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
+
+The values of 'hkdf', 'sign_enc_alg' and 'sign_alg' provide an early knowledge of the algorithms used in the OSCORE group. Thus, the client is able to decide whether to actually proceed with the (ACE) join process, depending on its support for the indicated algorithms.
 
 As mentioned above, since this mechanism is OPTIONAL, all the fields are OPTIONAL in the informative response. However, the 'join_uri' and 'sec_gp' fields MUST be present if the mechanism is implemented and used. If any of the fields are present without the 'join_uri' and 'sec_gp' fields present, the client MUST ignore these fields, since they would not be sufficient to start the (ACE) join procedure. When this happens, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). Otherwise, the client SHOULD explicitly withdraw from the group observation.
 
@@ -1033,11 +1047,11 @@ The table below summarizes them and specifies the CBOR key to use instead of the
  join_uri       | 3        | text string       | {{sec-inf-response}}
  sec_gp         | 4        | text string       | {{sec-inf-response}}
  as_uri         | 5        | text string       | {{sec-inf-response}}
- cs_alg         | 6        | int / text string | {{sec-inf-response}}
- cs_params      | 7        | array             | {{sec-inf-response}}
- cs_kenc        | 8        | int               | {{sec-inf-response}}
- alg            | 9        | int / text string | {{sec-inf-response}}
- hkdf           | 10       | int / text string | {{sec-inf-response}}
+ hkdf           | 6        | int / text string | {{sec-inf-response}}
+ pub_key_kenc   | 7        | int               | {{sec-inf-response}}
+ sign_enc_alg   | 8        | int / text string | {{sec-inf-response}}
+ sign_alg       | 9        | int / text string | {{sec-inf-response}}
+ sign_params    | 10       | array             | {{sec-inf-response}}
  gp_material    | 11       | map               | {{self-managed-oscore-group}}
  srv_pub_key    | 12       | byte string       | {{self-managed-oscore-group}}
  srv_identifier | 13       | byte string       | {{self-managed-oscore-group}}
@@ -1431,17 +1445,17 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-    - 'ms', 'contexId', 'cs_alg', 'cs_params', 'cs_key_enc'. These elements MUST be included.
+    - 'ms', 'contexId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params'. These elements MUST be included.
 
-    - 'hkdf', 'alg', 'salt'. These elements MAY be included.
+    - 'hkdf', 'salt'. These elements MAY be included.
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-   If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST be included. Otherwise, they MUST NOT be included.
+   If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'alg', 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST also be included. Otherwise, they MUST NOT be included.
 
-* 'srv_pub_key': this element is a CBOR byte string, which wraps the serialization of the public key that the server uses in the OSCORE group. If the public key of the server is encoded as a COSE\_Key (see the 'cs_key_enc' element of the 'gp_material' parameter), it includes 'kid' specifying the Sender ID that the server has in the OSCORE group.
+* 'srv_pub_key': this element is a CBOR byte string, which wraps the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element.
 
-* 'srv_identifier': this element MUST be present only if 'srv_pub_key' is also present and, at the same time, the used encoding for the public key of the server does not allow to specify a Sender ID within the associated public key. Otherwise, it MUST NOT be present. If present, this element is a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
+* 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
 * 'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what specified for NumericDate in {{Section 2 of RFC7519}}.
 
@@ -1894,7 +1908,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised protection of the error response to the phantom cancellation request.
 
-* Alignment to other Group-OSCORE-related documents.
+* Alignmed parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.
 
 * Fixed in the examples.
 
