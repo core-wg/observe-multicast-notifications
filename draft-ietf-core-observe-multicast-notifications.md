@@ -13,7 +13,7 @@ kw: Internet-Draft
 cat: std
 updates: 7252, 7641
 
-coding: us-ascii
+coding: utf-8
 pi:    # can use array (if all yes) or hash here
 
   toc: yes
