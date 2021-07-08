@@ -1445,15 +1445,15 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-    - 'ms', 'contexId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg', 'sign_params'. These elements MUST be included.
+    - 'ms', 'contexId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg' and 'sign_params'. These elements MUST be included.
 
-    - 'hkdf', 'salt'. These elements MAY be included.
+    - 'hkdf' and 'salt'. These elements MAY be included.
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
    If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'alg', 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST also be included. Otherwise, they MUST NOT be included.
 
-* 'srv_pub_key': this element is a CBOR byte string, which wraps the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element.
+* 'srv_pub_key': this element is a CBOR byte string, which wraps the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element of 'gp_material'.
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
