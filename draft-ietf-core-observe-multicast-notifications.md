@@ -1481,7 +1481,11 @@ After the time indicated in the 'exp' field:
 
 * The client MUST stop using the keying material and MAY re-register the observation at the server.
 
-Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) and contains the abovementioned parameters for the next group keying material to be used. Alternatively, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
+Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) and contains the abovementioned parameters for the next group keying material to be used.
+
+When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.
+
+As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
 Applications requiring backward security and forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in {{sec-inf-response}}.
 
