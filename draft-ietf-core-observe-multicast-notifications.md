@@ -356,10 +356,10 @@ In order to not cause congestion, the server should conservatively control the s
 
 * The multicast notifications MUST be Non-confirmable.
 
-* In constrained environments such as low-power, lossy networks (LLNs), the server should only support multicast notifications for resources that are small. Following related guidelines from {{Section 3.5 of I-D.ietf-core-groupcomm-bis}}, this can consist, for example, in having the payload of multicast notifications as limited to approximately 5% of the IP Maximum Transmit Unit (MTU) size, so that it fits into a single link-layer frame in case IPv6 over Low-Power Wireless Personal Area Networks (6LoWPAN) (see {{Section 4 of RFC4944}}) is
+* In constrained environments such as low-power, lossy networks (LLNs), the server should only support multicast notifications for resources that are small. Following related guidelines from {{Section 3.6 of I-D.ietf-core-groupcomm-bis}}, this can consist, for example, in having the payload of multicast notifications as limited to approximately 5% of the IP Maximum Transmit Unit (MTU) size, so that it fits into a single link-layer frame in case IPv6 over Low-Power Wireless Personal Area Networks (6LoWPAN) (see {{Section 4 of RFC4944}}) is
 used.
 
-* The server SHOULD provide multicast notifications with the smallest possible IP multicast scope that fulfills the application needs. For example, following related guidelines from {{Section 3.5 of I-D.ietf-core-groupcomm-bis}}, site-local scope is always preferred over global scope IP multicast, if this fulfills the application needs. Similarly, realm-local scope is always preferred over site-local scope, if this fulfills the application needs.
+* The server SHOULD provide multicast notifications with the smallest possible IP multicast scope that fulfills the application needs. For example, following related guidelines from {{Section 3.6 of I-D.ietf-core-groupcomm-bis}}, site-local scope is always preferred over global scope IP multicast, if this fulfills the application needs. Similarly, realm-local scope is always preferred over site-local scope, if this fulfills the application needs.
 
 * Following related guidelines from {{Section 4.5.1 of RFC7641}}, the server SHOULD NOT send more than one multicast notification every 3 seconds, and SHOULD use an even less aggressive rate when possible (see also {{Section 3.1.2 of RFC8085}}). The transmission rate of multicast notifications should also take into account the avoidance of a possible "broadcast storm" problem {{MOBICOM99}}. This prevents a following, considerable increase of the channel load, whose origin would be likely attributed to a router rather than the server.
 
@@ -610,7 +610,7 @@ If this information is not known to the server, it is recommended to define MAX_
 
 MAX_CONFIRMATION_WAIT = MAX_RTT + MAX_CLIENT_REQUEST_DELAY
 
-where MAX_RTT is as defined in {{Section 4.8.2 of RFC7252}} and has default value 202 seconds, while MAX_CLIENT_REQUEST_DELAY is equivalent to MAX_SERVER_RESPONSE_DELAY defined in {{Section 3.1 of I-D.ietf-core-groupcomm-bis}} and has default value 250 seconds. In the absence of more specific information, the server can thus consider a conservative MAX_CONFIRMATION_WAIT of 452 seconds.
+where MAX_RTT is as defined in {{Section 4.8.2 of RFC7252}} and has default value 202 seconds, while MAX_CLIENT_REQUEST_DELAY is equivalent to MAX_SERVER_RESPONSE_DELAY defined in {{Section 3.1.5 of I-D.ietf-core-groupcomm-bis}} and has default value 250 seconds. In the absence of more specific information, the server can thus consider a conservative MAX_CONFIRMATION_WAIT of 452 seconds.
 
 If more information is available in deployments, a much shorter MAX_CONFIRMATION_WAIT can be set. This can be based on a realistic round trip time (replacing MAX_RTT) and on the largest leisure time configured on the clients (replacing MAX_CLIENT_REQUEST_DELAY), e.g., DEFAULT_LEISURE = 5 seconds, thus shortening MAX_CONFIRMATION_WAIT to a few seconds.
 
@@ -712,7 +712,7 @@ Optionally, the informative response includes information on the OSCORE group to
 
 The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The process described in {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see Sections 4.3.1 and 4.3.2 of {{I-D.ietf-core-oscore-groupcomm}}).
+The process described in {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}}).
 
 *  The 'request_kid' is the 'kid' value in the OSCORE option of the phantom registration request, i.e., the Sender ID of the server.
 
@@ -1475,7 +1475,7 @@ After the time indicated in the 'exp' field:
 
    - The server MUST update the Master Secret.
 
-   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 3.1 of I-D.ietf-core-oscore-groupcomm}}.
+   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
 
    - The server MAY update the Master Salt.
 
@@ -1921,6 +1921,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 # Acknowledgments # {#acknowldegment}
 {: numbered="no"}
 
-The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime Jimenez, John Mattsson, Ludwig Seitz, Jim Schaad and Goeran Selander for their comments and feedback.
+The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime Jimenez, John Mattsson, Ludwig Seitz, Jim Schaad and Göran Selander for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
