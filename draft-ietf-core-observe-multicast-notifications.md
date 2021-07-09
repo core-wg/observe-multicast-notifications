@@ -1461,7 +1461,9 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
-The server complies with the following points.
+Since the server is acting as de-facto Group Manager, the public key of the server provided in the 'srv_pub_key' element of the informative response is also used in the 'gm_public_key' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}})
+
+Furthermore, the server complies with the following points.
 
 * The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of group observations, as defined in this document.
 
