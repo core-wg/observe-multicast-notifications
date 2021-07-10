@@ -1918,7 +1918,9 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Aligned parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.
 
-* Fixed in the examples.
+* Clarifications about self-managed OSCORE group and use of deterministic requests for cacheable OSCORE.
+
+* Fixes in the examples.
 
 * Editorial improvements.
 
