@@ -1469,7 +1469,7 @@ Furthermore, the server complies with the following points.
 
 After the time indicated in the 'exp' field:
 
-* The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see ssec-server-side-cancellation and {{ssec-server-side-cancellation-oscore}}). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:
+* The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:
 
    - The server MUST update the Master Secret.
 
@@ -1479,7 +1479,7 @@ After the time indicated in the 'exp' field:
 
 * The client MUST stop using the keying material and MAY re-register the observation at the server.
 
-Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) and contains the abovementioned parameters for the next group keying material to be used.
+Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}), which additionally contains the abovementioned parameters for the next group keying material to be used. The response has the same Token value T of the phantom registration request and it does not include an Observe option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response.
 
 When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.
 
