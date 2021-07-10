@@ -1459,9 +1459,11 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
 * 'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what specified for NumericDate in {{Section 2 of RFC7519}}.
 
+Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Joining Response (see {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.
+
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
-Since the server is acting as de-facto Group Manager, the public key of the server provided in the 'srv_pub_key' element of the informative response is also used in the 'gm_public_key' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}})
+Since the server is also acting as Group Manager, the public key of the server provided in the 'srv_pub_key' element of the informative response is also used in the 'gm_public_key' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}})
 
 Furthermore, the server complies with the following points.
 
