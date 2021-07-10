@@ -367,9 +367,9 @@ used.
 
 At any point in time, the server may want to cancel a group observation of a target resource. For instance, the server may realize that no clients or not enough clients are interested in taking part in the group observation anymore. A possible approach that the server can use to assess this is defined in {{sec-rough-counting}}.
 
-In order to cancel the group observation, the server sends to itself a phantom cancellation request, i.e., a GET request with an Observe option set to 1 (deregister), without transmitting it on the wire. As per {{Section 3.6 of RFC7641}}, all other options MUST be identical to those in the phantom registration request, except for the set of ETag Options. This request has the same Token value T of the phantom registration request, and is addressed to the resource for which the server wants to cancel the group observation, as if sent by the group of observers, i.e., with the multicast IP address GRP_ADDR as source address and the port number GRP_PORT as source port.
+In order to cancel the group observation, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated. The response has the same Token value T of the phantom registration request, it has no payload, and it does not include an Observe option.
 
-After that, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated.  The response has no payload, and is sent to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. As per {{RFC7641}}, this response does not include an Observe option. Finally, the server releases the resources allocated for the group observation, and especially frees up the Token value T used at its CoAP endpoint.
+The server sends the response to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. Finally, the server releases the resources allocated for the group observation, and especially frees up the Token value T used at its CoAP endpoint.
 
 # Client-Side Requirements # {#sec-client-side}
 
@@ -724,13 +724,7 @@ Note that these same values are used to protect each and every multicast notific
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation (see {{ssec-server-side-cancellation}}), the phantom cancellation request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
-
-Like defined in {{ssec-server-side-request-oscore}} for the phantom registration request, the server protects the phantom cancellation request as per {{Section 8.1 of I-D.ietf-core-oscore-groupcomm}}, by using its Sender Context and consuming its current Sender Sequence number in the OSCORE group, from its Sender Context.
-
-The following, corresponding multicast error response defined in {{ssec-server-side-cancellation}} is also protected with Group OSCORE, as per {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}}. In particular, the server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response. This is required, since the client has never seen that request, and thus cannot build the AEAD nonce based on the Partial IV of the phantom cancellation request.
-
-Note that, differently from the multicast notifications, this multicast error response will be the only one securely paired with the phantom cancellation request.
+When canceling a group observation (see {{ssec-server-side-cancellation}}), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -1475,7 +1469,7 @@ Furthermore, the server complies with the following points.
 
 After the time indicated in the 'exp' field:
 
-* The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see {{ssec-server-side-cancellation}}). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:
+* The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see ssec-server-side-cancellation and {{ssec-server-side-cancellation-oscore}}). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:
 
    - The server MUST update the Master Secret.
 
@@ -1489,7 +1483,7 @@ Before the keying material has expired, the server can send a multicast response
 
 When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.
 
-As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
+As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
 Applications requiring backward security and forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in {{sec-inf-response}}.
 
@@ -1914,7 +1908,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
-* Revised protection of the error response to the phantom cancellation request.
+* Simplified cancellation of the group observation, without using a phantom cancellation request.
 
 * Aligned parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.
 
