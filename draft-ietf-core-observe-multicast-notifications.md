@@ -31,8 +31,8 @@ author:
         country: Sweden
         email: marco.tiloca@ri.se
       -
-        ins: R. Hoeglund
-        name: Rikard Hoeglund
+        ins: R. Höglund
+        name: Rikard Höglund
         org: RISE AB
         street: Isafjordsgatan 22
         city: Kista
@@ -40,8 +40,8 @@ author:
         country: Sweden
         email: rikard.hoglund@ri.se
       -
-        ins: C. Amsuess
-        name: Christian Amsuess
+        ins: C. Amsüss
+        name: Christian Amsüss
         org:
         street: Hollandstr. 12/4
         city: Vienna
@@ -1911,7 +1911,7 @@ The example provided in this appendix as reflected by the message exchange shown
 
 8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
 
-9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the tranport information, the phantom request, and (optionally) the latest notification.
+9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the transport information, the phantom request, and (optionally) the latest notification.
 
 10. From the received 5.03 response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the 5.03 response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
 
