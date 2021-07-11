@@ -671,7 +671,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
         - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-The values of 'sign_alg', 'sign_params' and 'pub_key_kenc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
+The values of 'sign_alg', 'sign_params' and 'pub_key_enc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
 
 The values of 'hkdf', 'sign_enc_alg' and 'sign_alg' provide an early knowledge of the algorithms used in the OSCORE group. Thus, the client is able to decide whether to actually proceed with the (ACE) join process, depending on its support for the indicated algorithms.
 
@@ -1037,7 +1037,7 @@ The table below summarizes them and specifies the CBOR key to use instead of the
  sec_gp         | 4        | text string       | {{sec-inf-response}}
  as_uri         | 5        | text string       | {{sec-inf-response}}
  hkdf           | 6        | int / text string | {{sec-inf-response}}
- pub_key_kenc   | 7        | int               | {{sec-inf-response}}
+ pub_key_enc    | 7        | int               | {{sec-inf-response}}
  sign_enc_alg   | 8        | int / text string | {{sec-inf-response}}
  sign_alg       | 9        | int / text string | {{sec-inf-response}}
  sign_params    | 10       | array             | {{sec-inf-response}}
