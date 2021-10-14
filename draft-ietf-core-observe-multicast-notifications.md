@@ -244,6 +244,8 @@ Note that this also applies when, with no ongoing traditional observations on th
 
 ### Encoding of Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
+\[ This encoding might be replaced by CRIs {{?I-D.ietf-core-href}} in a later version of this document. \]
+
 The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.
 
 ~~~~~~~~~~~
