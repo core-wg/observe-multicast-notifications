@@ -1141,7 +1141,7 @@ This document registers the media type 'application/informative-response+cbor' f
 
 ## CoAP Content-Formats Registry {#content-format}
 
-IANA is asked to add the following entry to the "CoAP Content-Formats" sub-registry defined in {{Section 12.3 of RFC7252}}, within the "Constrained RESTful Environments (CoRE) Parameters" registry.
+IANA is asked to add the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 Media Type: application/informative-response+cbor
 
@@ -1153,7 +1153,7 @@ Reference: \[this document\]
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
-This document establishes the "Informative Response Parameters" IANA registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document establishes the "Informative Response Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
 
 The columns of this registry are:
 
@@ -1169,7 +1169,7 @@ This registry has been initially populated by the values in {{informative-respon
 
 ## CoAP Transport Information Registry {#iana-transport-protocol-identifiers}
 
-This document defines the subregistry "CoAP Transport Information" within the "CoRE Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
+This document establishes the "CoAP Transport Information" registry within the "CoRE Parameters" registry group. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
 
@@ -1189,7 +1189,7 @@ This registry has been initially populated by the values in {{transport-protocol
 
 ## CoAP Option Numbers Registry ## {#iana-coap-options}
 
-IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry defined in {{RFC7252}} within the "CoRE Parameters" registry.
+IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
 
 ~~~~~~~~~~~
 +--------+--------------------------------------+-----------------+
@@ -2149,6 +2149,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -01 to -02 ## {#sec-01-02}
+
+* RFC8126 terminology in IANA considerations.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
