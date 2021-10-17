@@ -104,6 +104,7 @@ informative:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-rats-uccs:
   I-D.ietf-cose-cbor-encoded-cert:
+  I-D.tiloca-core-oscore-capable-proxies:
   RFC6347:
   RFC6690:
   RFC7519:
@@ -1095,7 +1096,7 @@ Removing the option would result in the proxy adjacent to the origin server to n
 
 Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.
 
-In order to prevent what described above, the ticket requests conveying the Listen-To-Multicast-Responses option can be additionally protected hop-by-hop.
+In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.tiloca-core-oscore-capable-proxies}}) and/or DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}}.
 
 # IANA Considerations # {#iana}
 
@@ -2151,6 +2152,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -01 to -02 ## {#sec-01-02}
+
+* Protection of the ticket request sent to a proxy.
 
 * RFC8126 terminology in IANA considerations.
 
