@@ -1151,6 +1151,21 @@ ID: TBD
 
 Reference: \[this document\]
 
+## CoAP Option Numbers Registry ## {#iana-coap-options}
+
+IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
+
+~~~~~~~~~~~
++--------+--------------------------------------+-----------------+
+| Number |                 Name                 |    Reference    |
++--------+--------------------------------------+-----------------+
+|  TBD   |  Multicast-Response-Feedback-Divider | [This document] |
++--------+--------------------------------------+-----------------+
+|  TBD   |  Listen-To-Multicast-Responses       | [This document] |
++--------+--------------------------------------+-----------------+
+~~~~~~~~~~~
+{: artwork-align="center"}
+
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
 This document establishes the "Informative Response Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
@@ -1186,21 +1201,6 @@ The columns of this registry are:
 * Reference: This contains a pointer to the public specification for the item.
 
 This registry has been initially populated by the values in {{transport-protocol-identifiers}}. The "Reference" column for all of these entries refers to sections of this document.
-
-## CoAP Option Numbers Registry ## {#iana-coap-options}
-
-IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
-
-~~~~~~~~~~~
-+--------+--------------------------------------+-----------------+
-| Number |                 Name                 |    Reference    |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Multicast-Response-Feedback-Divider | [This document] |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Listen-To-Multicast-Responses       | [This document] |
-+--------+--------------------------------------+-----------------+
-~~~~~~~~~~~
-{: artwork-align="center"}
 
 ## Expert Review Instructions {#iana-review}
 
