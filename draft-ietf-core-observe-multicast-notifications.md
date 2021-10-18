@@ -545,9 +545,11 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
 
 # Rough Counting of Clients in the Group Observation {#sec-rough-counting}
 
+This section specifies a method that the server can use to keep an estimate of still active and interested clients, without creating undue traffic on the network.
+
 ## Multicast-Response-Feedback-Divider Option
 
-In order to allow the server to keep an estimate of interested clients without creating undue traffic on the network, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
+In order to enable the rough counting of still active and interested clients, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
 
 The option is called Multicast-Response-Feedback-Divider. As summarized in {{mrfd-table}}, the option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
 
