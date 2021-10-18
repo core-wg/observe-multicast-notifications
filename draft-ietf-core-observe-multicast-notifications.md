@@ -1086,9 +1086,9 @@ In addition to the security considerations from {{RFC7252}}{{RFC7641}}{{I-D.ietf
 
 In case communications are not protected, the server might not be able to effectively authenticate a new client when it registers as an observer. {{Section 7 of RFC7641}} specifies how, in such a case, the server must strictly limit the number of notifications sent between receiving acknowledgements from the client, as confirming to be still interested in the observation; i.e., any notifications sent in Non-confirmable messages must be interspersed with confirmable messages.
 
-This is not possible to achieve by the same means when using the communication model defined in this document, since multicast notifications are sent as Non-confirmable message. Nonetheless, the server might obtain such acknowledgements by other means.
+This is not possible to achieve by the same means when using the communication model defined in this document, since multicast notifications are sent as Non-confirmable messages. Nonetheless, the server might obtain such acknowledgements by other means.
 
-For instance, the method defined in {{sec-rough-counting}} to perform the rough counting of still interested clients triggers (some of) the clients to explicitly send a new observation request to confirm their interest. Then, the server can decide to terminate the group observation altogether, in case not enough clients are estimated to be still active. If the method defined in {{sec-rough-counting}}, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients.
+For instance, the method defined in {{sec-rough-counting}} to perform the rough counting of still interested clients triggers (some of) them to explicitly send a new observation request to acknowledge their interest. Then, the server can decide to terminate the group observation altogether, in case not enough clients are estimated to be still active. If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients.
 
 ## Secured Multicast Notifications
 
