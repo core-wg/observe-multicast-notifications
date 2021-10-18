@@ -575,7 +575,7 @@ The client picks an integer random number I, from 0 inclusive to the number Z = 
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless the source IP address and port number of the received multicast notification.
 
-Since the observation registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
+Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
 
 The client MUST ignore the Multicast-Response-Feedback-Divider option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
 
@@ -1080,7 +1080,17 @@ The table below summarizes them, specifies the integer value to use instead of t
 
 # Security Considerations # {#sec-security-considerations}
 
-The same security considerations from {{RFC7252}}{{RFC7641}}{{I-D.ietf-core-groupcomm-bis}}{{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}} hold for this document.
+In addition to the security considerations from {{RFC7252}}{{RFC7641}}{{I-D.ietf-core-groupcomm-bis}}{{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}, the following considerations hold for this document.
+
+## Unsecured Multicast Notifications
+
+In case communications are not protected, the server might not be able to effectively authenticate a new client when it registers as an observer. {{Section 7 of RFC7641}} specifies how, in such a case, the server must strictly limit the number of notifications sent between receiving acknowledgements from the client, as confirming to be still interested in the observation; i.e., any notifications sent in Non-confirmable messages must be interspersed with confirmable messages.
+
+This is not possible to achieve by the same means when using the communication model defined in this document, since multicast notifications are sent as Non-confirmable message. Nonetheless, the server might obtain such acknowledgements by other means.
+
+For instance, the method defined in {{sec-rough-counting}} to perform the rough counting of still interested clients triggers (some of) the clients to explicitly send a new observation request to confirm their interest. Then, the server can decide to terminate the group observation altogether, in case not enough clients are estimated to be still active. If the method defined in {{sec-rough-counting}}, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients.
+
+## Secured Multicast Notifications
 
 If multicast notifications are protected using Group OSCORE as per {{sec-secured-notifications}}, the following applies.
 
@@ -2164,6 +2174,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * New parameter 'next_not_before' for the informative response.
 
 * Optimization when rekeying the self-managed OSCORE group.
+
+* Security considerations on unsecured multicast notifications.
 
 * Protection of the ticket request sent to a proxy.
 
