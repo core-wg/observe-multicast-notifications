@@ -210,8 +210,6 @@ Assuming it is reachable at the address SRV_ADDR and port number SRV_PORT, the s
 
 6. The server builds a CoAP response message INIT_NOTIF as initial multicast notification for the target resource, in response to the phantom observation request. This message is formatted as other multicast notifications (see {{ssec-server-side-notifications}}) and MUST include the current representation of the target resource as payload. The server stores the message INIT_NOTIF and does not transmit it. The server considers this message as the latest multicast notification for the target resource, until it transmits a new multicast notification for that resource as a CoAP message on the wire. After that, the server deletes the message INIT_NOTIF.
 
-<!-- FP 23-10-2019: is it a problem if the server responds right after the phantom observation? I guess it could be a problem, as it would allow clients to spam other clients by starting the group observation... in general it's fine for a client to get notifications for a resource even if the resource representation does not change, if it has decided to observe. But maybe in this case it could open up to easy DOS? We might need more opinions -->
-
 ## Informative Response ## {#ssec-server-side-informative}
 
 After having started a group observation on a target resource, the server proceeds as follows.
@@ -228,13 +226,18 @@ The Content-Format of the informative response is set to application/informative
 
 * 'last_notif', with value the byte serialization of the transport-independent information of the latest multicast notification for the target resource, encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}. This parameter MAY be included.
 
+* 'next_not_before', with value the amount of seconds that will minimally elapse before the server sends the next multicast notification for the group observation of the target resource, encoded as a CBOR unsigned integer. This parameter MAY be included.
+
+   This information can help a new client to align itself with the server's timeline, especially in scenarios where multicast notifications are regularly sent. Also, it can help synchronizing different clients when orchestrating a content distribution through multicast notifications.
+
 The CDDL notation {{RFC8610}} provided below describes the payload of the informative response.
 
 ~~~~~~~~~~~
 informative_response_payload = {
-   1 => array, ; 'tp_info', i.e., transport-specific information
-   2 => bstr,  ; 'ph_req' (transport-independent information)
- ? 3 => bstr   ; 'last_notif' (transport-independent information)
+   0 => array, ; 'tp_info', i.e., transport-specific information
+   1 => bstr,  ; 'ph_req' (transport-independent information)
+ ? 2 => bstr   ; 'last_notif' (transport-independent information)
+ ? 3 => uint   ; 'next_not_before'
 }
 ~~~~~~~~~~~
 {: #informative-response-payload title="Format of the informative response payload"}
@@ -1031,23 +1034,24 @@ This document defines a number of fields used in the informative response messag
 
 The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name. Note that the media type application/informative-response+cbor MUST be used when these fields are transported.
 
- Name           | CBOR Key | CBOR Type         | Reference
-----------------|----------|-------------------|---------------
- tp_info        | 0        | array             | {{ssec-server-side-informative}}
- ph_req         | 1        | byte string       | {{ssec-server-side-informative}}
- last_notif     | 2        | byte string       | {{ssec-server-side-informative}}
- join_uri       | 3        | text string       | {{sec-inf-response}}
- sec_gp         | 4        | text string       | {{sec-inf-response}}
- as_uri         | 5        | text string       | {{sec-inf-response}}
- hkdf           | 6        | int / text string | {{sec-inf-response}}
- pub_key_enc    | 7        | int               | {{sec-inf-response}}
- sign_enc_alg   | 8        | int / text string | {{sec-inf-response}}
- sign_alg       | 9        | int / text string | {{sec-inf-response}}
- sign_params    | 10       | array             | {{sec-inf-response}}
- gp_material    | 11       | map               | {{self-managed-oscore-group}}
- srv_pub_key    | 12       | byte string       | {{self-managed-oscore-group}}
- srv_identifier | 13       | byte string       | {{self-managed-oscore-group}}
- exp            | 14       | uint              | {{self-managed-oscore-group}}
+ Name            | CBOR Key | CBOR Type  | Reference
+-----------------|----------|------------|---------------
+ tp_info         | 0        | array      | {{ssec-server-side-informative}}
+ ph_req          | 1        | bstr       | {{ssec-server-side-informative}}
+ last_notif      | 2        | bstr       | {{ssec-server-side-informative}}
+ next_not_before | 3        | uint       | {{ssec-server-side-informative}}
+ join_uri        | 4        | tstr       | {{sec-inf-response}}
+ sec_gp          | 5        | tstr       | {{sec-inf-response}}
+ as_uri          | 6        | tstr       | {{sec-inf-response}}
+ hkdf            | 7        | int / tstr | {{sec-inf-response}}
+ pub_key_enc     | 8        | int        | {{sec-inf-response}}
+ sign_enc_alg    | 9        | int / tstr | {{sec-inf-response}}
+ sign_alg        | 10       | int / tstr | {{sec-inf-response}}
+ sign_params     | 11       | array      | {{sec-inf-response}}
+ gp_material     | 12       | map        | {{self-managed-oscore-group}}
+ srv_pub_key     | 13       | bstr       | {{self-managed-oscore-group}}
+ srv_identifier  | 14       | bstr       | {{self-managed-oscore-group}}
+ exp             | 15       | uint       | {{self-managed-oscore-group}}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
@@ -1445,7 +1449,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'alg', 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST also be included. Otherwise, they MUST NOT be included.
 
-* 'srv_pub_key': this element is a CBOR byte string, which wraps the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element of 'gp_material'.
+* 'srv_pub_key': this element is a CBOR byte string, with value the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element of 'gp_material'.
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
@@ -2152,6 +2156,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -01 to -02 ## {#sec-01-02}
+
+* New parameter 'next_not_before' for the informative response.
 
 * Protection of the ticket request sent to a proxy.
 
