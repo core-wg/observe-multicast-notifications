@@ -222,7 +222,11 @@ The Content-Format of the informative response is set to application/informative
 
 * 'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. The CBOR array is formatted as defined in {{sssec-transport-specific-encoding}}. This parameter MUST be included.
 
-* 'ph_req', with value the byte serialization of the transport-independent information of the phantom observation request (see {{ssec-server-side-request}}), encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}. This parameter MUST be included.
+* 'ph_req', with value the byte serialization of the transport-independent information of the phantom observation request (see {{ssec-server-side-request}}), encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}.
+
+   This parameter MAY be omitted, in case the phantom request is, in terms of transport-independent information, identical to the registration request from the client. Otherwise, this parameter MUST be included.
+
+   Note that the registration request from the client may indeed differ from the phantom observation request in terms of transport-independent information, but still be acceptable for the server to register the client as taking part in the group observation.
 
 * 'last_notif', with value the byte serialization of the transport-independent information of the latest multicast notification for the target resource, encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}. This parameter MAY be included.
 
@@ -235,7 +239,7 @@ The CDDL notation {{RFC8610}} provided below describes the payload of the inform
 ~~~~~~~~~~~
 informative_response_payload = {
    0 => array, ; 'tp_info', i.e., transport-specific information
-   1 => bstr,  ; 'ph_req' (transport-independent information)
+ ? 1 => bstr,  ; 'ph_req' (transport-independent information)
  ? 2 => bstr   ; 'last_notif' (transport-independent information)
  ? 3 => uint   ; 'next_not_before'
 }
@@ -393,11 +397,15 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
     - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified as value of the 'cli_addr' and 'cli_port' elements of 'req_info' under the 'tp_info' parameter, in the informative response (see {{ssssec-udp-transport-specific}}). If the 'cli_port' element is omitted in 'req_info', the client MUST assume the default port number 5683 as GRP_PORT.
 
-2. The client rebuilds the phantom registration request, by using:
+2. The client rebuilds the phantom registration request as follows.
 
-   * The transport-independent information, specified in the 'ph_req' parameter of the informative response.
+   * The client uses the Token value T, specified in the 'token' element of 'req_info' under the 'tp_info' parameter of the informative response.
 
-   * The Token value T, specified in the 'token' element of 'req_info' under the 'tp_info' parameter of the informative response.
+   * If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.
+
+   * If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.
+
+      If such transport-independent information differs from the one in the original Observe registration request, the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. Unless this is the case, the client SHOULD explicitly withdraw from the group observation.
 
 3. The client stores the phantom registration request, as associated to the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated to that group observation, with respect to the server. The particular way to achieve this is implementation specific.
 
@@ -471,8 +479,6 @@ C_1     ----------------- [ Unicast ] ------------------------> S  /r
  |                                                              |
  |               (S allocates the available Token value 0x7b .) |
  |                                                              |
- |                                                              |
- |                                                              |
  |      (S sends to itself a phantom observation request PH_REQ |
  |       as coming from the IP multicast address GRP_ADDR .)    |
  |         ------------------------------------------------     |
@@ -497,12 +503,8 @@ C_1 <-------------------- [ Unicast ] ---------------------     S
  |  Payload: {                                                  |
  |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
  |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
- |    ph_req     : bstr(0x01 | OPT),                            |
  |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
  |  }                                                           |
- |                                                              |
- |                                                              |
-
  |                                                              |
 C_2     ----------------- [ Unicast ] ------------------------> S  /r
  |  GET                                                         |
@@ -513,7 +515,6 @@ C_2     ----------------- [ Unicast ] ------------------------> S  /r
  |                          (S increments the observer counter  |
  |                           for the group observation of /r .) |
  |                                                              |
- |                                                              |
 C_2 <-------------------- [ Unicast ] ---------------------     S
  |  5.03                                                        |
  |  Token: 0x01                                                 |
@@ -523,12 +524,10 @@ C_2 <-------------------- [ Unicast ] ---------------------     S
  |  Payload: {                                                  |
  |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
  |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
- |    ph_req     : bstr(0x01 | OPT),                            |
  |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
  |  }                                                           |
  |                                                              |
  |          (The value of the resource /r changes to "5678".)   |
- |                                                              |
  |                                                              |
 C_1                                                             |
  +  <------------------- [ Multicast ] --------------------     S
@@ -703,7 +702,7 @@ The server protects the phantom registration request as defined in {{Section 8.1
 
 ### Informative Response ### {#ssec-server-side-informative-oscore}
 
-The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see {{ssec-server-side-request-oscore}}). As a consequence: the specified Code is always 0.05 (FETCH); the sequence of CoAP options will be limited to the outer, non encrypted options; a payload is always present, as the authenticated ciphertext followed by the signature.
+The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see {{ssec-server-side-request-oscore}}). As a consequence: the specified Code is always 0.05 (FETCH); the sequence of CoAP options will be limited to the outer, non encrypted options; a payload is always present, as the authenticated ciphertext followed by the signature. Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
 Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built in step 6 of {{ssec-server-side-request}}.
 
@@ -734,6 +733,8 @@ When using Group OSCORE to protect multicast notifications, the client performs 
 ### Informative Response ### {#ssec-client-side-informative-oscore}
 
 Upon receiving the informative response from the server, the client performs as described in {{ssec-client-side-informative}}, with the following additions.
+
+When performing step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
 Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in {{Section 8.2 of I-D.ietf-core-oscore-groupcomm}}, with the following differences.
 
@@ -806,7 +807,6 @@ C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  }                                                           |
  |                                                              |
  |              (S allocates the available Token value 0x7b .)  |
- |                                                              |
  |                                                              |
  |      (S sends to itself a phantom observation request PH_REQ |
  |       as coming from the IP multicast address GRP_ADDR .)    |
@@ -1509,9 +1509,9 @@ For instance, the clients can be pre-configured with the phantom observation req
 
 If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can independently protect the phantom observation request possibly available as plain CoAP message. To this end, they use the approach defined in {{Section 2 of I-D.amsuess-core-cachable-oscore}} to compute a protected deterministic request, against which the protected multicast notifications will match for the group observation in question.
 
-Note that, if the optimization defined in {{self-managed-oscore-group}} is also used, the error informative response from the server has to include additional information, i.e., the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
+Note that the same deterministic request sent by each client as registration request is, in terms of transport-independent information, identical to the phantom registration request. Thus, the informative response sent by the server may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
-This optimization allows the server to not provide the same full phantom observation request to each client in the error informative response (see {{ssec-server-side-informative}}). That is, the informative response does not need to convey the full phantom request in the 'ph_req' parameter, but only the 'tp_info' parameter specifying the transport-specific information and (optionally) the 'last_notif' parameter specifying the latest sent multicast notification.
+Also note that, if the optimization defined in {{self-managed-oscore-group}} is also used, the error informative response from the server has to include additional information, i.e., the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
 # Example with a Proxy {#intermediaries-example}
 
@@ -1561,7 +1561,6 @@ C1     C2     P        S
 |      |      |        |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,
 |      |      |        |                  0x7b, bstr(GRP_ADDR),
 |      |      |        |                  GRP_PORT],
-|      |      |        |    ph_req     : bstr(0x01 | OPT),
 |      |      |        |    last_notif : bstr(0x45 | OPT |
 |      |      |        |                      0xff | PAYLOAD)
 |      |      |        |  }
@@ -2053,8 +2052,6 @@ C1      C2      P         S
 |       |       |         |     tp_info : [1, bstr(SRV_ADDR), SRV_PORT,
 |       |       |         |                0x7b, bstr(GRP_ADDR),
 |       |       |         |                GRP_PORT],
-|       |       |         |     ph_req : <the deterministic
-|       |       |         |               phantom request>,
 |       |       |         |     last_notif : <the "last notification"
 |       |       |         |                   response prepared above>
 |       |       |         |    }
@@ -2170,6 +2167,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -01 to -02 ## {#sec-01-02}
 
 * Clarifications on client rough counting and IP multicast scope.
+
+* The 'ph_req' parameter is optional in the informative response.
 
 * New parameter 'next_not_before' for the informative response.
 
