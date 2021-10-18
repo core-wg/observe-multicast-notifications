@@ -1459,8 +1459,6 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-   If the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}), the elements 'alg', 'ecdh_alg' and 'ecdh_params' of the Group_OSCORE_Input_Material object MUST also be included. Otherwise, they MUST NOT be included.
-
 * 'srv_pub_key': this element is a CBOR byte string, with value the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element of 'gp_material'.
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
@@ -1511,7 +1509,11 @@ If Group OSCORE is used to protect the group observation (see {{sec-secured-noti
 
 Note that the same deterministic request sent by each client as registration request is, in terms of transport-independent information, identical to the phantom registration request. Thus, the informative response sent by the server may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
-Also note that, if the optimization defined in {{self-managed-oscore-group}} is also used, the error informative response from the server has to include additional information, i.e., the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
+If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the error informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
+
+   * 'alg', 'ecdh_alg' and 'ecdh_params', as per {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
+
+   * 'det_senderId' and 'det_hash_alg', defined in {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
 # Example with a Proxy {#intermediaries-example}
 
@@ -2179,6 +2181,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Protection of the ticket request sent to a proxy.
 
 * RFC8126 terminology in IANA considerations.
+
+* Editorial improvements.
 
 ## Version -00 to -01 ## {#sec-00-01}
 
