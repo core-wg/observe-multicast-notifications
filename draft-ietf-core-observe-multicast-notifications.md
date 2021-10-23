@@ -776,11 +776,11 @@ The server S sends multicast notifications to the IP multicast address GRP_ADDR 
 
 Pairwise communication over unicast is protected with OSCORE, while S protects multicast notifications with Group OSCORE. Specifically:
 
-* C_1 and S have a pairwise OSCORE Security Context. In particular, C_1 has 'kid' = 1 as Sender ID, and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 3 as Sender ID, and SN_3 = 301 as Sender Sequence Number.
+* C_1 and S have a pairwise OSCORE Security Context. In particular, C_1 has 'kid' = 0x01 as Sender ID, and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID, and SN_3 = 301 as Sender Sequence Number.
 
-* C_2 and S have a pairwise OSCORE Security Context. In particular, C_2 has 'kid' = 2 as Sender ID, and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 4 as Sender ID, and SN_4 = 401 as Sender Sequence Number.
+* C_2 and S have a pairwise OSCORE Security Context. In particular, C_2 has 'kid' = 0x02 as Sender ID, and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID, and SN_4 = 401 as Sender Sequence Number.
 
-* S is a member of the OSCORE group with name "myGroup", and 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 5 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
+* S is a member of the OSCORE group with name "myGroup", and 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
 
 The following notation is used for the payload of the informative responses:
 
@@ -797,7 +797,7 @@ The following notation is used for the payload of the informative responses:
 C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
  |  Token: 0x4a                                                 |
- |  OSCORE: {kid: 1; piv: 101; ...}                             |
+ |  OSCORE: {kid: 0x01; piv: 101; ...}                          |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -813,19 +813,18 @@ C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |     ------------------------------------------------------   |
  |    /                                                         |
  |    \-------------------------------------------------------> |  /r
- |                           0.05 (FETCH)                       |
- |                           Token: 0x7b                        |
- |                           OSCORE: {kid: 5 ; piv: 501;        |
- |                                    kid context: 57ab2e; ...} |
- |                           <Other class U/I options>          |
- |                           0xff                               |
- |                           Encrypted_payload {                |
- |                             0x01 (GET),                      |
- |                             Observe: 0 (Register),           |
- |                             <Other class E options>          |
- |                           }                                  |
- |                           <Signature>                        |
- |                                                              |
+ |                         0.05 (FETCH)                         |
+ |                         Token: 0x7b                          |
+ |                         OSCORE: {kid: 0x05 ; piv: 501;       |
+ |                                  kid context: 0x57ab2e; ...} |
+ |                         <Other class U/I options>            |
+ |                         0xff                                 |
+ |                         Encrypted_payload {                  |
+ |                           0x01 (GET),                        |
+ |                           Observe: 0 (Register),             |
+ |                           <Other class E options>            |
+ |                         }                                    |
+ |                         <Signature>                          |
  |                                                              |
  |   (S steps SN_5 in the Group OSCORE Sec. Ctx : SN_5 <== 502) |
  |                                                              |
@@ -833,9 +832,6 @@ C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |                                                              |
  |                          (S increments the observer counter  |
  |                           for the group observation of /r .) |
- |                                                              |
- |                                                              |
-
  |                                                              |
 C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |  2.05 (Content)                                              |
@@ -862,7 +858,7 @@ C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
 C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
  |  0.05 (FETCH)                                                |
  |  Token: 0x01                                                 |
- |  OSCORE: {kid: 2; piv: 201; ...}                             |
+ |  OSCORE: {kid: 0x02; piv: 201; ...}                          |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -903,8 +899,7 @@ C_1                                                             |
 C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
  |  2.05 (Content)                                              |
  |  Token: 0x7b                                                 |
- |  OSCORE: {kid: 5; piv: 502;                                  |
- |           kid context: 57ab2e; ...}                          |
+ |  OSCORE: {kid: 0x05; piv: 502; ...}                          |
  |  <Other class U/I options>                                   |
  |  0xff                                                        |
  |  Encrypted_payload {                                         |
@@ -913,7 +908,7 @@ C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
  |    Content-Format: application/cbor,                         |
  |    <Other class E options>,                                  |
  |    0xff,                                                     |
- |    CBOR_Payload : "5678"                                     |
+ |    CBOR_Payload: "5678"                                      |
  |  }                                                           |
  |  <Signature>                                                 |
  |                                                              |
@@ -1554,6 +1549,7 @@ C1     C2     P        S
 |      |      |        |  for the group observation of /r)
 |      |      |        |
 |      |      |        |
+|      |      |        |
 |      |      |<-------+  Token: 0x5e
 |      |      | 5.03   |  Content-Format: application/
 |      |      |        |     informative-response+cbor
@@ -1585,7 +1581,6 @@ C1     C2     P        S
 :      :      :        :
 :      :      :        :
 |      |      |        |
-|      |      |        |
 |      +----->|        |  Token: 0x01
 |      | GET  |        |  Observe: 0 (Register)
 |      |      |        |  Proxy-Uri: coap://sensor.example/r
@@ -1602,6 +1597,7 @@ C1     C2     P        S
 :      :      :        :  (The value of the resource
 :      :      :        :  /r changes to "5678".)
 :      :      :        :
+|      |      |        |
 |      |      |  (*)   |
 |      |      |<-------+  Token: 0x7b
 |      |      | 2.05   |  Observe: 11
@@ -1648,7 +1644,7 @@ C1      C2      P         S
 |       |       |         |
 +-------------->|         |  Token: 0x4a
 | FETCH |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 1; piv: 101; ...}
+|       |       |         |  OSCORE: {kid: 0x01; piv: 101; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
@@ -1662,7 +1658,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       +-------->|  Token: 0x5e
 |       |       | FETCH   |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 1; piv: 101; ...}
+|       |       |         |  OSCORE: {kid: 0x01; piv: 101; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1685,8 +1681,8 @@ C1      C2      P         S
 |       |       | /       |
 |       |       | \------>|  Token: 0x7b
 |       |       |   FETCH |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5; piv: 501;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 501;
+|       |       |         |           kid context: 0x57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1738,10 +1734,11 @@ C1      C2      P         S
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
+|       |       |         |
 +-------------->|         |  Token: 0x4b
 | FETCH |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05 ; piv: 501;
+|       |       |         |           kid context: 0x57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  Listen-To-
@@ -1760,7 +1757,6 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
-|       |       |         |
 |       |       |         |  (The proxy starts listening to the
 |       |       |         |   GRP_ADDR address and the GRP_PORT port.)
 |       |       |         |
@@ -1775,7 +1771,7 @@ C1      C2      P         S
 |       |       |         |
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 2; piv: 201; ...}
+|       |       |         |  OSCORE: {kid: 0x02; piv: 201; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
@@ -1789,7 +1785,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       +-------->|  Token: 0x5f
 |       |       | FETCH   |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 2; piv: 201; ...}
+|       |       |         |  OSCORE: {kid: 0x02; piv: 201; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -1833,7 +1829,7 @@ C1      C2      P         S
 |       |       |         |
 |       +------>|         |  Token: 0x02
 |       | FETCH |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 5; piv: 501;
+|       |       |         |  OSCORE: {kid: 0x05; piv: 501;
 |       |       |         |           kid context: 57ab2e; ...}
 |       |       |         |  Uri-Host: sensor.example
 |       |       |         |  Proxy-Scheme: coap
@@ -1865,8 +1861,7 @@ C1      C2      P         S
 |       |       |   (*)   |
 |       |       |<--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
-|       |       |         |  OSCORE: {kid: 5; piv: 502;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
@@ -1875,22 +1870,20 @@ C1      C2      P         S
 |       |       |         |    Content-Format: application/cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |   CBOR_Payload : "5678"
+|       |       |         |    CBOR_Payload: "5678"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
 |<--------------+         |  Token: 0x4b
 | 2.05  |       |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and Signature)
 |       |       |         |
 |       |<------+         |  Token: 0x02
 |       | 2.05  |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and signature)
@@ -1945,13 +1938,13 @@ The same assumptions and notation used in {{sec-example-with-security}} are used
 
 * The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
-* S is a member of the OSCORE group with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 5 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
+* S is a member of the OSCORE group with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
 
 In addition:
 
 * The proxy has address PRX_ADDR and listens to the port number PRX_PORT.
 
-* The deterministic client in the OSCORE group has 'kid' 9.
+* The deterministic client in the OSCORE group has 'kid' = 0x09.
 
 Unless explicitly indicated, all messages transmitted on the wire are sent over unicast and protected with Group OSCORE end-to-end between a client and the server.
 
@@ -1971,7 +1964,7 @@ C1      C2      P         S
 +-------------->|         |  Token: 0x4a
 | FETCH |       |         |  Uri-Host: sensor.example
 |       |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 9 ; piv: 0 ;
+|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
@@ -1986,7 +1979,7 @@ C1      C2      P         S
 |       |       +-------->|  Token: 0x5e
 |       |       | FETCH   |  Uri-Host: sensor.example
 |       |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 9 ; piv: 0 ;
+|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -2015,7 +2008,7 @@ C1      C2      P         S
 |       |       | \------>|  Token: 0x7b
 |       |       |   FETCH |  Uri-Host: sensor.example
 |       |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 9 ; piv: 0 ;
+|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -2031,16 +2024,16 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  0x45 (2.05 Content)
 |       |       |         |  Observe: 10
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05 ; piv: 501 ; ...}
 |       |       |         |  Max-Age: 3000
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    Payload: "1234"
+|       |       |         |    CBOR_Payload: "1234"
 |       |       |         |  }
+|       |       |         |  <Signature>
 |       |       |         |
 |       |       |         |  (S responds to the proxy with an
 |       |       |         |   unprotected informative response)
@@ -2069,16 +2062,16 @@ C1      C2      P         S
 |       |       |         |
 |<--------------+         |  Token: 0x4a
 | 2.05  |       |         |  Observe: 54120
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x05 ; piv: 501 ; ...}
 |       |       |         |  Max-Age: 2995
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    Payload: "1234"
+|       |       |         |    CBOR_Payload: "1234"
 |       |       |         |  }
+|       |       |         |  <Signature>
 |       |       |         |
 :       :       :         |
 :       :       :         |
@@ -2089,8 +2082,8 @@ C1      C2      P         S
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Uri-Host: sensor.example
 |       |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 9 ; piv: 0 ;
-|       |       |         |           kid context: 57ab2e; ...}
+|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
+|       |       |         |           kid context: 0x57ab2e; ...}
 |       |       |         |  Proxy-Scheme: coap
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
@@ -2105,16 +2098,16 @@ C1      C2      P         S
 |       |       |         |
 |       |<------+         |  Token: 0x01
 |       | 2.05  |         |  Observe: 54120
-|       |       |         |  OSCORE: {kid: 5 ; piv: 501 ;
-|       |       |         |           kid context: 57ab2e;
+|       |       |         |  OSCORE: {kid: 0x05 ; piv: 501 ; ...}
 |       |       |         |  Max-Age: 1800
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    Payload: "1234"
+|       |       |         |    CBOR_Payload: "1234"
 |       |       |         |  }
+|       |       |         |  <Signature>
 |       |       |         |
 :       :       :         |
 :       :       :         |
@@ -2126,7 +2119,7 @@ C1      C2      P         S
 |       |       |   (*)   |
 |       |       |<--------|  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502 ; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
@@ -2135,7 +2128,7 @@ C1      C2      P         S
 |       |       |         |    Content-Format: application/cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |    CBOR_Payload : "5678"
+|       |       |         |    CBOR_Payload: "5678"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
@@ -2144,14 +2137,14 @@ C1      C2      P         S
 |       |       |         |
 |<--------------+         |  Token: 0x4a
 | 2.05  |       |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502 ; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and signature)
 |       |       |         |
 |       |<------+         |  Token: 0x01
 |       | 2.05  |         |  Observe: 54123
-|       |       |         |  OSCORE: {kid: 5; piv: 502 ; ...}
+|       |       |         |  OSCORE: {kid: 0x05; piv: 502 ; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and signature)
