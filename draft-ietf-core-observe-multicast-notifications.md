@@ -1508,7 +1508,7 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'alg', 'ecdh_alg' and 'ecdh_params', as per {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   * 'det_senderId' and 'det_hash_alg', defined in {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
+   * 'det_senderId' and 'det_hash_alg', defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
 # Example with a Proxy {#intermediaries-example}
 
