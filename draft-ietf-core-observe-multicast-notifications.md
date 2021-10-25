@@ -180,7 +180,7 @@ The server can, at any time, start a group observation on one of its resources. 
 
 The server maintains an observer counter for each group observation to a target resource, as a rough estimation of the observers actively taking part in the group observation.
 
-The server initializes the counter to 0 when starting the group observation, and increments it after a new client starts taking part in that group observation. Also, the server should keep the counter up-to-date over time, for instance by using the method described in {{sec-rough-counting}}. This allows the server to possibly terminate a group obervation in case, at some point in time, not enough clients are estimated to be still active and interested.
+The server initializes the counter to 0 when starting the group observation, and increments it after a new client starts taking part in that group observation. Also, the server should keep the counter up-to-date over time, for instance by using the method described in {{sec-rough-counting}}. This allows the server to possibly terminate a group observation in case, at some point in time, not enough clients are estimated to be still active and interested.
 
 This document does not describe a way for the client to influence the server's decision to start group observations.
 That is done on purpose:
