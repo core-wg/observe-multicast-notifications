@@ -1239,6 +1239,8 @@ In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observati
 
 This example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
+\[ The reported CoRAL example is based on the textual representation used until  version -03 of {{I-D.ietf-core-coral}}. This will be revised to use the CBOR diagnostic notation instead. \]
+
 ~~~~~~~~~~~
 Request:
 
