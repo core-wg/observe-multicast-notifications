@@ -162,9 +162,9 @@ Readers are expected to be familiar with terms and concepts described in CoAP {{
 
 This document additionally defines the following terminology.
 
-* Traditional observation. A resource observation associated to a single observer client, as defined in {{RFC7641}}.
+* Traditional observation. A resource observation associated with a single observer client, as defined in {{RFC7641}}.
 
-* Group observation. A resource observation associated to a group of clients. The server sends notifications for the group-observed resource over IP multicast to all the observer clients.
+* Group observation. A resource observation associated with a group of clients. The server sends notifications for the group-observed resource over IP multicast to all the observer clients.
 
 * Phantom request. The CoAP request message that the server would have received to start or cancel a group observation on one of its resources. A phantom request is generated inside the server and does not hit the wire.
 
@@ -204,7 +204,7 @@ Assuming it is reachable at the address SRV_ADDR and port number SRV_PORT, the s
 
 3. The server processes the phantom observation request above, without transmitting it on the wire. The request is addressed to the resource for which the server wants to start the group observation, as if sent by the group of observers, i.e., with GRP_ADDR as source address and GRP_PORT as source port.
 
-4. Upon processing the self-generated phantom registration request, the server interprets it as an observe registration received from the group of potential observer clients. In particular, from then on, the server MUST use T as its own local Token value associated to that observation, with respect to the (previous hop towards the) clients.
+4. Upon processing the self-generated phantom registration request, the server interprets it as an observe registration received from the group of potential observer clients. In particular, from then on, the server MUST use T as its own local Token value associated with that observation, with respect to the (previous hop towards the) clients.
 
 5. The server does not immediately respond to the phantom observation request with a multicast notification sent on the wire. The server stores the phantom observation request as is, throughout the lifetime of the group observation.
 
@@ -352,7 +352,7 @@ Upon a change in the status of the target resource under group observation, the 
 
 * It MUST have the same Token value T of the phantom registration request that started the group observation. This Token value is specified in the 'token' element of 'req_info' under the 'tp_info' parameter, in the informative response message sent to all the observer clients.
 
-   That is, every multicast notification for a target resource is not bound to the observation requests from the different clients, but rather to the phantom registration request associated to the whole set of clients taking part in the group observation of that resource.
+   That is, every multicast notification for a target resource is not bound to the observation requests from the different clients, but rather to the phantom registration request associated with the whole set of clients taking part in the group observation of that resource.
 
 * It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where: i) the original Observe registration requests are sent to by the clients; and ii) the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). These are indicated to the observer clients as value of the 'srv_host' and 'srv_port' elements of 'srv_addr' under the 'tp_info' parameter, in the informative response message (see {{ssssec-udp-transport-specific}}). That is, redirection MUST NOT be used.
 
@@ -407,7 +407,7 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
       If such transport-independent information differs from the one in the original Observe registration request, the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. Unless this is the case, the client SHOULD explicitly withdraw from the group observation.
 
-3. The client stores the phantom registration request, as associated to the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated to that group observation, with respect to the server. The particular way to achieve this is implementation specific.
+3. The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.
 
 4. If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:
 
@@ -656,7 +656,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * 'sec_gp', with value the name of the OSCORE group, encoded as a CBOR text string.
 
-   * Optionally, 'as_uri', with value the URI of the Authorization Server associated to the Group Manager for the OSCORE group, encoded as a CBOR text string.
+   * Optionally, 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.
 
    * Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
@@ -742,7 +742,7 @@ Once completed step 2, the client decrypts and verifies the rebuilt phantom regi
 
 * If decryption and verification of the phantom registration request succeed:
 
-   - The client MUST NOT update the Replay Window in the Recipient Context associated to the server. That is, the client skips the second bullet of step 6 in {{Section 8.2 of RFC8613}}.
+   - The client MUST NOT update the Replay Window in the Recipient Context associated with the server. That is, the client skips the second bullet of step 6 in {{Section 8.2 of RFC8613}}.
 
    - The client MUST NOT take any further process as normally expected according to {{RFC7252}}. That is, the client skips step 8 in {{Section 8.2 of RFC8613}}. In particular, the client MUST NOT deliver the phantom registration request to the application, and MUST NOT take any action in the Token space of its unicast endpoint, where the informative response has been received.
 
@@ -939,7 +939,7 @@ When responding to an observation request from a client, the proxy also adds tha
 
 Upon receiving a multicast notification from the server, the proxy forwards it back separately to each observer client over unicast. Note that the notification forwarded back to a certain client has the same Token value of the original observation request sent by that client to the proxy.
 
-Note that the proxy configures the observation of the target resource at the server only once, when receiving the informative response associated to a (newly started) group observation for that target resource.
+Note that the proxy configures the observation of the target resource at the server only once, when receiving the informative response associated with a (newly started) group observation for that target resource.
 
 After that, when receiving an observation request from a following new client to be added to the same group observation, the proxy does not take any further action with the server. Instead, the proxy responds to the client either with the latest multicast notification if available from its cache, or with an Empty Acknowledgement otherwise, as defined above.
 
@@ -1017,7 +1017,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy removes the Listen-To-Multicast-Responses option from the ticket request, and extracts the conveyed transport-specific information.
 
-* The proxy rebuilds the phantom request associated to the group observation, by using the ticket request as directly providing the required transport-independent information. This includes the outer Code field, the outer CoAP options and the encrypted payload with AEAD tag concatenated with the signature.
+* The proxy rebuilds the phantom request associated with the group observation, by using the ticket request as directly providing the required transport-independent information. This includes the outer Code field, the outer CoAP options and the encrypted payload with AEAD tag concatenated with the signature.
 
 * The proxy configures an observation of the target resource at the origin server, acting as a client directly taking part in the group observation. To this end, the proxy uses the rebuilt phantom request and the transport-specific information retrieved from the Listen-To-Multicast-Responses Option. The particular way to achieve this is implementation specific.
 
@@ -1270,7 +1270,7 @@ In heavily asymmetric networks like municipal notification services, discovery a
 
 For network debugging purposes, it can be useful to query a server that sends multicast responses as matching a phantom registration request.
 
-Such an interface is left for other documents to specify on demand. As an example, a possible interface can be as follows, and rely on the already known Token value of intercepted multicast notifications, associated to a phantom registration request.
+Such an interface is left for other documents to specify on demand. As an example, a possible interface can be as follows, and rely on the already known Token value of intercepted multicast notifications, associated with a phantom registration request.
 
 ~~~~~~~~~~~
 Request:
