@@ -389,7 +389,7 @@ A client sends an observation request to the server as described in {{RFC7641}},
 
 In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be preconfigured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
 
-In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response option {{RFC7967}} with value 16 in its observation request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation. This still helps the server to assess the current number of clients interested in a group observation (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation.
+In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response option {{RFC7967}} with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation. This still helps the server to assess the current number of clients interested in a group observation (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation.
 
 ## Informative Response ## {#ssec-client-side-informative}
 
@@ -409,19 +409,19 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
    * If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.
 
-      If such transport-independent information differs from the one in the original Observe registration request, the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. Unless this is the case, the client SHOULD explicitly withdraw from the group observation.
+3. If the informative response includes the parameter 'ph_req', and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. In case no such response is available, the client SHOULD explicitly withdraw from the group observation.
 
-3. The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.
+4. The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.
 
-4. If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:
+5. If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:
 
    * The transport-independent information, specified in the 'last_notif' parameter of the informative response.
 
    * The Token value T, specified in the 'token' element of 'req_info' under the 'tp_info' parameter of the informative response.
 
-5. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt in step 4 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe option is used as initial baseline for notification reordering in this group observation.
+6. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at step 5 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe option is used as initial baseline for notification reordering in this group observation.
 
-6. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
+7. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
 
 If any of the expected fields in the informative response are not present or malformed, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). Otherwise, the client SHOULD explicitly withdraw from the group observation.
 
@@ -754,7 +754,9 @@ Once completed step 2, the client decrypts and verifies the rebuilt phantom regi
 
 * If decryption and verification of the phantom registration request fail, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). Otherwise, the client SHOULD explicitly withdraw from the group observation.
 
-* If the informative response includes the parameter 'last_notif', the client also decrypts and verifies the latest multicast notification rebuilt in step 4, just like it would for the multicast notifications transmitted as CoAP messages on the wire (see {{ssec-client-side-notifications-oscore}}). The client proceeds with step 5 if decryption and verification of the latest multicast notification succeed, or to step 6 otherwise.
+After successful decryption and verification, the client performs step 3 in {{ssec-client-side-informative}}, considering the decrypted phantom registration request.
+
+If the informative response includes the parameter 'last_notif', the client also decrypts and verifies the latest multicast notification rebuilt at step 5 in {{ssec-client-side-informative}}, just like it would for the multicast notifications transmitted as CoAP messages on the wire (see {{ssec-client-side-notifications-oscore}}). If decryption and verification succeed, the client proceeds with step 6, considering the decrypted latest multicast notification. Otherwise, the client proceeds to step 7.
 
 ### Notifications ### {#ssec-client-side-notifications-oscore}
 
@@ -2168,6 +2170,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -02 to -03 ## {#sec-02-03}
 
 * Distinction between authentication credential and public key.
+
+* Fixed processing of informative response at the client, when Group OSCORE is used.
 
 * Discussed scenarios with pre-configured address/port and Token value.
 
