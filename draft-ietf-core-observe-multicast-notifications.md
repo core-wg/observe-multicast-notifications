@@ -250,10 +250,6 @@ Upon receiving a registration request to observe the target resource, the server
 
 Note that this also applies when, with no ongoing traditional observations on the target resource, the server receives a registration request from a first client and decides to start a group observation on the target resource.
 
-In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response can be preconfigured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
-
-In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see above). In this case, the client can include a No-Response option {{RFC7967}} with value 16 in its observation request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation. This still helps the server to assess the current number of clients interested in a group observation (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation.
-
 ### Encoding of Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
 \[ This encoding might be replaced by CRIs {{?I-D.ietf-core-href}} in a later version of this document. \]
@@ -390,6 +386,10 @@ The server sends the response to the same multicast IP address GRP_ADDR and port
 ## Request ## {#ssec-client-side-request}
 
 A client sends an observation request to the server as described in {{RFC7641}}, i.e., a GET request with an Observe option set to 0 (register). The request MUST NOT encode link-local addresses. If the server is not configured to accept registrations on that target resource with a group observation, this would still result in a positive notification response to the client as described in {{RFC7641}}.
+
+In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be preconfigured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
+
+In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response option {{RFC7967}} with value 16 in its observation request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation. This still helps the server to assess the current number of clients interested in a group observation (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation.
 
 ## Informative Response ## {#ssec-client-side-informative}
 
