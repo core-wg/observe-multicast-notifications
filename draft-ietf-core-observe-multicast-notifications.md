@@ -220,7 +220,7 @@ The server sends to each of such clients an informative response message, encode
 
 The Content-Format of the informative response is set to application/informative-response+cbor, defined in {{content-format}}. The payload of the informative response is a CBOR map including the following parameters, whose CBOR labels are defined in {{informative-response-params}}.
 
-* 'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. The CBOR array is formatted as defined in {{sssec-transport-specific-encoding}}. This parameter MUST be included.
+* 'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in {{sssec-transport-specific-encoding}}. This parameter MUST be included.
 
 * 'ph_req', with value the byte serialization of the transport-independent information of the phantom observation request (see {{ssec-server-side-request}}), encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}.
 
@@ -249,6 +249,10 @@ informative_response_payload = {
 Upon receiving a registration request to observe the target resource, the server does not create a corresponding individual observation for the requesting client. Instead, the server considers that client as now taking part in the group observation of the target resource, of which it increments the observer counter by 1. Then, the server replies to the client with the same informative response message defined above, which MUST be Confirmable.
 
 Note that this also applies when, with no ongoing traditional observations on the target resource, the server receives a registration request from a first client and decides to start a group observation on the target resource.
+
+In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response can be preconfigured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
+
+In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see above). In this case, the client can include a No-Response option {{RFC7967}} with value 16 in its observation request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation. This still helps the server to assess the current number of clients interested in a group observation (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation.
 
 ### Encoding of Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
@@ -2164,6 +2168,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -02 to -03 ## {#sec-02-03}
 
 * Distinction between authentication credential and public key.
+
+* Discussed scenarios with pre-configured address/port and Token value.
 
 ## Version -01 to -02 ## {#sec-01-02}
 
