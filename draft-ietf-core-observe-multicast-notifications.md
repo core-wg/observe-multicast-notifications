@@ -660,9 +660,9 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'pub_key_enc', with value the encoding of the public keys used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote an encoding that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
+   * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
-      At the time of writing this specification, acceptable public key encodings are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
+      At the time of writing this specification, acceptable formats of authentication crediantials are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
         \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
 
@@ -678,7 +678,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
         - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
 
-The values of 'sign_alg', 'sign_params' and 'pub_key_enc' provide an early knowledge of the format and encoding of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own public key in the correct expected format and encoding, at the very first step of the (ACE) join process.
+The values of 'sign_alg', 'sign_params' and 'cred_fmt' provide an early knowledge of the format of authentication credentials as well as of the type of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own authentication credential in the correct expected format and including a public key of the correct expected type, at the very first step of the (ACE) join process.
 
 The values of 'hkdf', 'sign_enc_alg' and 'sign_alg' provide an early knowledge of the algorithms used in the OSCORE group. Thus, the client is able to decide whether to actually proceed with the (ACE) join process, depending on its support for the indicated algorithms.
 
@@ -1041,12 +1041,12 @@ The table below summarizes them and specifies the CBOR key to use instead of the
  sec_gp          | 5        | tstr       | {{sec-inf-response}}
  as_uri          | 6        | tstr       | {{sec-inf-response}}
  hkdf            | 7        | int / tstr | {{sec-inf-response}}
- pub_key_enc     | 8        | int        | {{sec-inf-response}}
+ cred_fmt        | 8        | int        | {{sec-inf-response}}
  sign_enc_alg    | 9        | int / tstr | {{sec-inf-response}}
  sign_alg        | 10       | int / tstr | {{sec-inf-response}}
  sign_params     | 11       | array      | {{sec-inf-response}}
  gp_material     | 12       | map        | {{self-managed-oscore-group}}
- srv_pub_key     | 13       | bstr       | {{self-managed-oscore-group}}
+ srv_cred        | 13       | bstr       | {{self-managed-oscore-group}}
  srv_identifier  | 14       | bstr       | {{self-managed-oscore-group}}
  exp             | 15       | uint       | {{self-managed-oscore-group}}
 
@@ -1448,13 +1448,13 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-    - 'ms', 'contexId', 'pub_key_enc', 'sign_enc_alg', 'sign_alg' and 'sign_params'. These elements MUST be included.
+    - 'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg' and 'sign_params'. These elements MUST be included.
 
     - 'hkdf' and 'salt'. These elements MAY be included.
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-* 'srv_pub_key': this element is a CBOR byte string, with value the original binary representation of the server's public key used in the OSCORE group. In particular, the original binary representation complies with the encoding specified by the 'pub_key_enc' element of 'gp_material'.
+* 'srv_cred': this element is a CBOR byte string, with value the original binary representation of the server's authentication credential used in the OSCORE group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
@@ -1464,7 +1464,7 @@ Note that the informative response does not require to include an explicit proof
 
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
-Since the server is also acting as Group Manager, the public key of the server provided in the 'srv_pub_key' element of the informative response is also used in the 'gm_public_key' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}})
+Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.3 of I-D.ietf-core-oscore-groupcomm}})
 
 Furthermore, the server complies with the following points.
 
@@ -2158,6 +2158,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -02 to -03 ## {#sec-02-03}
+
+* Distinction between authentication credential and public key.
 
 ## Version -01 to -02 ## {#sec-01-02}
 
