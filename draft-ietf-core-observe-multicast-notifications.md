@@ -664,7 +664,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
 
-   * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the full set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
+   * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
       At the time of writing this specification, acceptable formats of authentication crediantials are CWTs {{RFC8392}}, unprotected CWT claim sets {{I-D.ietf-rats-uccs}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further encodings may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
@@ -1062,7 +1062,7 @@ This document defines some values of transport protocol identifiers to use withi
 
 According to the encoding specified in {{sssec-transport-specific-encoding}}, these values are used for the 'tp_id' element of 'srv_addr', under the 'tp_info' parameter.
 
-The table below summarizes them, specifies the integer value to use instead of the full descriptive name, and provides the corresponding full set of information elements to include in the 'tp_info' parameter.
+The table below summarizes them, specifies the integer value to use instead of the full descriptive name, and provides the corresponding comprehensive set of information elements to include in the 'tp_info' parameter.
 
 ~~~~~~~~~~~
 +-----------+-------------+-------+----------+-----------+-----------+
