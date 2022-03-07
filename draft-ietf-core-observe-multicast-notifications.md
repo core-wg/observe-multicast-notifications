@@ -1508,7 +1508,7 @@ In some settings, the server can assume that all the approaching clients already
 
 For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}), before sending an observe registration request to the server.
 
-If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can independently protect the phantom observation request possibly available as plain CoAP message. To this end, they use the approach defined in {{Section 2 of I-D.amsuess-core-cachable-oscore}} to compute a protected deterministic request, against which the protected multicast notifications will match for the group observation in question.
+If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can independently protect the phantom observation request possibly available as plain CoAP message. To this end, they use the approach defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}} to compute a protected deterministic request, against which the protected multicast notifications will match for the group observation in question.
 
 Note that the same deterministic request sent by each client as registration request is, in terms of transport-independent information, identical to the phantom registration request. Thus, the informative response sent by the server may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
@@ -1516,7 +1516,7 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'alg', 'ecdh_alg' and 'ecdh_params', as per {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   * 'det_senderId' and 'det_hash_alg', defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 2.4.1 of I-D.amsuess-core-cachable-oscore}}).
+   * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
 # Example with a Proxy {#intermediaries-example}
 
