@@ -665,7 +665,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
    * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.3 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
-      At the time of writing this specification, acceptable formats of authentication crediantials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
+      At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC7925}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
         \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
 
