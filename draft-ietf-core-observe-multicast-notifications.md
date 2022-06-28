@@ -169,6 +169,8 @@ This document additionally defines the following terminology.
 
 * Informative response. A CoAP response message that the server sends to a given client via unicast, providing the client with information on a group observation.
 
+* Transport CRI. A CRI ({{I-D.ietf-core-href}}) that contains address components which identify a CoAP scheme, a host and a port, but no later components (i.e., with an empty local-part).
+
 # Server-Side Requirements # {#sec-server-side}
 
 The server can, at any time, start a group observation on one of its resources. Practically, the server may want to do that under the following circumstances.
@@ -251,83 +253,61 @@ Note that this also applies when, with no ongoing traditional observations on th
 
 ### Encoding of Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
-\[ This encoding might be replaced by CRIs {{?I-D.ietf-core-href}} in a later version of this document. \]
-
 The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.
 
 ~~~~~~~~~~~
 tp_info = [
-    srv_addr  ; Addressing information of the server
-  ? req_info  ; Request data extension
+    tpi_server    ; Addressing information of the server
+  ? tpi_details   ; Additional information about the request
 ]
 
-srv_addr = (
-    tp_id : int,  ; Identifier of the used transport protocol
-  + elements      ; Number, format and encoding
-                  ; based on the value of 'tp_id'
-)
+tpi_server = CRI  ; from draft-ietf-core-href, with no local part
 
-req_info = (
+tpi_details = (
   + elements  ; Number, format and encoding based on
-              ; the value of 'tp_id' in 'srv_addr'
+              ; the scheme of tp_details
 )
 ~~~~~~~~~~~
 {: #tp-info-general title="General format of 'tp_info'"}
 
-The 'srv_addr' element of 'tp_info' specifies the addressing information of the server, and includes at least one element 'tp_id' which is formatted as follows.
+The 'tpi_server' element of 'tp_info' specifies the addressing information of the server in URI form.
+That URI contains (at least for the currently defined schemes) no path, query or fragment;
+it indicates a transport as described in {{Section 1.1.1 of ?I-D.ietf-core-transport-indiciation}}.
+<!-- It may be null under conditions yet to be determined precisely. -->
 
-* 'tp_id' : this element is a CBOR integer, which specifies the transport protocol used to transport the CoAP response from the server, i.e., a multicast notification in this document.
+The elements of `tpi_details` are specific to the transport implied by the scheme of `tpi_server`.
 
-   This element takes value from the "Value" column of the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this document. This element MUST be present. The value of this element determines:
+For `coap` (CoAP over UDP as described in {{RFC7252}}),
+the elemtns of `tpi_details` are described below.
 
-    - How many elements are required to follow in 'srv_addr', as well as what information they convey, their encoding and their semantics.
+Future specifications that consider CoAP multicast notifications transported over different transport protocols should:
 
-    - How many elements are required in the 'req_info' element of the 'tp_info' array, as well as what information they convey, their encoding and their semantics.
+* Register a numeric scheme with CRIs.
 
-    This document registers the integer value 1 ("UDP") to be used as value for the 'tp_id' element, when CoAP responses are transported over UDP. In such a case, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
+* Define elements of `tpi_details`, and register them in the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this document.
 
-    Future specifications that consider CoAP multicast notifications transported over different transport protocols MUST:
-
-    * Register an entry with an integer value to be used for 'tp_id', in the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}} of this document.
-
-    * Accordingly, define the elements of the 'tp_info' CBOR array, i.e., the elements following 'tp_id' in 'srv_addr' as well as the elements in 'req_info', as to what information they convey, their encoding and their semantics.
-
-The 'req_info' element of 'tp_info' specifies transport-specific information related to a pertinent request message, i.e., the phantom observation request in this document. The exact format of 'req_info' depends on the value of 'tp_id'.
-
-Given a specific value of 'tp_id', the complete set of elements composing 'srv_addr' and 'req_info' in the 'tp_info' CBOR array is indicated by the two columns "Srv Addr" and "Req Info" of the "CoAP Transport Information" registry defined in {{iana-transport-protocol-identifiers}}, respectively.
+* Accordingly, define the elements of the 'tp_info' CBOR array, i.e., the elements following 'tp_id' in 'srv_addr' as well as the elements in 'req_info', as to what information they convey, their encoding and their semantics.
 
 #### UDP Transport-Specific Information  ### {#ssssec-udp-transport-specific}
 
-When CoAP multicast notifications are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the server specifies the integer value 1 ("UDP") as value of 'tp_id' in the 'srv_addr' element of the 'tp_info' CBOR array in the error informative response. Then, the rest of the 'tp_info' CBOR array is defined as follows.
+When CoAP multicast notifications are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the server places the URI indicating its transport address in the `tpi_server` field. Then, the rest of the 'tp_info' CBOR array is defined as follows.
 
-* 'srv_addr' includes two more elements following 'tp_id':
+* 'tpi_client': this element is a CRI indicating the transport address of the multicast client.
+  This element MUST be present, but may be nil if it is identical to the client's address.
+  (That is a corner case only present between a proxy and a client, if at all.).
 
-   * 'srv_host': this element is a CBOR byte string, with value the destination IP address of the phantom observation request. This parameter is tagged and identified by the CBOR tag 260 "Network Address (IPv4 or IPv6 or MAC Address)".  That is, the value of the CBOR byte string is the IP address SRV_ADDR of the server hosting the target resource, from where the server will send multicast notifications for the target resource. This element MUST be present.
-
-   * 'srv_port': this element is a CBOR unsigned integer, with value the destination port number of the phantom observation request. That is, the specified value is the port number SRV_PORT, from where the server will send multicast notifications for the target resource. This element MUST be present.
-
-* 'req_info' includes the following elements:
-
-   * 'token': this element is a CBOR byte string, with value the Token value of the phantom observation request generated by the server (see {{ssec-server-side-request}}). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see {{ssec-server-side-notifications}}). This element MUST be present.
-
-   * 'cli_addr': this element is a CBOR byte string, with value the source IP address of the phantom observation request. This parameter is tagged and identified by the CBOR tag 260 "Network Address (IPv4 or IPv6 or MAC Address)". That is, the value of the CBOR byte string is the IP multicast address GRP_ADDR, where the server will send multicast notifications for the target resource. This element MUST be present.
-
-   * 'cli_port': this element is a CBOR unsigned integer, with value the source port number of the phantom observation request. That is, the specified value is the port number GRP_PORT, where the server will send multicast notifications for the target resource. This element is OPTIONAL. If not included, the default port number 5683 is assumed.
-
-The CDDL notation provided below describes the full 'tp_info' CBOR array using the format above.
+* 'tpi_token': this element is a CBOR byte string, with value the Token value of the phantom observation request generated by the server (see {{ssec-server-side-request}}). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see {{ssec-server-side-notifications}}). This element MUST be present.
 
 ~~~~~~~~~~~
-tp_info = [
-    tp_id    : 1,             ; UDP as transport protocol
-    srv_host : #6.260(bstr),  ; Src. address of multicast notifications
-    srv_port : uint,          ; Src. port of multicast notifications
-    token    : bstr,          ; Token of the phantom request and
-                              ; associated multicast notifications
-    cli_addr : #6.260(bstr),  ; Dst. address of multicast notifications
-  ? cli_port : uint           ; Dst. port of multicast notifications
-]
+tpi_details_udp = (
+    tpi_client,
+    tpi_token
+)
+
+tpi_client = CRI / nil
+tpi_token = bytes
 ~~~~~~~~~~~
-{: #tp-info-udp title="Format of 'tp_info' with UDP as transport protocol"}
+{: #tp-info-udp title="Format of 'tpi_details' with UDP as transport protocol"}
 
 ### Encoding of Transport-Independent Message Information  ### {#sssec-transport-independent-encoding}
 
@@ -396,13 +376,13 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
 1. The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:
 
-    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified as value of the 'srv_host' and 'srv_port' elements of 'srv_addr' under the 'tp_info' parameter, in the informative response (see {{ssssec-udp-transport-specific}}).
+    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified in the 'tpi_server' parameter, in the informative response (see {{ssssec-udp-transport-specific}}).
 
-    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified as value of the 'cli_addr' and 'cli_port' elements of 'req_info' under the 'tp_info' parameter, in the informative response (see {{ssssec-udp-transport-specific}}). If the 'cli_port' element is omitted in 'req_info', the client MUST assume the default port number 5683 as GRP_PORT.
+    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified as value of the 'tpi_client' parameter, in the informative response (see {{ssssec-udp-transport-specific}}).
 
 2. The client rebuilds the phantom registration request as follows.
 
-   * The client uses the Token value T, specified in the 'token' element of 'req_info' under the 'tp_info' parameter of the informative response.
+   * The client uses the Token value T, specified in the 'tpi_token' parameter of the informative response.
 
    * If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.
 
@@ -416,7 +396,7 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
    * The transport-independent information, specified in the 'last_notif' parameter of the informative response.
 
-   * The Token value T, specified in the 'token' element of 'req_info' under the 'tp_info' parameter of the informative response.
+   * The Token value T, specified in the 'tpi_token' parameter of the informative response.
 
 6. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at step 5 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe option is used as initial baseline for notification reordering in this group observation.
 
@@ -504,8 +484,7 @@ C_1 <-------------------- [ Unicast ] ---------------------     S
  |  Max-Age: 0                                                  |
  |  <Other options>                                             |
  |  Payload: {                                                  |
- |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
- |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
+ |    tp_info    : [coap://SRV_ADDR, coap://GRP_ADDR, h'7b'],   |
  |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
  |  }                                                           |
  |                                                              |
@@ -525,8 +504,7 @@ C_2 <-------------------- [ Unicast ] ---------------------     S
  |  Max-Age: 0                                                  |
  |  <Other options>                                             |
  |  Payload: {                                                  |
- |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
- |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
+ |    tp_info    : [coap://SRV_ADDR, coap://GRP_ADDR, h'7b'],   |
  |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
  |  }                                                           |
  |                                                              |
@@ -851,8 +829,7 @@ C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |    <Other class E options>,                                  |
  |    0xff,                                                     |
  |    CBOR_payload {                                            |
- |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
- |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
+ |      tp_info    : [coap://SRV_ADDR, coap://GRP_ADDR, h'7b'], |
  |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
  |      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
  |      join_uri   : "coap://myGM/ace-group/myGroup",           |
@@ -888,8 +865,7 @@ C_2 <--------------- [ Unicast w/ OSCORE ] ----------------     S
  |    <Other class E options>,                                  |
  |    0xff,                                                     |
  |    CBOR_payload {                                            |
- |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
- |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
+ |      tp_info    : [coap://SRV_ADDR, coap://GRP_ADDR, h'7b'], |
  |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
  |      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
  |      join_uri   : "coap://myGM/ace-group/myGroup",           |
@@ -932,7 +908,7 @@ Upon receiving an informative response, the proxy performs as specified for the 
 
 In particular, by using the information retrieved from the informative response, the proxy configures an observation of the target resource at the origin server, acting as a client directly taking part in the group observation.
 
-As a consequence, the proxy will listen to the IP multicast address and port number indicated by the server in the informative response, as 'cli_addr' and 'cli_port' element of 'req_info' under the 'tp_info' parameter, respectively (see {{ssssec-udp-transport-specific}}). Furthermore, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'token' element of 'req_info' under the 'tp_info' parameter in the informative response.
+As a consequence, the proxy will listen to the IP multicast address and port number indicated by the server in the informative response in 'tpi_details' (see {{ssssec-udp-transport-specific}}). Furthermore, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'tpi_token' in the informative response.
 
 Then, the proxy performs the following actions.
 
@@ -1203,19 +1179,18 @@ This registry has been initially populated by the values in {{informative-respon
 
 This document establishes the "CoAP Transport Information" registry within the "CoRE Parameters" registry group. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
+\[ TBD: Can we somehow link the policy with the corresponding scheme entry? Like, if IESG registered a scheme, IESG is needed to do this entry as well. \]
+
 The columns of this registry are:
 
-* Transport Protocol: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
+* Scheme: This is a scheme as registered in the Uniform Resource Identifier (URI) Schemes registry, and also needs to have a corresponding number for CRIs.
 
-* Description: Text giving an overview of the transport protocol referred by this item.
-
-* Value: CBOR abbreviation for the transport protocol referred by this item. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 are designated as Standards Action. Integer values from -65536 to -257 and from 256 to 65535 are designated as Specification Required. Integer values greater than 65535 are designated as Expert Review. Integer values less than -65536 are marked as Private Use.
-
-* Server Addr: List of elements providing addressing information of the server.
-
-* Req Info: List of elements providing transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?'.
+* `tpi_details` format: List of elements providing transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?'.
 
 * Reference: This contains a pointer to the public specification for the item.
+
+  The reference needs to describe how the `tpi_details` are used by a client to configure an observation,
+  as is done in {#ssec-client-side-informative} in this document.
 
 This registry has been initially populated by the values in {{transport-protocol-identifiers}}. The "Reference" column for all of these entries refers to sections of this document.
 
