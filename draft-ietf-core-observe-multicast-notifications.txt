@@ -144,8 +144,9 @@ Table of Contents
      G.2.  Message Exchange
    Appendix H.  Document Updates
      H.1.  Version -02 to -03
-     H.2.  Version -01 to -02
-     H.3.  Version -00 to -01
+     H.2.  Version -02 to -03
+     H.3.  Version -01 to -02
+     H.4.  Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -528,7 +529,7 @@ Table of Contents
          observation request (see Section 2.3).  This element MUST be
          present.
 
-      -  'cli_addr': this element is a CBOR byte string, with value the
+      -  'cli_host': this element is a CBOR byte string, with value the
          source IP address of the phantom observation request.  This
          parameter is tagged and identified by the CBOR tag 260 "Network
          Address (IPv4 or IPv6 or MAC Address)".  That is, the value of
@@ -552,7 +553,7 @@ Table of Contents
      srv_port : uint,          ; Src. port of multicast notifications
      token    : bstr,          ; Token of the phantom request and
                                ; associated multicast notifications
-     cli_addr : #6.260(bstr),  ; Dst. address of multicast notifications
+     cli_host : #6.260(bstr),  ; Dst. address of multicast notifications
    ? cli_port : uint           ; Dst. port of multicast notifications
  ]
 
@@ -613,7 +614,7 @@ Table of Contents
 
    *  It MUST be sent to the IP multicast address GRP_ADDR and port
       number GRP_PORT.  These are indicated to the observer clients as
-      value of the 'cli_addr' and 'cli_port' elements of 'req_info'
+      value of the 'cli_host' and 'cli_port' elements of 'req_info'
       under the 'tp_info' parameter, in the informative response message
       (see Section 2.2.1.1).
 
@@ -731,7 +732,7 @@ Table of Contents
 
        *  As destination address and port number, the IP multicast
           address GRP_ADDR and port number GRP_PORT.  These are
-          specified as value of the 'cli_addr' and 'cli_port' elements
+          specified as value of the 'cli_host' and 'cli_port' elements
           of 'req_info' under the 'tp_info' parameter, in the
           informative response (see Section 2.2.1.1).  If the 'cli_port'
           element is omitted in 'req_info', the client MUST assume the
@@ -1692,7 +1693,7 @@ Table of Contents
 
    As a consequence, the proxy will listen to the IP multicast address
    and port number indicated by the server in the informative response,
-   as 'cli_addr' and 'cli_port' element of 'req_info' under the
+   as 'cli_host' and 'cli_port' element of 'req_info' under the
    'tp_info' parameter, respectively (see Section 2.2.1.1).
    Furthermore, multicast notifications will match the phantom request
    stored at the proxy, based on the Token value specified in the
@@ -1899,7 +1900,7 @@ Table of Contents
 
    After that, the proxy will listen to the IP multicast address and
    port number indicated in the Listen-To-Multicast-Responses option, as
-   'cli_addr' and 'cli_port' element of the serialized CBOR array,
+   'cli_host' and 'cli_port' element of the serialized CBOR array,
    respectively.  Furthermore, multicast notifications will match the
    phantom request stored at the proxy, based on the Token value
    specified in the 'token' element of the serialized CBOR array in the
@@ -3635,6 +3636,10 @@ Appendix H.  Document Updates
 
 H.1.  Version -02 to -03
 
+   *  Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.
+
+H.2.  Version -02 to -03
+
    *  Distinction between authentication credential and public key.
 
    *  Fixed processing of informative response at the client, when Group
@@ -3643,7 +3648,7 @@ H.1.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-H.2.  Version -01 to -02
+H.3.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -3661,7 +3666,7 @@ H.2.  Version -01 to -02
 
    *  Editorial improvements.
 
-H.3.  Version -00 to -01
+H.4.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
