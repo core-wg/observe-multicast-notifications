@@ -1243,11 +1243,19 @@ While the clients usually receive the phantom registration request and other inf
 
 ## Topic Discovery in Publish-Subscribe Settings
 
-In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata. For instance, a discovery step can make the following metadata available.
+In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata.
 
-This example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
+As a pre-requirement, the server has to first perform the following actions.
 
-Note that the information about the used transport protocol is not expressed through a dedicated element equivalent to 'tp_id' (see {{sssec-transport-specific-encoding}}). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in {{ssssec-udp-transport-specific}}).
+* The server has to start the group observation (see {{ssec-server-side-request}}).
+
+* Together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative error response returned to observer clients (see {{ssec-server-side-informative}}).
+
+   This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
+
+{{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
+
+Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative error response (see {{sssec-transport-specific-encoding}}). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in {{ssssec-udp-transport-specific}}).
 
 ~~~~~~~~~~~
 Request:
@@ -2174,6 +2182,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -02 to -03 ## {#sec-03-04}
 
 * Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.
+
+* Added pre-requirements for early retrieval of phantom request.
 
 * Revised example with early retrieval of phantom request.
 
