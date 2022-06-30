@@ -1247,26 +1247,28 @@ In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observati
 
 This example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
-\[ The reported CoRAL example is based on the textual representation used until  version -03 of {{I-D.ietf-core-coral}}. This will be revised to use the CBOR diagnostic notation instead. \]
+Note that the information about the used transport protocol is not expressed through a dedicated element equivalent to 'tp_id' (see {{sssec-transport-specific-encoding}}). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in {{ssssec-udp-transport-specific}}).
 
 ~~~~~~~~~~~
 Request:
 
     GET </ps/topics?rt=oic.r.temperature>
-    Accept: CoRAL
+    Accept: application/coral+cbor
 
 Response:
 
     2.05 Content
-    Content-Format: CoRAL
+    Content-Format: application/coral+cbor
 
-    rdf:type <http://example.org/pubsub/topic-list>
-    topic </ps/topics/1234> {
-        tp_info [1, h"7b", h"20010db80100..0001", 5683,
-                 h"ff35003020010db8..1234", 5683],
-        ph_req h"0160..",
-        last_notif h"256105.."
-    }
+    rdf:type [ = <http://example.org/pubsub/topic-list>,
+           topic [ = </ps/topics/1234>,
+               tp_info_srv <coap://[2001:db8::1]>,
+               tp_info_token "7b"^^xsd::hexBinary,
+               tp_info_cli <coap://[ff35:30:2001:db8::123]>,
+               ph_req "0160.."^^xsd::hexBinary,
+               last_notif "256105.."^^xsd::hexBinary,
+           ]
+    ]
 ~~~~~~~~~~~
 {: #discovery-pub-sub title="Group observation discovery in a Pub-Sub scenario"}
 
@@ -2172,6 +2174,10 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -02 to -03 ## {#sec-03-04}
 
 * Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.
+
+* Revised example with early retrieval of phantom request.
+
+* Editorial improvements.
 
 ## Version -02 to -03 ## {#sec-02-03}
 
