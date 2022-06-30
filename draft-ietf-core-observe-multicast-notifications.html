@@ -12,26 +12,26 @@
 <meta content='
        The Constrained Application Protocol (CoAP) allows clients to "observe" resources at a server, and receive notifications as unicast responses upon changes of the resource state. In some use cases, such as based on publish-subscribe, it would be convenient for the server to send a single notification addressed to all the clients observing a same target resource. This document updates RFC7252 and RFC7641, and defines how a server sends observe notifications as response messages over multicast, synchronizing  all the observers of a same resource on a same shared Token value. Besides, this document defines how Group OSCORE can be used to protect multicast notifications end-to-end between the server and the observer clients. 
     ' name="description">
-<meta content="xml2rfc 3.12.3" name="generator">
+<meta content="xml2rfc 3.12.10" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-core-observe-multicast-notifications-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.3
-    Python 3.9.7
+  xml2rfc 3.12.10
+    Python 3.10.4
     appdirs 1.4.4
-    ConfigArgParse 1.3
-    google-i18n-address 2.5.0
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.1
     html5lib 1.1
     intervaltree 3.1.0
     Jinja2 2.11.3
     kitchen 1.2.6
-    lxml 4.6.5
+    lxml 4.8.0
     MarkupSafe 2.0.1
     pycountry 20.7.3
-    pyflakes 2.3.1
-    PyYAML 5.4.1
-    requests 2.26.0
-    setuptools 52.0.0
+    pyflakes 2.4.0
+    PyYAML 6.0
+    requests 2.27.1
+    setuptools 59.4.0
     six 1.16.0
 -->
 <link href="draft-ietf-core-observe-multicast-notifications.xml" rel="alternate" type="application/rfc+xml">
@@ -156,6 +156,14 @@
   font-weight: 700;
   font-display: swap;
   src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -339,7 +347,7 @@ ol, ul {
   padding: 0;
   margin: 0 0 0.5em 2em;
 }
-ol ol, ul ul, ol ul, ul ol {
+:is(ol, ul) :is(ol, ul) {
   margin-left: 1em;
 }
 li {
@@ -354,8 +362,7 @@ ul.empty, .ulEmpty {
 ul.empty li, .ulEmpty li {
   margin-top: 0.5em;
 }
-ul.compact, .ulCompact,
-ol.compact, .olCompact {
+:is(ul, ol).compact, .ulCompact, .olCompact {
   line-height: 100%;
   margin: 0 0 0 2em;
 }
@@ -371,7 +378,7 @@ dl > dd {
   margin-bottom: .8em;
   min-height: 1.3em;
 }
-dl.compact > dd, .dlCompact > dd {
+:is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0em;
 }
 dl > dd > dl {
@@ -413,6 +420,9 @@ tt, code {
      remove leading to avoid altering the final height of lines */
   line-height: 0;
 }
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
 pre {
   border: 1px solid var(--line-color);
   font-size: 13.5px;
@@ -437,6 +447,19 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
   pre, svg {
     display: inline-block;
     overflow-x: auto;
@@ -452,7 +475,7 @@ figcaption, caption {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow, svg + .pilcrow {
+  :is(pre, svg) + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -501,17 +524,11 @@ th, td {
 th {
   background-color: var(--line-color);
 }
-tr:nth-child(2n) > td {
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
   background-color: var(--background-color);
 }
-tr:nth-child(2n+1) > td {
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n) > td {
-  background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n+1) > td {
-  background-color: var(--background-color);
 }
 table caption {
   margin: 0;
@@ -551,8 +568,9 @@ hr {
 }
 .bcp14 {
   font-variant: small-caps;
+  font-weight: 600;
+  font-size: 14.5px;
 }
-
 .role {
   font-variant: all-small-caps;
 }
@@ -791,7 +809,7 @@ hr.addr {
     margin: 0 0 0 4px;
     font-size: var(--small-font-size);
   }
-  #toc ul p, #toc ul li {
+  #toc ul :is(p, li) {
     margin: 2px 0;
     line-height: 22px;
   }
@@ -901,13 +919,13 @@ dl.dlNewline > dt {
 }
 
 /* Provide styling for table cell text alignment */
-table .text-left, table .text-left {
+table .text-left {
   text-align: left;
 }
-table .text-center, table .text-center {
+table .text-center {
   text-align: center;
 }
-table .text-right, table .text-right {
+table .text-right {
   text-align: right;
 }
 
@@ -974,12 +992,6 @@ address div.right {
   }
 
 }
-/* Tweak the bcp14 keyword presentation */
-.bcp14 {
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 0.9em;
-}
 
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
@@ -994,19 +1006,20 @@ address div.right {
   --pilcrow-strong: #666;
   scrollbar-color: #777 #333;
 }
-/* Trick: a prefix match works because only black and white are allowed */
-svg [stroke="black"], svg [stroke^="#000"] {
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
   stroke: var(--text-color);
 }
-svg [stroke="white"], svg [stroke^="#fff"] {
+svg :is([stroke="white"], [stroke^="#fff"]) {
   stroke: var(--background-color);
 }
-svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg [stroke="fill"], svg [fill^="#fff"] {
+svg :is([stroke="fill"], [fill^="#fff"]) {
   fill: var(--background-color);
-}
 }
 </style>
 
@@ -1016,11 +1029,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Observe Multicast Notifications</td>
-<td class="right">March 2022</td>
+<td class="right">June 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 8 September 2022</td>
+<td class="center">Expires 1 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1036,12 +1049,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-03-07" class="published">7 March 2022</time>
+<time datetime="2022-06-30" class="published">30 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-09-08">8 September 2022</time></dd>
+<dd class="expires"><time datetime="2023-01-01">1 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1097,7 +1110,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1682,10 +1695,10 @@ That is, every multicast notification for a target resource is not bound to the 
 <ul class="normal">
 <li class="normal" id="section-2.4-2.1">The multicast notifications MUST be Non-confirmable.<a href="#section-2.4-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-2.4-2.2">In constrained environments such as low-power, lossy networks (LLNs), the server should only support multicast notifications for resources that are small. Following related guidelines from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-05#section-3.6" class="relref">Section 3.6</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span>, this can consist, for example, in having the payload of multicast notifications as limited to approximately 5% of the IP Maximum Transmit Unit (MTU) size, so that it fits into a single link-layer frame in case IPv6 over Low-Power Wireless Personal Area Networks (6LoWPAN) (see <span><a href="https://rfc-editor.org/rfc/rfc4944#section-4" class="relref">Section 4</a> of [<a href="#RFC4944" class="xref">RFC4944</a>]</span>) is
+          <li class="normal" id="section-2.4-2.2">In constrained environments such as low-power, lossy networks (LLNs), the server should only support multicast notifications for resources that are small. Following related guidelines from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-06#section-3.6" class="relref">Section 3.6</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span>, this can consist, for example, in having the payload of multicast notifications as limited to approximately 5% of the IP Maximum Transmit Unit (MTU) size, so that it fits into a single link-layer frame in case IPv6 over Low-Power Wireless Personal Area Networks (6LoWPAN) (see <span><a href="https://rfc-editor.org/rfc/rfc4944#section-4" class="relref">Section 4</a> of [<a href="#RFC4944" class="xref">RFC4944</a>]</span>) is
 used.<a href="#section-2.4-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-2.4-2.3">The server SHOULD provide multicast notifications with the smallest possible IP multicast scope that fulfills the application needs. For example, following related guidelines from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-05#section-3.6" class="relref">Section 3.6</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span>, site-local scope is always preferred over global scope IP multicast, if this fulfills the application needs. Similarly, realm-local scope is always preferred over site-local scope, if this fulfills the application needs. Ultimately, it is up to the server administrator to explicitly configure the most appropriate IP multicast scope.<a href="#section-2.4-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-2.4-2.3">The server SHOULD provide multicast notifications with the smallest possible IP multicast scope that fulfills the application needs. For example, following related guidelines from <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-06#section-3.6" class="relref">Section 3.6</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span>, site-local scope is always preferred over global scope IP multicast, if this fulfills the application needs. Similarly, realm-local scope is always preferred over site-local scope, if this fulfills the application needs. Ultimately, it is up to the server administrator to explicitly configure the most appropriate IP multicast scope.<a href="#section-2.4-2.3" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-2.4-2.4">Following related guidelines from <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.5.1" class="relref">Section 4.5.1</a> of [<a href="#RFC7641" class="xref">RFC7641</a>]</span>, the server SHOULD NOT send more than one multicast notification every 3 seconds, and SHOULD use an even less aggressive rate when possible (see also <span><a href="https://rfc-editor.org/rfc/rfc8085#section-3.1.2" class="relref">Section 3.1.2</a> of [<a href="#RFC8085" class="xref">RFC8085</a>]</span>). The transmission rate of multicast notifications should also take into account the avoidance of a possible "broadcast storm" problem <span>[<a href="#MOBICOM99" class="xref">MOBICOM99</a>]</span>. This prevents a following, considerable increase of the channel load, whose origin would be likely attributed to a router rather than the server.<a href="#section-2.4-2.4" class="pilcrow">¶</a>
 </li>
@@ -1991,7 +2004,7 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
 <p id="section-6.3.2-2">It is up to applications to define the value of MAX_CONFIRMATION_WAIT, which has to take into account the transmission time of the multicast notification and of unicast observation requests, as well as the leisure time of the clients, which may be hard to know or estimate for the server.<a href="#section-6.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.2-3">If this information is not known to the server, it is recommended to define MAX_CONFIRMATION_WAIT as follows.<a href="#section-6.3.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.2-4">MAX_CONFIRMATION_WAIT = MAX_RTT + MAX_CLIENT_REQUEST_DELAY<a href="#section-6.3.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.3.2-5">where MAX_RTT is as defined in <span><a href="https://rfc-editor.org/rfc/rfc7252#section-4.8.2" class="relref">Section 4.8.2</a> of [<a href="#RFC7252" class="xref">RFC7252</a>]</span> and has default value 202 seconds, while MAX_CLIENT_REQUEST_DELAY is equivalent to MAX_SERVER_RESPONSE_DELAY defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-05#section-3.1.5" class="relref">Section 3.1.5</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span> and has default value 250 seconds. In the absence of more specific information, the server can thus consider a conservative MAX_CONFIRMATION_WAIT of 452 seconds.<a href="#section-6.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.3.2-5">where MAX_RTT is as defined in <span><a href="https://rfc-editor.org/rfc/rfc7252#section-4.8.2" class="relref">Section 4.8.2</a> of [<a href="#RFC7252" class="xref">RFC7252</a>]</span> and has default value 202 seconds, while MAX_CLIENT_REQUEST_DELAY is equivalent to MAX_SERVER_RESPONSE_DELAY defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-06#section-3.1.5" class="relref">Section 3.1.5</a> of [<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span> and has default value 250 seconds. In the absence of more specific information, the server can thus consider a conservative MAX_CONFIRMATION_WAIT of 452 seconds.<a href="#section-6.3.2-5" class="pilcrow">¶</a></p>
 <p id="section-6.3.2-6">If more information is available in deployments, a much shorter MAX_CONFIRMATION_WAIT can be set. This can be based on a realistic round trip time (replacing MAX_RTT) and on the largest leisure time configured on the clients (replacing MAX_CLIENT_REQUEST_DELAY), e.g., DEFAULT_LEISURE = 5 seconds, thus shortening MAX_CONFIRMATION_WAIT to a few seconds.<a href="#section-6.3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2042,7 +2055,7 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
           <li class="normal" id="section-7.1-3.4">Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#COSE.Algorithms" class="xref">COSE.Algorithms</a>]</span>.<a href="#section-7.1-3.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-7.1-3.5">
-            <p id="section-7.1-3.5.1">Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span>. Consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-2.3" class="relref">Section 2.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that MUST explicitly provide the comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-7.1-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-3.5.1">Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry <span>[<a href="#COSE.Header.Parameters" class="xref">COSE.Header.Parameters</a>]</span>. Consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-2.3" class="relref">Section 2.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that MUST explicitly provide the comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-7.1-3.5.1" class="pilcrow">¶</a></p>
 <p id="section-7.1-3.5.2">
 At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>, X.509 certificates <span>[<a href="#RFC7925" class="xref">RFC7925</a>]</span> and C509 certificates <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span>. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.<a href="#section-7.1-3.5.2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3.5.3">
@@ -2081,8 +2094,8 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-registration">
 <a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-registration" class="section-name selfRef">Registration</a>
           </h4>
-<p id="section-7.2.1-1">The phantom registration request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> MUST be used.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-2">The server protects the phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8.1" class="relref">Section 8.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE option in the phantom registration request includes:<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-1">The phantom registration request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> MUST be used.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">The server protects the phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8.1" class="relref">Section 8.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE option in the phantom registration request includes:<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2.1-3.1">As 'kid', the Sender ID of the server in the OSCORE group.<a href="#section-7.2.1-3.1" class="pilcrow">¶</a>
 </li>
@@ -2106,8 +2119,8 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-notifications-3">
 <a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-notifications-3" class="section-name selfRef">Notifications</a>
           </h4>
-<p id="section-7.2.3-1">The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> MUST be used.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.3-2">The process described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8.3" class="relref">Section 8.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#section-7.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-1">The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8" class="relref">Section 8</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> MUST be used.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.3-2">The process described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8.3" class="relref">Section 8.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#section-7.2.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2.3-3.1">The 'request_kid' is the 'kid' value in the OSCORE option of the phantom registration request, i.e., the Sender ID of the server.<a href="#section-7.2.3-3.1" class="pilcrow">¶</a>
 </li>
@@ -2124,7 +2137,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-cancellation-3">
 <a href="#section-7.2.4" class="section-number selfRef">7.2.4. </a><a href="#name-cancellation-3" class="section-name selfRef">Cancellation</a>
           </h4>
-<p id="section-7.2.4-1">When canceling a group observation (see <a href="#ssec-server-side-cancellation" class="xref">Section 2.5</a>), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8.3" class="relref">Section 8.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response.<a href="#section-7.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.4-1">When canceling a group observation (see <a href="#ssec-server-side-cancellation" class="xref">Section 2.5</a>), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8.3" class="relref">Section 8.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response.<a href="#section-7.2.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2142,7 +2155,7 @@ At the time of writing this specification, acceptable formats of authentication 
           </h4>
 <p id="section-7.3.1-1">Upon receiving the informative response from the server, the client performs as described in <a href="#ssec-client-side-informative" class="xref">Section 3.2</a>, with the following additions.<a href="#section-7.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.3.1-2">When performing step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="xref">Appendix D</a>.<a href="#section-7.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.3.1-3">Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8.2" class="relref">Section 8.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following differences.<a href="#section-7.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.3.1-3">Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8.2" class="relref">Section 8.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following differences.<a href="#section-7.3.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3.1-4.1">The client MUST NOT perform any replay check. That is, the client skips step 3 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="xref">RFC8613</a>]</span>.<a href="#section-7.3.1-4.1" class="pilcrow">¶</a>
 </li>
@@ -2169,8 +2182,8 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-notifications-4">
 <a href="#section-7.3.2" class="section-number selfRef">7.3.2. </a><a href="#name-notifications-4" class="section-name selfRef">Notifications</a>
           </h4>
-<p id="section-7.3.2-1">After having successfully processed the informative response as defined in <a href="#ssec-client-side-informative-oscore" class="xref">Section 7.3.1</a>, the client will decrypt and verify every multicast notification for the target resource as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-8.4" class="relref">Section 8.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following difference.<a href="#section-7.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.3.2-2">For both decryption and signature verification, the client MUST set the 'external_aad' defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> as follows. The particular way to achieve this is implementation specific.<a href="#section-7.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.3.2-1">After having successfully processed the informative response as defined in <a href="#ssec-client-side-informative-oscore" class="xref">Section 7.3.1</a>, the client will decrypt and verify every multicast notification for the target resource as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-8.4" class="relref">Section 8.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following difference.<a href="#section-7.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.3.2-2">For both decryption and signature verification, the client MUST set the 'external_aad' defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> as follows. The particular way to achieve this is implementation specific.<a href="#section-7.3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3.2-3.1">'request_kid' takes the value of the 'kid' field from the OSCORE option of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="xref">Section 7.3.1</a>).<a href="#section-7.3.2-3.1" class="pilcrow">¶</a>
 </li>
@@ -2857,67 +2870,67 @@ This section gives some general guidelines for what the experts should be lookin
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-key-groupcomm-oscore">[I-D.ietf-ace-key-groupcomm-oscore]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Park, J.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Key Management for OSCORE Groups in ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-12</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-oscore-12.txt">https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-oscore-12.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Park, J.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Key Management for OSCORE Groups in ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-14</span>, <time datetime="2022-04-28" class="refDate">28 April 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-oscore-profile">[I-D.ietf-ace-oscore-profile]</dt>
         <dd>
-<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, and <span class="refAuthor">M. Gunnarsson</span>, <span class="refTitle">"OSCORE Profile of the Authentication and Authorization for Constrained Environments Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-profile-19</span>, <time datetime="2021-05-06" class="refDate">6 May 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-oscore-profile-19.txt">https://www.ietf.org/archive/id/draft-ietf-ace-oscore-profile-19.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, and <span class="refAuthor">M. Gunnarsson</span>, <span class="refTitle">"OSCORE Profile of the Authentication and Authorization for Constrained Environments Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-profile-19</span>, <time datetime="2021-05-06" class="refDate">6 May 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-groupcomm-bis">[I-D.ietf-core-groupcomm-bis]</dt>
         <dd>
-<span class="refAuthor">Dijk, E.</span>, <span class="refAuthor">Wang, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Group Communication for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-groupcomm-bis-05</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-groupcomm-bis-05.txt">https://www.ietf.org/archive/id/draft-ietf-core-groupcomm-bis-05.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Dijk, E.</span>, <span class="refAuthor">Wang, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Group Communication for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-groupcomm-bis-06</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-06">https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-oscore-groupcomm">[I-D.ietf-core-oscore-groupcomm]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">J. Park</span>, <span class="refTitle">"Group OSCORE - Secure Group Communication for CoAP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-oscore-groupcomm-13</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-oscore-groupcomm-13.txt">https://www.ietf.org/archive/id/draft-ietf-core-oscore-groupcomm-13.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">J. Park</span>, <span class="refTitle">"Group OSCORE - Secure Group Communication for CoAP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-oscore-groupcomm-14</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14">https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4944">[RFC4944]</dt>
         <dd>
-<span class="refAuthor">Montenegro, G.</span>, <span class="refAuthor">Kushalnagar, N.</span>, <span class="refAuthor">Hui, J.</span>, and <span class="refAuthor">D. Culler</span>, <span class="refTitle">"Transmission of IPv6 Packets over IEEE 802.15.4 Networks"</span>, <span class="seriesInfo">RFC 4944</span>, <span class="seriesInfo">DOI 10.17487/RFC4944</span>, <time datetime="2007-09" class="refDate">September 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4944">https://www.rfc-editor.org/info/rfc4944</a>&gt;</span>. </dd>
+<span class="refAuthor">Montenegro, G.</span>, <span class="refAuthor">Kushalnagar, N.</span>, <span class="refAuthor">Hui, J.</span>, and <span class="refAuthor">D. Culler</span>, <span class="refTitle">"Transmission of IPv6 Packets over IEEE 802.15.4 Networks"</span>, <span class="seriesInfo">RFC 4944</span>, <span class="seriesInfo">DOI 10.17487/RFC4944</span>, <time datetime="2007-09" class="refDate">September 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4944">https://www.rfc-editor.org/rfc/rfc4944</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6838">[RFC6838]</dt>
         <dd>
-<span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </dd>
+<span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6838">https://www.rfc-editor.org/rfc/rfc6838</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7252">[RFC7252]</dt>
         <dd>
-<span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Hartke, K.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"The Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 7252</span>, <span class="seriesInfo">DOI 10.17487/RFC7252</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7252">https://www.rfc-editor.org/info/rfc7252</a>&gt;</span>. </dd>
+<span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Hartke, K.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"The Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 7252</span>, <span class="seriesInfo">DOI 10.17487/RFC7252</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7252">https://www.rfc-editor.org/rfc/rfc7252</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7641">[RFC7641]</dt>
         <dd>
-<span class="refAuthor">Hartke, K.</span>, <span class="refTitle">"Observing Resources in the Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 7641</span>, <span class="seriesInfo">DOI 10.17487/RFC7641</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7641">https://www.rfc-editor.org/info/rfc7641</a>&gt;</span>. </dd>
+<span class="refAuthor">Hartke, K.</span>, <span class="refTitle">"Observing Resources in the Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 7641</span>, <span class="seriesInfo">DOI 10.17487/RFC7641</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7641">https://www.rfc-editor.org/rfc/rfc7641</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7967">[RFC7967]</dt>
         <dd>
-<span class="refAuthor">Bhattacharyya, A.</span>, <span class="refAuthor">Bandyopadhyay, S.</span>, <span class="refAuthor">Pal, A.</span>, and <span class="refAuthor">T. Bose</span>, <span class="refTitle">"Constrained Application Protocol (CoAP) Option for No Server Response"</span>, <span class="seriesInfo">RFC 7967</span>, <span class="seriesInfo">DOI 10.17487/RFC7967</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7967">https://www.rfc-editor.org/info/rfc7967</a>&gt;</span>. </dd>
+<span class="refAuthor">Bhattacharyya, A.</span>, <span class="refAuthor">Bandyopadhyay, S.</span>, <span class="refAuthor">Pal, A.</span>, and <span class="refAuthor">T. Bose</span>, <span class="refTitle">"Constrained Application Protocol (CoAP) Option for No Server Response"</span>, <span class="seriesInfo">RFC 7967</span>, <span class="seriesInfo">DOI 10.17487/RFC7967</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7967">https://www.rfc-editor.org/rfc/rfc7967</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8085">[RFC8085]</dt>
         <dd>
-<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8085">https://www.rfc-editor.org/info/rfc8085</a>&gt;</span>. </dd>
+<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8126">[RFC8126]</dt>
         <dd>
-<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8126">https://www.rfc-editor.org/info/rfc8126</a>&gt;</span>. </dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8288">[RFC8288]</dt>
         <dd>
-<span class="refAuthor">Nottingham, M.</span>, <span class="refTitle">"Web Linking"</span>, <span class="seriesInfo">RFC 8288</span>, <span class="seriesInfo">DOI 10.17487/RFC8288</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8288">https://www.rfc-editor.org/info/rfc8288</a>&gt;</span>. </dd>
+<span class="refAuthor">Nottingham, M.</span>, <span class="refTitle">"Web Linking"</span>, <span class="seriesInfo">RFC 8288</span>, <span class="seriesInfo">DOI 10.17487/RFC8288</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8288">https://www.rfc-editor.org/rfc/rfc8288</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8613">[RFC8613]</dt>
         <dd>
-<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J.</span>, <span class="refAuthor">Palombini, F.</span>, and <span class="refAuthor">L. Seitz</span>, <span class="refTitle">"Object Security for Constrained RESTful Environments (OSCORE)"</span>, <span class="seriesInfo">RFC 8613</span>, <span class="seriesInfo">DOI 10.17487/RFC8613</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8613">https://www.rfc-editor.org/info/rfc8613</a>&gt;</span>. </dd>
+<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J.</span>, <span class="refAuthor">Palombini, F.</span>, and <span class="refAuthor">L. Seitz</span>, <span class="refTitle">"Object Security for Constrained RESTful Environments (OSCORE)"</span>, <span class="seriesInfo">RFC 8613</span>, <span class="seriesInfo">DOI 10.17487/RFC8613</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8613">https://www.rfc-editor.org/rfc/rfc8613</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8949">[RFC8949]</dt>
       <dd>
-<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8949">https://www.rfc-editor.org/info/rfc8949</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2928,43 +2941,43 @@ This section gives some general guidelines for what the experts should be lookin
 <dl class="references">
 <dt id="I-D.amsuess-core-cachable-oscore">[I-D.amsuess-core-cachable-oscore]</dt>
         <dd>
-<span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Cacheable OSCORE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-amsuess-core-cachable-oscore-04</span>, <time datetime="2022-03-06" class="refDate">6 March 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-amsuess-core-cachable-oscore-04.txt">https://www.ietf.org/archive/id/draft-amsuess-core-cachable-oscore-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Cacheable OSCORE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-amsuess-core-cachable-oscore-04</span>, <time datetime="2022-03-06" class="refDate">6 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-04">https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-oauth-authz">[I-D.ietf-ace-oauth-authz]</dt>
         <dd>
-<span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authentication and Authorization for Constrained Environments (ACE) using the OAuth 2.0 Framework (ACE-OAuth)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oauth-authz-46</span>, <time datetime="2021-11-08" class="refDate">8 November 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-ace-oauth-authz-46.txt">https://www.ietf.org/archive/id/draft-ietf-ace-oauth-authz-46.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authentication and Authorization for Constrained Environments (ACE) using the OAuth 2.0 Framework (ACE-OAuth)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oauth-authz-46</span>, <time datetime="2021-11-08" class="refDate">8 November 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oauth-authz-46</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-coap-pubsub">[I-D.ietf-core-coap-pubsub]</dt>
         <dd>
-<span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Keranen, A.</span>, and <span class="refAuthor">J. Jimenez</span>, <span class="refTitle">"Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coap-pubsub-09</span>, <time datetime="2019-09-30" class="refDate">30 September 2019</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-coap-pubsub-09.txt">https://www.ietf.org/archive/id/draft-ietf-core-coap-pubsub-09.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Keranen, A.</span>, and <span class="refAuthor">J. Jimenez</span>, <span class="refTitle">"Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coap-pubsub-10</span>, <time datetime="2022-05-04" class="refDate">4 May 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-10">https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-coral">[I-D.ietf-core-coral]</dt>
         <dd>
-<span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"The Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coral-04</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-coral-04.txt">https://www.ietf.org/archive/id/draft-ietf-core-coral-04.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"The Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coral-05</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-05">https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-href">[I-D.ietf-core-href]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Constrained Resource Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-href-09</span>, <time datetime="2022-01-15" class="refDate">15 January 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-href-09.txt">https://www.ietf.org/archive/id/draft-ietf-core-href-09.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Constrained Resource Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-href-10</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-10">https://datatracker.ietf.org/doc/html/draft-ietf-core-href-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-resource-directory">[I-D.ietf-core-resource-directory]</dt>
         <dd>
-<span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. V. D. Stok</span>, <span class="refTitle">"CoRE Resource Directory"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-resource-directory-28</span>, <time datetime="2021-03-07" class="refDate">7 March 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-core-resource-directory-28.txt">https://www.ietf.org/archive/id/draft-ietf-core-resource-directory-28.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. V. D. Stok</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Resource Directory"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-resource-directory-28</span>, <time datetime="2021-03-07" class="refDate">7 March 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-resource-directory-28">https://datatracker.ietf.org/doc/html/draft-ietf-core-resource-directory-28</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
-<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-03</span>, <time datetime="2022-01-10" class="refDate">10 January 2022</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-cose-cbor-encoded-cert-03.txt">https://www.ietf.org/archive/id/draft-ietf-cose-cbor-encoded-cert-03.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-03</span>, <time datetime="2022-01-10" class="refDate">10 January 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-03">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-dtls13">[I-D.ietf-tls-dtls13]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-dtls13-43</span>, <time datetime="2021-04-30" class="refDate">30 April 2021</time>, <span>&lt;<a href="https://www.ietf.org/internet-drafts/draft-ietf-tls-dtls13-43.txt">https://www.ietf.org/internet-drafts/draft-ietf-tls-dtls13-43.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-dtls13-43</span>, <time datetime="2021-04-30" class="refDate">30 April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-dtls13-43">https://datatracker.ietf.org/doc/html/draft-ietf-tls-dtls13-43</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-capable-proxies">[I-D.tiloca-core-oscore-capable-proxies]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span> and <span class="refAuthor">R. Höglund</span>, <span class="refTitle">"OSCORE-capable Proxies"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tiloca-core-oscore-capable-proxies-01</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-tiloca-core-oscore-capable-proxies-01.txt">https://www.ietf.org/archive/id/draft-tiloca-core-oscore-capable-proxies-01.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span> and <span class="refAuthor">R. Höglund</span>, <span class="refTitle">"OSCORE-capable Proxies"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tiloca-core-oscore-capable-proxies-02</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tiloca-core-oscore-capable-proxies-02">https://datatracker.ietf.org/doc/html/draft-tiloca-core-oscore-capable-proxies-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-discovery">[I-D.tiloca-core-oscore-discovery]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Amsuess, C.</span>, and <span class="refAuthor">P. V. D. Stok</span>, <span class="refTitle">"Discovery of OSCORE Groups with the CoRE Resource Directory"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tiloca-core-oscore-discovery-10</span>, <time datetime="2021-10-25" class="refDate">25 October 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-tiloca-core-oscore-discovery-10.txt">https://www.ietf.org/archive/id/draft-tiloca-core-oscore-discovery-10.txt</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Amsuess, C.</span>, and <span class="refAuthor">P. V. D. Stok</span>, <span class="refTitle">"Discovery of OSCORE Groups with the CoRE Resource Directory"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tiloca-core-oscore-discovery-11</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tiloca-core-oscore-discovery-11">https://datatracker.ietf.org/doc/html/draft-tiloca-core-oscore-discovery-11</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="MOBICOM99">[MOBICOM99]</dt>
         <dd>
@@ -2972,27 +2985,27 @@ This section gives some general guidelines for what the experts should be lookin
 <dd class="break"></dd>
 <dt id="RFC6347">[RFC6347]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"Datagram Transport Layer Security Version 1.2"</span>, <span class="seriesInfo">RFC 6347</span>, <span class="seriesInfo">DOI 10.17487/RFC6347</span>, <time datetime="2012-01" class="refDate">January 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6347">https://www.rfc-editor.org/info/rfc6347</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"Datagram Transport Layer Security Version 1.2"</span>, <span class="seriesInfo">RFC 6347</span>, <span class="seriesInfo">DOI 10.17487/RFC6347</span>, <time datetime="2012-01" class="refDate">January 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6347">https://www.rfc-editor.org/rfc/rfc6347</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6690">[RFC6690]</dt>
         <dd>
-<span class="refAuthor">Shelby, Z.</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Link Format"</span>, <span class="seriesInfo">RFC 6690</span>, <span class="seriesInfo">DOI 10.17487/RFC6690</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6690">https://www.rfc-editor.org/info/rfc6690</a>&gt;</span>. </dd>
+<span class="refAuthor">Shelby, Z.</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Link Format"</span>, <span class="seriesInfo">RFC 6690</span>, <span class="seriesInfo">DOI 10.17487/RFC6690</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6690">https://www.rfc-editor.org/rfc/rfc6690</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7519">[RFC7519]</dt>
         <dd>
-<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7519">https://www.rfc-editor.org/info/rfc7519</a>&gt;</span>. </dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <span class="seriesInfo">RFC 7519</span>, <span class="seriesInfo">DOI 10.17487/RFC7519</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7519">https://www.rfc-editor.org/rfc/rfc7519</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7925">[RFC7925]</dt>
         <dd>
-<span class="refAuthor">Tschofenig, H., Ed.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"Transport Layer Security (TLS) / Datagram Transport Layer Security (DTLS) Profiles for the Internet of Things"</span>, <span class="seriesInfo">RFC 7925</span>, <span class="seriesInfo">DOI 10.17487/RFC7925</span>, <time datetime="2016-07" class="refDate">July 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7925">https://www.rfc-editor.org/info/rfc7925</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschofenig, H., Ed.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"Transport Layer Security (TLS) / Datagram Transport Layer Security (DTLS) Profiles for the Internet of Things"</span>, <span class="seriesInfo">RFC 7925</span>, <span class="seriesInfo">DOI 10.17487/RFC7925</span>, <time datetime="2016-07" class="refDate">July 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7925">https://www.rfc-editor.org/rfc/rfc7925</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8392">[RFC8392]</dt>
         <dd>
-<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8392">https://www.rfc-editor.org/info/rfc8392</a>&gt;</span>. </dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8392">https://www.rfc-editor.org/rfc/rfc8392</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8610">[RFC8610]</dt>
       <dd>
-<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8610">https://www.rfc-editor.org/info/rfc8610</a>&gt;</span>. </dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3255,9 +3268,9 @@ return NEW_COUNT;
 <li class="normal" id="appendix-C-4.1">
           <p id="appendix-C-4.1.1">'gp_material': this element is a CBOR map, which includes what the client needs in order to set up the Group OSCORE Security Context.<a href="#appendix-C-4.1.1" class="pilcrow">¶</a></p>
 <p id="appendix-C-4.1.2">
-This parameter has as value a subset of the Group_OSCORE_Input_Material object, which is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-12#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and extends the OSCORE_Input_Material object encoded in CBOR as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19#section-3.2.1" class="relref">Section 3.2.1</a> of [<a href="#I-D.ietf-ace-oscore-profile" class="xref">I-D.ietf-ace-oscore-profile</a>]</span>.<a href="#appendix-C-4.1.2" class="pilcrow">¶</a></p>
+This parameter has as value a subset of the Group_OSCORE_Input_Material object, which is defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and extends the OSCORE_Input_Material object encoded in CBOR as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-profile-19#section-3.2.1" class="relref">Section 3.2.1</a> of [<a href="#I-D.ietf-ace-oscore-profile" class="xref">I-D.ietf-ace-oscore-profile</a>]</span>.<a href="#appendix-C-4.1.2" class="pilcrow">¶</a></p>
 <p id="appendix-C-4.1.3">
-In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-12#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-C-4.1.3" class="pilcrow">¶</a></p>
+In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-C-4.1.3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-4.1.4.1">'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg' and 'sign_params'. These elements MUST be included.<a href="#appendix-C-4.1.4.1" class="pilcrow">¶</a>
 </li>
@@ -3274,9 +3287,9 @@ The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT 
         <li class="normal" id="appendix-C-4.4">'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what specified for NumericDate in <span><a href="https://rfc-editor.org/rfc/rfc7519#section-2" class="relref">Section 2</a> of [<a href="#RFC7519" class="xref">RFC7519</a>]</span>.<a href="#appendix-C-4.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-C-5">Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Joining Response (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-12#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
-<p id="appendix-C-6">A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-2" class="relref">Section 2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.<a href="#appendix-C-6" class="pilcrow">¶</a></p>
-<p id="appendix-C-7">Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>)<a href="#appendix-C-7" class="pilcrow">¶</a></p>
+<p id="appendix-C-5">Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Joining Response (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
+<p id="appendix-C-6">A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-2" class="relref">Section 2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.<a href="#appendix-C-6" class="pilcrow">¶</a></p>
+<p id="appendix-C-7">Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-4.3" class="relref">Section 4.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>)<a href="#appendix-C-7" class="pilcrow">¶</a></p>
 <p id="appendix-C-8">Furthermore, the server complies with the following points.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-9.1">
@@ -3294,7 +3307,7 @@ The server MAY use the same self-managed OSCORE group to protect the phantom req
 <ul class="normal">
 <li class="normal" id="appendix-C-11.1.2.1">The server MUST update the Master Secret.<a href="#appendix-C-11.1.2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="appendix-C-11.1.2.2">The server MUST update the ID Context used as Group Identifier (Gid), consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#appendix-C-11.1.2.2" class="pilcrow">¶</a>
+            <li class="normal" id="appendix-C-11.1.2.2">The server MUST update the ID Context used as Group Identifier (Gid), consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#appendix-C-11.1.2.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="appendix-C-11.1.2.3">The server MAY update the Master Salt.<a href="#appendix-C-11.1.2.3" class="pilcrow">¶</a>
 </li>
@@ -3304,7 +3317,7 @@ The server MAY use the same self-managed OSCORE group to protect the phantom req
 </li>
       </ul>
 <p id="appendix-C-12">Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see <a href="#ssec-server-side-informative" class="xref">Section 2.2</a>), which: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE option of the response.<a href="#appendix-C-12" class="pilcrow">¶</a></p>
-<p id="appendix-C-13">When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-13#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see <a href="#deterministic-phantom-Request" class="xref">Appendix D</a>). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.<a href="#appendix-C-13" class="pilcrow">¶</a></p>
+<p id="appendix-C-13">When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-14#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see <a href="#deterministic-phantom-Request" class="xref">Appendix D</a>). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.<a href="#appendix-C-13" class="pilcrow">¶</a></p>
 <p id="appendix-C-14">As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see <a href="#ssec-server-side-cancellation" class="xref">Section 2.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="xref">Section 7.2.4</a>), which results in the eventual re-registration of the clients that are still interested in the group observation.<a href="#appendix-C-14" class="pilcrow">¶</a></p>
 <p id="appendix-C-15">Applications requiring backward security and forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in <a href="#sec-inf-response" class="xref">Section 7.1</a>.<a href="#appendix-C-15" class="pilcrow">¶</a></p>
 </section>
@@ -3320,7 +3333,7 @@ The server MAY use the same self-managed OSCORE group to protect the phantom req
 <p id="appendix-D-4">Note that the same deterministic request sent by each client as registration request is, in terms of transport-independent information, identical to the phantom registration request. Thus, the informative response sent by the server may omit the 'ph_req' parameter (see <a href="#ssec-server-side-informative" class="xref">Section 2.2</a>). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.<a href="#appendix-D-4" class="pilcrow">¶</a></p>
 <p id="appendix-D-5">If the optimization defined in <a href="#self-managed-oscore-group" class="xref">Appendix C</a> is also used, the 'gp_material' element in the error informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.<a href="#appendix-D-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-D-6.1">'alg', 'ecdh_alg' and 'ecdh_params', as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-12#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-D-6.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-D-6.1">'alg', 'ecdh_alg' and 'ecdh_params', as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-14#section-6.4" class="relref">Section 6.4</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-D-6.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="appendix-D-6.2">'det_senderId' and 'det_hash_alg', defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-04#section-4" class="relref">Section 4</a> of [<a href="#I-D.amsuess-core-cachable-oscore" class="xref">I-D.amsuess-core-cachable-oscore</a>]</span>. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see <span><a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-04#section-3.4.1" class="relref">Section 3.4.1</a> of [<a href="#I-D.amsuess-core-cachable-oscore" class="xref">I-D.amsuess-core-cachable-oscore</a>]</span>).<a href="#appendix-D-6.2" class="pilcrow">¶</a>
 </li>
@@ -4073,7 +4086,7 @@ C1      C2      P         S
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-I-1">The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime Jimenez, John Mattsson, Ludwig Seitz, Jim Schaad and Goeran Selander for their comments and feedback.<a href="#appendix-I-1" class="pilcrow">¶</a></p>
+<p id="appendix-I-1">The authors sincerely thank <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Klaus Hartke</span>, <span class="contact-name">Jaime Jiménez</span>, <span class="contact-name">John Preuß Mattsson</span>, <span class="contact-name">Ludwig Seitz</span>, <span class="contact-name">Jim Schaad</span> and <span class="contact-name">Göran Selander</span> for their comments and feedback.<a href="#appendix-I-1" class="pilcrow">¶</a></p>
 <p id="appendix-I-2">The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).<a href="#appendix-I-2" class="pilcrow">¶</a></p>
 </section>
 </div>
