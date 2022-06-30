@@ -3680,7 +3680,7 @@ H.3.  Version -00 to -01
 Acknowledgments
 
    The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime
-   Jiménez, John Preuß Mattsson, Ludwig Seitz, Jim Schaad and Göran
+   Jiménez, John Preuß Mattsson, Jim Schaad, Ludwig Seitz and Göran
    Selander for their comments and feedback.
 
    The work on this document has been partly supported by VINNOVA and
