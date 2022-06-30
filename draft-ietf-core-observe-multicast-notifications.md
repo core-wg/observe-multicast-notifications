@@ -1280,7 +1280,7 @@ Response:
 ~~~~~~~~~~~
 {: #discovery-pub-sub title="Group observation discovery in a Pub-Sub scenario"}
 
-With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications.
+With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications for the group observation in question. Clients that are not directly able to listen to multicast notications can instead rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
 In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.
 
