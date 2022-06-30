@@ -1516,13 +1516,17 @@ Applications requiring backward security and forward security are REQUIRED to us
 
 # Phantom Request as Deterministic Request {#deterministic-phantom-Request}
 
-In some settings, the server can assume that all the approaching clients already have the exact phantom observation request to use.
+In some settings, the server can assume that all the approaching clients already have the exact phantom observation request to use, together with the transport-specific information required to listen to corresponding multicast notifications.
 
-For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}), before sending an observe registration request to the server.
+For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}). Then, the clients either set up their multicast address and group observation for listening to multicast notifications if directly able to, or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
-If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can independently protect the phantom observation request possibly available as plain CoAP message. To this end, they use the approach defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}} to compute a protected deterministic request, against which the protected multicast notifications will match for the group observation in question.
+If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
 
-Note that the same deterministic request sent by each client as registration request is, in terms of transport-independent information, identical to the phantom registration request. Thus, the informative response sent by the server may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
+In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same protected deterministic request. The latter is used as the actual phantom observation request, against which the protected multicast notifications will match for the group observation in question.
+
+If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} when the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.amsuess-core-cachable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
+
+Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the error informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
 If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the error informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
 
@@ -1928,15 +1932,15 @@ In addition, the phantom request is especially a deterministic request (see {{de
 
 The example provided in this appendix as reflected by the message exchange shown in {{intermediaries-example-e2e-security-det-exchange}} assumes the following.
 
-1. The OSCORE group supports deterministic requests. Thus, the server creates the phantom request as a deterministic request {{I-D.amsuess-core-cachable-oscore}}, and stores it locally as one of its issued phantom requests, without starting the group observation yet.
+1. The OSCORE group supports deterministic requests. Thus, the server creates the phantom request as a deterministic request {{I-D.amsuess-core-cachable-oscore}}, stores it locally as one of its issued phantom requests, and starts the group observation.
 
 2. The server makes the phantom request available through other means, e.g., a pub-sub broker, together with the transport-specific information for listening to multicast notifications bound to the phantom request (see {{appendix-different-sources}}).
 
-3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source, and compute the protected version to use from the retrieved plain version.
+3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same deterministic request to be used as phantom observation request.
 
 4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on point (2) above, the same would happen if the phantom request would not be specifically a deterministic request.
 
-5. If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request. However, unlike the case considered in {{intermediaries-e2e-security}} when the ticket request is not deterministic, the client does not include a Listen-to-Multicast-Responses option in the phantom request sent to the proxy.
+5. If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request (see {{intermediaries-e2e-security}}). However, unlike the case considered in {{intermediaries-e2e-security}} when the ticket request is not deterministic, the client does not include a Listen-to-Multicast-Responses option in the phantom request sent to the proxy.
 
 6. Unlike for the case considered in {{intermediaries-e2e-security}}, here the proxy does not know that the request is exactly a ticket request for subscribing to multicast notifications. Thus, the proxy simply forwards the ticket request to the server as it normally does for any request.
 
@@ -2186,6 +2190,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Added pre-requirements for early retrieval of phantom request.
 
 * Revised example with early retrieval of phantom request.
+
+* Clarified use and rationale of phantom requests as deterministic requests.
 
 * Editorial improvements.
 
