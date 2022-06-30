@@ -2547,7 +2547,10 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
 
    With this information from the topic discovery step, the client can
    already set up its multicast address and start receiving multicast
-   notifications.
+   notifications for the group observation in question.  Clients that
+   are not directly able to listen to multicast notications can instead
+   rely on a proxy to do so on their behalf (see Section 9 and
+   Section 10).
 
    In heavily asymmetric networks like municipal notification services,
    discovery and notifications do not necessarily need to use the same
