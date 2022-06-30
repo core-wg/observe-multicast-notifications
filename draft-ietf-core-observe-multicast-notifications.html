@@ -3024,12 +3024,22 @@ This section gives some general guidelines for what the experts should be lookin
         <h3 id="name-topic-discovery-in-publish-">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-topic-discovery-in-publish-" class="section-name selfRef">Topic Discovery in Publish-Subscribe Settings</a>
         </h3>
-<p id="appendix-A.1-1">In a Publish-Subscribe scenario <span>[<a href="#I-D.ietf-core-coap-pubsub" class="xref">I-D.ietf-core-coap-pubsub</a>]</span>, a group observation can be discovered along with topic metadata. For instance, a discovery step can make the following metadata available.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-2">This example assumes a CoRAL namespace <span>[<a href="#I-D.ietf-core-coral" class="xref">I-D.ietf-core-coral</a>]</span>, that contains properties analogous to those in the content-format application/informative-response+cbor.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-3">Note that the information about the used transport protocol is not expressed through a dedicated element equivalent to 'tp_id' (see <a href="#sssec-transport-specific-encoding" class="xref">Section 2.2.1</a>). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in <a href="#ssssec-udp-transport-specific" class="xref">Section 2.2.1.1</a>), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in <a href="#ssssec-udp-transport-specific" class="xref">Section 2.2.1.1</a>).<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-1">In a Publish-Subscribe scenario <span>[<a href="#I-D.ietf-core-coap-pubsub" class="xref">I-D.ietf-core-coap-pubsub</a>]</span>, a group observation can be discovered along with topic metadata.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">As a pre-requirement, the server has to first perform the following actions.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.1-3.1">The server has to start the group observation (see <a href="#ssec-server-side-request" class="xref">Section 2.1</a>).<a href="#appendix-A.1-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-A.1-3.2">
+            <p id="appendix-A.1-3.2.1">Together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative error response returned to observer clients (see <a href="#ssec-server-side-informative" class="xref">Section 2.2</a>).<a href="#appendix-A.1-3.2.1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3.2.2">
+This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.<a href="#appendix-A.1-3.2.2" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-A.1-4"><a href="#discovery-pub-sub" class="xref">Figure 10</a> provides an example where a group observation is discovered. The example assumes a CoRAL namespace <span>[<a href="#I-D.ietf-core-coral" class="xref">I-D.ietf-core-coral</a>]</span>, that contains properties analogous to those in the content-format application/informative-response+cbor.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-5">Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative error response (see <a href="#sssec-transport-specific-encoding" class="xref">Section 2.2.1</a>). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in <a href="#ssssec-udp-transport-specific" class="xref">Section 2.2.1.1</a>), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in <a href="#ssssec-udp-transport-specific" class="xref">Section 2.2.1.1</a>).<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
 <span id="name-group-observation-discovery"></span><div id="discovery-pub-sub">
 <figure id="figure-10">
-          <div class="alignLeft art-text artwork" id="appendix-A.1-4.1">
+          <div class="alignLeft art-text artwork" id="appendix-A.1-6.1">
 <pre>
 Request:
 
@@ -3056,8 +3066,8 @@ Response:
 <a href="#name-group-observation-discovery" class="selfRef">Group observation discovery in a Pub-Sub scenario</a>
           </figcaption></figure>
 </div>
-<p id="appendix-A.1-5">With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications.<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-6">In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.<a href="#appendix-A.1-6" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-7">With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications.<a href="#appendix-A.1-7" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-8">In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="introspection-at-the-multicast-notification-sender">
@@ -4033,9 +4043,11 @@ C1      C2      P         S
 <ul class="normal">
 <li class="normal" id="appendix-H.1-1.1">Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.<a href="#appendix-H.1-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-H.1-1.2">Revised example with early retrieval of phantom request.<a href="#appendix-H.1-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-H.1-1.2">Added pre-requirements for early retrieval of phantom request.<a href="#appendix-H.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-H.1-1.3">Editorial improvements.<a href="#appendix-H.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-H.1-1.3">Revised example with early retrieval of phantom request.<a href="#appendix-H.1-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-H.1-1.4">Editorial improvements.<a href="#appendix-H.1-1.4" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
