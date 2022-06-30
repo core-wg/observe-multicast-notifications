@@ -1,4 +1,6 @@
 ---
+v: 3
+
 title: Observe Notifications as CoAP Multicast Responses
 abbrev: Observe Multicast Notifications
 docname: draft-ietf-core-observe-multicast-notifications-latest
@@ -11,6 +13,7 @@ area: Internet
 wg: CoRE Working Group
 kw: Internet-Draft
 cat: std
+submissiontype: IETF
 updates: 7252, 7641
 
 coding: utf-8
@@ -2207,6 +2210,6 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 # Acknowledgments # {#acknowldegment}
 {: numbered="no"}
 
-The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime Jimenez, John Mattsson, Ludwig Seitz, Jim Schaad and Göran Selander for their comments and feedback.
+The authors sincerely thank {{{Carsten Bormann}}}, {{{Klaus Hartke}}}, {{{Jaime Jiménez}}}, {{{John Preuß Mattsson}}}, {{{Ludwig Seitz}}}, {{{Jim Schaad}}} and {{{Göran Selander}}} for their comments and feedback.
 
 The work on this document has been partly supported by VINNOVA and the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home (Grant agreement 952652).
