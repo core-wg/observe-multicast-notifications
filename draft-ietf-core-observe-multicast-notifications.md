@@ -1070,17 +1070,17 @@ According to the encoding specified in {{sssec-transport-specific-encoding}}, th
 The table below summarizes them, specifies the integer value to use instead of the full descriptive name, and provides the corresponding comprehensive set of information elements to include in the 'tp_info' parameter.
 
 ~~~~~~~~~~~
-+-----------+-------------+-------+----------+-----------+-----------+
-| Transport | Description | Value | Srv Addr | Req Info  | Reference |
-| Protocol  |             |       |          |           |           |
-+-----------+-------------+-------+----------+-----------+-----------+
-| Reserved  | This value  | 0     |          |           | [This     |
-|           | is reserved |       |          |           | document] |
-|           |             |       |          |           |           |
-| UDP       | UDP is used | 1     | tp_id    |  token    | [This     |
-|           | as per      |       | srv_host |  cli_host | document] |
-|           | RFC7252     |       | srv_port | ?cli_port |           |
-+-----------+-------------+-------+----------+-----------+-----------+
++-----------+-------------+-------+----------+-----------+------------+
+| Transport | Description | Value | Srv Addr | Req Info  | Reference  |
+| Protocol  |             |       |          |           |            |
++-----------+-------------+-------+----------+-----------+------------+
+| Reserved  | This value  | 0     |          |           | [RFC-XXXX] |
+|           | is reserved |       |          |           |            |
+|           |             |       |          |           |            |
+| UDP       | UDP is used | 1     | tp_id    |  token    | [RFC-XXXX] |
+|           | as per      |       | srv_host |  cli_host |            |
+|           | RFC7252     |       | srv_port | ?cli_port |            |
++-----------+-------------+-------+----------+-----------+------------+
 ~~~~~~~~~~~
 {: #values_tp_id title="Transport protocol information"}
 
@@ -1181,13 +1181,13 @@ Reference: {{&SELF}}
 IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
 
 ~~~~~~~~~~~
-+--------+--------------------------------------+-----------------+
-| Number |                 Name                 |    Reference    |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Multicast-Response-Feedback-Divider | [This document] |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Listen-To-Multicast-Responses       | [This document] |
-+--------+--------------------------------------+-----------------+
++--------+--------------------------------------+------------+
+| Number |                 Name                 | Reference  |
++--------+--------------------------------------+------------+
+|  TBD   |  Multicast-Response-Feedback-Divider | [RFC-XXXX] |
++--------+--------------------------------------+------------+
+|  TBD   |  Listen-To-Multicast-Responses       | [RFC-XXXX] |
++--------+--------------------------------------+------------+
 ~~~~~~~~~~~
 {: artwork-align="center"}
 
