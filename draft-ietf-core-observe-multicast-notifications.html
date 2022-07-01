@@ -2640,17 +2640,17 @@ Note also that, identically to the phantom request, the ticket request is still 
 <figure id="figure-9">
         <div class="alignLeft art-text artwork" id="section-12-4.1">
 <pre>
-+-----------+-------------+-------+----------+-----------+-----------+
-| Transport | Description | Value | Srv Addr | Req Info  | Reference |
-| Protocol  |             |       |          |           |           |
-+-----------+-------------+-------+----------+-----------+-----------+
-| Reserved  | This value  | 0     |          |           | [This     |
-|           | is reserved |       |          |           | document] |
-|           |             |       |          |           |           |
-| UDP       | UDP is used | 1     | tp_id    |  token    | [This     |
-|           | as per      |       | srv_host |  cli_host | document] |
-|           | RFC7252     |       | srv_port | ?cli_port |           |
-+-----------+-------------+-------+----------+-----------+-----------+
++-----------+-------------+-------+----------+-----------+------------+
+| Transport | Description | Value | Srv Addr | Req Info  | Reference  |
+| Protocol  |             |       |          |           |            |
++-----------+-------------+-------+----------+-----------+------------+
+| Reserved  | This value  | 0     |          |           | [RFC-XXXX] |
+|           | is reserved |       |          |           |            |
+|           |             |       |          |           |            |
+| UDP       | UDP is used | 1     | tp_id    |  token    | [RFC-XXXX] |
+|           | as per      |       | srv_host |  cli_host |            |
+|           | RFC7252     |       | srv_port | ?cli_port |            |
++-----------+-------------+-------+----------+-----------+------------+
 </pre>
 </div>
 <figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
@@ -2776,13 +2776,13 @@ Note also that, identically to the phantom request, the ticket request is still 
 <p id="section-14.3-1">IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.<a href="#section-14.3-1" class="pilcrow">¶</a></p>
 <div class="alignCenter art-text artwork" id="section-14.3-2">
 <pre>
-+--------+--------------------------------------+-----------------+
-| Number |                 Name                 |    Reference    |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Multicast-Response-Feedback-Divider | [This document] |
-+--------+--------------------------------------+-----------------+
-|  TBD   |  Listen-To-Multicast-Responses       | [This document] |
-+--------+--------------------------------------+-----------------+
++--------+--------------------------------------+------------+
+| Number |                 Name                 | Reference  |
++--------+--------------------------------------+------------+
+|  TBD   |  Multicast-Response-Feedback-Divider | [RFC-XXXX] |
++--------+--------------------------------------+------------+
+|  TBD   |  Listen-To-Multicast-Responses       | [RFC-XXXX] |
++--------+--------------------------------------+------------+
 </pre><a href="#section-14.3-2" class="pilcrow">¶</a>
 </div>
 </section>
