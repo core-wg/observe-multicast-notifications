@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 1 January 2023                                                 
+Expires: 2 January 2023                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                            30 June 2022
+                                                             1 July 2022
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2023.
+   This Internet-Draft will expire on 2 January 2023.
 
 Copyright Notice
 
@@ -2893,10 +2893,14 @@ Appendix D.  Phantom Request as Deterministic Request
 
    For instance, the clients can be pre-configured with the phantom
    observation request, or they may be expected to retrieve it through
-   dedicated means (see Appendix A).  Then, the clients either set up
-   their multicast address and group observation for listening to
-   multicast notifications if directly able to, or rely on a proxy to do
-   so on their behalf (see Section 9 and Section 10).
+   dedicated means (see Appendix A).  In either case, the server would
+   already have started the group observation, before the associated
+   phantom observation request was disseminated.
+
+   Then, the clients either set up their multicast address and group
+   observation for listening to multicast notifications if directly able
+   to, or rely on a proxy to do so on their behalf (see Section 9 and
+   Section 10).
 
    If Group OSCORE is used to protect the group observation (see
    Section 7), and the OSCORE group supports the concept of
@@ -3411,8 +3415,7 @@ G.1.  Assumptions and Walkthrough
         the stored ones.  This happens through a byte-by-byte comparison
         of the incoming message minus the transport-related fields,
         i.e., by considering only: i) the outer REST code; ii) the outer
-        options; and iii) the ciphertext and signature from the message
-        payload.
+        options; and iii) the ciphertext from the message payload.
 
    8.   Having recognized the incoming request as one of the self-
         generated deterministic phantom requests made available at
@@ -3456,9 +3459,8 @@ G.2.  Message Exchange
 
    *  The server S sends multicast notifications to the IP multicast
       address GRP_ADDR and port number GRP_PORT, and starts the group
-      observation upon receiving a registration request from a first
-      client that wishes to start a traditional observation on the
-      resource /r.
+      observation already after creating the deterministic phantom
+      request to early disseminate.
 
    *  S is a member of the OSCORE group with 'kid context' = 0x57ab2e as
       Group ID.  In the OSCORE group, S has 'kid' = 0x05 as Sender ID,
@@ -3479,10 +3481,37 @@ G.2.  Message Exchange
  |       |       |         |
  |       |       |         |  (The value of the resource /r is "1234")
  |       |       |         |
- |       |       |         |  (The server prepares a deterministic
- |       |       |         |   phantom request PH_REQ. The server
- |       |       |         |   stores PH_REQ locally and makes it
- |       |       |         |   available at an external source)
+ |       |       |         |  (S allocates the available
+ |       |       |         |   Token value 0x7b .)
+ |       |       |         |
+ |       |       |         |  (S sends to itself a phantom observation
+ |       |       |         |   request PH_REQ as coming from the
+ |       |       |         |   IP multicast address GRP_ADDR.
+ |       |       |         |   The OSCORE processing occurs as
+ |       |       |         |   specified for a deterministic request)
+ |       |       |         |
+ |       |       |  -------|
+ |       |       | /       |
+ |       |       | \------>|  Token: 0x7b
+ |       |       |   FETCH |  Uri-Host: sensor.example
+ |       |       |         |  Observe: 0 (Register)
+ |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
+ |       |       |         |           kid context: 0x57ab2e ; ... }
+ |       |       |         |  <Other class U/I options>
+ |       |       |         |  0xff
+ |       |       |         |  Encrypted_payload {
+ |       |       |         |    0x01 (GET),
+ |       |       |         |    Observe: 0 (Register),
+ |       |       |         |    Uri-Path: r,
+ |       |       |         |    <Other class E options>
+ |       |       |         |  }
+ |       |       |         |
+ |       |       |         |  (S creates a group observation of /r)
+ |       |       |         |
+ |       |       |         |  (The server does not respond to PH_REQ.
+ |       |       |         |   The server stores PH_REQ locally and
+ |       |       |         |   makes it available at an external source)
+ |       |       |         |
  |       |       |         |
  |       |       |         |  (C1 obtains PH_REQ and sends it to P)
  |       |       |         |
@@ -3519,31 +3548,6 @@ G.2.  Message Exchange
  |       |       |         |  (S recognizes PH_REQ through byte-by-byte
  |       |       |         |   comparison against the stored one, and
  |       |       |         |   skips any OSCORE processing)
- |       |       |         |
- |       |       |         |  (S allocates the available
- |       |       |         |   Token value 0x7b .)
- |       |       |         |
- |       |       |         |  (S sends to itself PH_REQ, with Token 0x7b
- |       |       |         |   and as coming from the IP multicast
- |       |       |         |   address GRP_ADDR; now the OSCORE
- |       |       |         |   processing does happen, as specified
- |       |       |         |   for a deterministic request)
- |       |       |         |
- |       |       |  -------|
- |       |       | /       |
- |       |       | \------>|  Token: 0x7b
- |       |       |   FETCH |  Uri-Host: sensor.example
- |       |       |         |  Observe: 0 (Register)
- |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
- |       |       |         |           kid context: 0x57ab2e ; ... }
- |       |       |         |  <Other class U/I options>
- |       |       |         |  0xff
- |       |       |         |  Encrypted_payload {
- |       |       |         |    0x01 (GET),
- |       |       |         |    Observe: 0 (Register),
- |       |       |         |    Uri-Path: r,
- |       |       |         |    <Other class E options>
- |       |       |         |  }
  |       |       |         |
  |       |       |         |  (S prepares the "last notification"
  |       |       |         |   response defined below)
@@ -3692,8 +3696,8 @@ H.1.  Version -02 to -03
 
    *  Revised example with early retrieval of phantom request.
 
-   *  Clarified use and rationale of phantom requests as deterministic
-      requests.
+   *  Clarified use, rationale and example of phantom request as
+      deterministic request.
 
    *  Editorial improvements.
 
