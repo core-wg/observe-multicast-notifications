@@ -175,6 +175,22 @@ This document additionally defines the following terminology.
 
 * Informative response. A CoAP response message that the server sends to a given client via unicast, providing the client with information on a group observation.
 
+# Prerequisites # {#sec-prereq}
+
+In order to use multicast notifications as defined in this document, the following prerequisites have to be fulfilled.
+
+* The server and the clients need to be on a network on which multicasts can reach a sufficiently large portion of the clients.
+
+* The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see {{Section 12.8 of RFC7252}}) are not suitable for this purpose.
+
+* The server and the clients need to agree out of band that multicast notifications may be used.
+
+   This document does not describe a way for a client to influence the server's decision to start group observations and thus to use multicast notifications. This is done on purpose.
+
+   That is, the mechanism specified in this document is expected to be used in situations where sending individual notifications is not feasible, or is not preferred beyond a certain number of clients observing a target resource.
+
+   If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means to opt in to multicast notifications.
+
 # Server-Side # {#sec-server-side}
 
 The server can, at any time, start a group observation on one of its resources. Practically, the server may want to do that under the following circumstances.
@@ -186,12 +202,6 @@ The server can, at any time, start a group observation on one of its resources. 
 The server maintains an observer counter for each group observation to a target resource, as a rough estimation of the observers actively taking part in the group observation.
 
 The server initializes the counter to 0 when starting the group observation, and increments it after a new client starts taking part in that group observation. Also, the server should keep the counter up-to-date over time, for instance by using the method described in {{sec-rough-counting}}. This allows the server to possibly terminate a group observation in case, at some point in time, not enough clients are estimated to be still active and interested.
-
-This document does not describe a way for the client to influence the server's decision to start group observations.
-That is done on purpose:
-the specified mechanism is expected to be used in situations where sending individual notifications is not feasible, or not preferred beyond a certain number of clients observing a target resource.
-If applications arise where negotiation does make sense,
-they are welcome to specify additional means to opt in to multicast notifications.
 
 ## Request ## {#ssec-server-side-request}
 
@@ -2193,6 +2203,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -02 to -03 ## {#sec-03-04}
+
+* Added a new section on prerequisites.
 
 * Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.
 
