@@ -255,7 +255,7 @@ Upon receiving a registration request to observe the target resource, the server
 
 Note that this also applies when, with no ongoing traditional observations on the target resource, the server receives a registration request from a first client and decides to start a group observation on the target resource.
 
-### Encoding of Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
+### Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
 \[ This encoding might be replaced by CRIs {{?I-D.ietf-core-href}} in a later version of this document. \]
 
@@ -335,7 +335,7 @@ tp_info = [
 ~~~~~~~~~~~
 {: #tp-info-udp title="Format of 'tp_info' with UDP as transport protocol"}
 
-### Encoding of Transport-Independent Message Information  ### {#sssec-transport-independent-encoding}
+### Transport-Independent Message Information  ### {#sssec-transport-independent-encoding}
 
 For both the parameters 'ph_req' and 'last_notif' in the informative response, the value of the byte string is the concatenation of the following components, in the order specified below.
 
