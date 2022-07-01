@@ -1518,7 +1518,9 @@ Applications requiring backward security and forward security are REQUIRED to us
 
 In some settings, the server can assume that all the approaching clients already have the exact phantom observation request to use, together with the transport-specific information required to listen to corresponding multicast notifications.
 
-For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}). Then, the clients either set up their multicast address and group observation for listening to multicast notifications if directly able to, or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
+For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}). In either case, the server would already have started the group observation, before the associated phantom observation request was disseminated.
+
+Then, the clients either set up their multicast address and group observation for listening to multicast notifications if directly able to, or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
 If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
 
@@ -1944,7 +1946,7 @@ The example provided in this appendix as reflected by the message exchange shown
 
 6. Unlike for the case considered in {{intermediaries-e2e-security}}, here the proxy does not know that the request is exactly a ticket request for subscribing to multicast notifications. Thus, the proxy simply forwards the ticket request to the server as it normally does for any request.
 
-7. The server receives the ticket request, which is a deviation from the case where the ticket request is not deterministic and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext and signature from the message payload.
+7. The server receives the ticket request, which is a deviation from the case where the ticket request is not deterministic and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
 8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
 
@@ -1960,7 +1962,7 @@ The same assumptions and notation used in {{sec-example-with-security}} are used
 
 * Two clients C_1 and C_2 register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
-* The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
+* The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation already after creating the deterministic phantom request to early disseminate.
 
 * S is a member of the OSCORE group with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
 
@@ -1977,10 +1979,37 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The value of the resource /r is "1234")
 |       |       |         |
-|       |       |         |  (The server prepares a deterministic
-|       |       |         |   phantom request PH_REQ. The server
-|       |       |         |   stores PH_REQ locally and makes it
-|       |       |         |   available at an external source)
+|       |       |         |  (S allocates the available
+|       |       |         |   Token value 0x7b .)
+|       |       |         |
+|       |       |         |  (S sends to itself a phantom observation
+|       |       |         |   request PH_REQ as coming from the
+|       |       |         |   IP multicast address GRP_ADDR.
+|       |       |         |   The OSCORE processing occurs as
+|       |       |         |   specified for a deterministic request)
+|       |       |         |
+|       |       |  -------|
+|       |       | /       |
+|       |       | \------>|  Token: 0x7b
+|       |       |   FETCH |  Uri-Host: sensor.example
+|       |       |         |  Observe: 0 (Register)
+|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
+|       |       |         |           kid context: 0x57ab2e ; ... }
+|       |       |         |  <Other class U/I options>
+|       |       |         |  0xff
+|       |       |         |  Encrypted_payload {
+|       |       |         |    0x01 (GET),
+|       |       |         |    Observe: 0 (Register),
+|       |       |         |    Uri-Path: r,
+|       |       |         |    <Other class E options>
+|       |       |         |  }
+|       |       |         |
+|       |       |         |  (S creates a group observation of /r)
+|       |       |         |
+|       |       |         |  (The server does not respond to PH_REQ.
+|       |       |         |   The server stores PH_REQ locally and
+|       |       |         |   makes it available at an external source)
+|       |       |         |
 |       |       |         |
 |       |       |         |  (C1 obtains PH_REQ and sends it to P)
 |       |       |         |
@@ -2017,31 +2046,6 @@ C1      C2      P         S
 |       |       |         |  (S recognizes PH_REQ through byte-by-byte
 |       |       |         |   comparison against the stored one, and
 |       |       |         |   skips any OSCORE processing)
-|       |       |         |
-|       |       |         |  (S allocates the available
-|       |       |         |   Token value 0x7b .)
-|       |       |         |
-|       |       |         |  (S sends to itself PH_REQ, with Token 0x7b
-|       |       |         |   and as coming from the IP multicast
-|       |       |         |   address GRP_ADDR; now the OSCORE
-|       |       |         |   processing does happen, as specified
-|       |       |         |   for a deterministic request)
-|       |       |         |
-|       |       |  -------|
-|       |       | /       |
-|       |       | \------>|  Token: 0x7b
-|       |       |   FETCH |  Uri-Host: sensor.example
-|       |       |         |  Observe: 0 (Register)
-|       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
-|       |       |         |           kid context: 0x57ab2e ; ... }
-|       |       |         |  <Other class U/I options>
-|       |       |         |  0xff
-|       |       |         |  Encrypted_payload {
-|       |       |         |    0x01 (GET),
-|       |       |         |    Observe: 0 (Register),
-|       |       |         |    Uri-Path: r,
-|       |       |         |    <Other class E options>
-|       |       |         |  }
 |       |       |         |
 |       |       |         |  (S prepares the "last notification"
 |       |       |         |   response defined below)
@@ -2191,7 +2195,7 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 * Revised example with early retrieval of phantom request.
 
-* Clarified use and rationale of phantom requests as deterministic requests.
+* Clarified use, rationale and example of phantom request as deterministic request.
 
 * Editorial improvements.
 
