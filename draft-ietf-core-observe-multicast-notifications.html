@@ -1157,10 +1157,10 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-informative-response" class="xref">Informative Response</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.1">
-                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="xref">2.2.1</a>.  <a href="#name-encoding-of-transport-speci" class="xref">Encoding of Transport-Specific Message Information</a></p>
+                    <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="xref">2.2.1</a>.  <a href="#name-transport-specific-message-" class="xref">Transport-Specific Message Information</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.2">
-                    <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="xref">2.2.2</a>.  <a href="#name-encoding-of-transport-indep" class="xref">Encoding of Transport-Independent Message Information</a></p>
+                    <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="xref">2.2.2</a>.  <a href="#name-transport-independent-messa" class="xref">Transport-Independent Message Information</a></p>
 </li>
                 </ul>
 </li>
@@ -1538,8 +1538,8 @@ informative_response_payload = {
 <p id="section-2.2-9">Note that this also applies when, with no ongoing traditional observations on the target resource, the server receives a registration request from a first client and decides to start a group observation on the target resource.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
 <div id="sssec-transport-specific-encoding">
 <section id="section-2.2.1">
-          <h4 id="name-encoding-of-transport-speci">
-<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-encoding-of-transport-speci" class="section-name selfRef">Encoding of Transport-Specific Message Information</a>
+          <h4 id="name-transport-specific-message-">
+<a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-transport-specific-message-" class="section-name selfRef">Transport-Specific Message Information</a>
           </h4>
 <p id="section-2.2.1-1">[ This encoding might be replaced by CRIs <span>[<a href="#I-D.ietf-core-href" class="xref">I-D.ietf-core-href</a>]</span> in a later version of this document. ]<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.1-2">The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
@@ -1648,8 +1648,8 @@ tp_info = [
 </div>
 <div id="sssec-transport-independent-encoding">
 <section id="section-2.2.2">
-          <h4 id="name-encoding-of-transport-indep">
-<a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-encoding-of-transport-indep" class="section-name selfRef">Encoding of Transport-Independent Message Information</a>
+          <h4 id="name-transport-independent-messa">
+<a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-transport-independent-messa" class="section-name selfRef">Transport-Independent Message Information</a>
           </h4>
 <p id="section-2.2.2-1">For both the parameters 'ph_req' and 'last_notif' in the informative response, the value of the byte string is the concatenation of the following components, in the order specified below.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.2-2">When defining the value of each component, "CoAP message" refers to the phantom observation request for the 'ph_req' parameter, and to the corresponding latest multicast notification for the 'last_notif' parameter.<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>

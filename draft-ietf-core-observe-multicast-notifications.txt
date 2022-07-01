@@ -78,8 +78,8 @@ Table of Contents
    2.  Server-Side
      2.1.  Request
      2.2.  Informative Response
-       2.2.1.  Encoding of Transport-Specific Message Information
-       2.2.2.  Encoding of Transport-Independent Message Information
+       2.2.1.  Transport-Specific Message Information
+       2.2.2.  Transport-Independent Message Information
      2.3.  Notifications
      2.4.  Congestion Control
      2.5.  Cancellation
@@ -420,7 +420,7 @@ Table of Contents
    registration request from a first client and decides to start a group
    observation on the target resource.
 
-2.2.1.  Encoding of Transport-Specific Message Information
+2.2.1.  Transport-Specific Message Information
 
    [ This encoding might be replaced by CRIs [I-D.ietf-core-href] in a
    later version of this document. ]
@@ -559,7 +559,7 @@ Table of Contents
 
       Figure 3: Format of 'tp_info' with UDP as transport protocol
 
-2.2.2.  Encoding of Transport-Independent Message Information
+2.2.2.  Transport-Independent Message Information
 
    For both the parameters 'ph_req' and 'last_notif' in the informative
    response, the value of the byte string is the concatenation of the
