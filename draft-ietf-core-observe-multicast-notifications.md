@@ -191,6 +191,30 @@ In order to use multicast notifications as defined in this document, the followi
 
    If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means to opt in to multicast notifications.
 
+# High-Level Overview of Available Variants # {#sec-variants}
+
+The method defined in this document fundamentally enables a server to setup a group observation. This is associated with a phantom observation request started by the server, and to which the multicast notifications of the group observation are bound.
+
+While the server can provide the phantom request in question to the interested clients as they reach out for registering to the group observation, the server may alternatively distribute the phantom request in advance by alternative means (e.g., see {{appendix-different-sources}}). Clients that have already retrieved the phantom request can immediately starts listening to multicast notifications if able to directly do so, or rather instruct an assisting intermediary such as a proxy to do that on their behalf.
+
+The following provides an overview of the available variants to enforce a group observation, depending on whether a proxy is deployed or not, and on whether exchanged messages are protected end-to-end between the observer clients and the server.
+
+* No proxy -  This is simplest network configuration, where the clients participating to the group observation are capable to listen to multicast traffic. In such a setup, the clients directly receive multicast notifications from the server.
+
+   * Without end-to-end security - Messages pertaining to the group observation are not protected. This basic case is defined in {{sec-server-side}} and {{sec-client-side}} from the server and the client side, respectively. An example is provided in {{sec-example-no-security}}.
+
+   * With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the Group OSCORE security protocol {{I-D.ietf-core-oscore-groupcomm}}. This case is defined in {{sec-secured-notifications}}. An example is provided in {{sec-example-with-security}}.
+
+      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Then, all the clients are able to compute the same protected phantom request to use (see {{deterministic-phantom-Request}}).
+
+* With proxy - This network configuration is expected in case the clients participating to the group observation are not capable to listen to multicast traffic. In such a setup, the proxy directly receives multicast notifications from the server, and relays them back to the clients.
+
+   * Without end-to-end security - Messages pertaining to the group observation are not protected end-to-end between the clients and the server. This basic case is defined in {{intermediaries}}. An example is provided in {{intermediaries-example}}.
+
+   * With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the Group OSCORE security protocol {{I-D.ietf-core-oscore-groupcomm}}. In particular, the clients are required to separately provide the proxy with the obtained phantom request, thus enabling the proxy to receive the multicast notifications from the server. This case is defined in {{intermediaries-e2e-security}}. An example is provided in {{intermediaries-example-e2e-security}}.
+
+      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, the same advantages mentioned above for the case without a proxy applies (see {{deterministic-phantom-Request}}). In addition, this allows for a more efficient setup and enforcement of the group observation, by reducing the amount of message exchanges and allowing the proxy to effectively serve protected multicast notifications from its cache. An example is provided in {{intermediaries-example-e2e-security-det-exchange}}.
+
 # Server-Side # {#sec-server-side}
 
 The server can, at any time, start a group observation on one of its resources. Practically, the server may want to do that under the following circumstances.
@@ -2205,6 +2229,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -02 to -03 ## {#sec-03-04}
 
 * Added a new section on prerequisites.
+
+* Added a new section overviewing alternative variants.
 
 * Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.
 
