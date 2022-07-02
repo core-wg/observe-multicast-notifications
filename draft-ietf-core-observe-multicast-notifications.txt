@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 2 January 2023                                                 
+Expires: 3 January 2023                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                             1 July 2022
+                                                             2 July 2022
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2023.
+   This Internet-Draft will expire on 3 January 2023.
 
 Copyright Notice
 
@@ -251,7 +251,9 @@ Table of Contents
    the following prerequisites have to be fulfilled.
 
    *  The server and the clients need to be on a network on which
-      multicasts can reach a sufficiently large portion of the clients.
+      multicast notifications can reach a sufficiently large portion of
+      the clients.  These may leverage indermediaries such as proxies,
+      if not directly able to listen to multicast traffic.
 
    *  The server needs to be provisioned with multicast addresses whose
       token space is placed under its control.  On general purpose
