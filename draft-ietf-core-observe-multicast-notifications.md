@@ -171,7 +171,7 @@ This document additionally defines the following terminology.
 
 * Group observation. A resource observation associated with a group of clients. The server sends notifications for the group-observed resource over IP multicast to all the observer clients.
 
-* Phantom request. The CoAP request message that the server would have received to start or cancel a group observation on one of its resources. A phantom request is generated inside the server and does not hit the wire.
+* Phantom request. The CoAP request message that the server would have received to start a group observation on one of its resources. A phantom request is generated inside the server and does not hit the wire.
 
 * Informative response. A CoAP response message that the server sends to a given client via unicast, providing the client with information on a group observation.
 
