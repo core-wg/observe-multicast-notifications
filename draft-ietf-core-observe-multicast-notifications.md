@@ -179,7 +179,7 @@ This document additionally defines the following terminology.
 
 In order to use multicast notifications as defined in this document, the following prerequisites have to be fulfilled.
 
-* The server and the clients need to be on a network on which multicasts can reach a sufficiently large portion of the clients.
+* The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage indermediaries such as proxies, if not directly able to listen to multicast traffic.
 
 * The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see {{Section 12.8 of RFC7252}}) are not suitable for this purpose.
 
