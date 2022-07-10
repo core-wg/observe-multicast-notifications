@@ -12,22 +12,22 @@
 <meta content='
        The Constrained Application Protocol (CoAP) allows clients to "observe" resources at a server, and receive notifications as unicast responses upon changes of the resource state. In some use cases, such as based on publish-subscribe, it would be convenient for the server to send a single notification addressed to all the clients observing a same target resource. This document updates RFC7252 and RFC7641, and defines how a server sends observe notifications as response messages over multicast, synchronizing  all the observers of a same resource on a same shared Token value. Besides, this document defines how Group OSCORE can be used to protect multicast notifications end-to-end between the server and the observer clients. 
     ' name="description">
-<meta content="xml2rfc 3.12.10" name="generator">
+<meta content="xml2rfc 3.13.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-core-observe-multicast-notifications-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.10
+  xml2rfc 3.13.0
     Python 3.10.4
     appdirs 1.4.4
     ConfigArgParse 1.5.3
-    google-i18n-address 2.5.1
+    google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.8.0
-    MarkupSafe 2.0.1
-    pycountry 20.7.3
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
     pyflakes 2.4.0
     PyYAML 6.0
     requests 2.27.1
@@ -1033,7 +1033,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 3 January 2023</td>
+<td class="center">Expires 11 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1049,12 +1049,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-07-02" class="published">2 July 2022</time>
+<time datetime="2022-07-10" class="published">10 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-01-03">3 January 2023</time></dd>
+<dd class="expires"><time datetime="2023-01-11">11 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1453,7 +1453,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
       </h2>
 <p id="section-2-1">In order to use multicast notifications as defined in this document, the following prerequisites have to be fulfilled.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2-2.1">The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage indermediaries such as proxies, if not directly able to listen to multicast traffic.<a href="#section-2-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-2-2.1">The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage intermediaries such as proxies, if not directly able to listen to multicast traffic.<a href="#section-2-2.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-2-2.2">The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-12.8" class="relref">Section 12.8</a> of [<a href="#RFC7252" class="xref">RFC7252</a>]</span>) are not suitable for this purpose.<a href="#section-2-2.2" class="pilcrow">¶</a>
 </li>
@@ -3127,7 +3127,7 @@ Response:
 <a href="#name-group-observation-discovery" class="selfRef">Group observation discovery in a Pub-Sub scenario</a>
           </figcaption></figure>
 </div>
-<p id="appendix-A.1-7">With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications for the group observation in question. Clients that are not directly able to listen to multicast notications can instead rely on a proxy to do so on their behalf (see <a href="#intermediaries" class="xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="xref">Section 12</a>).<a href="#appendix-A.1-7" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-7">With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications for the group observation in question. Clients that are not directly able to listen to multicast notifications can instead rely on a proxy to do so on their behalf (see <a href="#intermediaries" class="xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="xref">Section 12</a>).<a href="#appendix-A.1-7" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-8">In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>

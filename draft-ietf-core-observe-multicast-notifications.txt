@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 3 January 2023                                                 
+Expires: 11 January 2023                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                             2 July 2022
+                                                            10 July 2022
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2023.
+   This Internet-Draft will expire on 11 January 2023.
 
 Copyright Notice
 
@@ -253,7 +253,7 @@ Table of Contents
 
    *  The server and the clients need to be on a network on which
       multicast notifications can reach a sufficiently large portion of
-      the clients.  These may leverage indermediaries such as proxies,
+      the clients.  These may leverage intermediaries such as proxies,
       if not directly able to listen to multicast traffic.
 
    *  The server needs to be provisioned with multicast addresses whose
@@ -2650,8 +2650,8 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
    With this information from the topic discovery step, the client can
    already set up its multicast address and start receiving multicast
    notifications for the group observation in question.  Clients that
-   are not directly able to listen to multicast notications can instead
-   rely on a proxy to do so on their behalf (see Section 11 and
+   are not directly able to listen to multicast notifications can
+   instead rely on a proxy to do so on their behalf (see Section 11 and
    Section 12).
 
    In heavily asymmetric networks like municipal notification services,
