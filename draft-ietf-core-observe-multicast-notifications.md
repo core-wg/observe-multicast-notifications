@@ -179,7 +179,7 @@ This document additionally defines the following terminology.
 
 In order to use multicast notifications as defined in this document, the following prerequisites have to be fulfilled.
 
-* The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage indermediaries such as proxies, if not directly able to listen to multicast traffic.
+* The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage intermediaries such as proxies, if not directly able to listen to multicast traffic.
 
 * The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see {{Section 12.8 of RFC7252}}) are not suitable for this purpose.
 
@@ -1319,7 +1319,7 @@ Response:
 ~~~~~~~~~~~
 {: #discovery-pub-sub title="Group observation discovery in a Pub-Sub scenario"}
 
-With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications for the group observation in question. Clients that are not directly able to listen to multicast notications can instead rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
+With this information from the topic discovery step, the client can already set up its multicast address and start receiving multicast notifications for the group observation in question. Clients that are not directly able to listen to multicast notifications can instead rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
 In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.
 
