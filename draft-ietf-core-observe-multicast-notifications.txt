@@ -145,7 +145,7 @@ Table of Contents
      G.1.  Assumptions and Walkthrough
      G.2.  Message Exchange
    Appendix H.  Document Updates
-     H.1.  Version -02 to -03
+     H.1.  Version -03 to -04
      H.2.  Version -02 to -03
      H.3.  Version -01 to -02
      H.4.  Version -00 to -01
@@ -2470,9 +2470,9 @@ Table of Contents
    [I-D.amsuess-core-cachable-oscore]
               Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
               Progress, Internet-Draft, draft-amsuess-core-cachable-
-              oscore-04, 6 March 2022,
+              oscore-05, 11 July 2022,
               <https://datatracker.ietf.org/doc/html/draft-amsuess-core-
-              cachable-oscore-04>.
+              cachable-oscore-05>.
 
    [I-D.ietf-ace-oauth-authz]
               Seitz, L., Selander, G., Wahlstroem, E., Erdtman, S., and
@@ -2516,9 +2516,9 @@ Table of Contents
    [I-D.tiloca-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
               in Progress, Internet-Draft, draft-tiloca-core-oscore-
-              capable-proxies-02, 7 March 2022,
+              capable-proxies-03, 11 July 2022,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-capable-proxies-02>.
+              oscore-capable-proxies-03>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsuess, C., and P. V. D. Stok, "Discovery of
@@ -3777,7 +3777,7 @@ Appendix H.  Document Updates
 
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-H.1.  Version -02 to -03
+H.1.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
