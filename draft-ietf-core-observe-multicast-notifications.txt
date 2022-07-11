@@ -1292,9 +1292,9 @@ Table of Contents
    informative responses from the server.
 
    To this end, alternative security protocols than Group OSCORE, such
-   as OSCORE [RFC8613] and/or DTLS [RFC6347][RFC9147], can be used to
-   protect other exchanges via unicast between the server and each
-   client, including the original client registration (see Section 5).
+   as OSCORE [RFC8613] and/or DTLS [RFC9147], can be used to protect
+   other exchanges via unicast between the server and each client,
+   including the original client registration (see Section 5).
 
 9.1.  Signaling the OSCORE Group in the Informative Response
 
@@ -2171,8 +2171,7 @@ Table of Contents
    conveying the Listen-To-Multicast-Responses Option can be
    additionally protected hop-by-hop.  This can be achieved by the
    client protecting the ticket request sent to the proxy using OSCORE
-   (see [I-D.tiloca-core-oscore-capable-proxies]) and/or DTLS
-   [RFC6347][RFC9147].
+   (see [I-D.tiloca-core-oscore-capable-proxies]) and/or DTLS [RFC9147].
 
 16.  IANA Considerations
 
@@ -2536,10 +2535,6 @@ Table of Contents
               computing and networking , August 1999,
               <https://people.eecs.berkeley.edu/~culler/cs294-
               f03/papers/bcast-storm.pdf>.
-
-   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
-              January 2012, <https://www.rfc-editor.org/rfc/rfc6347>.
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
