@@ -1033,7 +1033,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 11 January 2023</td>
+<td class="center">Expires 12 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1049,12 +1049,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-07-10" class="published">10 July 2022</time>
+<time datetime="2022-07-11" class="published">11 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-01-11">11 January 2023</time></dd>
+<dd class="expires"><time datetime="2023-01-12">12 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1110,7 +1110,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1420,7 +1420,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <p id="section-1-2">CoAP supports group communication over IP multicast <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="xref">I-D.ietf-core-groupcomm-bis</a>]</span>. This includes support for Observe registration requests over multicast, in order for clients to efficiently register as observers of a resource hosted at multiple servers.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">However, in a number of use cases, using multicast messages for responses would also be desirable. That is, it would be useful that a server sends observe notifications for a same target resource to multiple observers as responses over IP multicast.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">For instance, in CoAP publish-subscribe <span>[<a href="#I-D.ietf-core-coap-pubsub" class="xref">I-D.ietf-core-coap-pubsub</a>]</span>, multiple clients can subscribe to a topic, by observing the related resource hosted at the responsible broker. When a new value is published on that topic, it would be convenient for the broker to send a single multicast notification at once, to all the subscriber clients observing that topic.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">A different use case concerns clients observing a same registration resource at the CoRE Resource Directory <span>[<a href="#I-D.ietf-core-resource-directory" class="xref">I-D.ietf-core-resource-directory</a>]</span>. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="xref">I-D.tiloca-core-oscore-discovery</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-5">A different use case concerns clients observing a same registration resource at the CoRE Resource Directory <span>[<a href="#RFC9176" class="xref">RFC9176</a>]</span>. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="xref">I-D.tiloca-core-oscore-discovery</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This document fills this gap and provides the following twofold contribution.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">First, it updates <span>[<a href="#RFC7252" class="xref">RFC7252</a>]</span> and <span>[<a href="#RFC7641" class="xref">RFC7641</a>]</span>, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of an informative unicast response sent by the server to each observer client.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">Second, this document defines how to use Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="xref">I-D.ietf-core-oscore-groupcomm</a>]</span> to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the informative unicast response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.<a href="#section-1-8" class="pilcrow">¶</a></p>
@@ -2100,7 +2100,7 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
 <p id="section-9-3">In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in <a href="#sec-inf-response" class="xref">Section 9.1</a>. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server and/or with other servers to access their resources.<a href="#section-9-3" class="pilcrow">¶</a></p>
 <p id="section-9-4">Both the clients and the server MAY join the OSCORE group by using the approach described in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and based on the ACE framework for Authentication and Authorization in constrained environments <span>[<a href="#I-D.ietf-ace-oauth-authz" class="xref">I-D.ietf-ace-oauth-authz</a>]</span>. Further details on how to discover the OSCORE group and join it are out of the scope of this document.<a href="#section-9-4" class="pilcrow">¶</a></p>
 <p id="section-9-5">If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.<a href="#section-9-5" class="pilcrow">¶</a></p>
-<p id="section-9-6">To this end, alternative security protocols than Group OSCORE, such as OSCORE <span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span> and/or DTLS <span>[<a href="#RFC6347" class="xref">RFC6347</a>]</span><span>[<a href="#I-D.ietf-tls-dtls13" class="xref">I-D.ietf-tls-dtls13</a>]</span>, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see <a href="#sec-client-side" class="xref">Section 5</a>).<a href="#section-9-6" class="pilcrow">¶</a></p>
+<p id="section-9-6">To this end, alternative security protocols than Group OSCORE, such as OSCORE <span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span> and/or DTLS <span>[<a href="#RFC6347" class="xref">RFC6347</a>]</span><span>[<a href="#RFC9147" class="xref">RFC9147</a>]</span>, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see <a href="#sec-client-side" class="xref">Section 5</a>).<a href="#section-9-6" class="pilcrow">¶</a></p>
 <div id="sec-inf-response">
 <section id="section-9.1">
         <h3 id="name-signaling-the-oscore-group-">
@@ -2760,7 +2760,7 @@ Note also that, identically to the phantom request, the ticket request is still 
 <p id="section-15.3-3">Any proxy in the chain, as well as further possible intermediaries or on-path active adversaries, are thus able to remove the option or alter its content, before the ticket request reaches the proxy adjacent to the origin server.<a href="#section-15.3-3" class="pilcrow">¶</a></p>
 <p id="section-15.3-4">Removing the option would result in the proxy adjacent to the origin server to not configure the group observation, if that has not happened yet. In such a case, the proxy would not receive the corresponding multicast notifications to be forwarded back to the clients.<a href="#section-15.3-4" class="pilcrow">¶</a></p>
 <p id="section-15.3-5">Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.<a href="#section-15.3-5" class="pilcrow">¶</a></p>
-<p id="section-15.3-6">In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see <span>[<a href="#I-D.tiloca-core-oscore-capable-proxies" class="xref">I-D.tiloca-core-oscore-capable-proxies</a>]</span>) and/or DTLS <span>[<a href="#RFC6347" class="xref">RFC6347</a>]</span><span>[<a href="#I-D.ietf-tls-dtls13" class="xref">I-D.ietf-tls-dtls13</a>]</span>.<a href="#section-15.3-6" class="pilcrow">¶</a></p>
+<p id="section-15.3-6">In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see <span>[<a href="#I-D.tiloca-core-oscore-capable-proxies" class="xref">I-D.tiloca-core-oscore-capable-proxies</a>]</span>) and/or DTLS <span>[<a href="#RFC6347" class="xref">RFC6347</a>]</span><span>[<a href="#RFC9147" class="xref">RFC9147</a>]</span>.<a href="#section-15.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3023,17 +3023,9 @@ This section gives some general guidelines for what the experts should be lookin
         <dd>
 <span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Constrained Resource Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-href-10</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-10">https://datatracker.ietf.org/doc/html/draft-ietf-core-href-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-core-resource-directory">[I-D.ietf-core-resource-directory]</dt>
-        <dd>
-<span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. V. D. Stok</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Resource Directory"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-resource-directory-28</span>, <time datetime="2021-03-07" class="refDate">7 March 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-resource-directory-28">https://datatracker.ietf.org/doc/html/draft-ietf-core-resource-directory-28</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
-<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-03</span>, <time datetime="2022-01-10" class="refDate">10 January 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-03">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-03</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.ietf-tls-dtls13">[I-D.ietf-tls-dtls13]</dt>
-        <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-dtls13-43</span>, <time datetime="2021-04-30" class="refDate">30 April 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-dtls13-43">https://datatracker.ietf.org/doc/html/draft-ietf-tls-dtls13-43</a>&gt;</span>. </dd>
+<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-04</span>, <time datetime="2022-07-10" class="refDate">10 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-04">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-capable-proxies">[I-D.tiloca-core-oscore-capable-proxies]</dt>
         <dd>
@@ -3068,8 +3060,16 @@ This section gives some general guidelines for what the experts should be lookin
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"CBOR Web Token (CWT)"</span>, <span class="seriesInfo">RFC 8392</span>, <span class="seriesInfo">DOI 10.17487/RFC8392</span>, <time datetime="2018-05" class="refDate">May 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8392">https://www.rfc-editor.org/rfc/rfc8392</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8610">[RFC8610]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9147">[RFC9147]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9176">[RFC9176]</dt>
+      <dd>
+<span class="refAuthor">Amsüss, C., Ed.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. van der Stok</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Resource Directory"</span>, <span class="seriesInfo">RFC 9176</span>, <span class="seriesInfo">DOI 10.17487/RFC9176</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9176">https://www.rfc-editor.org/rfc/rfc9176</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

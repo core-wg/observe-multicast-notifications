@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 11 January 2023                                                
+Expires: 12 January 2023                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                            10 July 2022
+                                                            11 July 2022
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 January 2023.
+   This Internet-Draft will expire on 12 January 2023.
 
 Copyright Notice
 
@@ -179,12 +179,11 @@ Table of Contents
    clients observing that topic.
 
    A different use case concerns clients observing a same registration
-   resource at the CoRE Resource Directory
-   [I-D.ietf-core-resource-directory].  For example, multiple clients
-   can benefit of observation for discovering (to-be-created) OSCORE
-   groups [I-D.ietf-core-oscore-groupcomm], by retrieving from the
-   Resource Directory updated links and descriptions to join them
-   through the respective Group Manager
+   resource at the CoRE Resource Directory [RFC9176].  For example,
+   multiple clients can benefit of observation for discovering (to-be-
+   created) OSCORE groups [I-D.ietf-core-oscore-groupcomm], by
+   retrieving from the Resource Directory updated links and descriptions
+   to join them through the respective Group Manager
    [I-D.tiloca-core-oscore-discovery].
 
    More in general, multicast notifications would be beneficial whenever
@@ -1293,10 +1292,9 @@ Table of Contents
    informative responses from the server.
 
    To this end, alternative security protocols than Group OSCORE, such
-   as OSCORE [RFC8613] and/or DTLS [RFC6347][I-D.ietf-tls-dtls13], can
-   be used to protect other exchanges via unicast between the server and
-   each client, including the original client registration (see
-   Section 5).
+   as OSCORE [RFC8613] and/or DTLS [RFC6347][RFC9147], can be used to
+   protect other exchanges via unicast between the server and each
+   client, including the original client registration (see Section 5).
 
 9.1.  Signaling the OSCORE Group in the Informative Response
 
@@ -2174,7 +2172,7 @@ Table of Contents
    additionally protected hop-by-hop.  This can be achieved by the
    client protecting the ticket request sent to the proxy using OSCORE
    (see [I-D.tiloca-core-oscore-capable-proxies]) and/or DTLS
-   [RFC6347][I-D.ietf-tls-dtls13].
+   [RFC6347][RFC9147].
 
 16.  IANA Considerations
 
@@ -2508,29 +2506,13 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
               href-10>.
 
-   [I-D.ietf-core-resource-directory]
-              Amsüss, C., Shelby, Z., Koster, M., Bormann, C., and P. V.
-              D. Stok, "Constrained RESTful Environments (CoRE) Resource
-              Directory", Work in Progress, Internet-Draft, draft-ietf-
-              core-resource-directory-28, 7 March 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              resource-directory-28>.
-
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-03, 10 January 2022,
+              ietf-cose-cbor-encoded-cert-04, 10 July 2022,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-03>.
-
-   [I-D.ietf-tls-dtls13]
-              Rescorla, E., Tschofenig, H., and N. Modadugu, "The
-              Datagram Transport Layer Security (DTLS) Protocol Version
-              1.3", Work in Progress, Internet-Draft, draft-ietf-tls-
-              dtls13-43, 30 April 2021,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              dtls13-43>.
+              cbor-encoded-cert-04>.
 
    [I-D.tiloca-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
@@ -2582,6 +2564,16 @@ Table of Contents
               Express Concise Binary Object Representation (CBOR) and
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
+
+   [RFC9147]  Rescorla, E., Tschofenig, H., and N. Modadugu, "The
+              Datagram Transport Layer Security (DTLS) Protocol Version
+              1.3", RFC 9147, DOI 10.17487/RFC9147, April 2022,
+              <https://www.rfc-editor.org/rfc/rfc9147>.
+
+   [RFC9176]  Amsüss, C., Ed., Shelby, Z., Koster, M., Bormann, C., and
+              P. van der Stok, "Constrained RESTful Environments (CoRE)
+              Resource Directory", RFC 9176, DOI 10.17487/RFC9176, April
+              2022, <https://www.rfc-editor.org/rfc/rfc9176>.
 
 Appendix A.  Different Sources for Group Observation Data
 
