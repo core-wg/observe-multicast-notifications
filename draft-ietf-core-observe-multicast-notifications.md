@@ -100,9 +100,7 @@ normative:
 informative:
   I-D.ietf-ace-oauth-authz:
   I-D.ietf-core-coap-pubsub:
-  I-D.ietf-core-resource-directory:
   I-D.tiloca-core-oscore-discovery:
-  I-D.ietf-tls-dtls13:
   I-D.ietf-core-coral:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
@@ -113,6 +111,8 @@ informative:
   RFC7925:
   RFC8610:
   RFC8392:
+  RFC9147:
+  RFC9176:
   MOBICOM99:
     author:
       -
@@ -151,7 +151,7 @@ However, in a number of use cases, using multicast messages for responses would 
 
 For instance, in CoAP publish-subscribe {{I-D.ietf-core-coap-pubsub}}, multiple clients can subscribe to a topic, by observing the related resource hosted at the responsible broker. When a new value is published on that topic, it would be convenient for the broker to send a single multicast notification at once, to all the subscriber clients observing that topic.
 
-A different use case concerns clients observing a same registration resource at the CoRE Resource Directory {{I-D.ietf-core-resource-directory}}. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups {{I-D.ietf-core-oscore-groupcomm}}, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager {{I-D.tiloca-core-oscore-discovery}}.
+A different use case concerns clients observing a same registration resource at the CoRE Resource Directory {{RFC9176}}. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups {{I-D.ietf-core-oscore-groupcomm}}, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager {{I-D.tiloca-core-oscore-discovery}}.
 
 More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This document fills this gap and provides the following twofold contribution.
 
@@ -687,7 +687,7 @@ Both the clients and the server MAY join the OSCORE group by using the approach 
 
 If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.
 
-To this end, alternative security protocols than Group OSCORE, such as OSCORE {{RFC8613}} and/or DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}}, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see {{sec-client-side}}).
+To this end, alternative security protocols than Group OSCORE, such as OSCORE {{RFC8613}} and/or DTLS {{RFC6347}}{{RFC9147}}, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see {{sec-client-side}}).
 
 ## Signaling the OSCORE Group in the Informative Response ## {#sec-inf-response}
 
@@ -1152,7 +1152,7 @@ Removing the option would result in the proxy adjacent to the origin server to n
 
 Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.
 
-In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.tiloca-core-oscore-capable-proxies}}) and/or DTLS {{RFC6347}}{{I-D.ietf-tls-dtls13}}.
+In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.tiloca-core-oscore-capable-proxies}}) and/or DTLS {{RFC6347}}{{RFC9147}}.
 
 # IANA Considerations # {#iana}
 
