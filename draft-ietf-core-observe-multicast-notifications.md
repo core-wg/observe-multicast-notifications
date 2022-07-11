@@ -2225,7 +2225,7 @@ C1      C2      P         S
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
-## Version -02 to -03 ## {#sec-03-04}
+## Version -03 to -04 ## {#sec-03-04}
 
 * Added a new section on prerequisites.
 
