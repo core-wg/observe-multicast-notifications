@@ -105,7 +105,6 @@ informative:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.tiloca-core-oscore-capable-proxies:
-  RFC6347:
   RFC6690:
   RFC7519:
   RFC7925:
@@ -687,7 +686,7 @@ Both the clients and the server MAY join the OSCORE group by using the approach 
 
 If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.
 
-To this end, alternative security protocols than Group OSCORE, such as OSCORE {{RFC8613}} and/or DTLS {{RFC6347}}{{RFC9147}}, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see {{sec-client-side}}).
+To this end, alternative security protocols than Group OSCORE, such as OSCORE {{RFC8613}} and/or DTLS {{RFC9147}}, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see {{sec-client-side}}).
 
 ## Signaling the OSCORE Group in the Informative Response ## {#sec-inf-response}
 
@@ -1152,7 +1151,7 @@ Removing the option would result in the proxy adjacent to the origin server to n
 
 Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.
 
-In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.tiloca-core-oscore-capable-proxies}}) and/or DTLS {{RFC6347}}{{RFC9147}}.
+In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.tiloca-core-oscore-capable-proxies}}) and/or DTLS {{RFC9147}}.
 
 # IANA Considerations # {#iana}
 
