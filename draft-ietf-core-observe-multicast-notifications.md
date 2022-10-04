@@ -1226,7 +1226,7 @@ IANA is asked to enter the following option numbers to the "CoAP Option Numbers"
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
-This document establishes the "Informative Response Parameters" registry. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document establishes the "Informative Response Parameters" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
 
 The columns of this registry are:
 
@@ -1242,7 +1242,7 @@ This registry has been initially populated by the values in {{informative-respon
 
 ## CoAP Transport Information Registry {#iana-transport-protocol-identifiers}
 
-This document establishes the "CoAP Transport Information" registry within the "CoRE Parameters" registry group. The registry has been created to use the "Expert Review Required" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
+This document establishes the "CoAP Transport Information" registry within the "CoRE Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
 
@@ -1250,7 +1250,7 @@ The columns of this registry are:
 
 * Description: Text giving an overview of the transport protocol referred by this item.
 
-* Value: CBOR abbreviation for the transport protocol referred by this item. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 are designated as Standards Action. Integer values from -65536 to -257 and from 256 to 65535 are designated as Specification Required. Integer values greater than 65535 are designated as Expert Review. Integer values less than -65536 are marked as Private Use.
+* Value: CBOR abbreviation for the transport protocol referred by this item. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 are designated as "Specification Required". Integer values greater than 65535 are designated as "Expert Review". Integer values less than -65536 are marked as Private Use.
 
 * Server Addr: List of elements providing addressing information of the server.
 
@@ -2226,6 +2226,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -04 to -05 ## {#sec-04-05}
+
+* Fixes in IANA considerations.
 
 * Editorial improvements.
 
