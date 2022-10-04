@@ -447,7 +447,7 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
    * If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.
 
-3. If the informative response includes the parameter 'ph_req', and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. In case no such response is available, the client SHOULD explicitly withdraw from the group observation.
+3. If the informative response includes the parameter 'ph_req', and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. If this is not the case, the client SHOULD explicitly withdraw from the group observation.
 
 4. The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.
 
