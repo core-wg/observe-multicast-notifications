@@ -425,7 +425,7 @@ The server sends the response to the same multicast IP address GRP_ADDR and port
 
 A client sends an observation request to the server as described in {{RFC7641}}, i.e., a GET request with an Observe Option set to 0 (register). The request MUST NOT encode link-local addresses. If the server is not configured to accept registrations on that target resource specifically for a group observation, this would still result in a positive notification response to the client as described in {{RFC7641}}, in case the server is able and willing to add the client to the list of observers.
 
-In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be preconfigured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
+In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be pre-configured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
 
 In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response Option {{RFC7967}} with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation.
 
@@ -1574,11 +1574,11 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
-If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part to the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed preconfiguration.
+If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part to the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
 Therefore, the following holds when a group observation relies on a deterministic request as phantom observation request.
 
-* Every client interested to take part to such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of preconfiguration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
+* Every client interested to take part to such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
 
 * When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.
 
