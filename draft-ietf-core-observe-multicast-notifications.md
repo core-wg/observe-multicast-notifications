@@ -1574,6 +1574,16 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
+If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part to the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed preconfiguration.
+
+Therefore, the following holds when a group observation relies on a deterministic request as phantom observation request.
+
+* Every client interested to take part to such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of preconfiguration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
+
+* When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.
+
+   Upon receiving an individual observation request for the same target resource, the server MUST reply with a generic 5.03 (Service Unavailable) response (i.e., not the informative response defined in {{ssec-server-side-informative}}), if the request differs from the specific deterministic request associated with the group observation.
+
 # Example with a Proxy {#intermediaries-example}
 
 This section provides an example when a proxy P is used between the clients and the server. The same assumptions and notation used in {{sec-example-no-security}} are used for this example. In addition, the proxy has address PRX_ADDR and listens to the port number PRX_PORT.
@@ -2229,6 +2239,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -04 to -05 ## {#sec-04-05}
+
+* If the phantom request is an OSCORE deterministic request, there is no parallel group observation for clients that lack support.
 
 * Clarification on pre-configured clients.
 
