@@ -154,9 +154,9 @@ A different use case concerns clients observing a same registration resource at 
 
 More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This document fills this gap and provides the following twofold contribution.
 
-First, it updates {{RFC7252}} and {{RFC7641}}, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of an informative unicast response sent by the server to each observer client.
+First, it updates {{RFC7252}} and {{RFC7641}}, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of an unicast informative response sent by the server to each observer client.
 
-Second, this document defines how to use Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the informative unicast response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.
+Second, this document defines how to use Group OSCORE {{I-D.ietf-core-oscore-groupcomm}} to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the unicast informative response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.
 
 ## Terminology ## {#terminology}
 
@@ -337,7 +337,7 @@ Given a specific value of 'tp_id', the complete set of elements composing 'srv_a
 
 #### UDP Transport-Specific Information  ### {#ssssec-udp-transport-specific}
 
-When CoAP multicast notifications are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the server specifies the integer value 1 ("UDP") as value of 'tp_id' in the 'srv_addr' element of the 'tp_info' CBOR array in the error informative response. Then, the rest of the 'tp_info' CBOR array is defined as follows.
+When CoAP multicast notifications are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the server specifies the integer value 1 ("UDP") as value of 'tp_id' in the 'srv_addr' element of the 'tp_info' CBOR array in the informative response. Then, the rest of the 'tp_info' CBOR array is defined as follows.
 
 * 'srv_addr' includes two more elements following 'tp_id':
 
@@ -388,13 +388,13 @@ Upon a change in the status of the target resource under group observation, the 
 
 * It MUST include an Observe Option, as per {{RFC7641}}.
 
-* It MUST have the same Token value T of the phantom registration request that started the group observation. This Token value is specified in the 'token' element of 'req_info' under the 'tp_info' parameter, in the informative response message sent to all the observer clients.
+* It MUST have the same Token value T of the phantom registration request that started the group observation. This Token value is specified in the 'token' element of 'req_info' under the 'tp_info' parameter, in the informative response sent to all the observer clients.
 
    That is, every multicast notification for a target resource is not bound to the observation requests from the different clients, but rather to the phantom registration request associated with the whole set of clients taking part in the group observation of that resource.
 
-* It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where: i) the original Observe registration requests are sent to by the clients; and ii) the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). These are indicated to the observer clients as value of the 'srv_host' and 'srv_port' elements of 'srv_addr' under the 'tp_info' parameter, in the informative response message (see {{ssssec-udp-transport-specific}}). That is, redirection MUST NOT be used.
+* It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where: i) the original Observe registration requests are sent to by the clients; and ii) the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). These are indicated to the observer clients as value of the 'srv_host' and 'srv_port' elements of 'srv_addr' under the 'tp_info' parameter, in the informative response (see {{ssssec-udp-transport-specific}}). That is, redirection MUST NOT be used.
 
-* It MUST be sent to the IP multicast address GRP_ADDR and port number GRP_PORT. These are indicated to the observer clients as value of the 'cli_host' and 'cli_port' elements of 'req_info' under the 'tp_info' parameter, in the informative response message (see {{ssssec-udp-transport-specific}}).
+* It MUST be sent to the IP multicast address GRP_ADDR and port number GRP_PORT. These are indicated to the observer clients as value of the 'cli_host' and 'cli_port' elements of 'req_info' under the 'tp_info' parameter, in the informative response (see {{ssssec-udp-transport-specific}}).
 
 For each target resource with an active group observation, the server MUST store the latest multicast notification.
 
@@ -1071,7 +1071,7 @@ An example is provided in {{intermediaries-example-e2e-security}}.
 
 # Informative Response Parameters {#informative-response-params}
 
-This document defines a number of fields used in the informative response message defined in {{ssec-server-side-informative}}.
+This document defines a number of fields used in the informative response defined in {{ssec-server-side-informative}}.
 
 The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name. Note that the media type application/informative-response+cbor MUST be used when these fields are transported.
 
@@ -1096,7 +1096,7 @@ The table below summarizes them and specifies the CBOR key to use instead of the
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
-This document defines some values of transport protocol identifiers to use within the 'tp_info' parameter of the informative response message defined in {{ssec-server-side-informative}}.
+This document defines some values of transport protocol identifiers to use within the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}.
 
 According to the encoding specified in {{sssec-transport-specific-encoding}}, these values are used for the 'tp_id' element of 'srv_addr', under the 'tp_info' parameter.
 
@@ -1277,7 +1277,7 @@ Expert reviewers should take into consideration the following points:
 
 # Different Sources for Group Observation Data # {#appendix-different-sources}
 
-While the clients usually receive the phantom registration request and other information related to the group observation through an Informative Response, the same data can be made available through different services, such as the following ones.
+While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the same data can be made available through different services, such as the following ones.
 
 ## Topic Discovery in Publish-Subscribe Settings
 
@@ -1287,13 +1287,13 @@ As a pre-requirement, the server has to first perform the following actions.
 
 * The server has to start the group observation (see {{ssec-server-side-request}}).
 
-* Together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative error response returned to observer clients (see {{ssec-server-side-informative}}).
+* Together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see {{ssec-server-side-informative}}).
 
    This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
 
 {{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
-Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative error response (see {{sssec-transport-specific-encoding}}). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in {{ssssec-udp-transport-specific}}).
+Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Rather, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in {{ssssec-udp-transport-specific}}).
 
 ~~~~~~~~~~~
 Request:
@@ -1498,7 +1498,7 @@ For simple settings, where no pre-arranged group with suitable memberships is av
 
 In such a case, a client would implicitly request to join the OSCORE group when sending the observe registration request to the server. When replying, the server includes the group keying material and related information in the informative response (see {{ssec-server-side-informative}}).
 
-Additionally to what defined in {{sec-server-side}}, the CBOR map in the informative response payload contains the following fields, whose CBOR labels are defined in {{informative-response-params}}.
+Additionally to what is defined in {{sec-server-side}}, the CBOR map in the informative response payload contains the following fields, whose CBOR labels are defined in {{informative-response-params}}.
 
 * 'gp_material': this element is a CBOR map, which includes what the client needs in order to set up the Group OSCORE Security Context.
 
@@ -1518,7 +1518,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
 * 'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what specified for NumericDate in {{Section 2 of RFC7519}}.
 
-Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Joining Response (see {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.
+Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.
 
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
@@ -1566,9 +1566,9 @@ In such a case, the unprotected version of the phantom observation request can b
 
 If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} when the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses Option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.amsuess-core-cachable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
 
-Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the error informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
+Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
-If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the error informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
+If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
 
    * 'alg', 'ecdh_alg' and 'ecdh_params', as per {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
@@ -2224,6 +2224,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -04 to -05 ## {#sec-04-05}
+
+* Editorial improvements.
 
 ## Version -03 to -04 ## {#sec-03-04}
 
