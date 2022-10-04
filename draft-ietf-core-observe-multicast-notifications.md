@@ -1277,19 +1277,17 @@ Expert reviewers should take into consideration the following points:
 
 # Different Sources for Group Observation Data # {#appendix-different-sources}
 
-While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the same data can be made available through different services, such as the following ones.
+While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the server can make the same data available through different means, such as the following ones.
+
+In such a case, the server has to first start the group observation (see {{ssec-server-side-request}}), before making the corresponding data available.
 
 ## Topic Discovery in Publish-Subscribe Settings
 
 In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata.
 
-As a pre-requirement, the server has to first perform the following actions.
+To this end, together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see {{ssec-server-side-informative}}).
 
-* The server has to start the group observation (see {{ssec-server-side-request}}).
-
-* Together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see {{ssec-server-side-informative}}).
-
-   This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
+This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
 
 {{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
@@ -2226,6 +2224,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -04 to -05 ## {#sec-04-05}
+
+* Clarified early publication of phantom request.
 
 * Fixes in IANA considerations.
 
