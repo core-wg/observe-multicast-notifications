@@ -65,7 +65,6 @@ normative:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
-  I-D.ietf-ace-oscore-profile:
   RFC2119:
   RFC4944:
   RFC6838:
@@ -78,6 +77,7 @@ normative:
   RFC8288:
   RFC8613:
   RFC8949:
+  RFC9203:
   COSE.Algorithms:
     author:
       org: IANA
@@ -98,7 +98,6 @@ normative:
     target: https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
 
 informative:
-  I-D.ietf-ace-oauth-authz:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-core-coral:
@@ -112,6 +111,7 @@ informative:
   RFC8392:
   RFC9147:
   RFC9176:
+  RFC9200:
   MOBICOM99:
     author:
       -
@@ -682,7 +682,7 @@ In some settings, the OSCORE group to refer to can be pre-configured on the clie
 
 In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server and/or with other servers to access their resources.
 
-Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{I-D.ietf-ace-oauth-authz}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
+Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{RFC9200}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
 
 If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.
 
@@ -1502,7 +1502,7 @@ Additionally to what defined in {{sec-server-side}}, the CBOR map in the informa
 
 * 'gp_material': this element is a CBOR map, which includes what the client needs in order to set up the Group OSCORE Security Context.
 
-   This parameter has as value a subset of the Group_OSCORE_Input_Material object, which is defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}} and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of I-D.ietf-ace-oscore-profile}}.
+   This parameter has as value a subset of the Group_OSCORE_Input_Material object, which is defined in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}} and extends the OSCORE_Input_Material object encoded in CBOR as defined in {{Section 3.2.1 of RFC9203}}.
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR labels from the OSCORE Security Context Parameters Registry, as in {{Section 6.4 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
