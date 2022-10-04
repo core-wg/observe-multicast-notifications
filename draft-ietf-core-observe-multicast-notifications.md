@@ -1860,6 +1860,9 @@ C1      C2      P         S
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
+|       |       |         |  (S increments the observer counter
+|       |       |         |  for the group observation of /r)
+|       |       |         |
 |       |       |<--------+  Token: 0x5f
 |       |       | 2.05    |  OSCORE: {piv: 401; ...}
 |       |       |         |  Max-Age: 0
@@ -2232,6 +2235,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Clarified early publication of phantom request.
 
 * Fixes in IANA considerations.
+
+* Fixed example with proxy and Group OSCORE.
 
 * Editorial improvements.
 
