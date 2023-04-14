@@ -1104,6 +1104,8 @@ According to the encoding specified in {{sssec-transport-specific-encoding}}, th
 
 The table below summarizes them, specifies the integer value to use instead of the full descriptive name, and provides the corresponding comprehensive set of information elements to include in the 'tp_info' parameter.
 
+Note to RFC Editor: Please replace in the table below all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
+
 ~~~~~~~~~~~
 +-----------+-------------+-------+----------+-----------+------------+
 | Transport | Description | Value | Srv Addr | Req Info  | Reference  |
