@@ -483,19 +483,19 @@ In case the server has canceled a group observation as defined in {{ssec-server-
 
 # Web Linking # {#sec-web-linking}
 
-The possible use of multicast notifications in a group observation may be indicated by a target "grp_obs" attribute in a web link {{RFC8288}} to a resource, e.g., using a link-format document {{RFC6690}}.
+The possible use of multicast notifications in a group observation may be indicated by a target attribute "gp-obs" in a web link {{RFC8288}} to a resource, e.g., using a link-format document {{RFC6690}}.
 
-The "grp_obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation, and to receive and process multicast notifications.
+The "gp-obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation, and to receive and process multicast notifications.
 
-A value MUST NOT be given for the "grp_obs" attribute; any present value MUST be ignored by parsers.  The "grp_obs" attribute MUST NOT appear more than once in a given link-value; occurrences after the first MUST be ignored by parsers.
+A value MUST NOT be given for the "gp-obs" attribute; any present value MUST be ignored by parsers.  The "gp-obs" attribute MUST NOT appear more than once in a given link-value; occurrences after the first MUST be ignored by parsers.
 
-The example in {{example-web-link}} shows a use of the "grp_obs" attribute: the client does resource discovery on a server and gets back a list of resources, one of which includes the "grp_obs" attribute indicating that the server might send multicast notifications for observations of that resource. The link-format notation (see {{Section 5 of RFC6690}}) is used.
+The example in {{example-web-link}} shows a use of the "gp-obs" attribute: the client does resource discovery on a server and gets back a list of resources, one of which includes the "gp-obs" attribute indicating that the server might send multicast notifications for observations of that resource. The link-format notation (see {{Section 5 of RFC6690}}) is used.
 
 ~~~~~~~~~~~
 REQ: GET /.well-known/core
 
 RES: 2.05 Content
-    </sensors/temp>;grp_obs,
+    </sensors/temp>;gp-obs,
     </sensors/light>;if="sensor"
 ~~~~~~~~~~~
 {: #example-web-link title="The Web Link"}
@@ -1263,6 +1263,17 @@ The columns of this registry are:
 * Reference: This contains a pointer to the public specification for the item.
 
 This registry has been initially populated by the values in {{transport-protocol-identifiers}}. The "Reference" column for all of these entries refers to sections of this document.
+
+## Target Attributes Registry ## {#iana-target-attributes}
+
+IANA is asked to register the following entry in the "Target Attributes" registry within the "CoRE Parameters" registry group.
+
+~~~~~~~~~~~
+Attribute Name: gp-obs
+Brief Description: Observable resource supporting group observation
+Change Controller: IESG
+Reference: Section 6 of [RFC-XXXX]
+~~~~~~~~~~~
 
 ## Expert Review Instructions {#iana-review}
 
@@ -2241,6 +2252,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -05 to -06 ## {#sec-05-06}
+
+* IANA considerations: registration of target attribute "gp-obs"
 
 * Editorial improvements.
 
