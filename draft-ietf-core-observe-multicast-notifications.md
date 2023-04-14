@@ -614,7 +614,7 @@ The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC861
 
 Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client SHOULD acknowledge its interest in continuing receiving multicast notifications for the target resource, as described below.
 
-The client picks an integer random number I, from 0 inclusive to the number Z = (2 ** Q) exclusive, where Q is the value specified in the option and "**" is the exponentiation operator. If I is different than 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}), and then registers a regular unicast observation on the same target resource.
+The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different than 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}), and then registers a regular unicast observation on the same target resource.
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless the source IP address and port number of the received multicast notification.
 
@@ -662,7 +662,7 @@ If more information is available in deployments, a much shorter MAX_CONFIRMATION
 
 Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with an empty value (Option Length = 0).
 
-Then, the server computes a feedback indicator as E = R * (2 ** Q), where "**" is the exponentiation operator. According to what defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
+Then, the server computes a feedback indicator as E = R * (2^Q), where "^" is the exponentiation operator. According to what defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
 Finally, the server computes a new estimated count of the observers. To this end, the server first consider COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
 
@@ -1264,7 +1264,7 @@ This registry has been initially populated by the values in {{transport-protocol
 
 ## Expert Review Instructions {#iana-review}
 
-The IANA registries established in this document are defined as expert review.
+The IANA registries established in this document are defined as Expert Review.
 This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
@@ -1366,7 +1366,7 @@ output: None
 
 
 int RAND_MIN = 0;
-int RAND_MAX = (2**Q) - 1;
+int RAND_MAX = (2^Q) - 1;
 int I = randomInteger(RAND_MIN, RAND_MAX);
 
 if (I == 0) {
@@ -1468,7 +1468,7 @@ while(!t.isExpired());
 int R = <number of requests to the target resource
          between t1 and t2, with the MRFD option>;
 
-int E = R * (2**Q);
+int E = R * (2^Q);
 
 // Determine after how many multicast notifications
 // the next count update will be performed
@@ -2237,6 +2237,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -05 to -06 ## {#sec-05-06}
+
+* Editorial improvements.
 
 ## Version -04 to -05 ## {#sec-04-05}
 
