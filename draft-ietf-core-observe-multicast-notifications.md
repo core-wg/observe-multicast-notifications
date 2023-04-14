@@ -622,9 +622,19 @@ Since the Observe registration is only done for its side effect of showing as an
 
 The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
 
-As the Multicast-Response-Feedback-Divider Option is unsafe to forward, a proxy needs to answer it on its own, and is later counted as a single client.
+{{appendix-pseudo-code-counting-client}} and {{appendix-pseudo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
 
-{{appendix-psuedo-code-counting-client}} and {{appendix-psuedo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
+{{intermediaries}} specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the clients and the server. In such a case, the following applies.
+
+* Since the Multicast-Response-Feedback-Divider Option is unsafe to forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.
+
+* Upon receiving a multicast notification including the Multicast-Response-Feedback-Divider Option, the proxy proceeds like defined above for an origin client, i.e., by answering to the server on its own in case it picks a random number I equal to 0. When doing so, the proxy will be counted by the server as a single client.
+
+* Upon receiving a multicast notification including the Multicast-Response-Feedback-Divider Option, the proxy MUST remove the option before forwarding the notification to (the previous hop towards) any of the origin clients.
+
+   The proxy would have to rely on separate means for asserting whether the origin clients are still interested in the observation, e.g., by regularly forwarding notifications to the clients as unicast, Confirmable response messages.
+
+   When no interested origin clients remain, the proxy can simply forget about being part of the group observation for the target resource at the server, like an origin client would do (see {{ssec-client-side-cancellation}}).
 
 ## Processing on the Server Side
 
@@ -674,7 +684,7 @@ As an example, if the server currently estimates that N = COUNT = 32 observers a
 
 To produce a most accurate updated counter, a server can include a Multicast-Response-Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.
 
-{{appendix-psuedo-code-counting-server}} provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.
+{{appendix-pseudo-code-counting-server}} provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.
 
 # Protection of Multicast Notifications with Group OSCORE # {#sec-secured-notifications}
 
@@ -1362,13 +1372,13 @@ Response:
 
 For example, a network sniffer could offer sending such a request when unknown multicast notifications are seen in a network. Consequently, it can associate those notifications with a URI, or decrypt them, if member of the correct OSCORE group.
 
-# Pseudo-Code for Rough Counting of Clients # {#appendix-psuedo-code-counting}
+# Pseudo-Code for Rough Counting of Clients # {#appendix-pseudo-code-counting}
 
 This appendix provides a description in pseudo-code of the two algorithms used for the rough counting of active observers, as defined in {{sec-rough-counting}}.
 
-In particular, {{appendix-psuedo-code-counting-client}} describes the algorithm for the client side, while {{appendix-psuedo-code-counting-client-constrained}} describes an optimized version for constrained clients. Finally, {{appendix-psuedo-code-counting-server}} describes the algorithm for the server side.
+In particular, {{appendix-pseudo-code-counting-client}} describes the algorithm for the client side, while {{appendix-pseudo-code-counting-client-constrained}} describes an optimized version for constrained clients. Finally, {{appendix-pseudo-code-counting-server}} describes the algorithm for the server side.
 
-## Client Side # {#appendix-psuedo-code-counting-client}
+## Client Side # {#appendix-pseudo-code-counting-client}
 
 ~~~~~~~~~~~
 input:  int Q, // Value of the MRFD option
@@ -1404,7 +1414,7 @@ if (I == 0) {
 }
 ~~~~~~~~~~~
 
-## Client Side - Optimized Version # {#appendix-psuedo-code-counting-client-constrained}
+## Client Side - Optimized Version # {#appendix-pseudo-code-counting-client-constrained}
 
 ~~~~~~~~~~~
 input:  int Q, // Value of the MRFD option
@@ -1448,7 +1458,7 @@ bool respond_to(int Q) {
 }
 ~~~~~~~~~~~
 
-## Server Side # {#appendix-psuedo-code-counting-server}
+## Server Side # {#appendix-pseudo-code-counting-server}
 
 ~~~~~~~~~~~
 input:  int COUNT, // Current observer counter
@@ -2252,6 +2262,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -05 to -06 ## {#sec-05-06}
+
+* Clarified rough counting of clients when a proxy is used
 
 * IANA considerations: registration of target attribute "gp-obs"
 
