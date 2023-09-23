@@ -1200,25 +1200,23 @@ This document registers the media type 'application/informative-response+cbor' f
 
 * Additional information: N/A
 
-* Person & email address to contact for further information: <iesg@ietf.org>
+* Person & email address to contact for further information: CoRE WG mailing list (core@ietf.org) or IETF Applications and Real-Time Area (art@ietf.org)
 
 * Intended usage: COMMON
 
 * Restrictions on usage: None
 
-* Author: Marco Tiloca <marco.tiloca@ri.se>
+Author/Change controller: IETF
 
-* Change controller: IESG
-
-* Provisional registration?  No
+* Provisional registration:  No
 
 ## CoAP Content-Formats Registry {#content-format}
 
 IANA is asked to add the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-Media Type: application/informative-response+cbor
+Content Type: application/informative-response+cbor
 
-Encoding: -
+Content Coding: -
 
 ID: TBD
 
@@ -1282,7 +1280,7 @@ IANA is asked to register the following entry in the "Target Attributes" registr
 ~~~~~~~~~~~
 Attribute Name: gp-obs
 Brief Description: Observable resource supporting group observation
-Change Controller: IESG
+Change Controller: IETF
 Reference: Section 6 of [RFC-XXXX]
 ~~~~~~~~~~~
 
@@ -2265,6 +2263,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -06 to -07 ## {#sec-06-07}
 
 * Revised parameter naming.
+
+* Fixes in IANA considerations.
 
 * Editorial improvements.
 
