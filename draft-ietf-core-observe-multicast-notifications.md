@@ -1010,6 +1010,8 @@ Note that the proxy configures the observation of the target resource at the ser
 
 After that, when receiving an observation request from a following new client to be added to the same group observation, the proxy does not take any further action with the server. Instead, the proxy responds to the client either with the latest multicast notification if available from its cache, or with an Empty Acknowledgement otherwise, as defined above.
 
+As a result, the observer counter at the server (see {{sec-server-side}}) is not incremented when a new origin client behind the proxy registers as an observer at the proxy. Instead, the observer counter takes into account only the proxy, which has registered as observer at the server and has received the informative response from the server.
+
 An example is provided in {{intermediaries-example}}.
 
 In the general case with a chain of two or more proxies, every proxy in the chain takes the role of client with the (next hop towards the) origin server. Note that the proxy adjacent to the origin server is the only one in the chain that receives informative responses and listens to an IP multicast address to receive notifications for the group observation. Furthermore, every proxy in the chain takes the role of server with the (previous hop towards the) origin client.
@@ -1023,6 +1025,8 @@ In fact, the proxy adjacent to the origin server is not able to access the encry
 Then, differently from what is defined in {{intermediaries}}, each proxy receiving an informative response simply forwards it back to the client that has sent the corresponding observation request. Note that the proxy does not even realize that the message is an actual informative response, since the outer Code field is set to 2.05 (Content).
 
 Upon receiving the informative response, the client does not configure an observation of the target resource. Instead, the client performs a new observe registration request, by transmitting the re-built phantom request as intended to reach the proxy adjacent to the origin server. In particular, the client includes the new Listen-To-Multicast-Responses CoAP option defined in {{ltmr-option}}, to provide that proxy with the transport-specific information required for receiving multicast notifications for the group observation.
+
+As a result, the observer counter at the server (see {{sec-server-side}}) is incremented when, after having received the original observation request from a new origin client, the origin server replies with the informative response. In particular, the observer counter at the server reliably takes into account the new, different origin clients behind the proxy, which the server distinguishes through their security identity specified by the pair (OSCORE Sender ID, OSCORE ID Context) in the OSCORE Option of their original observation request. Note that this does not hold anymore if the origin endpoints use phantom observation requests as deterministic requests (see {{deterministic-phantom-Request}}).
 
 Details on the additional message exchange and processing are defined in {{intermediaries-e2e-security-processing}}.
 
@@ -1316,6 +1320,8 @@ While the clients usually receive the phantom registration request and other inf
 
 In such a case, the server has to first start the group observation (see {{ssec-server-side-request}}), before making the corresponding data available.
 
+A client that receives such information from different sources may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
+
 ## Topic Discovery in Publish-Subscribe Settings
 
 In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata.
@@ -1602,6 +1608,14 @@ In such a case, the unprotected version of the phantom observation request can b
 If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} when the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses Option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.amsuess-core-cachable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
 
 Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
+
+When using a deterministic request as phantom observation request, the observer counter at the server (see {{sec-server-side}}) is not reliably incremented when new clients start participating in the group observation. In fact:
+
+   - If a proxy is not deployed, the clients simply set up the right multicast address and starts listening to multicast notifications bound to the deterministic request. Hence, the observer counter at the server is not incremented as new clients start listening to multicast notifications.
+
+   - If a proxy is deployed, the origin server increments its observer counter after having sent the informative response to the proxy, as a reply to the deterministic request forwarded to the origin server on behalf of the first origin client that contacted the proxy. After that, the same deterministic request sent by any origin client will not be forwarded to the origin server, but will instead produce a cache hit at the proxy that will serve the client accordingly. Hence, the observer counter at the server is not further incremented as additional, new origin clients start participating in the group observation through the proxy.
+
+   In either case, the security identity associated with the sender of any deterministic request in the OSCORE group is exactly the same one, i.e., the pair (SID, OSCORE ID Context), where SID is the OSCORE Sender ID of the deterministic client in the OSCORE group, which all the clients rely on for producing deterministic requests.
 
 If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
 
@@ -2149,6 +2163,9 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
+|       |       |         |  (S increments the observer counter
+|       |       |         |  for the group observation of /r)
+|       |       |         |
 |       |       |         |  (S responds to the proxy with an
 |       |       |         |   unprotected informative response)
 |       |       |         |
@@ -2278,6 +2295,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Added more details on proxies that do not support the Multicast-Response-Feedback-Divider Option.
 
 * Added more details on the reliability of the client rough counting.
+
+* Added more details on the unreliability of counting new clients, when the phantom request is obtained from other sources or is an OSCORE deterministic request.
 
 * Revised parameter naming.
 
