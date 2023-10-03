@@ -1547,7 +1547,7 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
     - 'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg' and 'sign_params'. These elements MUST be included.
 
-       Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'gp_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+       Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
     - 'hkdf' and 'salt'. These elements MAY be included.
 
