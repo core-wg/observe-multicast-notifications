@@ -1,0 +1,271 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-09-12T00:54:51.674334+00:00",
+  "repo": "core-wg/observe-multicast-notifications",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU4OTA4Njg2MzM=",
+      "title": "Gather ideas about configuration",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/1",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Migrated from https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/3\r\n\r\nOriginal content and comments below\r\n\r\n================================================\r\n\r\nThis falls in two categories:\r\n* How would the server know for which requests it pays to multicast them?\r\n  * Just see which observations are on and learn from them?\r\n  * Use an external tool, which would either\r\n    * use an extension of https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/2 to put in active observations, or\r\n    * just start the observation like the first client would, and maybe even end it the same way?\r\n      * (If the server *only* accepts to-multicast observations established by that tool, how does the tool authenticate? By being a particular member of the OSCORE group?)\r\n* How would the client know which multicast address to join?\r\n  * By looking at something https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/2 -ish? Would be unwieldy.\r\n  * Could that derive from the network parameters, possibly the cache-key options as input to a hash? (Eg. such that for `GET coap://[address]/path`, the multicast group in the network `2001:db8::` would become `ff35:30:2001:db8::XXYY` where XXYY is a portion of `hash(address, path)`)\r\n  * Could a client say something about its ability to choose any multicast address in the request?\r\n \r\n----------\r\n\r\nMuch of this hinges on the address selection. Do we have *anything* on how link- and site-wide multicast addresses are selected by applications at all?\r\n\r\n(All I know so far are special-purpose IANA-managed addresses, and that ff35:30:2001:db8::XXYY source-specific-multicast of which I don't even know whether they're actually used.)\r\n",
+      "createdAt": "2021-05-13T09:04:41Z",
+      "updatedAt": "2021-05-13T09:04:41Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU4OTA4NzAyMTI=",
+      "title": "Informative response also in CoRAL",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/2",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Migrated from https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/20\r\n\r\nOriginal content and comments below\r\n\r\n================================================\r\n\r\nAppendix A.1 gives a starting point\r\n\r\n----------\r\n\r\nIn the appendix on alternative retrieval methods, we are now essentially having examples of (looking-alike) informative responses, both in CBOR and CoRAL. It's probably better to keep it this way than adding more (identical) examples inline in the document body.\r\n",
+      "createdAt": "2021-05-13T09:06:59Z",
+      "updatedAt": "2021-05-13T09:06:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU4OTA4NzA3NjU=",
+      "title": "Deterministic sub-example?",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/3",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Migrated from https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/32\r\n\r\nOriginal content and comments below\r\n\r\n================================================\r\n\r\nOverhauling the examples I found that deterministic requests would slot peculiarly inbetween the unprotected and OSCORE-protected examples, in that the first request would go all the way, but then come back as an identical request with just the Listen-To-Multicast-Responses option added.\r\n\r\nWe should check whether the proxy is within its rights to answer the second client's request (where it has an identical observation standing, modulo the LTMR option) with what it knows from the first one. (IOW: Check whether LTMR can be NoCacheKey).\r\n",
+      "createdAt": "2021-05-13T09:07:48Z",
+      "updatedAt": "2021-07-10T14:43:48Z",
+      "closedAt": "2021-07-10T14:43:48Z",
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU4OTA4NzEzNjE=",
+      "title": "Network information in protected responses through proxies",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/4",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Migrated from https://gitlab.com/crimson84/draft-tiloca-core-observe-responses-multicast/-/issues/33\r\n\r\nOriginal content and comments below\r\n\r\n================================================\r\n\r\nHow does the client (when doing OSCORE through a proxy) know that it shouldn't just join the group? After all, it might manage to.\r\n\r\nSimple answer is that it is configured to use a proxy, and because of that does not join the group. (Or, even simpler, because it's using a different protocol).\r\n\r\nBut what if it is using a reverse proxy (of whose existence it is unaware)? Then the server could render assistance (mind you, reverse proxies do in general need explicit setup somewhere) like this:\r\n* It sends an empty (or absent) tp_info. This prompts the client to send the observation the same way it would always (because there's no better guidance, but hey, there's now a known-good request).\r\n* The proxy receives the phantom request as a regular unicast request, sends it by unicast, and now we're in a situation as with the deterministic client that the server can act in \"Huh, OSCORE? Never heard of it\" mode and respond with an unprotected 5.03 with tp_info.\r\n* The proxy joins the group as it would in the unprotected or the deterministic case.\r\n\r\nThis has one message exchange more (two unicasts from the proxy), but allows the server to hide its network addresses / topology from clients.\r\n\r\nThis is now possible that we have a good separation between tp_info and ph_req/last_notif, and by the way this is exactly what (if deterministic-oscore still talked about how to get a ticket request) would be used for unicast ticket requests :-)\r\n",
+      "createdAt": "2021-05-13T09:08:39Z",
+      "updatedAt": "2021-05-13T09:08:39Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU4OTA4NzY0NTE=",
+      "title": "Alternative 'tp_info' format using CRIs",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/5",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chrysn"
+      ],
+      "labels": [],
+      "body": "We can consider an alternative tp_info as\r\n\r\n```\r\n    [\r\n       // in absolute form, with no path or query\r\n       CORI (tp_id, srv_host, ?srv_port),\r\n       token,\r\n       // in authority-only form, equivalent to a `//host:port` URI reference\r\n       CORI (cl_host, ?cl_port)\r\n    ]\r\n```\r\n\r\nFor consistency, entries in the new Registry \"CoAP Transport Information\" will have to cross-reference the \"Scheme Registry\" or anything else suitable for CRIs (see below, including changes to the current registry format).\r\n\r\n ``` \r\n  +-----------+-------------+--------------+-----------+\r\n  | Scheme    | Description | Req Info     | Reference |\r\n  | (with CRI)|             |              |           |\r\n  +-----------+-------------+--------------+-----------+\r\n  | coap      | UDP is used |  token       | [This     |\r\n  | (-1)      | as per      |  cli (a rel. | document] |\r\n  |           | RFC7252     |     CRI //x) |           |\r\n  +-----------+-------------+--------------+-----------+\r\n  ```\r\n  \r\n  * value: replaced with scheme name or what's in the CRI shorthands\r\n  * srv addr is always a CRI (so no need to have it in the registry), with scheme and authority with empty path and no query or fragment\r\n  * cli is a CRI reference, as used is of shape `//authority`\r\n",
+      "createdAt": "2021-05-13T09:16:15Z",
+      "updatedAt": "2021-05-13T09:18:41Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU4OTI2NDIxNTg=",
+      "title": "OSCORE-binding of phantom cancellation request and cancellation response",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/6",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 7.2.4 defines how the server cancels a group observation, when Group OSCORE is used.\r\n\r\nThe server sends to itself a protected phantom cancellation request, and then sends the protected 5.03 cancellation response over multicast. What happens then?\r\n\r\n* The cancellation response still matches with the Token of the phantom *registration* request stored by the clients (i.e., the same Token used in the phantom *cancellation* request), which is good.\r\n\r\n* Through the external_aad, the cancellation response can cryptographically match only with the phantom *cancellation* request, that the clients have however never seen and will never see.\r\n\r\nThus, when receiving the cancellation response, there will be a successful CoAP-matching but not a successful OSCORE-matching at the clients, which results in a failed decryption.\r\n\r\nPossible way out: when the server protects the cancellation response, the request_piv in the external_aad can be not the Partial IV of the phantom *cancellation* request (as it should normally be), but rather the Partial IV of the original phantom *registration* request.\r\n\r\nThe cancellation response would be protected \"as if it was a group notification\", but of course it still does not include an inner Observe option.\r\n\r\nThe clients will get a response with outer code 2.05 anyway, thus initially believing it to be a notification to match with the phantom registration request. After decryption, the clients can rely on the inner code 5.03 to understand that this is actually about cancelling the group observation.",
+      "createdAt": "2021-05-16T10:31:18Z",
+      "updatedAt": "2021-07-10T09:20:59Z",
+      "closedAt": "2021-07-10T09:19:58Z",
+      "comments": [
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "I think it's easier if the cancellation is just server-initiated. That'd even look 1:1 like the fix you proposed, just with an easier explanation.",
+          "createdAt": "2021-07-08T13:20:58Z",
+          "updatedAt": "2021-07-08T13:20:58Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Followed the proposed simpler way as per the commit above.",
+          "createdAt": "2021-07-10T09:20:59Z",
+          "updatedAt": "2021-07-10T09:20:59Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU5MTc2MjA4NjU=",
+      "title": "Reply from the proxy to the client, with no end-to-end security",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/7",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When no end-to-end security is used and the proxy receives an informative response from the server, the proxy does what now defined in https://datatracker.ietf.org/doc/html/draft-ietf-core-observe-multicast-notifications-00#section-9, i.e.:\r\n\r\n> If the 'last_notif' field is not present, the proxy responds to the client with an Empty Acknowledgement (if indicated by the message type, and if it has not already done so).\r\n> \r\n> If the 'last_notif' field is present, the proxy rebuilds the latest multicast notification, as defined in Section 3. Then, the proxy responds to the client, by forwarding back the latest multicast notification.\r\n\r\nOn the first case --- Since 'last_notif' is optional to include in the informative response, it may take some time before the proxy actually receives a notification, and forwards it back to the client. The lifetime of the Token used between client and proxy has to be longer than such an amount of time, or the first following notification would not match anymore on the Client's side when it comes. This can be explicitly noted.\r\n\r\nOn the second case --- It is worth saying explicitly that the forwarded notification includes an Observe option, where the proxy specifies a value consistent with the counter it uses with the observing clients. The observe option is what the client practically needs to see in order to persist the observation on its side and preserve the Token used with the proxy beyond this first notification.",
+      "createdAt": "2021-06-10T17:38:29Z",
+      "updatedAt": "2021-07-10T08:47:59Z",
+      "closedAt": "2021-07-10T08:47:59Z",
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "As discussed, this does not deviate from the behavior in the non-multicast case, so no clarifications are needed.",
+          "createdAt": "2021-07-10T08:47:59Z",
+          "updatedAt": "2021-07-10T08:47:59Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU5MzIzODExNDM=",
+      "title": "Signaling of OSCORE group parameters",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/8",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The section \"Signaling the OSCORE Group in the Informative Response\" defines how the 5.03 informative response can provide descriptive information of the OSCORE group to join.\r\n\r\nThis needs to be aligned with the latest updates in core-oscore-groupcomm-12 and expected related updates in ace-key-groupcomm-oscore.\r\n\r\nIn particular, names and occurrence of parameters related to algorithms need to reflect the latest format of the Security Context for Group OSCORE.",
+      "createdAt": "2021-06-29T08:49:57Z",
+      "updatedAt": "2021-07-10T08:30:44Z",
+      "closedAt": "2021-07-10T08:30:44Z",
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWU5MzIzODMwMjU=",
+      "title": "Signaling of self-managed OSCORE group",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/9",
+      "state": "CLOSED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The appendix \"OSCORE Group Self-Managed by the Server\" needs to be aligned with the latest updates in core-oscore-groupcomm-12 and expected related updates in ace-key-groupcomm-oscore.\r\n\r\nExpected additions/changes include:\r\n\r\n* New parameters to enforce proof-of-possession of the Server's private key, here acting also as Group Manager. These should be a server-generated nonce and a signature over that nonce.\r\n* The Server's public key in 'srv_pub_key' is in its native format used for its distribution/retrieval; the format is indicated in 'cs_key_enc' by a value from the COSE Headers Parameters registry (i.e., CWT, set of CWT claims, X.509/C509 certificates, ...); 'srv_identifier' is always present and specifying the Sender ID of the Server.\r\n* Names and occurrence of parameters related to algorithms need to reflect the latest format of the Security Context for Group OSCORE. Some parameters are not needed anymore, since the related information would be part of the Server's public key in 'srv_pub_key'.\r\n* The same Server's public key is used as public key of the Group Manager and as public key of the sender of phantom registration/cancellation request and multicast notifications. That is, that same public key has to be used in the elements 'sender_public_key' and 'gm_public_key' of the external_aad of those messages.",
+      "createdAt": "2021-06-29T08:52:13Z",
+      "updatedAt": "2021-07-10T08:30:18Z",
+      "closedAt": "2021-07-10T08:30:17Z",
+      "comments": [
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "as for PoP, I'd need to understand what that PoP is originally needed for.",
+          "createdAt": "2021-07-08T13:48:22Z",
+          "updatedAt": "2021-07-08T13:48:22Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The updated appendix addresses all points now.\r\n\r\nAs discussed, the PoP does not require an explicit piece of evidence in the informative response, but it rather comes later on with every signed multicast notification.",
+          "createdAt": "2021-07-10T08:30:17Z",
+          "updatedAt": "2021-07-10T08:30:17Z"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "MDU6SXNzdWU5NDEyMTUxMjU=",
+      "title": "Optimization when using deterministic phantom requests",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/10",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The appendix \"Phantom Request as Deterministic Request\" considers the use of deterministic requests [1] as phantom registration requests.\r\n\r\nIf the server recognizes an incoming registration request to be exactly a phantom registration request earlier released as deterministic request, then the informative response sent as reply may specify the empty byte string as value of 'ph_req'.\r\n\r\n[1] https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/",
+      "createdAt": "2021-07-10T09:43:53Z",
+      "updatedAt": "2021-07-10T09:43:53Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "MDU6SXNzdWU5NDEyMTU0MDE=",
+      "title": "Optimization when rekeying the self-managed OSCORE group",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/11",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In the appendix \"OSCORE Group Self-Managed by the Server\", the server acting as Group Manager can send a protected 5.03 multicast response to rekey the self-managed group.\r\n\r\nWhen doing so, the response payload may omit most of the information included in the original informative responses sent to the clients, i.e., 'tp_info', 'ph_req' and 'last_notif'.\r\n\r\nThose elements don't change when the group is rekeyed through the 5.03 multicast response.",
+      "createdAt": "2021-07-10T09:45:51Z",
+      "updatedAt": "2021-07-10T09:45:51Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
