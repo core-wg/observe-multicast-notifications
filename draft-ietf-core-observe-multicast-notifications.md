@@ -65,6 +65,7 @@ normative:
   I-D.ietf-core-groupcomm-bis:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
+  I-D.ietf-core-href:
   RFC2119:
   RFC4944:
   RFC6838:
@@ -290,7 +291,7 @@ Note that this also applies when, with no ongoing traditional observations on th
 
 ### Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
-\[ This encoding might be replaced by CRIs {{?I-D.ietf-core-href}} in a later version of this document. \]
+\[ This encoding might be replaced by CRIs {{I-D.ietf-core-href}} in a later version of this document. \]
 
 The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.
 
@@ -1072,7 +1073,7 @@ Once received the informative response, the origin client proceeds in a differen
 
    - An outer Observe Option is included and set to 0 (register). This will usually be set in the phantom request already.
 
-   - The outer option Proxy-Uri or the outer options (Proxy-Scheme, Uri-Host, Uri-Port) are included, and set to the same values they had in the original registration request sent by the client.
+   - The client includes: the outer option Proxy-Uri or Proxy-Cri {{I-D.ietf-core-href}}; or the outer options (Uri-Host, Uri-Port), together with the outer option Proxy-Scheme or Proxy-Scheme-Number {{I-D.ietf-core-href}}. These options are set in order to specify the same request URI of the original registration request sent by the client.
 
    - The new option Listen-To-Multicast-Responses is included as an outer option. The value is set to the serialization of the CBOR array specified by the 'tp_info' parameter of the informative response.
 
@@ -1084,7 +1085,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy MUST NOT further forward the ticket request to the origin server.
 
-* The proxy removes the Proxy-Uri Option or the Proxy-Scheme Option from the ticket request.
+* The proxy removes the option Proxy-Uri, or Proxy-Scheme, or Proxy-Cri, or Proxy-Scheme-Number from the ticket request.
 
 * The proxy removes the Listen-To-Multicast-Responses Option from the ticket request, and extracts the conveyed transport-specific information.
 
@@ -2310,6 +2311,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.
 
 * Fixed consumption of proxy-related options in a ticket request sent to the proxy.
+
+* Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.
 
 * Improved notation in the examples of message exchanges with proxy.
 
