@@ -2101,7 +2101,7 @@ C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
 <p id="section-8.2-1">Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client SHOULD acknowledge its interest in continuing receiving multicast notifications for the target resource, as described below.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different than 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>), and then registers a regular unicast observation on the same target resource.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
-<p id="section-8.2-4">Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be set to 0. As per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses, and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 <p id="section-8.2-5">The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 <p id="section-8.2-6"><a href="#appendix-pseudo-code-counting-client" class="auto internal xref">Appendix B.1</a> and <a href="#appendix-pseudo-code-counting-client-constrained" class="auto internal xref">Appendix B.2</a> provide a description in pseudo-code of the operations above performed by the client.<a href="#section-8.2-6" class="pilcrow">¶</a></p>
 <p id="section-8.2-7"><a href="#intermediaries" class="auto internal xref">Section 11</a> specifies how the approach presented in <a href="#sec-server-side" class="auto internal xref">Section 4</a> and <a href="#sec-client-side" class="auto internal xref">Section 5</a> works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.<a href="#section-8.2-7" class="pilcrow">¶</a></p>
@@ -2180,7 +2180,7 @@ When no interested origin clients remain, the proxy can simply forget about bein
           <h4 id="name-processing-of-feedback">
 <a href="#section-8.3.3" class="section-number selfRef">8.3.3. </a><a href="#name-processing-of-feedback" class="section-name selfRef">Processing of Feedback</a>
           </h4>
-<p id="section-8.3.3-1">Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with an empty value (Option Length = 0).<a href="#section-8.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3.3-1">Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with value 0.<a href="#section-8.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-2">Then, the server computes a feedback indicator as E = R * (2^Q), where "^" is the exponentiation operator. According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).<a href="#section-8.3.3-2" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-3">Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>).<a href="#section-8.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-4">In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D &gt; 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server MUST hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, and assesses it for possibly canceling the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>).<a href="#section-8.3.3-4" class="pilcrow">¶</a></p>
@@ -3395,6 +3395,7 @@ if (I == 0) {
     req.setOption(opt);
 
     opt = new Option(MRFD);
+    opt.set(0);
     req.setOption(opt);
 
     req.send(SRV_ADDR, SRV_PORT);
@@ -3435,6 +3436,7 @@ if (respond_to(Q) == true) {
     req.setOption(opt);
 
     opt = new Option(MRFD);
+    opt.set(0);
     req.setOption(opt);
 
     req.send(SRV_ADDR, SRV_PORT);
@@ -3488,7 +3490,8 @@ while(!t.isExpired());
 // Time t2
 
 int R = &lt;number of requests to the target resource
-         between t1 and t2, with the MRFD option&gt;;
+         received between t1 and t2, and including
+         the MRFD option with value 0&gt;;
 
 int E = R * (2^Q);
 
@@ -4364,10 +4367,13 @@ C1      C2      P         S
             <p id="appendix-H.1-1.2.1">Early mentioning that 'srv_addr' cannot instruct redirection.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.3">
-            <p id="appendix-H.1-1.3.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.3.1">Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.4">
-            <p id="appendix-H.1-1.4.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.4.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.5">
+            <p id="appendix-H.1-1.5.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
