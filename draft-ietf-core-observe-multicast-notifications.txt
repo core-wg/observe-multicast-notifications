@@ -543,7 +543,7 @@ Table of Contents
 
    srv_addr = (
        tp_id : int,  ; Identifier of the used transport protocol
-     + elements      ; Number, format, and encoding
+     * elements      ; Number, format, and encoding
                      ; based on the value of 'tp_id'
    )
 
@@ -3994,6 +3994,8 @@ Appendix H.  Document Updates
    RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 H.1.  Version -07 to -08
+
+   *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
    *  Improved notation in the examples of message exchanges with proxy.
 
