@@ -555,8 +555,14 @@ Table of Contents
                    Figure 2: General format of 'tp_info'
 
    The 'srv_addr' element of 'tp_info' specifies the addressing
-   information of the server, and includes at least one element 'tp_id'
-   which is formatted as follows.
+   information of the server, i.e., the source addressing information of
+   the multicast notifications that are sent for the group observation.
+   Such addressing information MUST be equal to the destination
+   addressing information of the registration requests sent by the
+   clients to observe the target resource at the server.
+
+   The 'srv_addr' element includes at least one element 'tp_id', which
+   is formatted as follows.
 
    *  'tp_id' : this element is a CBOR integer, which specifies the
       transport protocol used to transport the CoAP response from the
@@ -3996,6 +4002,8 @@ Appendix H.  Document Updates
 H.1.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
+
+   *  Early mentioning that 'srv_addr' cannot instruct redirection.
 
    *  Improved notation in the examples of message exchanges with proxy.
 
