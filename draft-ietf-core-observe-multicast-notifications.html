@@ -2822,8 +2822,16 @@ Note also that, identically to the phantom request, the ticket request is still 
 </td>
           </tr>
           <tr>
-            <td class="text-left" rowspan="1" colspan="1">exp</td>
+            <td class="text-left" rowspan="1" colspan="1">exi</td>
             <td class="text-left" rowspan="1" colspan="1">15</td>
+            <td class="text-left" rowspan="1" colspan="1">uint</td>
+            <td class="text-left" rowspan="1" colspan="1">
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
+</td>
+          </tr>
+          <tr>
+            <td class="text-left" rowspan="1" colspan="1">exp</td>
+            <td class="text-left" rowspan="1" colspan="1">16</td>
             <td class="text-left" rowspan="1" colspan="1">uint</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
@@ -3565,47 +3573,54 @@ Note that no information is provided as related to the AEAD Algorithm, or to the
           <p id="appendix-C-4.3.1">'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.<a href="#appendix-C-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-4.4">
-          <p id="appendix-C-4.4.1">'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in <span><a href="https://rfc-editor.org/rfc/rfc7519#section-2" class="relref">Section 2</a> of [<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>.<a href="#appendix-C-4.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-4.4.1">'exi': this element has as value the residual lifetime of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. The value represents the residual lifetime of the keying material in seconds, i.e., the number of seconds between the current time at the server and the time when the keying material expires. Upon receiving the informative response containing the 'exi' parameter, a client determines the expiration time of the keying material by adding the seconds specified in the 'exi' parameter to its current time.<a href="#appendix-C-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-5">Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), such proof-of-possession will be achieved through every multicast notification that the server sends, as protected with the group mode of Group OSCORE and including a signature computed with its private key.<a href="#appendix-C-5" class="pilcrow">¶</a></p>
-<p id="appendix-C-6">A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2" class="relref">Section 2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.<a href="#appendix-C-6" class="pilcrow">¶</a></p>
-<p id="appendix-C-7">Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-C-7" class="pilcrow">¶</a></p>
-<p id="appendix-C-8">Furthermore, the server complies with the following points.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
+<p id="appendix-C-5">If the server has a reliable way to synchronize its internal clock with UTC, then the server includes also the following field:<a href="#appendix-C-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-9.1">
-          <p id="appendix-C-9.1.1">The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of the phantom requests and the multicast notifications in group observations that it hosts, as defined in this document.<a href="#appendix-C-9.1.1" class="pilcrow">¶</a></p>
-<p id="appendix-C-9.1.2">
-The server MAY use the same self-managed OSCORE group to protect the phantom request and the multicast notifications of multiple group observations that it hosts.<a href="#appendix-C-9.1.2" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-9.2">
-          <p id="appendix-C-9.2.1">The server MUST NOT provide in the informative response the keying material of other OSCORE groups it is or has been a member of.<a href="#appendix-C-9.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C-6.1">
+          <p id="appendix-C-6.1.1">'exp': this element has as value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. The value represents the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in <span><a href="https://rfc-editor.org/rfc/rfc7519#section-2" class="relref">Section 2</a> of [<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>.<a href="#appendix-C-6.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-10">After the time indicated in the 'exp' field:<a href="#appendix-C-10" class="pilcrow">¶</a></p>
+<p id="appendix-C-7">If a client has a reliable way to synchronize its internal clock with UTC, and both the 'exi' and 'exp' parameters are present in the informative response, then the client MUST use the 'exp' parameter value as expiration time for the group keying material.<a href="#appendix-C-7" class="pilcrow">¶</a></p>
+<p id="appendix-C-8">Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>), such proof-of-possession will be achieved through every multicast notification that the server sends, as protected with the group mode of Group OSCORE and including a signature computed with its private key.<a href="#appendix-C-8" class="pilcrow">¶</a></p>
+<p id="appendix-C-9">A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2" class="relref">Section 2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.<a href="#appendix-C-9" class="pilcrow">¶</a></p>
+<p id="appendix-C-10">Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-C-10" class="pilcrow">¶</a></p>
+<p id="appendix-C-11">Furthermore, the server complies with the following points.<a href="#appendix-C-11" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-11.1">
-          <p id="appendix-C-11.1.1">The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="auto internal xref">Section 9.2.4</a>). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:<a href="#appendix-C-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C-12.1">
+          <p id="appendix-C-12.1.1">The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of the phantom requests and the multicast notifications in group observations that it hosts, as defined in this document.<a href="#appendix-C-12.1.1" class="pilcrow">¶</a></p>
+<p id="appendix-C-12.1.2">
+The server MAY use the same self-managed OSCORE group to protect the phantom request and the multicast notifications of multiple group observations that it hosts.<a href="#appendix-C-12.1.2" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-12.2">
+          <p id="appendix-C-12.2.1">The server MUST NOT provide in the informative response the keying material of other OSCORE groups it is or has been a member of.<a href="#appendix-C-12.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-C-13">Upon expiration of the group keying material as indicated in the informative response by the 'exp' parameter (if present) and the 'exi' parameter:<a href="#appendix-C-13" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-11.1.2.1">
-              <p id="appendix-C-11.1.2.1.1">The server MUST update the OSCORE Master Secret.<a href="#appendix-C-11.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C-14.1">
+          <p id="appendix-C-14.1.1">The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="auto internal xref">Section 9.2.4</a>). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:<a href="#appendix-C-14.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-14.1.2.1">
+              <p id="appendix-C-14.1.2.1.1">The server MUST update the OSCORE Master Secret.<a href="#appendix-C-14.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-C-11.1.2.2">
-              <p id="appendix-C-11.1.2.2.1">The server MUST update the ID Context used as Group Identifier (Gid), consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#appendix-C-11.1.2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-C-14.1.2.2">
+              <p id="appendix-C-14.1.2.2.1">The server MUST update the ID Context used as Group Identifier (Gid), consistently with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#appendix-C-14.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-C-11.1.2.3">
-              <p id="appendix-C-11.1.2.3.1">The server MAY update the OSCORE Master Salt.<a href="#appendix-C-11.1.2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-C-14.1.2.3">
+              <p id="appendix-C-14.1.2.3.1">The server MAY update the OSCORE Master Salt.<a href="#appendix-C-14.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
-        <li class="normal" id="appendix-C-11.2">
-          <p id="appendix-C-11.2.1">The client MUST stop using the keying material and MAY re-register the observation at the server.<a href="#appendix-C-11.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-14.2">
+          <p id="appendix-C-14.2.1">The client MUST stop using the keying material and MAY re-register the observation at the server.<a href="#appendix-C-14.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-12">Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>) that: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE Option of the response.<a href="#appendix-C-12" class="pilcrow">¶</a></p>
-<p id="appendix-C-13">When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>). In particular, both of them never change their Sender ID during the group lifetime, and they both remain part of the group until the group ceases to exist.<a href="#appendix-C-13" class="pilcrow">¶</a></p>
-<p id="appendix-C-14">As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="auto internal xref">Section 9.2.4</a>), which results in the eventual re-registration of the clients that are still interested in the group observation.<a href="#appendix-C-14" class="pilcrow">¶</a></p>
-<p id="appendix-C-15">Applications requiring backward security or forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>.<a href="#appendix-C-15" class="pilcrow">¶</a></p>
+<p id="appendix-C-15">Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>) that: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE Option of the response.<a href="#appendix-C-15" class="pilcrow">¶</a></p>
+<p id="appendix-C-16">When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-3.2" class="relref">Section 3.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>). In particular, both of them never change their Sender ID during the group lifetime, and they both remain part of the group until the group ceases to exist.<a href="#appendix-C-16" class="pilcrow">¶</a></p>
+<p id="appendix-C-17">As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="auto internal xref">Section 9.2.4</a>), which results in the eventual re-registration of the clients that are still interested in the group observation.<a href="#appendix-C-17" class="pilcrow">¶</a></p>
+<p id="appendix-C-18">Applications requiring backward security or forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>.<a href="#appendix-C-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="deterministic-phantom-Request">
@@ -4400,10 +4415,13 @@ C1      C2      P         S
             <p id="appendix-H.1-1.7.1">Explained non-provisioning of some parameters in self-managed OSCORE groups.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.8">
-            <p id="appendix-H.1-1.8.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.8.1">Use of 'exi' for relative expiration time in self-managed OSCORE groups.<a href="#appendix-H.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.9">
-            <p id="appendix-H.1-1.9.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.9.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.9.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.10">
+            <p id="appendix-H.1-1.10.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.10.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
