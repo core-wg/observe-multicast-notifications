@@ -1557,6 +1557,12 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
+   Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will never use the pairwise mode of Group OSCORE as per {{Section 9 of I-D.ietf-core-oscore-groupcomm}}, and will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
+
+   * In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see {{Section 2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 2.1.9 of I-D.ietf-core-oscore-groupcomm}}).
+
+   * Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value "null" (0xf6).
+
 * 'srv_cred': this element is a CBOR byte string, with value the original binary representation of the server's authentication credential used in the OSCORE group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
@@ -1623,9 +1629,15 @@ When using a deterministic request as a phantom observation request, the observe
 
 If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
 
-   * 'alg', 'ecdh_alg', and 'ecdh_params', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+   * 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
    * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
+
+Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
+
+* In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.9 of I-D.ietf-core-oscore-groupcomm}}).
+
+* Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value "null" (0xf6).
 
 If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
@@ -2313,6 +2325,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Fixed consumption of proxy-related options in a ticket request sent to the proxy.
 
 * Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.
+
+* Explained non-provisioning of some parameters in self-managed OSCORE groups.
 
 * Improved notation in the examples of message exchanges with proxy.
 
