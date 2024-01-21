@@ -2067,10 +2067,12 @@ Table of Contents
       -  An outer Observe Option is included and set to 0 (register).
          This will usually be set in the phantom request already.
 
-      -  The outer option Proxy-Uri or the outer options (Proxy-Scheme,
-         Uri-Host, Uri-Port) are included, and set to the same values
-         they had in the original registration request sent by the
-         client.
+      -  The client includes: the outer option Proxy-Uri or Proxy-Cri
+         [I-D.ietf-core-href]; or the outer options (Uri-Host, Uri-
+         Port), together with the outer option Proxy-Scheme or Proxy-
+         Scheme-Number [I-D.ietf-core-href].  These options are set in
+         order to specify the same request URI of the original
+         registration request sent by the client.
 
       -  The new option Listen-To-Multicast-Responses is included as an
          outer option.  The value is set to the serialization of the
@@ -2095,8 +2097,8 @@ Table of Contents
    *  The proxy MUST NOT further forward the ticket request to the
       origin server.
 
-   *  The proxy removes the Proxy-Uri Option or the Proxy-Scheme Option
-      from the ticket request.
+   *  The proxy removes the option Proxy-Uri, or Proxy-Scheme, or Proxy-
+      Cri, or Proxy-Scheme-Number from the ticket request.
 
    *  The proxy removes the Listen-To-Multicast-Responses Option from
       the ticket request, and extracts the conveyed transport-specific
@@ -2531,6 +2533,13 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
               groupcomm-bis-10>.
 
+   [I-D.ietf-core-href]
+              Bormann, C. and H. Birkholz, "Constrained Resource
+              Identifiers", Work in Progress, Internet-Draft, draft-
+              ietf-core-href-14, 9 January 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              href-14>.
+
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and J. Park, "Group Object Security for Constrained
@@ -2632,13 +2641,6 @@ Table of Contents
               Draft, draft-ietf-core-coral-05, 7 March 2022,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
               coral-05>.
-
-   [I-D.ietf-core-href]
-              Bormann, C. and H. Birkholz, "Constrained Resource
-              Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-14, 9 January 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-14>.
 
    [I-D.ietf-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
@@ -4014,6 +4016,9 @@ H.1.  Version -07 to -08
 
    *  Fixed consumption of proxy-related options in a ticket request
       sent to the proxy.
+
+   *  Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a
+      ticket request.
 
    *  Improved notation in the examples of message exchanges with proxy.
 

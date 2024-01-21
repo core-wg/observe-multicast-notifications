@@ -2647,7 +2647,7 @@ C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
                 <p id="section-12.2-4.2.2.3.1">An outer Observe Option is included and set to 0 (register). This will usually be set in the phantom request already.<a href="#section-12.2-4.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-12.2-4.2.2.4">
-                <p id="section-12.2-4.2.2.4.1">The outer option Proxy-Uri or the outer options (Proxy-Scheme, Uri-Host, Uri-Port) are included, and set to the same values they had in the original registration request sent by the client.<a href="#section-12.2-4.2.2.4.1" class="pilcrow">¶</a></p>
+                <p id="section-12.2-4.2.2.4.1">The client includes: the outer option Proxy-Uri or Proxy-Cri <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>; or the outer options (Uri-Host, Uri-Port), together with the outer option Proxy-Scheme or Proxy-Scheme-Number <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>. These options are set in order to specify the same request URI of the original registration request sent by the client.<a href="#section-12.2-4.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-12.2-4.2.2.5">
                 <p id="section-12.2-4.2.2.5.1">The new option Listen-To-Multicast-Responses is included as an outer option. The value is set to the serialization of the CBOR array specified by the 'tp_info' parameter of the informative response.<a href="#section-12.2-4.2.2.5.1" class="pilcrow">¶</a></p>
@@ -2665,7 +2665,7 @@ Note also that, identically to the phantom request, the ticket request is still 
             <p id="section-12.2-6.1.1">The proxy MUST NOT further forward the ticket request to the origin server.<a href="#section-12.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-12.2-6.2">
-            <p id="section-12.2-6.2.1">The proxy removes the Proxy-Uri Option or the Proxy-Scheme Option from the ticket request.<a href="#section-12.2-6.2.1" class="pilcrow">¶</a></p>
+            <p id="section-12.2-6.2.1">The proxy removes the option Proxy-Uri, or Proxy-Scheme, or Proxy-Cri, or Proxy-Scheme-Number from the ticket request.<a href="#section-12.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-12.2-6.3">
             <p id="section-12.2-6.3.1">The proxy removes the Listen-To-Multicast-Responses Option from the ticket request, and extracts the conveyed transport-specific information.<a href="#section-12.2-6.3.1" class="pilcrow">¶</a></p>
@@ -3132,6 +3132,10 @@ Reference: Section 6 of [RFC-XXXX]
         <dd>
 <span class="refAuthor">Dijk, E.</span>, <span class="refAuthor">Wang, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Group Communication for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-groupcomm-bis-10</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-10">https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.ietf-core-href">[I-D.ietf-core-href]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Constrained Resource Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-href-14</span>, <time datetime="2024-01-09" class="refDate">9 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-14">https://datatracker.ietf.org/doc/html/draft-ietf-core-href-14</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.ietf-core-oscore-groupcomm">[I-D.ietf-core-oscore-groupcomm]</dt>
         <dd>
 <span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">J. Park</span>, <span class="refTitle">"Group Object Security for Constrained RESTful Environments (Group OSCORE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-oscore-groupcomm-20</span>, <time datetime="2023-09-02" class="refDate">2 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20">https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20</a>&gt;</span>. </dd>
@@ -3212,10 +3216,6 @@ Reference: Section 6 of [RFC-XXXX]
 <dt id="I-D.ietf-core-coral">[I-D.ietf-core-coral]</dt>
         <dd>
 <span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"The Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coral-05</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-05">https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-05</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.ietf-core-href">[I-D.ietf-core-href]</dt>
-        <dd>
-<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Constrained Resource Identifiers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-href-14</span>, <time datetime="2024-01-09" class="refDate">9 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-14">https://datatracker.ietf.org/doc/html/draft-ietf-core-href-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-oscore-capable-proxies">[I-D.ietf-core-oscore-capable-proxies]</dt>
         <dd>
@@ -4375,10 +4375,13 @@ C1      C2      P         S
             <p id="appendix-H.1-1.5.1">Fixed consumption of proxy-related options in a ticket request sent to the proxy.<a href="#appendix-H.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.6">
-            <p id="appendix-H.1-1.6.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.6.1">Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.<a href="#appendix-H.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.7">
-            <p id="appendix-H.1-1.7.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.7.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.8">
+            <p id="appendix-H.1-1.8.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
