@@ -1120,7 +1120,8 @@ The table below summarizes them and specifies the CBOR key to use instead of the
  gp_material     | 12       | map        | {{self-managed-oscore-group}}
  srv_cred        | 13       | bstr       | {{self-managed-oscore-group}}
  srv_identifier  | 14       | bstr       | {{self-managed-oscore-group}}
- exp             | 15       | uint       | {{self-managed-oscore-group}}
+ exi             | 15       | uint       | {{self-managed-oscore-group}}
+ exp             | 16       | uint       | {{self-managed-oscore-group}}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
@@ -1567,7 +1568,13 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
 * 'srv_identifier': this element MUST be included and is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
-* 'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}.
+* 'exi': this element has as value the residual lifetime of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. The value represents the residual lifetime of the keying material in seconds, i.e., the number of seconds between the current time at the server and the time when the keying material expires. Upon receiving the informative response containing the 'exi' parameter, a client determines the expiration time of the keying material by adding the seconds specified in the 'exi' parameter to its current time.
+
+If the server has a reliable way to synchronize its internal clock with UTC, then the server includes also the following field:
+
+* 'exp': this element has as value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. The value represents the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}.
+
+If a client has a reliable way to synchronize its internal clock with UTC, and both the 'exi' and 'exp' parameters are present in the informative response, then the client MUST use the 'exp' parameter value as expiration time for the group keying material.
 
 Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification that the server sends, as protected with the group mode of Group OSCORE and including a signature computed with its private key.
 
@@ -1583,7 +1590,7 @@ Furthermore, the server complies with the following points.
 
 * The server MUST NOT provide in the informative response the keying material of other OSCORE groups it is or has been a member of.
 
-After the time indicated in the 'exp' field:
+Upon expiration of the group keying material as indicated in the informative response by the 'exp' parameter (if present) and the 'exi' parameter:
 
 * The server MUST stop using the keying material and MUST cancel the group observations for which that keying material is used (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}). If the server creates a new group observation as a replacement or follow-up using the same OSCORE group:
 
@@ -2327,6 +2334,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.
 
 * Explained non-provisioning of some parameters in self-managed OSCORE groups.
+
+* Use of 'exi' for relative expiration time in self-managed OSCORE groups.
 
 * Improved notation in the examples of message exchanges with proxy.
 
