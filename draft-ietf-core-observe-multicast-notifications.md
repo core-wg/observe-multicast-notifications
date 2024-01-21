@@ -302,7 +302,7 @@ tp_info = [
 
 srv_addr = (
     tp_id : int,  ; Identifier of the used transport protocol
-  + elements      ; Number, format, and encoding
+  * elements      ; Number, format, and encoding
                   ; based on the value of 'tp_id'
 )
 
@@ -2297,6 +2297,8 @@ C1      C2      P         S
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
 
 ## Version -07 to -08 ## {#sec-07-08}
+
+* Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
 * Improved notation in the examples of message exchanges with proxy.
 
