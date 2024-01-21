@@ -3753,7 +3753,7 @@ C1     C2     P        S
 |      |      |        |
 
 
-(*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT
+(*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT.
 
 </pre>
 </div>
@@ -3815,7 +3815,7 @@ C1      C2      P         S
 |       |       |         |  (S sends to itself a phantom observation
 |       |       |         |  request PH_REQ as coming from the
 |       |       |         |  IP multicast address GRP_ADDR)
-|       |       |         |
+|       |       |    (*)  |
 |       |       |  -------+
 |       |       | /       |
 |       |       | \------&gt;|  Token: 0x7b
@@ -3873,7 +3873,7 @@ C1      C2      P         S
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
-|       |       |         |
+|  (*)  |       |         |
 +--------------&gt;|         |  Token: 0x4b
 | FETCH |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05 ; piv: 501;
@@ -3968,7 +3968,7 @@ C1      C2      P         S
 |       |       |         |  &lt;Other class U/I options&gt;
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
-|       |       |         |
+|       |  (*)  |         |
 |       +------&gt;|         |  Token: 0x02
 |       | FETCH |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05; piv: 501;
@@ -4000,7 +4000,7 @@ C1      C2      P         S
 :       :       :         :  (The value of the resource
 :       :       :         :  /r changes to "5678".)
 :       :       :         :
-|       |       |   (*)   |
+|       |       |   (**)  |
 |       |       |&lt;--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
@@ -4015,14 +4015,14 @@ C1      C2      P         S
 |       |       |         |    CBOR_Payload: "5678"
 |       |       |         |  }
 |       |       |         |  &lt;Signature&gt;
-|       |       |         |
+|  (*)  |       |         |
 |&lt;--------------+         |  Token: 0x4b
 | 2.05  |       |         |  Observe: 54123
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
 |       |       |         |  &lt;Other class U/I options&gt;
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and Signature)
-|       |       |         |
+|       |  (*)  |         |
 |       |&lt;------+         |  Token: 0x02
 |       | 2.05  |         |  Observe: 54123
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
@@ -4032,8 +4032,11 @@ C1      C2      P         S
 |       |       |         |
 
 
-(*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT and protected
-    with Group OSCORE end-to-end between the server and the clients.
+(*)  Sent over unicast, and protected with Group OSCORE end-to-end
+     between the server and the clients.
+
+(**) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+     with Group OSCORE end-to-end between the server and the clients.
 
 </pre>
 </div>
@@ -4216,7 +4219,7 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (S responds to the proxy with an
 |       |       |         |   unprotected informative response)
-|       |       |         |
+|       |       |   (*)   |
 |       |       |&lt;--------|  Token: 0x5e
 |       |       | 5.03    |  Content-Format: application/
 |       |       |         |    informative-response+cbor
@@ -4295,7 +4298,7 @@ C1      C2      P         S
 |       |       |         |  (The value of the resource
 |       |       |         |   /r changes to "5678".)
 |       |       |         |
-|       |       |   (*)   |
+|       |       |   (**)  |
 |       |       |&lt;--------|  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502 ; ...}
@@ -4330,8 +4333,11 @@ C1      C2      P         S
 |       |       |         |
 
 
-(*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT and protected
-    with Group OSCORE end-to-end between the server and the clients.
+(*)  Sent over unicast and unprotected.
+
+(**) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+     with Group OSCORE end-to-end between the server and the clients.
+
 </pre><a href="#appendix-G.2-6" class="pilcrow">¶</a>
 </div>
 </section>
@@ -4351,7 +4357,10 @@ C1      C2      P         S
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-H.1-1.1">
-            <p id="appendix-H.1-1.1.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.1.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.2">
+            <p id="appendix-H.1-1.2.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
