@@ -835,8 +835,6 @@ For both decryption and signature verification, the client MUST set the 'externa
 
 Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource.
 
-The replay protection and checking of multicast notifications is performed as specified in {{Section 4.1.3.5.2 of RFC8613}}.
-
 # Example with Group OSCORE # {#sec-example-with-security}
 
 The following example refers to two clients C_1 and C_2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
@@ -2306,6 +2304,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
 * Early mentioning that 'srv_addr' cannot instruct redirection.
+
+* The replay protection of multicast notifications is as per Group OSCORE.
 
 * Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.
 
