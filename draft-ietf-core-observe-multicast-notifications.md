@@ -313,7 +313,9 @@ req_info = (
 ~~~~~~~~~~~
 {: #tp-info-general title="General format of 'tp_info'"}
 
-The 'srv_addr' element of 'tp_info' specifies the addressing information of the server, and includes at least one element 'tp_id' which is formatted as follows.
+The 'srv_addr' element of 'tp_info' specifies the addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation. Such addressing information MUST be equal to the destination addressing information of the registration requests sent by the clients to observe the target resource at the server.
+
+The 'srv_addr' element includes at least one element 'tp_id', which is formatted as follows.
 
 * 'tp_id' : this element is a CBOR integer, which specifies the transport protocol used to transport the CoAP response from the server, i.e., a multicast notification in this document.
 
@@ -2299,6 +2301,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 ## Version -07 to -08 ## {#sec-07-08}
 
 * Fixed the CDDL definition 'srv_addr' in 'tp_info'.
+
+* Early mentioning that 'srv_addr' cannot instruct redirection.
 
 * Improved notation in the examples of message exchanges with proxy.
 
