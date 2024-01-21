@@ -1084,7 +1084,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy MUST NOT further forward the ticket request to the origin server.
 
-* The proxy removes from the ticket request the Proxy-Uri Option or the (Proxy-Scheme, Uri-Host, Uri-Port) Options.
+* The proxy removes the Proxy-Uri Option or the Proxy-Scheme Option from the ticket request.
 
 * The proxy removes the Listen-To-Multicast-Responses Option from the ticket request, and extracts the conveyed transport-specific information.
 
@@ -2308,6 +2308,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * The replay protection of multicast notifications is as per Group OSCORE.
 
 * Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.
+
+* Fixed consumption of proxy-related options in a ticket request sent to the proxy.
 
 * Improved notation in the examples of message exchanges with proxy.
 
