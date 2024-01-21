@@ -2665,7 +2665,7 @@ Note also that, identically to the phantom request, the ticket request is still 
             <p id="section-12.2-6.1.1">The proxy MUST NOT further forward the ticket request to the origin server.<a href="#section-12.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-12.2-6.2">
-            <p id="section-12.2-6.2.1">The proxy removes from the ticket request the Proxy-Uri Option or the (Proxy-Scheme, Uri-Host, Uri-Port) Options.<a href="#section-12.2-6.2.1" class="pilcrow">¶</a></p>
+            <p id="section-12.2-6.2.1">The proxy removes the Proxy-Uri Option or the Proxy-Scheme Option from the ticket request.<a href="#section-12.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-12.2-6.3">
             <p id="section-12.2-6.3.1">The proxy removes the Listen-To-Multicast-Responses Option from the ticket request, and extracts the conveyed transport-specific information.<a href="#section-12.2-6.3.1" class="pilcrow">¶</a></p>
@@ -4372,10 +4372,13 @@ C1      C2      P         S
             <p id="appendix-H.1-1.4.1">Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.<a href="#appendix-H.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.5">
-            <p id="appendix-H.1-1.5.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.5.1">Fixed consumption of proxy-related options in a ticket request sent to the proxy.<a href="#appendix-H.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.6">
-            <p id="appendix-H.1-1.6.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.6.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.7">
+            <p id="appendix-H.1-1.7.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
