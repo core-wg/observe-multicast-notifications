@@ -3547,6 +3547,16 @@ Editor's note: as per the text above, the referred version of <span>[<a href="#I
           </ul>
 <p id="appendix-C-4.1.5">
 The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.<a href="#appendix-C-4.1.5" class="pilcrow">¶</a></p>
+<p id="appendix-C-4.1.6">
+Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will never use the pairwise mode of Group OSCORE as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-9" class="relref">Section 9</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, and will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:<a href="#appendix-C-4.1.6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-4.1.7.1">
+              <p id="appendix-C-4.1.7.1.1">In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.9" class="relref">Section 2.1.9</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-C-4.1.7.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-C-4.1.7.2">
+              <p id="appendix-C-4.1.7.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value "null" (0xf6).<a href="#appendix-C-4.1.7.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </li>
         <li class="normal" id="appendix-C-4.2">
           <p id="appendix-C-4.2.1">'srv_cred': this element is a CBOR byte string, with value the original binary representation of the server's authentication credential used in the OSCORE group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element of 'gp_material'.<a href="#appendix-C-4.2.1" class="pilcrow">¶</a></p>
@@ -3623,22 +3633,31 @@ The server MAY use the same self-managed OSCORE group to protect the phantom req
 <p id="appendix-D-11">If the optimization defined in <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.<a href="#appendix-D-11" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-D-12.1">
-          <p id="appendix-D-12.1.1">'alg', 'ecdh_alg', and 'ecdh_params', as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-D-12.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-D-12.1.1">'alg', as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-16#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-D-12.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-D-12.2">
           <p id="appendix-D-12.2.1">'det_senderId' and 'det_hash_alg', defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-08#section-4" class="relref">Section 4</a> of [<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see <span><a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-08#section-3.4.1" class="relref">Section 3.4.1</a> of [<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>).<a href="#appendix-D-12.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-D-13">If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.<a href="#appendix-D-13" class="pilcrow">¶</a></p>
-<p id="appendix-D-14">Therefore, the following holds when a group observation relies on a deterministic request as a phantom observation request.<a href="#appendix-D-14" class="pilcrow">¶</a></p>
+<p id="appendix-D-13">Note that, like in <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:<a href="#appendix-D-13" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-D-15.1">
-          <p id="appendix-D-15.1.1">Every client interested to take part in such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see <a href="#appendix-different-sources" class="auto internal xref">Appendix A</a>).<a href="#appendix-D-15.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-D-14.1">
+          <p id="appendix-D-14.1.1">In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.9" class="relref">Section 2.1.9</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-D-14.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-D-15.2">
-          <p id="appendix-D-15.2.1">When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.<a href="#appendix-D-15.2.1" class="pilcrow">¶</a></p>
-<p id="appendix-D-15.2.2">
-Upon receiving an individual observation request for the same target resource, the server MUST reply with a generic 5.03 (Service Unavailable) response (i.e., not the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), if the request differs from the specific deterministic request associated with the group observation.<a href="#appendix-D-15.2.2" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-D-14.2">
+          <p id="appendix-D-14.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value "null" (0xf6).<a href="#appendix-D-14.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-D-15">If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.<a href="#appendix-D-15" class="pilcrow">¶</a></p>
+<p id="appendix-D-16">Therefore, the following holds when a group observation relies on a deterministic request as a phantom observation request.<a href="#appendix-D-16" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-D-17.1">
+          <p id="appendix-D-17.1.1">Every client interested to take part in such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see <a href="#appendix-different-sources" class="auto internal xref">Appendix A</a>).<a href="#appendix-D-17.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-D-17.2">
+          <p id="appendix-D-17.2.1">When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.<a href="#appendix-D-17.2.1" class="pilcrow">¶</a></p>
+<p id="appendix-D-17.2.2">
+Upon receiving an individual observation request for the same target resource, the server MUST reply with a generic 5.03 (Service Unavailable) response (i.e., not the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), if the request differs from the specific deterministic request associated with the group observation.<a href="#appendix-D-17.2.2" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -4378,10 +4397,13 @@ C1      C2      P         S
             <p id="appendix-H.1-1.6.1">Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.<a href="#appendix-H.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.7">
-            <p id="appendix-H.1-1.7.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.7.1">Explained non-provisioning of some parameters in self-managed OSCORE groups.<a href="#appendix-H.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.8">
-            <p id="appendix-H.1-1.8.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.8.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.8.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-H.1-1.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.9">
+            <p id="appendix-H.1-1.9.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.9.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
