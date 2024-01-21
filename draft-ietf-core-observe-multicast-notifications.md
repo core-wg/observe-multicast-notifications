@@ -75,6 +75,7 @@ normative:
   RFC8126:
   RFC8174:
   RFC8288:
+  RFC8610:
   RFC8613:
   RFC8949:
   RFC9203:
@@ -107,7 +108,6 @@ informative:
   RFC5280:
   RFC6690:
   RFC7519:
-  RFC8610:
   RFC8392:
   RFC9147:
   RFC9176:
@@ -144,7 +144,7 @@ The Constrained Application Protocol (CoAP) allows clients to "observe" resource
 
 The Constrained Application Protocol (CoAP) {{RFC7252}} has been extended with a number of mechanisms, including resource Observation {{RFC7641}}. This enables CoAP clients to register at a CoAP server as "observers" of a resource, and hence being automatically notified with an unsolicited response upon changes of the resource state.
 
-CoAP supports group communication over IP multicast {{I-D.ietf-core-groupcomm-bis}}. This includes support for Observe registration requests over multicast, in order for clients to efficiently register as observers of a resource hosted at multiple servers.
+CoAP supports group communication {{I-D.ietf-core-groupcomm-bis}}, e.g., over IP multicast. This includes support for Observe registration requests over multicast, in order for clients to efficiently register as observers of a resource hosted at multiple servers.
 
 However, in a number of use cases, using multicast messages for responses would also be desirable. That is, it would be useful that a server sends observe notifications for a same target resource to multiple observers as responses over IP multicast.
 
@@ -152,7 +152,7 @@ For instance, in CoAP publish-subscribe {{I-D.ietf-core-coap-pubsub}}, multiple 
 
 A different use case concerns clients observing a same registration resource at the CoRE Resource Directory {{RFC9176}}. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups {{I-D.ietf-core-oscore-groupcomm}}, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager {{I-D.tiloca-core-oscore-discovery}}.
 
-More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages over IP multicast. This document fills this gap and provides the following twofold contribution.
+More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not currently define response messages addressed to multiple clients, e.g., over IP multicast. This document fills this gap and provides the following twofold contribution.
 
 First, it updates {{RFC7252}} and {{RFC7641}}, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of a unicast informative response sent by the server to each observer client.
 
@@ -162,7 +162,7 @@ Second, this document defines how to use Group OSCORE {{I-D.ietf-core-oscore-gro
 
 {::boilerplate bcp14}
 
-Readers are expected to be familiar with terms and concepts described in CoAP {{RFC7252}}, group communication for CoAP {{I-D.ietf-core-groupcomm-bis}}, Observe {{RFC7641}}, CBOR {{RFC8949}}, OSCORE {{RFC8613}}, and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
+Readers are expected to be familiar with terms and concepts described in CoAP {{RFC7252}}, group communication for CoAP {{I-D.ietf-core-groupcomm-bis}}, Observe {{RFC7641}}, CDDL {{RFC8610}}, CBOR {{RFC8949}}, OSCORE {{RFC8613}}, and Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}.
 
 This document additionally defines the following terminology.
 
@@ -178,7 +178,7 @@ This document additionally defines the following terminology.
 
 In order to use multicast notifications as defined in this document, the following prerequisites have to be fulfilled.
 
-* The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage intermediaries such as proxies, if not directly able to listen to multicast traffic.
+* The server and the clients need to be on a network on which multicast notifications can reach a sufficiently large portion of the clients. These may leverage intermediaries such as proxies, if some clients are not able to directly listen to multicast traffic.
 
 * The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see {{Section 12.8 of RFC7252}}) are not suitable for this purpose.
 
@@ -188,17 +188,17 @@ In order to use multicast notifications as defined in this document, the followi
 
    That is, the mechanism specified in this document is expected to be used in situations where sending individual notifications is not feasible, or is not preferred beyond a certain number of clients observing a target resource.
 
-   If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means to opt in to multicast notifications.
+   If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means for clients to opt in for receiving multicast notifications.
 
 # High-Level Overview of Available Variants # {#sec-variants}
 
-The method defined in this document fundamentally enables a server to setup a group observation. This is associated with a phantom observation request generated by the server, and to which the multicast notifications of the group observation are bound.
+The method defined in this document fundamentally enables a server to set up a group observation. This is associated with a phantom observation request generated by the server, and to which the multicast notifications of the group observation are bound.
 
-While the server can provide the phantom request in question to the interested clients as they reach out for registering to the group observation, the server may alternatively distribute the phantom request in advance by alternative means (e.g., see {{appendix-different-sources}}). Clients that have already retrieved the phantom request can immediately starts listening to multicast notifications if able to directly do so, or rather instruct an assisting intermediary such as a proxy to do that on their behalf.
+While the server can provide the phantom request in question to the interested clients as they reach out for registering to the group observation, the server may alternatively distribute the phantom request in advance by alternative means (e.g., see {{appendix-different-sources}}). Clients that have already retrieved the phantom request can immediately start listening to multicast notifications if able to directly do so, or rather instruct an assisting intermediary such as a proxy to do that on their behalf.
 
 The following provides an overview of the available variants to enforce a group observation, depending on whether a proxy is deployed or not, and on whether exchanged messages are protected end-to-end between the observer clients and the server.
 
-* No proxy -  This is simplest network configuration, where the clients participating to the group observation are capable to listen to multicast traffic. In such a setup, the clients directly receive multicast notifications from the server.
+* Without proxy - This is the simplest network configuration, where the clients participating in the group observation are capable to listen to multicast traffic. In such a setup, the clients directly receive multicast notifications from the server.
 
    * Without end-to-end security - Messages pertaining to the group observation are not protected. This basic case is defined in {{sec-server-side}} and {{sec-client-side}} from the server and the client side, respectively. An example is provided in {{sec-example-no-security}}.
 
@@ -206,7 +206,7 @@ The following provides an overview of the available variants to enforce a group 
 
       If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Then, all the clients are able to compute the same protected phantom request to use (see {{deterministic-phantom-Request}}).
 
-* With proxy - This network configuration is expected in case (some of) the clients participating to the group observation are not capable to listen to multicast traffic. In such a setup, the proxy directly receives multicast notifications from the server, and relays them back to the clients.
+* With proxy - This network configuration is expected in case (some of) the clients participating in the group observation are not capable to listen to multicast traffic. In such a setup, the proxy directly receives multicast notifications from the server, and relays them back to the clients.
 
    * Without end-to-end security - Messages pertaining to the group observation are not protected end-to-end between the clients and the server. This basic case is defined in {{intermediaries}}. An example is provided in {{intermediaries-example}}.
 
@@ -220,7 +220,7 @@ The server can, at any time, start a group observation on one of its resources. 
 
 * In the absence of observations for the target resource, the server receives a registration request from a first client wishing to start a traditional observation on that resource.
 
-* When a certain amount of traditional observations has been established on the target resource, the server decides to make those clients part of a group observation on that resource.
+* When a certain amount of traditional observations has been established on the target resource, the server decides to make the corresponding observer clients part of a group observation on that resource.
 
 The server maintains an observer counter for each group observation to a target resource, as a rough estimation of the observers actively taking part in the group observation.
 
@@ -228,7 +228,7 @@ The server initializes the counter to 0 when starting the group observation, and
 
 ## Request ## {#ssec-server-side-request}
 
-Assuming it is reachable at the address SRV_ADDR and port number SRV_PORT, the server starts a group observation on one of its resources as defined below. The server intends to send multicast notifications for the target resource to the multicast IP address GRP_ADDR and port number GRP_PORT.
+Assuming that the server is reachable at the address SRV_ADDR and port number SRV_PORT, the server starts a group observation on one of its resources as defined below. The server intends to send multicast notifications for the target resource to the multicast IP address GRP_ADDR and port number GRP_PORT.
 
 1. The server builds a phantom observation request, i.e., a GET request with an Observe Option set to 0 (register).
 
@@ -276,7 +276,7 @@ The CDDL notation {{RFC8610}} provided below describes the payload of the inform
 
 ~~~~~~~~~~~
 informative_response_payload = {
-   0 => array, ; 'tp_info', i.e., transport-specific information
+   0 => array, ; 'tp_info' (transport-specific information)
  ? 1 => bstr,  ; 'ph_req' (transport-independent information)
  ? 2 => bstr   ; 'last_notif' (transport-independent information)
  ? 3 => uint   ; 'next_not_before'
@@ -615,7 +615,7 @@ Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a c
 
 The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different than 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}), and then registers a regular unicast observation on the same target resource.
 
-To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless the source IP address and port number of the received multicast notification.
+To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
 
 Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
 
@@ -623,7 +623,7 @@ The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the mu
 
 {{appendix-pseudo-code-counting-client}} and {{appendix-pseudo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
 
-{{intermediaries}} specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.
+{{intermediaries}} specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.
 
 * Since the Multicast-Response-Feedback-Divider Option is unsafe to forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.
 
@@ -663,7 +663,7 @@ Then, the server computes the value Q = max(L, 0), where:
 
 Finally, the server sets Q as the value of the Multicast-Response-Feedback-Divider Option, which is sent within a successful multicast notification.
 
-If several multicast notifications are sent in a burst fashion, it is RECOMMENDED for the server to include the Multicast-Response-Feedback-Divider Option only in the first one of those notifications.
+If several multicast notifications are sent in a burst fashion, it is RECOMMENDED for the server to include the Multicast-Response-Feedback-Divider Option only in the first notification of such a burst.
 
 ### Collection of Feedback
 
@@ -703,7 +703,7 @@ A server can protect multicast notifications by using Group OSCORE {{I-D.ietf-co
 
 In some settings, the OSCORE group to refer to can be pre-configured on the clients and the server. In such a case, a server which is aware of such pre-configuration can simply assume a client to be already member of the correct OSCORE group.
 
-In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server and/or with other servers to access their resources.
+In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server or with other servers to access their resources.
 
 Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{RFC9200}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
 
@@ -713,7 +713,7 @@ To this end, alternative security protocols than Group OSCORE, such as OSCORE {{
 
 ## Signaling the OSCORE Group in the Informative Response ## {#sec-inf-response}
 
-This section describes a mechanism for the server to communicate to the client what OSCORE group to join in order to decrypt and verify the multicast notifications protected with Group OSCORE. The client MAY use the information provided by the server to start the ACE joining procedure described in {{I-D.ietf-ace-key-groupcomm-oscore}}. This mechanism is OPTIONAL to support for the client and server.
+This section describes a mechanism for the server to communicate to the client what OSCORE group to join, in order to decrypt and verify the multicast notifications protected with Group OSCORE. The client MAY use the information provided by the server to start the ACE joining procedure described in {{I-D.ietf-ace-key-groupcomm-oscore}}. The mechanism defined in this section is OPTIONAL to support for the client and server.
 
 Additionally to what is defined in {{sec-server-side}}, the CBOR map in the informative response payload contains the following fields, whose CBOR labels are defined in {{informative-response-params}}.
 
@@ -727,7 +727,7 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistently with {{Section 2.4 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that MUST explicitly provide the comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
-      At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}} and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
+      At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}}, and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and would be acceptable to use as long as they comply with the criteria defined above.
 
         \[ As to CWTs and unprotected CWT claim sets, there is a pending registration requested by draft-ietf-lake-edhoc. \]
 
@@ -769,7 +769,7 @@ The server protects the phantom registration request as defined in {{Section 8.1
 
 The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see {{ssec-server-side-request-oscore}}). As a consequence: the specified Code is always 0.05 (FETCH); the sequence of CoAP options will be limited to the outer, non encrypted options; a payload is always present, as the authenticated ciphertext followed by the signature. Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
-Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built in step 6 of {{ssec-server-side-request}}.
+Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built at step 6 of {{ssec-server-side-request}}.
 
 Optionally, the informative response includes information on the OSCORE group to join, as additional parameters (see {{sec-inf-response}}).
 
@@ -982,7 +982,7 @@ C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
 ~~~~~~~~~~~
 {: #example-oscore title="Example of group observation with Group OSCORE"}
 
-The two external_aad used to encrypt and sign the multicast notification above have 'request\_kid' = 5, 'request\_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv', and 'kid context' field of the OSCORE Option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external\_aad for decrypting and verifying this multicast notification and the following ones.
+The two external_aad used to encrypt and sign the multicast notification above have 'request\_kid' = 5, 'request\_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv', and 'kid context' field of the OSCORE Option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external\_aad for decrypting and verifying this multicast notification and the following ones in the group observation.
 
 # Intermediaries {#intermediaries}
 
@@ -994,11 +994,11 @@ Upon receiving an informative response, the proxy performs as specified for the 
 
 In particular, by using the information retrieved from the informative response, the proxy configures an observation of the target resource at the origin server, acting as a client directly taking part in the group observation.
 
-As a consequence, the proxy will listen to the IP multicast address and port number indicated by the server in the informative response, as 'cli_host' and 'cli_port' element of 'req_info' under the 'tp_info' parameter, respectively (see {{ssssec-udp-transport-specific}}). Furthermore, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'token' element of 'req_info' under the 'tp_info' parameter in the informative response.
+As a consequence, the proxy listens to the IP multicast address and port number indicated by the server in the informative response, as 'cli_host' and 'cli_port' element of 'req_info' under the 'tp_info' parameter, respectively (see {{ssssec-udp-transport-specific}}). Furthermore, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'token' element of 'req_info' under the 'tp_info' parameter in the informative response.
 
 Then, the proxy performs the following actions.
 
-* If the 'last_notif' field is not present, the proxy responds to the client with an Empty Acknowledgement (if indicated by the message type, and if it has not already done so).
+* If the 'last_notif' field is not present, the proxy responds to the client with an Empty Acknowledgement (if indicated by the message type, and if the proxy has not already done so).
 
 * If the 'last_notif' field is present, the proxy rebuilds the latest multicast notification, as defined in {{sec-client-side}}. Then, the proxy responds to the client, by forwarding back the latest multicast notification.
 
@@ -1014,11 +1014,11 @@ As a result, the observer counter at the server (see {{sec-server-side}}) is not
 
 An example is provided in {{intermediaries-example}}.
 
-In the general case with a chain of two or more proxies, every proxy in the chain takes the role of client with the (next hop towards the) origin server. Note that the proxy adjacent to the origin server is the only one in the chain that receives informative responses and listens to an IP multicast address to receive notifications for the group observation. Furthermore, every proxy in the chain takes the role of server with the (previous hop towards the) origin client.
+In the general case with a chain of two or more proxies, every proxy in the chain takes the role of client with the (next hop towards the) origin server. Note that the proxy adjacent to the origin server is the only one in the chain that receives informative responses, and that listens to an IP multicast address and port number to receive notifications for the group observation. Furthermore, every proxy in the chain takes the role of server with the (previous hop towards the) origin client.
 
 # Intermediaries Together with End-to-End Security {#intermediaries-e2e-security}
 
-As defined in {{sec-secured-notifications}}, Group OSCORE can be used to protect multicast notifications end-to-end between the origin server and the clients. In such a case, additional actions are required when also the informative responses from the origin server are protected specifically end-to-end, by using OSCORE or Group OSCORE.
+As defined in {{sec-secured-notifications}}, Group OSCORE can be used to protect multicast notifications end-to-end between the origin server and the origin clients. In such a case, additional actions are required when also the informative responses from the origin server are protected specifically end-to-end, by using OSCORE or Group OSCORE.
 
 In fact, the proxy adjacent to the origin server is not able to access the encrypted payload of such informative responses. Hence, the proxy cannot retrieve the 'ph_req' and 'tp_info' parameters necessary to correctly receive multicast notifications and forward them back to the clients.
 
@@ -1056,7 +1056,7 @@ The Listen-To-Multicast-Responses Option is of class U for OSCORE {{RFC8613}}{{I
 
 ## Message Processing {#intermediaries-e2e-security-processing}
 
-Compared to {{intermediaries}}, the following additions apply when informative responses are protected end-to-end between the origin server and the clients.
+Compared to {{intermediaries}}, the following additions apply when informative responses are protected end-to-end between the origin server and the origin clients.
 
 After the origin server sends an informative response, each proxy simply forwards it back to the (previous hop towards the) origin client that has sent the observation request.
 
@@ -1076,7 +1076,7 @@ Once received the informative response, the origin client proceeds in a differen
 
    - The new option Listen-To-Multicast-Responses is included as an outer option. The value is set to the serialization of the CBOR array specified by the 'tp_info' parameter of the informative response.
 
-      Note that, except for transport-specific information such as the Token and Message ID values, every different client participating to the same group observation (hence rebuilding the same phantom request) will build the same ticket request.
+      Note that, except for transport-specific information such as the Token and Message ID values, every different client participating in the same group observation (hence rebuilding the same phantom request) will build the same ticket request.
 
       Note also that, identically to the phantom request, the ticket request is still protected with Group OSCORE, i.e., it has the same OSCORE Option, encrypted payload, and signature.
 
@@ -1092,7 +1092,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy configures an observation of the target resource at the origin server, acting as a client directly taking part in the group observation. To this end, the proxy uses the rebuilt phantom request and the transport-specific information retrieved from the Listen-To-Multicast-Responses Option. The particular way to achieve this is implementation specific.
 
-After that, the proxy will listen to the IP multicast address and port number indicated in the Listen-To-Multicast-Responses Option, as 'cli_host' and 'cli_port' element of the serialized CBOR array, respectively. In particular, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'token' element of the serialized CBOR array in the Listen-To-Multicast-Responses Option.
+After that, the proxy listens to the IP multicast address and port number indicated in the Listen-To-Multicast-Responses Option, as 'cli_host' and 'cli_port' element of the serialized CBOR array, respectively. In particular, multicast notifications will match the phantom request stored at the proxy, based on the Token value specified in the 'token' element of the serialized CBOR array in the Listen-To-Multicast-Responses Option.
 
 An example is provided in {{intermediaries-example-e2e-security}}.
 
@@ -1533,7 +1533,7 @@ return NEW_COUNT;
 
 # OSCORE Group Self-Managed by the Server {#self-managed-oscore-group}
 
-For simple settings, where no pre-arranged group with suitable memberships is available, the server can be responsible to setup and manage the OSCORE group used to protect the group observation.
+For simple settings, where no pre-arranged group with suitable memberships is available, the server can be responsible to set up and manage the OSCORE group used to protect the group observation.
 
 In such a case, a client would implicitly request to join the OSCORE group when sending the observe registration request to the server. When replying, the server includes the group keying material and related information in the informative response (see {{ssec-server-side-informative}}).
 
@@ -1559,7 +1559,7 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
 * 'exp': with value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer. This field contains a numeric value representing the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}.
 
-Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification, that the server sends as protected with the group mode of Group OSCORE and including a signature computed with its private key.
+Note that the informative response does not require to include an explicit proof-of-possession (PoP) of the server's private key. Although the server is also acting as Group Manager and a PoP evidence of the Group Manager's private key is included in a full-fledged Join Response (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof-of-possession will be achieved through every multicast notification that the server sends, as protected with the group mode of Group OSCORE and including a signature computed with its private key.
 
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs a Security Context that a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
@@ -1567,9 +1567,9 @@ Since the server is also acting as Group Manager, the authentication credential 
 
 Furthermore, the server complies with the following points.
 
-* The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of group observations, as defined in this document.
+* The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of the phantom requests and the multicast notifications in group observations that it hosts, as defined in this document.
 
-   The server MAY use the same self-managed OSCORE group to protect the phantom request and the multicast notifications of multiple group observations it hosts.
+   The server MAY use the same self-managed OSCORE group to protect the phantom request and the multicast notifications of multiple group observations that it hosts.
 
 * The server MUST NOT provide in the informative response the keying material of other OSCORE groups it is or has been a member of.
 
@@ -1585,13 +1585,13 @@ After the time indicated in the 'exp' field:
 
 * The client MUST stop using the keying material and MAY re-register the observation at the server.
 
-Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}), which: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE Option of the response.
+Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) that: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include it as Partial IV in the OSCORE Option of the response.
 
-When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, while they both remain part of the group until the group ceases to exist.
+When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, and they both remain part of the group until the group ceases to exist.
 
 As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
-Applications requiring backward security and forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in {{sec-inf-response}}.
+Applications requiring backward security or forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them information about the OSCORE group to join, as described in {{sec-inf-response}}.
 
 # Phantom Request as Deterministic Request {#deterministic-phantom-Request}
 
@@ -1599,7 +1599,7 @@ In some settings, the server can assume that all the approaching clients already
 
 For instance, the clients can be pre-configured with the phantom observation request, or they may be expected to retrieve it through dedicated means (see {{appendix-different-sources}}). In either case, the server would already have started the group observation, before the associated phantom observation request was disseminated.
 
-Then, the clients either set up their multicast address and group observation for listening to multicast notifications if directly able to, or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
+Then, the clients either set up the multicast address and group observation for listening to multicast notifications (if able to directly do so), or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
 If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}), and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
 
@@ -1609,9 +1609,9 @@ If relying on a proxy, each client sends the deterministic request to the proxy 
 
 Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
-When using a deterministic request as phantom observation request, the observer counter at the server (see {{sec-server-side}}) is not reliably incremented when new clients start participating in the group observation. In fact:
+When using a deterministic request as a phantom observation request, the observer counter at the server (see {{sec-server-side}}) is not reliably incremented when new clients start participating in the group observation. In fact:
 
-   - If a proxy is not deployed, the clients simply set up the right multicast address and starts listening to multicast notifications bound to the deterministic request. Hence, the observer counter at the server is not incremented as new clients start listening to multicast notifications.
+   - If a proxy is not deployed, the clients simply set up the right multicast address and port number, and starts listening to multicast notifications bound to the deterministic request. Hence, the observer counter at the server is not incremented as new clients start listening to multicast notifications.
 
    - If a proxy is deployed, the origin server increments its observer counter after having sent the informative response to the proxy, as a reply to the deterministic request forwarded to the origin server on behalf of the first origin client that contacted the proxy. After that, the same deterministic request sent by any origin client will not be forwarded to the origin server, but will instead produce a cache hit at the proxy that will serve the client accordingly. Hence, the observer counter at the server is not further incremented as additional, new origin clients start participating in the group observation through the proxy.
 
@@ -1623,11 +1623,11 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group, and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
 
-If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part to the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
+If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
-Therefore, the following holds when a group observation relies on a deterministic request as phantom observation request.
+Therefore, the following holds when a group observation relies on a deterministic request as a phantom observation request.
 
-* Every client interested to take part to such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
+* Every client interested to take part in such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
 
 * When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.
 
@@ -1749,7 +1749,7 @@ C1     C2     P        S
 
 Note that the proxy has all the information to understand the observation request from C2, and can immediately start to serve the still fresh values.
 
-This behavior is mandated by {{Section 5 of RFC7641}}, i.e., the proxy registers itself only once with the next hop and fans out the notifications it receives to all registered clients.
+This behavior is mandated by {{Section 5 of RFC7641}}, i.e., the proxy registers itself only once with the next hop and fans out the notifications it receives to all the registered clients.
 
 # Example with a Proxy and Group OSCORE {#intermediaries-example-e2e-security}
 
@@ -2040,19 +2040,19 @@ The example provided in this appendix as reflected by the message exchange shown
 
 3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same deterministic request to be used as phantom observation request.
 
-4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on point (2) above, the same would happen if the phantom request would not be specifically a deterministic request.
+4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on point (2) above, the same would happen if the phantom request was not specifically a deterministic request.
 
-5. If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request (see {{intermediaries-e2e-security}}). However, unlike the case considered in {{intermediaries-e2e-security}} when the ticket request is not deterministic, the client does not include a Listen-to-Multicast-Responses Option in the phantom request sent to the proxy.
+5. If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request (see {{intermediaries-e2e-security}}). However, unlike the case considered in {{intermediaries-e2e-security}} where the ticket request is not a deterministic request, the client does not include a Listen-to-Multicast-Responses Option in the phantom request sent to the proxy.
 
 6. Unlike for the case considered in {{intermediaries-e2e-security}}, here the proxy does not know that the request is exactly a ticket request for subscribing to multicast notifications. Thus, the proxy simply forwards the ticket request to the server as it normally does for any request.
 
-7. The server receives the ticket request, which is a deviation from the case where the ticket request is not deterministic and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
+7. The server receives the ticket request, which is a deviation from the case where the ticket request is not a deterministic request and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
 8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
 
-9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the transport information, the phantom request, and (optionally) the latest notification.
+9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the transport-specific information, the phantom request, and (optionally) the latest notification.
 
-10. From the received 5.03 response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the 5.03 response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
+10. From the received 5.03 (Service Unavailable) response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the 5.03 (Service Unavailable) response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
 
 11. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, this does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
 
@@ -2289,6 +2289,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -07 to -08 ## {#sec-07-08}
+
+* Clarifications and editorial improvements.
 
 ## Version -06 to -07 ## {#sec-06-07}
 
