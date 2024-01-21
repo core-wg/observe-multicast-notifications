@@ -619,7 +619,7 @@ The client picks an integer random number I, from 0 inclusive to the number Z = 
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
 
-Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be empty (Option Length = 0). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
+Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be set to 0. As per {{Section 3.2 of RFC7252}}, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
 
 The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
 
@@ -683,7 +683,7 @@ If more information is available in deployments, a much shorter MAX_CONFIRMATION
 
 ### Processing of Feedback
 
-Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with an empty value (Option Length = 0).
+Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with value 0.
 
 Then, the server computes a feedback indicator as E = R * (2^Q), where "^" is the exponentiation operator. According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
@@ -1426,6 +1426,7 @@ if (I == 0) {
     req.setOption(opt);
 
     opt = new Option(MRFD);
+    opt.set(0);
     req.setOption(opt);
 
     req.send(SRV_ADDR, SRV_PORT);
@@ -1460,6 +1461,7 @@ if (respond_to(Q) == true) {
     req.setOption(opt);
 
     opt = new Option(MRFD);
+    opt.set(0);
     req.setOption(opt);
 
     req.send(SRV_ADDR, SRV_PORT);
@@ -1507,7 +1509,8 @@ while(!t.isExpired());
 // Time t2
 
 int R = <number of requests to the target resource
-         between t1 and t2, with the MRFD option>;
+         received between t1 and t2, and including
+         the MRFD option with value 0>;
 
 int E = R * (2^Q);
 
@@ -2303,6 +2306,8 @@ RFC EDITOR: PLEASE REMOVE THIS SECTION.
 * Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
 * Early mentioning that 'srv_addr' cannot instruct redirection.
+
+* Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.
 
 * Improved notation in the examples of message exchanges with proxy.
 
