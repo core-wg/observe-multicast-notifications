@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 24 July 2024                                                   
+Expires: 28 August 2024                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                         21 January 2024
+                                                        25 February 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 July 2024.
+   This Internet-Draft will expire on 28 August 2024.
 
 Copyright Notice
 
@@ -3037,7 +3037,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
          process messages protected with Group OSCORE in this OSCORE
          group, (see Section 4.4 of [I-D.ietf-core-oscore-groupcomm]),
          the elements 'alg_aead' and 'alg_pairwise_key_agreement' within
-         the 'algorithms' arrays are set to the CBOR simple value "null"
+         the 'algorithms' arrays are set to the CBOR simple value null
          (0xf6).
 
    *  'srv_cred': this element is a CBOR byte string, with value the
@@ -3286,7 +3286,7 @@ Appendix D.  Phantom Request as Deterministic Request
       process messages protected with Group OSCORE in this OSCORE group,
       (see Section 4.4 of [I-D.ietf-core-oscore-groupcomm]), the element
       'alg_pairwise_key_agreement' within the 'algorithms' arrays is set
-      to the CBOR simple value "null" (0xf6).
+      to the CBOR simple value null (0xf6).
 
    If a deterministic request is used as phantom observation request for
    a group observation, the server does not assist clients that are
