@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 28 August 2024</td>
+<td class="center">Expires 29 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1048,12 +1048,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-25" class="published">25 February 2024</time>
+<time datetime="2024-02-26" class="published">26 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-28">28 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-29">29 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1109,7 +1109,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3562,7 +3562,7 @@ Note that no information is provided as related to the AEAD Algorithm, or to the
               <p id="appendix-C-4.1.7.1.1">In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.9" class="relref">Section 2.1.9</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-C-4.1.7.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-4.1.7.2">
-              <p id="appendix-C-4.1.7.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value null (0xf6).<a href="#appendix-C-4.1.7.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-C-4.1.7.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-C-4.1.7.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
@@ -3660,7 +3660,7 @@ The server MAY use the same self-managed OSCORE group to protect the phantom req
           <p id="appendix-D-14.1.1">In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-2.1.9" class="relref">Section 2.1.9</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-D-14.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-D-14.2">
-          <p id="appendix-D-14.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value null (0xf6).<a href="#appendix-D-14.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-D-14.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-20#section-4.4" class="relref">Section 4.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-D-14.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-D-15">If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.<a href="#appendix-D-15" class="pilcrow">¶</a></p>
