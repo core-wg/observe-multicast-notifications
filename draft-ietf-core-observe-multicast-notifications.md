@@ -504,7 +504,7 @@ RES: 2.05 Content
 
 # Example # {#sec-example-no-security}
 
-The following example refers to two clients C_1 and C_2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
+The following example refers to two clients C1 and C2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
 The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
@@ -516,75 +516,78 @@ The following notation is used for the payload of the informative responses:
 
    * 'PAYLOAD' denotes a CoAP payload. This refers to the latest multicast notification encoded by the 'last_notif' parameter.
 
-~~~~~~~~~~~
-C_1     ----------------- [ Unicast ] ------------------------> S  /r
- |  GET                                                         |
- |  Token: 0x4a                                                 |
- |  Observe: 0 (register)                                       |
- |  <Other options>                                             |
- |                                                              |
- |               (S allocates the available Token value 0x7b .) |
- |                                                              |
- |      (S sends to itself a phantom observation request PH_REQ |
- |       as coming from the IP multicast address GRP_ADDR .)    |
- |         ------------------------------------------------     |
- |       /                                                      |
- |       \----------------------------------------------------> |  /r
- |                                       GET                    |
- |                                       Token: 0x7b            |
- |                                       Observe: 0 (register)  |
- |                                       <Other options>        |
- |                                                              |
- |                      (S creates a group observation of /r .) |
- |                                                              |
- |                          (S increments the observer counter  |
- |                           for the group observation of /r .) |
- |                                                              |
-C_1 <-------------------- [ Unicast ] ---------------------     S
- |  5.03                                                        |
- |  Token: 0x4a                                                 |
- |  Content-Format: application/informative-response+cbor       |
- |  Max-Age: 0                                                  |
- |  <Other options>                                             |
- |  Payload: {                                                  |
- |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
- |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
- |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
- |  }                                                           |
- |                                                              |
-C_2     ----------------- [ Unicast ] ------------------------> S  /r
- |  GET                                                         |
- |  Token: 0x01                                                 |
- |  Observe: 0 (register)                                       |
- |  <Other options>                                             |
- |                                                              |
- |                          (S increments the observer counter  |
- |                           for the group observation of /r .) |
- |                                                              |
-C_2 <-------------------- [ Unicast ] ---------------------     S
- |  5.03                                                        |
- |  Token: 0x01                                                 |
- |  Content-Format: application/informative-response+cbor       |
- |  Max-Age: 0                                                  |
- |  <Other options>                                             |
- |  Payload: {                                                  |
- |    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
- |                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
- |    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
- |  }                                                           |
- |                                                              |
- |          (The value of the resource /r changes to "5678".)   |
- |                                                              |
-C_1                                                             |
- +  <------------------- [ Multicast ] --------------------     S
-C_2        (Destination address/port: GRP_ADDR/GRP_PORT)        |
- |  2.05                                                        |
- |  Token: 0x7b                                                 |
- |  Observe: 11                                                 |
- |  Content-Format: application/cbor                            |
- |  <Other options>                                             |
- |  Payload: : "5678"                                           |
- |                                                              |
+~~~~~~~~~~~ aasvg
+C1 --------------------- [ Unicast ] ------------------------> S  /r
+|  GET                                                         |
+|  Token: 0x4a                                                 |
+|  Observe: 0 (register)                                       |
+|  <Other options>                                             |
+|                                                              |
+|               (S allocates the available Token value 0x7b .) |
+|                                                              |
+|      (S sends to itself a phantom observation request PH_REQ |
+|       as coming from the IP multicast address GRP_ADDR .)    |
+|        .---------------------------------------------------- |
+|       /                                                      |
+|       \                                                      |
+|        `---------------------------------------------------> |  /r
+|                                       GET                    |
+|                                       Token: 0x7b            |
+|                                       Observe: 0 (register)  |
+|                                       <Other options>        |
+|                                                              |
+|                      (S creates a group observation of /r .) |
+|                                                              |
+|                          (S increments the observer counter  |
+|                           for the group observation of /r .) |
+|                                                              |
+C1 <-------------------- [ Unicast ] ------------------------- S
+|  5.03                                                        |
+|  Token: 0x4a                                                 |
+|  Content-Format: application/informative-response+cbor       |
+|  Max-Age: 0                                                  |
+|  <Other options>                                             |
+|  Payload: {                                                  |
+|    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
+|                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
+|    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
+|  }                                                           |
+|                                                              |
+C2 --------------------- [ Unicast ] ------------------------> S  /r
+|  GET                                                         |
+|  Token: 0x01                                                 |
+|  Observe: 0 (register)                                       |
+|  <Other options>                                             |
+|                                                              |
+|                          (S increments the observer counter  |
+|                           for the group observation of /r .) |
+|                                                              |
+C2 <-------------------- [ Unicast ] ------------------------- S
+|  5.03                                                        |
+|  Token: 0x01                                                 |
+|  Content-Format: application/informative-response+cbor       |
+|  Max-Age: 0                                                  |
+|  <Other options>                                             |
+|  Payload: {                                                  |
+|    tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,                |
+|                  0x7b, bstr(GRP_ADDR), GRP_PORT],            |
+|    last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD)            |
+|  }                                                           |
+|                                                              |
+|          (The value of the resource /r changes to "5678".)   |
+|                                                              |
++--+                                                           |
+C1 |                                                           |
+   | <------------------ [ Multicast ] ----------------------- S
+C2 |       (Destination address/port: GRP_ADDR/GRP_PORT)       |
++--+                                                           |
+|    2.05                                                      |
+|    Token: 0x7b                                               |
+|    Observe: 11                                               |
+|    Content-Format: application/cbor                          |
+|    <Other options>                                           |
+|    Payload: : "5678"                                         |
+|                                                              |
 ~~~~~~~~~~~
 {: #example-no-oscore title="Example of group observation"}
 
@@ -838,15 +841,15 @@ Note that these same values are used to decrypt and verify each and every multic
 
 # Example with Group OSCORE # {#sec-example-with-security}
 
-The following example refers to two clients C_1 and C_2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
+The following example refers to two clients C1 and C2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
 The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
 Pairwise communication over unicast is protected with OSCORE, while S protects multicast notifications with Group OSCORE. Specifically:
 
-* C_1 and S have a pairwise OSCORE Security Context. In particular, C_1 has 'kid' = 0x01 as Sender ID, and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID, and SN_3 = 301 as Sender Sequence Number.
+* C1 and S have a pairwise OSCORE Security Context. In particular, C1 has 'kid' = 0x01 as Sender ID, and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID, and SN_3 = 301 as Sender Sequence Number.
 
-* C_2 and S have a pairwise OSCORE Security Context. In particular, C_2 has 'kid' = 0x02 as Sender ID, and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID, and SN_4 = 401 as Sender Sequence Number.
+* C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID, and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID, and SN_4 = 401 as Sender Sequence Number.
 
 * S is a member of the OSCORE group with name "myGroup", and 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
 
@@ -860,126 +863,128 @@ The following notation is used for the payload of the informative responses:
 
    * 'SIGN' denotes the signature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
 
-~~~~~~~~~~~
-
-C_1     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
- |  0.05 (FETCH)                                                |
- |  Token: 0x4a                                                 |
- |  OSCORE: {kid: 0x01; piv: 101; ...}                          |
- |  <Other class U/I options>                                   |
- |  0xff                                                        |
- |  Encrypted_payload {                                         |
- |    0x01 (GET),                                               |
- |    Observe: 0 (register),                                    |
- |    <Other class E options>                                   |
- |  }                                                           |
- |                                                              |
- |              (S allocates the available Token value 0x7b .)  |
- |                                                              |
- |      (S sends to itself a phantom observation request PH_REQ |
- |       as coming from the IP multicast address GRP_ADDR .)    |
- |     ------------------------------------------------------   |
- |    /                                                         |
- |    \-------------------------------------------------------> |  /r
- |                         0.05 (FETCH)                         |
- |                         Token: 0x7b                          |
- |                         OSCORE: {kid: 0x05 ; piv: 501;       |
- |                                  kid context: 0x57ab2e; ...} |
- |                         <Other class U/I options>            |
- |                         0xff                                 |
- |                         Encrypted_payload {                  |
- |                           0x01 (GET),                        |
- |                           Observe: 0 (register),             |
- |                           <Other class E options>            |
- |                         }                                    |
- |                         <Signature>                          |
- |                                                              |
- |   (S steps SN_5 in the Group OSCORE Sec. Ctx : SN_5 <== 502) |
- |                                                              |
- |                     (S creates a group observation of /r .)  |
- |                                                              |
- |                          (S increments the observer counter  |
- |                           for the group observation of /r .) |
- |                                                              |
-C_1 <--------------- [ Unicast w/ OSCORE ] ----------------     S
- |  2.05 (Content)                                              |
- |  Token: 0x4a                                                 |
- |  OSCORE: {piv: 301; ...}                                     |
- |  Max-Age: 0                                                  |
- |  <Other class U/I options>                                   |
- |  0xff                                                        |
- |  Encrypted_payload {                                         |
- |    5.03 (Service Unavailable),                               |
- |    Content-Format: application/informative-response+cbor,    |
- |    <Other class E options>,                                  |
- |    0xff,                                                     |
- |    CBOR_payload {                                            |
- |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
- |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
- |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
- |      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
- |      join_uri   : "coap://myGM/ace-group/myGroup",           |
- |      sec_gp     : "myGroup"                                  |
- |    }                                                         |
- |  }                                                           |
- |                                                              |
-C_2     ------------ [ Unicast w/ OSCORE ]  ------------------> S  /r
- |  0.05 (FETCH)                                                |
- |  Token: 0x01                                                 |
- |  OSCORE: {kid: 0x02; piv: 201; ...}                          |
- |  <Other class U/I options>                                   |
- |  0xff                                                        |
- |  Encrypted_payload {                                         |
- |    0x01 (GET),                                               |
- |    Observe: 0 (register),                                    |
- |    <Other class E options>                                   |
- |  }                                                           |
- |                                                              |
- |                          (S increments the observer counter  |
- |                           for the group observation of /r .) |
- |                                                              |
-C_2 <--------------- [ Unicast w/ OSCORE ] ----------------     S
- |  2.05 (Content)                                              |
- |  Token: 0x01                                                 |
- |  OSCORE: {piv: 401; ...}                                     |
- |  Max-Age: 0                                                  |
- |  <Other class U/I options>                                   |
- |  0xff,                                                       |
- |  Encrypted_payload {                                         |
- |    5.03 (Service Unavailable),                               |
- |    Content-Format: application/informative-response+cbor,    |
- |    <Other class E options>,                                  |
- |    0xff,                                                     |
- |    CBOR_payload {                                            |
- |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
- |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
- |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
- |      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
- |      join_uri   : "coap://myGM/ace-group/myGroup",           |
- |      sec_gp     : "myGroup"                                  |
- |    }                                                         |
- |  }                                                           |
- |                                                              |
- |            (The value of the resource /r changes to "5678".) |
- |                                                              |
-C_1                                                             |
- +  <----------- [ Multicast w/ Group OSCORE ] ------------     S
-C_2       (Destination address/port: GRP_ADDR/GRP_PORT)         |
- |  2.05 (Content)                                              |
- |  Token: 0x7b                                                 |
- |  OSCORE: {kid: 0x05; piv: 502; ...}                          |
- |  <Other class U/I options>                                   |
- |  0xff                                                        |
- |  Encrypted_payload {                                         |
- |    2.05 (Content),                                           |
- |    Observe: [empty],                                         |
- |    Content-Format: application/cbor,                         |
- |    <Other class E options>,                                  |
- |    0xff,                                                     |
- |    CBOR_Payload: "5678"                                      |
- |  }                                                           |
- |  <Signature>                                                 |
- |                                                              |
+~~~~~~~~~~~ aasvg
+C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
+|  0.05 (FETCH)                                                |
+|  Token: 0x4a                                                 |
+|  OSCORE: {kid: 0x01; piv: 101; ...}                          |
+|  <Other class U/I options>                                   |
+|  0xff                                                        |
+|  Encrypted_payload {                                         |
+|    0x01 (GET),                                               |
+|    Observe: 0 (register),                                    |
+|    <Other class E options>                                   |
+|  }                                                           |
+|                                                              |
+|              (S allocates the available Token value 0x7b .)  |
+|                                                              |
+|      (S sends to itself a phantom observation request PH_REQ |
+|       as coming from the IP multicast address GRP_ADDR .)    |
+|     .------------------------------------------------------- |
+|    /                                                         |
+|    \                                                         |
+|     `------------------------------------------------------> |  /r
+|                         0.05 (FETCH)                         |
+|                         Token: 0x7b                          |
+|                         OSCORE: {kid: 0x05 ; piv: 501;       |
+|                                  kid context: 0x57ab2e; ...} |
+|                         <Other class U/I options>            |
+|                         0xff                                 |
+|                         Encrypted_payload {                  |
+|                           0x01 (GET),                        |
+|                           Observe: 0 (register),             |
+|                           <Other class E options>            |
+|                         }                                    |
+|                         <Signature>                          |
+|                                                              |
+|   (S steps SN_5 in the Group OSCORE Sec. Ctx : SN_5 <-- 502) |
+|                                                              |
+|                     (S creates a group observation of /r .)  |
+|                                                              |
+|                          (S increments the observer counter  |
+|                           for the group observation of /r .) |
+|                                                              |
+C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
+|  2.05 (Content)                                              |
+|  Token: 0x4a                                                 |
+|  OSCORE: {piv: 301; ...}                                     |
+|  Max-Age: 0                                                  |
+|  <Other class U/I options>                                   |
+|  0xff                                                        |
+|  Encrypted_payload {                                         |
+|    5.03 (Service Unavailable),                               |
+|    Content-Format: application/informative-response+cbor,    |
+|    <Other class E options>,                                  |
+|    0xff,                                                     |
+|    CBOR_payload {                                            |
+|      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
+|                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
+|      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
+|      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
+|      join_uri   : "coap://myGM/ace-group/myGroup",           |
+|      sec_gp     : "myGroup"                                  |
+|    }                                                         |
+|  }                                                           |
+|                                                              |
+C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
+|  0.05 (FETCH)                                                |
+|  Token: 0x01                                                 |
+|  OSCORE: {kid: 0x02; piv: 201; ...}                          |
+|  <Other class U/I options>                                   |
+|  0xff                                                        |
+|  Encrypted_payload {                                         |
+|    0x01 (GET),                                               |
+|    Observe: 0 (register),                                    |
+|    <Other class E options>                                   |
+|  }                                                           |
+|                                                              |
+|                          (S increments the observer counter  |
+|                           for the group observation of /r .) |
+|                                                              |
+C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
+|  2.05 (Content)                                              |
+|  Token: 0x01                                                 |
+|  OSCORE: {piv: 401; ...}                                     |
+|  Max-Age: 0                                                  |
+|  <Other class U/I options>                                   |
+|  0xff,                                                       |
+|  Encrypted_payload {                                         |
+|    5.03 (Service Unavailable),                               |
+|    Content-Format: application/informative-response+cbor,    |
+|    <Other class E options>,                                  |
+|    0xff,                                                     |
+|    CBOR_payload {                                            |
+|      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
+|                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
+|      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
+|      last_notif : bstr(0x45 | OPT | 0xff | PAYLOAD | SIGN),  |
+|      join_uri   : "coap://myGM/ace-group/myGroup",           |
+|      sec_gp     : "myGroup"                                  |
+|    }                                                         |
+|  }                                                           |
+|                                                              |
+|            (The value of the resource /r changes to "5678".) |
+|                                                              |
++--+                                                           |
+C1 |                                                           |
+   | <----------- [ Multicast w/ Group OSCORE ] -------------- S
+C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
++--+                                                           |
+|    2.05 (Content)                                            |
+|    Token: 0x7b                                               |
+|    OSCORE: {kid: 0x05; piv: 502; ...}                        |
+|    <Other class U/I options>                                 |
+|    0xff                                                      |
+|    Encrypted_payload {                                       |
+|      2.05 (Content),                                         |
+|      Observe: [empty],                                       |
+|      Content-Format: application/cbor,                       |
+|      <Other class E options>,                                |
+|      0xff,                                                   |
+|      CBOR_Payload: "5678"                                    |
+|    }                                                         |
+|    <Signature>                                               |
+|                                                              |
 ~~~~~~~~~~~
 {: #example-oscore title="Example of group observation with Group OSCORE"}
 
@@ -1662,7 +1667,7 @@ This section provides an example when a proxy P is used between the clients and 
 
 Unless explicitly indicated, all messages transmitted on the wire are sent over unicast.
 
-~~~~~~~~~~~
+~~~~~~~~~~~ aasvg
 C1     C2     P        S
 |      |      |        |
 |      |      |        |  (The value of the resource /r is "1234")
@@ -1682,10 +1687,11 @@ C1     C2     P        S
 |      |      |        |  request PH_REQ as coming from the
 |      |      |        |  IP multicast address GRP_ADDR)
 |      |      |        |
-|      |      |  ------+
+|      |      |  .-----+
 |      |      | /      |
-|      |      | \----->|  Token: 0x7b
-|      |      |   GET  |  Observe: 0 (register)
+|      |      | \      |
+|      |      |  `---->|  Token: 0x7b
+|      |      |    GET |  Observe: 0 (register)
 |      |      |        |  Uri-Host: sensor.example
 |      |      |        |  Uri-Path: r
 |      |      |        |
@@ -1723,9 +1729,9 @@ C1     C2     P        S
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
 |      |      |        |
-:      :      :        :
-:      :      :        :
-:      :      :        :
+
+...   ...    ...     ...
+
 |      |      |        |
 |      +----->|        |  Token: 0x01
 |      | GET  |        |  Observe: 0 (register)
@@ -1739,12 +1745,14 @@ C1     C2     P        S
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
 |      |      |        |
-:      :      :        :
-:      :      :        :  (The value of the resource
-:      :      :        :  /r changes to "5678".)
-:      :      :        :
+
+...    ...    ...    ...
+
 |      |      |        |
-|      |      |  (*)   |
+|      |      |        |  (The value of the resource
+|      |      |        |  /r changes to "5678".)
+|      |      |        |
+|      |      |  (#)   |
 |      |      |<-------+  Token: 0x7b
 |      |      | 2.05   |  Observe: 11
 |      |      |        |  Content-Format: application/cbor
@@ -1765,7 +1773,7 @@ C1     C2     P        S
 |      |      |        |
 
 
-(*) Sent over IP multicast to GROUP_ADDR:GROUP_PORT.
+(#) Sent over IP multicast to GROUP_ADDR:GROUP_PORT.
 
 ~~~~~~~~~~~
 {: #example-proxy-no-oscore title="Example of group observation with a proxy"}
@@ -1782,8 +1790,7 @@ The same assumptions and notation used in {{sec-example-with-security}} are used
 
 Unless explicitly indicated, all messages transmitted on the wire are sent over unicast and protected with OSCORE end-to-end between a client and the server.
 
-~~~~~~~~~~~
-
+~~~~~~~~~~~ aasvg
 C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The value of the resource /r is "1234")
@@ -1822,10 +1829,11 @@ C1      C2      P         S
 |       |       |         |  (S sends to itself a phantom observation
 |       |       |         |  request PH_REQ as coming from the
 |       |       |         |  IP multicast address GRP_ADDR)
-|       |       |    (*)  |
-|       |       |  -------+
+|       |       |    (#)  |
+|       |       |  .------+
 |       |       | /       |
-|       |       | \------>|  Token: 0x7b
+|       |       | \       |
+|       |       |  `----->|  Token: 0x7b
 |       |       |   FETCH |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05; piv: 501;
 |       |       |         |           kid context: 0x57ab2e; ...}
@@ -1841,7 +1849,7 @@ C1      C2      P         S
 |       |       |         |  <Signature>
 |       |       |         |
 |       |       |         |  (S steps SN_5 in the Group OSCORE
-|       |       |         |   Security Context : SN_5 <== 502)
+|       |       |         |   Security Context : SN_5 <-- 502)
 |       |       |         |
 |       |       |         |  (S creates a group observation of /r)
 |       |       |         |
@@ -1880,7 +1888,7 @@ C1      C2      P         S
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
 |       |       |         |
-|  (*)  |       |         |
+|  (#)  |       |         |
 +-------------->|         |  Token: 0x4b
 | FETCH |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05 ; piv: 501;
@@ -1909,11 +1917,11 @@ C1      C2      P         S
 |       |       |         |  (The proxy adds C1 to
 |       |       |         |   its list of observers.)
 |       |       |         |
-|<--------------|         |
+|<--------------+         |
 |       |  ACK  |         |
-:       :       :         :
-:       :       :         :
-:       :       :         :
+
+...    ...     ...      ...
+
 |       |       |         |
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Observe: 0 (register)
@@ -1975,7 +1983,7 @@ C1      C2      P         S
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload)
-|       |  (*)  |         |
+|       |  (#)  |         |
 |       +------>|         |  Token: 0x02
 |       | FETCH |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05; piv: 501;
@@ -2000,14 +2008,17 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The proxy adds C2 to
 |       |       |         |   its list of observers.)
-|       |<------|         |
+|       |<------+         |
 |       |  ACK  |         |
 |       |       |         |
-:       :       :         :
-:       :       :         :  (The value of the resource
-:       :       :         :  /r changes to "5678".)
-:       :       :         :
-|       |       |   (**)  |
+
+...     ...     ...     ...
+
+|       |       |         |
+|       |       |         |  (The value of the resource
+|       |       |         |   /r changes to "5678".)
+|       |       |         |
+|       |       |   (##)  |
 |       |       |<--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
@@ -2022,14 +2033,14 @@ C1      C2      P         S
 |       |       |         |    CBOR_Payload: "5678"
 |       |       |         |  }
 |       |       |         |  <Signature>
-|  (*)  |       |         |
+|  (#)  |       |         |
 |<--------------+         |  Token: 0x4b
 | 2.05  |       |         |  Observe: 54123
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  (Same Encrypted_payload and Signature)
-|       |  (*)  |         |
+|       |  (#)  |         |
 |       |<------+         |  Token: 0x02
 |       | 2.05  |         |  Observe: 54123
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502; ...}
@@ -2039,10 +2050,10 @@ C1      C2      P         S
 |       |       |         |
 
 
-(*)  Sent over unicast, and protected with Group OSCORE end-to-end
+(#)  Sent over unicast, and protected with Group OSCORE end-to-end
      between the server and the clients.
 
-(**) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+(##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
      with Group OSCORE end-to-end between the server and the clients.
 
 ~~~~~~~~~~~
@@ -2086,7 +2097,7 @@ The example provided in this appendix as reflected by the message exchange shown
 
 The same assumptions and notation used in {{sec-example-with-security}} are used for this example. As a recap of some specific value:
 
-* Two clients C_1 and C_2 register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
+* Two clients C1 and C2 register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
 * The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation already after creating the deterministic phantom request to early disseminate.
 
@@ -2100,7 +2111,7 @@ In addition:
 
 Unless explicitly indicated, all messages transmitted on the wire are sent over unicast and protected with Group OSCORE end-to-end between a client and the server.
 
-~~~~~~~~~~~
+~~~~~~~~~~~ aasvg
 C1      C2      P         S
 |       |       |         |
 |       |       |         |  (The value of the resource /r is "1234")
@@ -2114,9 +2125,10 @@ C1      C2      P         S
 |       |       |         |   The OSCORE processing occurs as
 |       |       |         |   specified for a deterministic request)
 |       |       |         |
-|       |       |  -------|
+|       |       |  .------+
 |       |       | /       |
-|       |       | \------>|  Token: 0x7b
+|       |       | \       |
+|       |       |  `----->|  Token: 0x7b
 |       |       |   FETCH |  Uri-Host: sensor.example
 |       |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
@@ -2194,8 +2206,8 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |  (S responds to the proxy with an
 |       |       |         |   unprotected informative response)
-|       |       |   (*)   |
-|       |       |<--------|  Token: 0x5e
+|       |       |   (#)   |
+|       |       |<--------+  Token: 0x5e
 |       |       | 5.03    |  Content-Format: application/
 |       |       |         |    informative-response+cbor
 |       |       |         |  Max-Age: 0
@@ -2230,9 +2242,9 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
-:       :       :         |
-:       :       :         |
-:       :       :         |
+
+...    ...     ...      ...
+
 |       |       |         |
 |       |       |         |  (C2 obtains PH_REQ and sends it to P)
 |       |       |         |
@@ -2266,15 +2278,15 @@ C1      C2      P         S
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
-:       :       :         |
-:       :       :         |
-:       :       :         |
+
+...     ...     ...     ...
+
 |       |       |         |
 |       |       |         |  (The value of the resource
 |       |       |         |   /r changes to "5678".)
 |       |       |         |
-|       |       |   (**)  |
-|       |       |<--------|  Token: 0x7b
+|       |       |   (##)  |
+|       |       |<--------+  Token: 0x7b
 |       |       | 2.05    |  Observe: 11
 |       |       |         |  OSCORE: {kid: 0x05; piv: 502 ; ...}
 |       |       |         |  <Other class U/I options>
@@ -2308,9 +2320,9 @@ C1      C2      P         S
 |       |       |         |
 
 
-(*)  Sent over unicast and unprotected.
+(#)  Sent over unicast and unprotected.
 
-(**) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+(##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
      with Group OSCORE end-to-end between the server and the clients.
 
 ~~~~~~~~~~~
@@ -2318,6 +2330,10 @@ C1      C2      P         S
 # Document Updates # {#sec-document-updates}
 
 RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+## Version -08 to -09 ## {#sec-08-09}
+
+* Clarifications and editorial improvements.
 
 ## Version -07 to -08 ## {#sec-07-08}
 
