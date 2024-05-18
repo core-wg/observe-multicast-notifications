@@ -1398,15 +1398,18 @@ Table of Contents
    discover the OSCORE group and join it are out of the scope of this
    document.
 
-   If multicast notifications are protected using Group OSCORE, the
+   If multicast notifications are protected using Group OSCORE, then the
    original registration requests and related unicast (notification)
    responses MUST also be secured, including and especially the
-   informative responses from the server.
+   informative responses from the server.  An exception is the case
+   discussed in Appendix D, where the informative response from the
+   server is not protected.
 
-   To this end, alternative security protocols than Group OSCORE, such
-   as OSCORE [RFC8613] and/or DTLS [RFC9147], can be used to protect
-   other exchanges via unicast between the server and each client,
-   including the original client registration (see Section 5).
+   In order to protect unicast messages exchanged between the server and
+   each client, including the original client registration (see
+   Section 5), alternative security protocols than Group OSCORE can be
+   used, such as OSCORE [RFC8613] and/or DTLS [RFC9147].  However, it is
+   RECOMMENDED to use OSCORE or Group OSCORE.
 
 9.1.  Signaling the OSCORE Group in the Informative Response
 
