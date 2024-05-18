@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 14 November 2024                                               
+Expires: 19 November 2024                                               
                                                             F. Palombini
                                                              Ericsson AB
-                                                             13 May 2024
+                                                             18 May 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 November 2024.
+   This Internet-Draft will expire on 19 November 2024.
 
 Copyright Notice
 
@@ -2320,9 +2320,10 @@ Table of Contents
 
    In order to prevent what is described above, the ticket requests
    conveying the Listen-To-Multicast-Responses Option can be
-   additionally protected hop-by-hop.  This can be achieved by the
-   client protecting the ticket request sent to the proxy using OSCORE
-   (see [I-D.ietf-core-oscore-capable-proxies]) and/or DTLS [RFC9147].
+   additionally protected hop-by-hop.  To this end, the client can
+   further protect the ticket request by means of a secure communication
+   association that it shares with the proxy, e.g., by using OSCORE (see
+   [I-D.ietf-core-oscore-capable-proxies]) and/or DTLS [RFC9147].
 
 16.  IANA Considerations
 
