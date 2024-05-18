@@ -3419,16 +3419,17 @@ Note also that, identically to the phantom request, the ticket request is still 
         <h3 id="name-protected-communications">
 <a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-protected-communications" class="section-name selfRef">Protected Communications</a>
         </h3>
-<p id="section-15.2-1">If multicast notifications are protected using Group OSCORE as per <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a>, the following applies.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
+<p id="section-15.2-1">If multicast notifications for an observed resource are protected using Group OSCORE as per <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a>, it is ensured that those are securely bound to the phantom registration request that started the group observation of that resource. Furthermore, the following applies.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-15.2-2.1">
-            <p id="section-15.2-2.1.1">The original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be secured, including and especially the informative responses from the server. This prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request. Thus, it ensures secure binding between every multicast notification for a same observed resource and the phantom registration request that started the group observation of that resource.<a href="#section-15.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-15.2-2.1.1">The original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be secured, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-15.2-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-15.2-2.1.2">
+Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.<a href="#section-15.2-2.1.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-15.2-2.2">
             <p id="section-15.2-2.2.1">A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), <span class="bcp14">MUST</span> also be secured.<a href="#section-15.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-15.2-3">To this end, clients and servers <span class="bcp14">SHOULD</span> use OSCORE or Group OSCORE, so ensuring that the secure binding above is enforced end-to-end between the server and each observing client.<a href="#section-15.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-security-considerations-ltmr">
