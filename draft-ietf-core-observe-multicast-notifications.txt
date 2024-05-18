@@ -1094,21 +1094,21 @@ Table of Contents
    clients, a new CoAP option is introduced, which SHOULD be supported
    by clients that listen to multicast responses.
 
-   The option is called Multicast-Response-Feedback-Divider.  As
-   summarized in Figure 6, the option is not Critical, not Safe-to-
-   Forward, and integer valued.  Since the option is not Safe-to-
-   Forward, the column "N" indicates a dash for "not applicable".
+   The option is called Multicast-Response-Feedback-Divider and has the
+   properties summarized in Table 1, which extends Table 4 of [RFC7252].
+   The option is not Critical, not Safe-to-Forward, and integer valued.
+   Since the option is not Safe-to-Forward, the column "N" indicates a
+   dash for "not applicable".
 
- +-----+---+---+---+---+---------------------+--------+------+---------+
- | No. | C | U | N | R | Name                | Format | Len. | Default |
- +-----+---+---+---+---+---------------------+--------+------+---------+
- | TBD |   | x | - |   | Multicast-Response- | uint   | 0-1  | (none)  |
- |     |   |   |   |   | Feedback-Divider    |        |      |         |
- +-----+---+---+---+---+---------------------+--------+------+---------+
+    +=====+=+=+=+===+=====================+========+========+=========+
+    | No. |C|U|N| R | Name                | Format | Length | Default |
+    +=====+=+=+=+===+=====================+========+========+=========+
+    | TBD | |x|-|   | Multicast-Response- | uint   | 0-1    | (none)  |
+    |     | | | |   | Feedback-Divider    |        |        |         |
+    +-----+-+-+-+---+---------------------+--------+--------+---------+
 
-       C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-
-             Figure 6: Multicast-Response-Feedback-Divider
+        Table 1: The Multicast-Response-Feedback-Divider Option.   
+              C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable
 
    The Multicast-Response-Feedback-Divider Option is of class E for
    OSCORE [RFC8613][I-D.ietf-core-oscore-groupcomm].
@@ -1866,7 +1866,7 @@ Table of Contents
    |    <Signature>                                               |
    |                                                              |
 
-          Figure 7: Example of group observation with Group OSCORE
+          Figure 6: Example of group observation with Group OSCORE
 
    The two external_aad used to encrypt and sign the multicast
    notification above have 'request_kid' = 5, 'request_piv' = 501, and
@@ -2015,23 +2015,21 @@ Table of Contents
    multicast notifications and forward them back to the observer
    clients.
 
-   The option is called Listen-To-Multicast-Responses and is intended
-   only for requests.  As summarized in Figure 8, the option is critical
-   and not Safe-to-Forward.  Since the option is not Safe-to-Forward,
-   the column "N" indicates a dash for "not applicable".
+   The option is called Listen-To-Multicast-Response, is intended only
+   for requests, and has the properties summarized in Table 2, which
+   extends Table 4 of [RFC7252].  The option is critical and not Safe-
+   to-Forward.  Since the option is not Safe-to-Forward, the column "N"
+   indicates a dash for "not applicable".
 
- +-----+---+---+---+---+-------------------+--------+--------+---------+
- | No. | C | U | N | R | Name              | Format | Len.   | Default |
- +-----+---+---+---+---+-------------------+--------+--------+---------+
- | TBD | x | x | - |   | Listen-To-        |  (*)   | 3-1024 | (none)  |
- |     |   |   |   |   | Multicast-        |        |        |         |
- |     |   |   |   |   | Responses         |        |        |         |
- +-----+---+---+---+---+-------------------+--------+--------+---------+
+    +=====+=+=+=+===+=====================+========+========+=========+
+    | No. |C|U|N| R | Name                | Format | Length | Default |
+    +=====+=+=+=+===+=====================+========+========+=========+
+    | TBD |x|x|-|   | Listen-To-          | (*)    | 3-1024 | (none)  |
+    |     | | | |   | Multicast-Responses |        |        |         |
+    +-----+-+-+-+---+---------------------+--------+--------+---------+
 
-       C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-       (*) See below.
-
-                Figure 8: Listen-To-Multicast-Responses
+             Table 2: The Listen-To-Multicast-Responses Option.
+              C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable
 
    The Listen-To-Multicast-Responses Option includes the byte
    serialization of a CBOR array.  This specifies transport-specific
@@ -2190,7 +2188,7 @@ Table of Contents
         | exp             | 16       | uint        | Appendix C  |
         +-----------------+----------+-------------+-------------+
 
-                Table 1: Informative Response Parameters.
+                Table 3: Informative Response Parameters.
 
 14.  Transport Protocol Information
 
@@ -2223,7 +2221,7 @@ Table of Contents
  |           | RFC7252     |       | srv_port | ?cli_port |            |
  +-----------+-------------+-------+----------+-----------+------------+
 
-                Figure 9: Transport protocol information
+                Figure 7: Transport protocol information
 
 15.  Security Considerations
 
@@ -2403,7 +2401,7 @@ Table of Contents
        | TBD    | Listen-To-Multicast-Responses       | [RFC-XXXX] |
        +--------+-------------------------------------+------------+
 
-         Table 2: Registrations in the CoAP Option Numbers Registry
+         Table 4: Registrations in the CoAP Option Numbers Registry
 
 16.4.  Informative Response Parameters Registry
 
@@ -2763,10 +2761,10 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
    information of the server and the addressing information where
    multicast notifications are sent to.
 
-   Figure 10 provides an example where a group observation is
-   discovered.  The example assumes a CoRAL namespace
-   [I-D.ietf-core-coral], that contains properties analogous to those in
-   the content-format application/informative-response+cbor.
+   Figure 8 provides an example where a group observation is discovered.
+   The example assumes a CoRAL namespace [I-D.ietf-core-coral], that
+   contains properties analogous to those in the content-format
+   application/informative-response+cbor.
 
    Note that the information about the transport protocol used for the
    group observation is not expressed through a dedicated element
@@ -2799,7 +2797,7 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
               ]
        ]
 
-        Figure 10: Group observation discovery in a Pub-Sub scenario
+        Figure 8: Group observation discovery in a Pub-Sub scenario
 
    With this information from the topic discovery step, the client can
    already set up its multicast address and start receiving multicast
@@ -2842,7 +2840,7 @@ A.2.  Introspection at the Multicast Notification Sender
      / last_notif / 2 : h'256105/.../'
    }
 
-      Figure 11: Group observation discovery with server introspection
+      Figure 9: Group observation discovery with server introspection
 
    For example, a network sniffer could offer sending such a request
    when unknown multicast notifications are seen in a network.
@@ -3452,7 +3450,7 @@ Appendix E.  Example with a Proxy
 
  (#) Sent over IP multicast to GROUP_ADDR:GROUP_PORT.
 
-          Figure 12: Example of group observation with a proxy
+          Figure 10: Example of group observation with a proxy
 
    Note that the proxy has all the information to understand the
    observation request from C2, and can immediately start to serve the
@@ -3741,7 +3739,7 @@ Appendix F.  Example with a Proxy and Group OSCORE
  (##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
       with Group OSCORE end-to-end between the server and the clients.
 
- Figure 13: Example of group observation with a proxy and Group OSCORE
+ Figure 11: Example of group observation with a proxy and Group OSCORE
 
    Unlike in the unprotected example in Appendix E, the proxy does _not_
    have all the information to perform request deduplication, and can

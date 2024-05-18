@@ -1297,7 +1297,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref">15.2</a>.  <a href="#name-protected-communications" class="internal xref">Protected Communications</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
-                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="auto internal xref">15.3</a>.  <a href="#name-listen-to-multicast-responses" class="internal xref">Listen-To-Multicast-Responses Option</a></p>
+                <p id="section-toc.1-1.15.2.3.1"><a href="#section-15.3" class="auto internal xref">15.3</a>.  <a href="#name-listen-to-multicast-response" class="internal xref">Listen-To-Multicast-Responses Option</a></p>
 </li>
             </ul>
 </li>
@@ -2249,24 +2249,40 @@ RES: 2.05 Content
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-multicast-response-feedback" class="section-name selfRef">Multicast-Response-Feedback-Divider Option</a>
         </h3>
 <p id="section-8.1-1">In order to enable the rough counting of still active and interested clients, a new CoAP option is introduced, which <span class="bcp14">SHOULD</span> be supported by clients that listen to multicast responses.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">The option is called Multicast-Response-Feedback-Divider. As summarized in <a href="#mrfd-table" class="auto internal xref">Figure 6</a>, the option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<span id="name-multicast-response-feedback-"></span><div id="mrfd-table">
-<figure id="figure-6">
-          <div class="alignCenter art-text artwork" id="section-8.1-3.1">
-<pre>
-+-----+---+---+---+---+---------------------+--------+------+---------+
-| No. | C | U | N | R | Name                | Format | Len. | Default |
-+-----+---+---+---+---+---------------------+--------+------+---------+
-| TBD |   | x | - |   | Multicast-Response- | uint   | 0-1  | (none)  |
-|     |   |   |   |   | Feedback-Divider    |        |      |         |
-+-----+---+---+---+---+---------------------+--------+------+---------+
-
-      C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-</pre>
-</div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-multicast-response-feedback-" class="selfRef">Multicast-Response-Feedback-Divider</a>
-          </figcaption></figure>
+<p id="section-8.1-2">The option is called Multicast-Response-Feedback-Divider and has the properties summarized in <a href="#mrfd-table" class="auto internal xref">Table 1</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<span id="name-the-multicast-response-feed"></span><div id="mrfd-table">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-the-multicast-response-feed" class="selfRef">The Multicast-Response-Feedback-Divider Option.    C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">No.</th>
+              <th class="text-left" rowspan="1" colspan="1">C</th>
+              <th class="text-left" rowspan="1" colspan="1">U</th>
+              <th class="text-left" rowspan="1" colspan="1">N</th>
+              <th class="text-left" rowspan="1" colspan="1">R</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Format</th>
+              <th class="text-left" rowspan="1" colspan="1">Length</th>
+              <th class="text-left" rowspan="1" colspan="1">Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">x</td>
+              <td class="text-left" rowspan="1" colspan="1">-</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">Multicast-Response-<br>Feedback-Divider</td>
+              <td class="text-left" rowspan="1" colspan="1">uint</td>
+              <td class="text-left" rowspan="1" colspan="1">0-1</td>
+              <td class="text-left" rowspan="1" colspan="1">(none)</td>
+            </tr>
+          </tbody>
+        </table>
 </div>
 <p id="section-8.1-4">The Multicast-Response-Feedback-Divider Option is of class E for OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -2598,7 +2614,7 @@ At the time of writing this specification, acceptable formats of authentication 
 </li>
       </ul>
 <span id="name-example-of-group-observation"></span><div id="example-oscore">
-<figure id="figure-7">
+<figure id="figure-6">
         <div id="section-10-7.1">
           <div class="alignLeft art-svg artwork" id="section-10-7.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="2032" width="552" viewBox="0 0 552 2032" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3022,7 +3038,7 @@ At the time of writing this specification, acceptable formats of authentication 
             </svg><a href="#section-10-7.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-example-of-group-observation" class="selfRef">Example of group observation with Group OSCORE</a>
         </figcaption></figure>
 </div>
@@ -3074,26 +3090,40 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-listen-to-multicast-respons" class="section-name selfRef">Listen-To-Multicast-Responses Option</a>
         </h3>
 <p id="section-12.1-1">In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option <span class="bcp14">MUST</span> be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<p id="section-12.1-2">The option is called Listen-To-Multicast-Responses and is intended only for requests. As summarized in <a href="#ltmr-table" class="auto internal xref">Figure 8</a>, the option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-12.1-2" class="pilcrow">¶</a></p>
-<span id="name-listen-to-multicast-response"></span><div id="ltmr-table">
-<figure id="figure-8">
-          <div class="alignCenter art-text artwork" id="section-12.1-3.1">
-<pre>
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-| No. | C | U | N | R | Name              | Format | Len.   | Default |
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-| TBD | x | x | - |   | Listen-To-        |  (*)   | 3-1024 | (none)  |
-|     |   |   |   |   | Multicast-        |        |        |         |
-|     |   |   |   |   | Responses         |        |        |         |
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-
-      C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-      (*) See below.
-</pre>
-</div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
-<a href="#name-listen-to-multicast-response" class="selfRef">Listen-To-Multicast-Responses</a>
-          </figcaption></figure>
+<p id="section-12.1-2">The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in <a href="#ltmr-table" class="auto internal xref">Table 2</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-12.1-2" class="pilcrow">¶</a></p>
+<span id="name-the-listen-to-multicast-res"></span><div id="ltmr-table">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-the-listen-to-multicast-res" class="selfRef">The Listen-To-Multicast-Responses Option.                 C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">No.</th>
+              <th class="text-left" rowspan="1" colspan="1">C</th>
+              <th class="text-left" rowspan="1" colspan="1">U</th>
+              <th class="text-left" rowspan="1" colspan="1">N</th>
+              <th class="text-left" rowspan="1" colspan="1">R</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Format</th>
+              <th class="text-left" rowspan="1" colspan="1">Length</th>
+              <th class="text-left" rowspan="1" colspan="1">Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">x</td>
+              <td class="text-left" rowspan="1" colspan="1">x</td>
+              <td class="text-left" rowspan="1" colspan="1">-</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">Listen-To-<br>Multicast-Responses</td>
+              <td class="text-left" rowspan="1" colspan="1">(*)</td>
+              <td class="text-left" rowspan="1" colspan="1">3-1024</td>
+              <td class="text-left" rowspan="1" colspan="1">(none)</td>
+            </tr>
+          </tbody>
+        </table>
 </div>
 <p id="section-12.1-4">The Listen-To-Multicast-Responses Option includes the byte serialization of a CBOR array. This specifies transport-specific message information required for listening to the multicast notifications of a group observation, and intended to the proxy adjacent to the origin server sending those notifications. In particular, the serialized CBOR array has the same format specified in <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a> for the 'tp_info' parameter of the informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>).<a href="#section-12.1-4" class="pilcrow">¶</a></p>
 <p id="section-12.1-5">The Listen-To-Multicast-Responses Option is of class U for OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-12.1-5" class="pilcrow">¶</a></p>
@@ -3168,9 +3198,9 @@ Note also that, identically to the phantom request, the ticket request is still 
 <p id="section-13-1">This document defines a number of fields used in the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>.<a href="#section-13-1" class="pilcrow">¶</a></p>
 <p id="section-13-2">The table below summarizes them and specifies the CBOR key to use as abbreviation, instead of the full descriptive name. Note that the media type application/informative-response+cbor <span class="bcp14">MUST</span> be used when these fields are transported.<a href="#section-13-2" class="pilcrow">¶</a></p>
 <span id="name-informative-response-paramet"></span><div id="_table-informative-response-params">
-<table class="center" id="table-1">
+<table class="center" id="table-3">
         <caption>
-<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#table-3" class="selfRef">Table 3</a>:
 <a href="#name-informative-response-paramet" class="selfRef">Informative Response Parameters.</a>
         </caption>
 <thead>
@@ -3333,7 +3363,7 @@ Note also that, identically to the phantom request, the ticket request is still 
 <p id="section-14-3">The table below summarizes them, specifies the integer value to use instead of the full descriptive name, and provides the corresponding comprehensive set of information elements to include in the 'tp_info' parameter.<a href="#section-14-3" class="pilcrow">¶</a></p>
 <p id="section-14-4">Note to RFC Editor: Please replace in the table below all occurrences of "[RFC-XXXX]" with the RFC number of this specification and delete this paragraph.<a href="#section-14-4" class="pilcrow">¶</a></p>
 <span id="name-transport-protocol-informati"></span><div id="values_tp_id">
-<figure id="figure-9">
+<figure id="figure-7">
         <div class="alignLeft art-text artwork" id="section-14-5.1">
 <pre>
 +-----------+-------------+-------+----------+-----------+------------+
@@ -3349,7 +3379,7 @@ Note also that, identically to the phantom request, the ticket request is still 
 +-----------+-------------+-------+----------+-----------+------------+
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-transport-protocol-informati" class="selfRef">Transport protocol information</a>
         </figcaption></figure>
 </div>
@@ -3391,8 +3421,8 @@ Note also that, identically to the phantom request, the ticket request is still 
 </div>
 <div id="sec-security-considerations-ltmr">
 <section id="section-15.3">
-        <h3 id="name-listen-to-multicast-responses">
-<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-listen-to-multicast-responses" class="section-name selfRef">Listen-To-Multicast-Responses Option</a>
+        <h3 id="name-listen-to-multicast-response">
+<a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-listen-to-multicast-response" class="section-name selfRef">Listen-To-Multicast-Responses Option</a>
         </h3>
 <p id="section-15.3-1">The CoAP option Listen-To-Multicast-Responses defined in <a href="#ltmr-option" class="auto internal xref">Section 12.1</a> is of class U for OSCORE and Group OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
 <p id="section-15.3-2">This allows the proxy adjacent to the origin server to access the option value conveyed in a ticket request (see <a href="#intermediaries-e2e-security-processing" class="auto internal xref">Section 12.2</a>), and to retrieve from it the transport-specific information about a phantom request. By doing so, the proxy becomes able to configure an observation of the target resource and to receive multicast notifications matching to the phantom request.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
@@ -3487,9 +3517,9 @@ Note also that, identically to the phantom request, the ticket request is still 
 <a href="#section-16.3" class="section-number selfRef">16.3. </a><a href="#name-coap-option-numbers-registr" class="section-name selfRef">CoAP Option Numbers Registry</a>
         </h3>
 <p id="section-16.3-1">IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.<a href="#section-16.3-1" class="pilcrow">¶</a></p>
-<span id="name-registrations-in-the-coap-o"></span><table class="center" id="table-2">
+<span id="name-registrations-in-the-coap-o"></span><table class="center" id="table-4">
           <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#table-4" class="selfRef">Table 4</a>:
 <a href="#name-registrations-in-the-coap-o" class="selfRef">Registrations in the CoAP Option Numbers Registry</a>
           </caption>
 <thead>
@@ -3785,10 +3815,10 @@ Reference: Section 6 of [RFC-XXXX]
 <p id="appendix-A.1-1">In a Publish-Subscribe scenario <span>[<a href="#I-D.ietf-core-coap-pubsub" class="cite xref">I-D.ietf-core-coap-pubsub</a>]</span>, a group observation can be discovered along with topic metadata.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-2">To this end, together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-3">This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-4"><a href="#discovery-pub-sub" class="auto internal xref">Figure 10</a> provides an example where a group observation is discovered. The example assumes a CoRAL namespace <span>[<a href="#I-D.ietf-core-coral" class="cite xref">I-D.ietf-core-coral</a>]</span>, that contains properties analogous to those in the content-format application/informative-response+cbor.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-4"><a href="#discovery-pub-sub" class="auto internal xref">Figure 8</a> provides an example where a group observation is discovered. The example assumes a CoRAL namespace <span>[<a href="#I-D.ietf-core-coral" class="cite xref">I-D.ietf-core-coral</a>]</span>, that contains properties analogous to those in the content-format application/informative-response+cbor.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-5">Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'srv_host' and 'srv_port' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>), while the latter specifies the addressing information where multicast notifications are sent to (like 'cli_host' and 'cli_port' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
 <span id="name-group-observation-discovery"></span><div id="discovery-pub-sub">
-<figure id="figure-10">
+<figure id="figure-8">
           <div class="alignLeft art-text artwork" id="appendix-A.1-6.1">
 <pre>
 Request:
@@ -3812,7 +3842,7 @@ Response:
     ]
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-group-observation-discovery" class="selfRef">Group observation discovery in a Pub-Sub scenario</a>
           </figcaption></figure>
 </div>
@@ -3828,7 +3858,7 @@ Response:
 <p id="appendix-A.2-1">For network debugging purposes, it can be useful to query a server that sends multicast responses as matching a phantom registration request.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.2-2">Such an interface is left for other documents to specify on demand. As an example, a possible interface can be as follows, and rely on the already known Token value of intercepted multicast notifications, associated with a phantom registration request.<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <span id="name-group-observation-discovery-"></span><div id="discovery-introspection">
-<figure id="figure-11">
+<figure id="figure-9">
           <div class="alignLeft art-text artwork" id="appendix-A.2-3.1">
 <pre>
 Request:
@@ -3848,7 +3878,7 @@ Content-Format: application/informative-response+cbor
 }
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-group-observation-discovery-" class="selfRef">Group observation discovery with server introspection</a>
           </figcaption></figure>
 </div>
@@ -4181,7 +4211,7 @@ Upon receiving an individual observation request for the same target resource, t
 <p id="appendix-E-1">This section provides an example when a proxy P is used between the clients and the server. The same assumptions and notation used in <a href="#sec-example-no-security" class="auto internal xref">Section 7</a> are used for this example. In addition, the proxy has address PRX_ADDR and listens to the port number PRX_PORT.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
 <p id="appendix-E-2">Unless explicitly indicated, all messages transmitted on the wire are sent over unicast.<a href="#appendix-E-2" class="pilcrow">¶</a></p>
 <span id="name-example-of-group-observation-"></span><div id="example-proxy-no-oscore">
-<figure id="figure-12">
+<figure id="figure-10">
         <div id="appendix-E-3.1">
           <div class="alignLeft art-svg artwork" id="appendix-E-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1744" width="576" viewBox="0 0 576 1744" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4460,7 +4490,7 @@ Upon receiving an individual observation request for the same target resource, t
             </svg><a href="#appendix-E-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-example-of-group-observation-" class="selfRef">Example of group observation with a proxy</a>
         </figcaption></figure>
 </div>
@@ -4477,7 +4507,7 @@ Upon receiving an individual observation request for the same target resource, t
 <p id="appendix-F-2">The same assumptions and notation used in <a href="#sec-example-with-security" class="auto internal xref">Section 10</a> are used for this example. In addition, the proxy has address PRX_ADDR and listens to the port number PRX_PORT.<a href="#appendix-F-2" class="pilcrow">¶</a></p>
 <p id="appendix-F-3">Unless explicitly indicated, all messages transmitted on the wire are sent over unicast and protected with OSCORE end-to-end between a client and the server.<a href="#appendix-F-3" class="pilcrow">¶</a></p>
 <span id="name-example-of-group-observation-w"></span><div id="example-proxy-oscore">
-<figure id="figure-13">
+<figure id="figure-11">
         <div id="appendix-F-4.1">
           <div class="alignLeft art-svg artwork" id="appendix-F-4.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="4272" width="576" viewBox="0 0 576 4272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -5215,7 +5245,7 @@ Upon receiving an individual observation request for the same target resource, t
             </svg><a href="#appendix-F-4.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-example-of-group-observation-w" class="selfRef">Example of group observation with a proxy and Group OSCORE</a>
         </figcaption></figure>
 </div>
