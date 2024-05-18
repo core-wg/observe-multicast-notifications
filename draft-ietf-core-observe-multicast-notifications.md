@@ -1162,13 +1162,13 @@ If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT s
 
 ## Protected Communications
 
-If multicast notifications are protected using Group OSCORE as per {{sec-secured-notifications}}, the following applies.
+If multicast notifications for an observed resource are protected using Group OSCORE as per {{sec-secured-notifications}}, it is ensured that those are securely bound to the phantom registration request that started the group observation of that resource. Furthermore, the following applies.
 
-* The original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server. This prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request. Thus, it ensures secure binding between every multicast notification for a same observed resource and the phantom registration request that started the group observation of that resource.
+* The original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server. An exception is the case discussed in {{deterministic-phantom-Request}}, where the informative response from the server is not protected.
+
+  Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.
 
 * A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), MUST also be secured.
-
-To this end, clients and servers SHOULD use OSCORE or Group OSCORE, so ensuring that the secure binding above is enforced end-to-end between the server and each observing client.
 
 ## Listen-To-Multicast-Responses Option  # {#sec-security-considerations-ltmr}
 
