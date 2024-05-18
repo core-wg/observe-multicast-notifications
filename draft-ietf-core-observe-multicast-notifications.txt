@@ -942,7 +942,7 @@ Table of Contents
    client to reject the multicast notification with a Reset message, as
    defined in Section 3.5 of [RFC7641].
 
-   In case the server has cancelled a group observation as defined in
+   In case the server has canceled a group observation as defined in
    Section 4.5, the client simply forgets about the group observation
    and frees up the used Token value T for that endpoint, upon receiving
    the multicast error response defined in Section 4.5.
@@ -1329,7 +1329,7 @@ Table of Contents
 
       Therefore, if the server uses the rough counting process defined
       in this section but communications are not protected end-to-end
-      between the origin enpoints, then it is practically required that
+      between the origin endpoints, then it is practically required that
       the proxy recognizes and understands the Multicast-Response-
       Feedback-Divider Option.  If that is not the case, then every
       execution of the rough counting process will effectively prevent
