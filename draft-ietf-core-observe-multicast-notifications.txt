@@ -4083,7 +4083,7 @@ Appendix H.  Document Updates
 
 H.1.  Version -08 to -09
 
-   *  Section restructing: impact from proxies on rough counting of
+   *  Section restructuring: impact from proxies on rough counting of
       clients.
 
    *  Fixes in the examples with message exchanges.
