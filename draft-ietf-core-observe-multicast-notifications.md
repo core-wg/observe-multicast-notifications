@@ -609,7 +609,7 @@ C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
 
-## Processing on the Client Side
+## Processing on the Client Side # {#ssec-rough-counting-client-side}
 
 Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client SHOULD acknowledge its interest in continuing receiving multicast notifications for the target resource, as described below.
 
@@ -622,30 +622,6 @@ Since the Observe registration is only done for its side effect of showing as an
 The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
 
 {{appendix-pseudo-code-counting-client}} and {{appendix-pseudo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
-
-{{intermediaries}} specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.
-
-* Since the Multicast-Response-Feedback-Divider Option is not Safe-to-Forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.
-
-   If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and send a 4.02 (Bad Option) response to the observer client (see {{Section 5.7.1 of RFC7252}}). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.
-
-   If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and send a 5.02 (Bad Gateway) response to each of the observer clients (see {{Section 5.7.1 of RFC7252}}). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.
-
-   This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see {{sec-secured-notifications}} and {{intermediaries-e2e-security}}). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.
-
-   Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin enpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.
-
-* The following applies when the proxy receives a multicast notification including the Multicast-Response-Feedback-Divider Option.
-
-   - If the multicast notification is not protected end-to-end by using Group OSCORE (see {{intermediaries}}), the Multicast-Response-Feedback-Divider Option is visible to the proxy. Then, the proxy proceeds like defined above for an origin client, i.e., by answering to the server on its own in case it picks a random number I equal to 0. When doing so, the proxy will be counted by the server as a single client.
-
-      Instead, if the multicast notification is protected end-to-end by using Group OSCORE (see {{sec-secured-notifications}} and {{intermediaries-e2e-security}}), then the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy. As a consequence, the proxy forwards the notification to (the previous hop towards) any of the origin clients, each of which answers to the server if it picks a random number I equal to 0.
-
-   - If the multicast notification is not protected end-to-end by using Group OSCORE, then the Multicast-Response-Feedback-Divider Option is visible to the proxy, which MUST remove the option before forwarding the notification to (the previous hop towards) any of the origin clients.
-
-      The proxy would have to rely on separate means for asserting whether the origin clients are still interested in the observation, e.g., by regularly forwarding notifications to the clients as unicast, Confirmable response messages.
-
-      When no interested origin clients remain, the proxy can simply forget about being part of the group observation for the target resource at the server, like an origin client would do (see {{ssec-client-side-cancellation}}).
 
 ## Processing on the Server Side
 
@@ -696,6 +672,34 @@ As an example, if the server currently estimates that N = COUNT = 32 observers a
 To produce a most accurate updated counter, a server can include a Multicast-Response-Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.
 
 {{appendix-pseudo-code-counting-server}} provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.
+
+## Impact from Proxies
+
+{{intermediaries}} specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.
+
+* Since the Multicast-Response-Feedback-Divider Option is not Safe-to-Forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.
+
+   If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and send a 4.02 (Bad Option) response to the observer client (see {{Section 5.7.1 of RFC7252}}). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.
+
+   If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and send a 5.02 (Bad Gateway) response to each of the observer clients (see {{Section 5.7.1 of RFC7252}}). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.
+
+   This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see {{sec-secured-notifications}} and {{intermediaries-e2e-security}}). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.
+
+   Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin enpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.
+
+* The following holds when the proxy receives a multicast notification including the Multicast-Response-Feedback-Divider Option.
+
+  - If the multicast notification is not protected end-to-end by using Group OSCORE (see {{intermediaries}}), then the Multicast-Response-Feedback-Divider Option is visible to the proxy.
+
+    In this case, the proxy proceeds like defined in {{ssec-rough-counting-client-side}} for an origin client, i.e., by answering to the server on its own in case it picks a random number I equal to 0. When doing so, the proxy will be counted by the server as a single client.
+
+    Furthermore, the proxy MUST remove the option before forwarding the notification to (the previous hop towards) any of the origin clients.
+
+    The proxy would have to rely on separate means for asserting whether the origin clients are still interested in the observation, e.g., by regularly forwarding notifications to the clients as unicast, Confirmable response messages.
+
+    When no interested origin clients remain, the proxy can simply forget about being part of the group observation for the target resource at the server, like an origin client would do (see {{ssec-client-side-cancellation}}).
+
+  - If the multicast notification is protected end-to-end by using Group OSCORE (see {{sec-secured-notifications}} and {{intermediaries-e2e-security}}), then the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy. As a consequence, the proxy forwards the notification to (the previous hop towards) any of the origin clients, each of which answers to the server if it picks a random number I equal to 0.
 
 # Protection of Multicast Notifications with Group OSCORE # {#sec-secured-notifications}
 
@@ -2307,6 +2311,8 @@ C1      C2      P         S
 {:removeinrfc}
 
 ## Version -08 to -09 ## {#sec-08-09}
+
+* Section restructing: impact from proxies on rough counting of clients.
 
 * Fixes in the examples with message exchanges.
 
