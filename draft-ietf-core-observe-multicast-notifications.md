@@ -1614,6 +1614,10 @@ If Group OSCORE is used to protect the group observation (see {{sec-secured-noti
 
 In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same protected deterministic request. The latter is used as the actual phantom observation request, against which the protected multicast notifications will match for the group observation in question.
 
+When receiving the deterministic request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
+
+If the server recognizes the received deterministic request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server MUST reply with an informative response that MUST NOT be protected. If a proxy is deployed between the clients and the server, the proxy is thus able to retrieve from the informative response everything needed to set itself as an observer in the group observation, and to start listening to multicast notifications.
+
 If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} when the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses Option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.amsuess-core-cachable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
 
 Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter, and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
@@ -1640,13 +1644,13 @@ Note that, like in {{self-managed-oscore-group}}, no information is provided as 
 
 If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
-Therefore, the following holds when a group observation relies on a deterministic request as a phantom observation request.
+Therefore, the following holds when a group observation for a target resource relies on a deterministic request as a phantom observation request.
 
 * Every client interested to take part in such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
 
 * When running such an observation request, the server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.
 
-   Upon receiving an individual observation request for the same target resource, the server MUST reply with a generic 5.03 (Service Unavailable) response (i.e., not the informative response defined in {{ssec-server-side-informative}}), if the request differs from the specific deterministic request associated with the group observation.
+* If the server receives an observation request for the target resource that differs from the specific deterministic request associated with the group observation for that target resource, then the server replies as usual with an informative response, including: the transport-specific information, the phantom request (i.e., the expected deterministic request), and (optionally) the latest notification.
 
 # Example with a Proxy {#intermediaries-example}
 
@@ -2058,21 +2062,21 @@ The example provided in this appendix as reflected by the message exchange shown
 
 3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same deterministic request to be used as phantom observation request.
 
-4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on point (2) above, the same would happen if the phantom request was not specifically a deterministic request.
+4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on step 2 above, the same would happen if the phantom request was not specifically a deterministic request.
 
 5. If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request (see {{intermediaries-e2e-security}}). However, unlike the case considered in {{intermediaries-e2e-security}} where the ticket request is not a deterministic request, the client does not include a Listen-to-Multicast-Responses Option in the phantom request sent to the proxy.
 
 6. Unlike for the case considered in {{intermediaries-e2e-security}}, here the proxy does not know that the request is exactly a ticket request for subscribing to multicast notifications. Thus, the proxy simply forwards the ticket request to the server as it normally does for any request.
 
-7. The server receives the ticket request, which is a deviation from the case where the ticket request is not a deterministic request and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
+7. The server receives the ticket request, which is a deviation from the case where the ticket request is not a deterministic request and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server recognizes the phantom request among the stored ones, through a byte-by-byte comparison of the incoming message minus the transport-related fields (see {{deterministic-phantom-Request}}). Consequently, the server does not perform any Group OSCORE processing on it.
 
-8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any Group OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
+8. The server replies with an unprotected informative response (see {{ssec-server-side-informative}}), including: the transport-specific information, (optionally) the phantom request, and (optionally) the latest notification.
 
-9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the transport-specific information, the phantom request, and (optionally) the latest notification.
+   Note that the phantom request can be omitted, since it is the deterministic phantom request from the client, and thus "in terms of transport-independent information, identical to the registration request from the client" (see {{ssec-server-side-informative}}).
 
-10. From the received 5.03 (Service Unavailable) response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the 5.03 (Service Unavailable) response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
+9. From the received informative response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the informative response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
 
-11. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, this does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
+10. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, this does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
 
 ## Message Exchange {#intermediaries-example-e2e-security-det-exchange}
 
@@ -2313,6 +2317,8 @@ C1      C2      P         S
 ## Version -08 to -09 ## {#sec-08-09}
 
 * Section restructuring: impact from proxies on rough counting of clients.
+
+* Revised and repositioned text on deterministic phantom requests.
 
 * Fixes in the examples with message exchanges.
 
