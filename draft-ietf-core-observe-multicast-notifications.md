@@ -1253,16 +1253,10 @@ Reference: {{&SELF}}
 
 IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
 
-~~~~~~~~~~~
-+--------+--------------------------------------+------------+
-| Number |                 Name                 | Reference  |
-+--------+--------------------------------------+------------+
-|  TBD   |  Multicast-Response-Feedback-Divider | [RFC-XXXX] |
-+--------+--------------------------------------+------------+
-|  TBD   |  Listen-To-Multicast-Responses       | [RFC-XXXX] |
-+--------+--------------------------------------+------------+
-~~~~~~~~~~~
-{: artwork-align="center"}
+| Number | Name                                | Reference |
+|  TBD   | Multicast-Response-Feedback-Divider | {{&SELF}} |
+|  TBD   | Listen-To-Multicast-Responses       | {{&SELF}} |
+{: align="center" title="Registrations in the CoAP Option Numbers Registry"}
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
