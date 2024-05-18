@@ -1226,6 +1226,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-impact-from-proxies" class="internal xref">Impact from Proxies</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
@@ -2287,7 +2290,7 @@ RES: 2.05 Content
 <p id="section-8.1-4">The Multicast-Response-Feedback-Divider Option is of class E for OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="processing-on-the-client-side">
+<div id="ssec-rough-counting-client-side">
 <section id="section-8.2">
         <h3 id="name-processing-on-the-client-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-processing-on-the-client-si" class="section-name selfRef">Processing on the Client Side</a>
@@ -2298,37 +2301,6 @@ RES: 2.05 Content
 <p id="section-8.2-4">Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client <span class="bcp14">MUST</span> send the unicast request in a non confirmable way, and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client <span class="bcp14">MUST</span> include a Multicast-Response-Feedback-Divider Option, whose value <span class="bcp14">MUST</span> be set to 0. As per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses, and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 <p id="section-8.2-5">The client <span class="bcp14">MUST</span> ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and <span class="bcp14">MUST NOT</span> include it in any other request.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 <p id="section-8.2-6"><a href="#appendix-pseudo-code-counting-client" class="auto internal xref">Appendix B.1</a> and <a href="#appendix-pseudo-code-counting-client-constrained" class="auto internal xref">Appendix B.2</a> provide a description in pseudo-code of the operations above performed by the client.<a href="#section-8.2-6" class="pilcrow">¶</a></p>
-<p id="section-8.2-7"><a href="#intermediaries" class="auto internal xref">Section 11</a> specifies how the approach presented in <a href="#sec-server-side" class="auto internal xref">Section 4</a> and <a href="#sec-client-side" class="auto internal xref">Section 5</a> works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.<a href="#section-8.2-7" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-8.2-8.1">
-            <p id="section-8.2-8.1.1">Since the Multicast-Response-Feedback-Divider Option is not Safe-to-Forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.<a href="#section-8.2-8.1.1" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.1.2">
-If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and send a 4.02 (Bad Option) response to the observer client (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.<a href="#section-8.2-8.1.2" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.1.3">
-If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and send a 5.02 (Bad Gateway) response to each of the observer clients (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.<a href="#section-8.2-8.1.3" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.1.4">
-This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.<a href="#section-8.2-8.1.4" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.1.5">
-Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin enpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.<a href="#section-8.2-8.1.5" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.2-8.2">
-            <p id="section-8.2-8.2.1">The following applies when the proxy receives a multicast notification including the Multicast-Response-Feedback-Divider Option.<a href="#section-8.2-8.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-8.2-8.2.2.1">
-                <p id="section-8.2-8.2.2.1.1">If the multicast notification is not protected end-to-end by using Group OSCORE (see <a href="#intermediaries" class="auto internal xref">Section 11</a>), the Multicast-Response-Feedback-Divider Option is visible to the proxy. Then, the proxy proceeds like defined above for an origin client, i.e., by answering to the server on its own in case it picks a random number I equal to 0. When doing so, the proxy will be counted by the server as a single client.<a href="#section-8.2-8.2.2.1.1" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.2.2.1.2">
-Instead, if the multicast notification is protected end-to-end by using Group OSCORE (see <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>), then the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy. As a consequence, the proxy forwards the notification to (the previous hop towards) any of the origin clients, each of which answers to the server if it picks a random number I equal to 0.<a href="#section-8.2-8.2.2.1.2" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-8.2-8.2.2.2">
-                <p id="section-8.2-8.2.2.2.1">If the multicast notification is not protected end-to-end by using Group OSCORE, then the Multicast-Response-Feedback-Divider Option is visible to the proxy, which <span class="bcp14">MUST</span> remove the option before forwarding the notification to (the previous hop towards) any of the origin clients.<a href="#section-8.2-8.2.2.2.1" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.2.2.2.2">
-The proxy would have to rely on separate means for asserting whether the origin clients are still interested in the observation, e.g., by regularly forwarding notifications to the clients as unicast, Confirmable response messages.<a href="#section-8.2-8.2.2.2.2" class="pilcrow">¶</a></p>
-<p id="section-8.2-8.2.2.2.3">
-When no interested origin clients remain, the proxy can simply forget about being part of the group observation for the target resource at the server, like an origin client would do (see <a href="#ssec-client-side-cancellation" class="auto internal xref">Section 5.4</a>).<a href="#section-8.2-8.2.2.2.3" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
 </section>
 </div>
 <div id="processing-on-the-server-side">
@@ -2384,6 +2356,46 @@ When no interested origin clients remain, the proxy can simply forget about bein
 <p id="section-8.3.3-8"><a href="#appendix-pseudo-code-counting-server" class="auto internal xref">Appendix B.3</a> provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.<a href="#section-8.3.3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
+<div id="impact-from-proxies">
+<section id="section-8.4">
+        <h3 id="name-impact-from-proxies">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-impact-from-proxies" class="section-name selfRef">Impact from Proxies</a>
+        </h3>
+<p id="section-8.4-1"><a href="#intermediaries" class="auto internal xref">Section 11</a> specifies how the approach presented in <a href="#sec-server-side" class="auto internal xref">Section 4</a> and <a href="#sec-client-side" class="auto internal xref">Section 5</a> works when a proxy is used between the origin clients and the origin server. That is, the clients register as observers at the proxy, which in turn registers as a participant to the group observation at the server, receives the multicast notifications from the server, and forwards those to the clients. In such a case, the following applies.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.4-2.1">
+            <p id="section-8.4-2.1.1">Since the Multicast-Response-Feedback-Divider Option is not Safe-to-Forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.1.2">
+If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and send a 4.02 (Bad Option) response to the observer client (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.<a href="#section-8.4-2.1.2" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.1.3">
+If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and send a 5.02 (Bad Gateway) response to each of the observer clients (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.<a href="#section-8.4-2.1.3" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.1.4">
+This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.<a href="#section-8.4-2.1.4" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.1.5">
+Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin enpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.<a href="#section-8.4-2.1.5" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.4-2.2">
+            <p id="section-8.4-2.2.1">The following holds when the proxy receives a multicast notification including the Multicast-Response-Feedback-Divider Option.<a href="#section-8.4-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.4-2.2.2.1">
+                <p id="section-8.4-2.2.2.1.1">If the multicast notification is not protected end-to-end by using Group OSCORE (see <a href="#intermediaries" class="auto internal xref">Section 11</a>), then the Multicast-Response-Feedback-Divider Option is visible to the proxy.<a href="#section-8.4-2.2.2.1.1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.2.2.1.2">
+In this case, the proxy proceeds like defined in <a href="#ssec-rough-counting-client-side" class="auto internal xref">Section 8.2</a> for an origin client, i.e., by answering to the server on its own in case it picks a random number I equal to 0. When doing so, the proxy will be counted by the server as a single client.<a href="#section-8.4-2.2.2.1.2" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.2.2.1.3">
+Furthermore, the proxy <span class="bcp14">MUST</span> remove the option before forwarding the notification to (the previous hop towards) any of the origin clients.<a href="#section-8.4-2.2.2.1.3" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.2.2.1.4">
+The proxy would have to rely on separate means for asserting whether the origin clients are still interested in the observation, e.g., by regularly forwarding notifications to the clients as unicast, Confirmable response messages.<a href="#section-8.4-2.2.2.1.4" class="pilcrow">¶</a></p>
+<p id="section-8.4-2.2.2.1.5">
+When no interested origin clients remain, the proxy can simply forget about being part of the group observation for the target resource at the server, like an origin client would do (see <a href="#ssec-client-side-cancellation" class="auto internal xref">Section 5.4</a>).<a href="#section-8.4-2.2.2.1.5" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-8.4-2.2.2.2">
+                <p id="section-8.4-2.2.2.2.1">If the multicast notification is protected end-to-end by using Group OSCORE (see <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>), then the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy. As a consequence, the proxy forwards the notification to (the previous hop towards) any of the origin clients, each of which answers to the server if it picks a random number I equal to 0.<a href="#section-8.4-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+        </ul>
 </section>
 </div>
 </section>
@@ -5962,10 +5974,13 @@ Upon receiving an individual observation request for the same target resource, t
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-H.1-1.1">
-            <p id="appendix-H.1-1.1.1">Fixes in the examples with message exchanges.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.1.1">Section restructing: impact from proxies on rough counting of clients.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.2">
-            <p id="appendix-H.1-1.2.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.2.1">Fixes in the examples with message exchanges.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.3">
+            <p id="appendix-H.1-1.3.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
