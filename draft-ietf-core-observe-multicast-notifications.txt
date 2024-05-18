@@ -2395,13 +2395,15 @@ Table of Contents
    IANA is asked to enter the following option numbers to the "CoAP
    Option Numbers" registry within the "CoRE Parameters" registry group.
 
-      +--------+--------------------------------------+------------+
-      | Number |                 Name                 | Reference  |
-      +--------+--------------------------------------+------------+
-      |  TBD   |  Multicast-Response-Feedback-Divider | [RFC-XXXX] |
-      +--------+--------------------------------------+------------+
-      |  TBD   |  Listen-To-Multicast-Responses       | [RFC-XXXX] |
-      +--------+--------------------------------------+------------+
+       +========+=====================================+============+
+       | Number | Name                                | Reference  |
+       +========+=====================================+============+
+       | TBD    | Multicast-Response-Feedback-Divider | [RFC-XXXX] |
+       +--------+-------------------------------------+------------+
+       | TBD    | Listen-To-Multicast-Responses       | [RFC-XXXX] |
+       +--------+-------------------------------------+------------+
+
+         Table 2: Registrations in the CoAP Option Numbers Registry
 
 16.4.  Informative Response Parameters Registry
 
