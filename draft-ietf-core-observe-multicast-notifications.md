@@ -1656,13 +1656,13 @@ C1     C2     P        S
 |      |      |        |  (The value of the resource /r is "1234")
 |      |      |        |
 +------------>|        |  Token: 0x4a
-| GET  |      |        |  Observe: 0 register)
-|      |      |        |  Proxy-Uri: coap://sensor.example/r
+| GET  |      |        |  Observe: 0 (register)
+|      |      |        |  Proxy-Uri: "coap://sensor.example/r"
 |      |      |        |
 |      |      +------->|  Token: 0x5e
 |      |      | GET    |  Observe: 0 (register)
-|      |      |        |  Uri-Host: sensor.example
-|      |      |        |  Uri-Path: r
+|      |      |        |  Uri-Host: "sensor.example"
+|      |      |        |  Uri-Path: "r"
 |      |      |        |
 |      |      |        |  (S allocates the available Token value 0x7b)
 |      |      |        |
@@ -1675,8 +1675,8 @@ C1     C2     P        S
 |      |      | \      |
 |      |      |  `---->|  Token: 0x7b
 |      |      |    GET |  Observe: 0 (register)
-|      |      |        |  Uri-Host: sensor.example
-|      |      |        |  Uri-Path: r
+|      |      |        |  Uri-Host: "sensor.example"
+|      |      |        |  Uri-Path: "r"
 |      |      |        |
 |      |      |        |  (S creates a group observation of /r)
 |      |      |        |
@@ -1708,7 +1708,6 @@ C1     C2     P        S
 |      |      |        |
 |<------------+        |  Token: 0x4a
 | 2.05 |      |        |  Observe: 54120
-|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
 |      |      |        |
@@ -1718,18 +1717,17 @@ C1     C2     P        S
 |      |      |        |
 |      +----->|        |  Token: 0x01
 |      | GET  |        |  Observe: 0 (register)
-|      |      |        |  Proxy-Uri: coap://sensor.example/r
+|      |      |        |  Proxy-Uri: "coap://sensor.example/r"
 |      |      |        |
 |      |      |        |  (The proxy has a fresh cache representation)
 |      |      |        |
 |      |<-----+        |  Token: 0x01
 |      | 2.05 |        |  Observe: 54120
-|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "1234"
 |      |      |        |
 
-...    ...    ...    ...
+...   ...    ...     ...
 
 |      |      |        |
 |      |      |        |  (The value of the resource
@@ -1738,19 +1736,16 @@ C1     C2     P        S
 |      |      |  (#)   |
 |      |      |<-------+  Token: 0x7b
 |      |      | 2.05   |  Observe: 11
-|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "5678"
 |      |      |        |
 |<------------+        |  Token: 0x4a
 | 2.05 |      |        |  Observe: 54123
-|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "5678"
 |      |      |        |
 |      |<-----+        |  Token: 0x01
 |      | 2.05 |        |  Observe: 54123
-|      |      |        |  Content-Format: application/cbor
 |      |      |        |  <Other options>
 |      |      |        |  Payload: "5678"
 |      |      |        |
@@ -1781,27 +1776,27 @@ C1      C2      P         S
 +-------------->|         |  Token: 0x4a
 | FETCH |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x01; piv: 101; ...}
-|       |       |         |  Uri-Host: sensor.example
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Uri-Host: "sensor.example"
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
 |       |       +-------->|  Token: 0x5e
 |       |       | FETCH   |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x01; piv: 101; ...}
-|       |       |         |  Uri-Host: sensor.example
+|       |       |         |  Uri-Host: "sensor.example"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
@@ -1820,13 +1815,13 @@ C1      C2      P         S
 |       |       |   FETCH |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05; piv: 501;
 |       |       |         |           kid context: 0x57ab2e; ...}
-|       |       |         |  Uri-Host: sensor.example
+|       |       |         |  Uri-Host: "sensor.example"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |  <Signature>
@@ -1876,8 +1871,8 @@ C1      C2      P         S
 | FETCH |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05 ; piv: 501;
 |       |       |         |           kid context: 0x57ab2e; ...}
-|       |       |         |  Uri-Host: sensor.example
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Uri-Host: "sensor.example"
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  Listen-To-
 |       |       |         |  Multicast-Responses: {[1, bstr(SRV_ADDR),
 |       |       |         |                         SRV_PORT, 0x7b,
@@ -1889,7 +1884,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |  <Signature>
@@ -1909,27 +1904,27 @@ C1      C2      P         S
 |       +------>|         |  Token: 0x01
 |       | FETCH |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x02; piv: 201; ...}
-|       |       |         |  Uri-Host: sensor.example
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Uri-Host: "sensor.example"
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
 |       |       +-------->|  Token: 0x5f
 |       |       | FETCH   |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x02; piv: 201; ...}
-|       |       |         |  Uri-Host: sensor.example
+|       |       |         |  Uri-Host: "sensor.example"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
@@ -1971,8 +1966,8 @@ C1      C2      P         S
 |       | FETCH |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x05; piv: 501;
 |       |       |         |           kid context: 57ab2e; ...}
-|       |       |         |  Uri-Host: sensor.example
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Uri-Host: "sensor.example"
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  Listen-To-
 |       |       |         |  Multicast-Responses: {[1, bstr(SRV_ADDR),
 |       |       |         |                         SRV_PORT, 0x7b,
@@ -1984,7 +1979,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |  <Signature>
@@ -1995,7 +1990,7 @@ C1      C2      P         S
 |       |  ACK  |         |
 |       |       |         |
 
-...     ...     ...     ...
+...    ...     ...      ...
 
 |       |       |         |
 |       |       |         |  (The value of the resource
@@ -2010,7 +2005,6 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    2.05 (Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    Content-Format: application/cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
 |       |       |         |    CBOR_Payload: "5678"
@@ -2068,7 +2062,7 @@ The example provided in this appendix as reflected by the message exchange shown
 
 7. The server receives the ticket request, which is a deviation from the case where the ticket request is not a deterministic request and stops at the proxy (see {{intermediaries-e2e-security}}). Then, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This happens through a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
-8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
+8. Having recognized the incoming request as one of the self-generated deterministic phantom requests made available at external sources, the server does not perform any Group OSCORE processing on it. This opens for replying to the proxy with an unprotected response, although not signaling any OSCORE-related error.
 
 9. The server starts the group observation and replies with an error response, i.e., the usual 5.03 informative response, including: the transport-specific information, the phantom request, and (optionally) the latest notification.
 
@@ -2105,14 +2099,14 @@ C1      C2      P         S
 |       |       |         |  (S sends to itself a phantom observation
 |       |       |         |   request PH_REQ as coming from the
 |       |       |         |   IP multicast address GRP_ADDR.
-|       |       |         |   The OSCORE processing occurs as
+|       |       |         |   The Group OSCORE processing occurs as
 |       |       |         |   specified for a deterministic request)
 |       |       |         |
 |       |       |  .------+
 |       |       | /       |
 |       |       | \       |
 |       |       |  `----->|  Token: 0x7b
-|       |       |   FETCH |  Uri-Host: sensor.example
+|       |       |   FETCH |  Uri-Host: "sensor.example"
 |       |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
@@ -2121,7 +2115,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
@@ -2136,22 +2130,22 @@ C1      C2      P         S
 |       |       |         |
 |       |       |         |
 +-------------->|         |  Token: 0x4a
-| FETCH |       |         |  Uri-Host: sensor.example
+| FETCH |       |         |  Uri-Host: "sensor.example"
 |       |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
 |       |       +-------->|  Token: 0x5e
-|       |       | FETCH   |  Uri-Host: sensor.example
+|       |       | FETCH   |  Uri-Host: "sensor.example"
 |       |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e ; ... }
@@ -2160,13 +2154,13 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
 |       |       |         |  (S recognizes PH_REQ through byte-by-byte
 |       |       |         |   comparison against the stored one, and
-|       |       |         |   skips any OSCORE processing)
+|       |       |         |   skips any Group OSCORE processing)
 |       |       |         |
 |       |       |         |  (S prepares the "last notification"
 |       |       |         |   response defined below)
@@ -2232,17 +2226,17 @@ C1      C2      P         S
 |       |       |         |  (C2 obtains PH_REQ and sends it to P)
 |       |       |         |
 |       +------>|         |  Token: 0x01
-|       | FETCH |         |  Uri-Host: sensor.example
+|       | FETCH |         |  Uri-Host: "sensor.example"
 |       |       |         |  Observe: 0 (register)
 |       |       |         |  OSCORE: {kid: 0x09 ; piv: 0 ;
 |       |       |         |           kid context: 0x57ab2e; ...}
-|       |       |         |  Proxy-Scheme: coap
+|       |       |         |  Proxy-Scheme: "coap"
 |       |       |         |  <Other class U/I options>
 |       |       |         |  0xff
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x01 (GET),
 |       |       |         |    Observe: 0 (register),
-|       |       |         |    Uri-Path: r,
+|       |       |         |    Uri-Path: "r",
 |       |       |         |    <Other class E options>
 |       |       |         |  }
 |       |       |         |
@@ -2262,7 +2256,7 @@ C1      C2      P         S
 |       |       |         |  <Signature>
 |       |       |         |
 
-...     ...     ...     ...
+...    ...     ...      ...
 
 |       |       |         |
 |       |       |         |  (The value of the resource
@@ -2277,7 +2271,6 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    Content-Format: application/cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
 |       |       |         |    CBOR_Payload: "5678"
