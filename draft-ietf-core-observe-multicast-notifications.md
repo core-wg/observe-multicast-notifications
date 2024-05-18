@@ -600,19 +600,12 @@ This section specifies a method that the server can use to keep an estimate of s
 
 In order to enable the rough counting of still active and interested clients, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
 
-The option is called Multicast-Response-Feedback-Divider. As summarized in {{mrfd-table}}, the option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
+The option is called Multicast-Response-Feedback-Divider and has the properties summarized in {{mrfd-table}}, which extends Table 4 of {{RFC7252}}. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
 
-~~~~~~~~~~
-+-----+---+---+---+---+---------------------+--------+------+---------+
-| No. | C | U | N | R | Name                | Format | Len. | Default |
-+-----+---+---+---+---+---------------------+--------+------+---------+
-| TBD |   | x | - |   | Multicast-Response- | uint   | 0-1  | (none)  |
-|     |   |   |   |   | Feedback-Divider    |        |      |         |
-+-----+---+---+---+---+---------------------+--------+------+---------+
-
-      C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-~~~~~~~~~~
-{: #mrfd-table title="Multicast-Response-Feedback-Divider" artwork-align="center"}
+| No.  | C | U | N | R | Name                                    | Format | Length | Default |
+| TBD  |   | x | - |   | Multicast-Response-<br>Feedback-Divider | uint   | 0-1    | (none)  |
+{: #mrfd-table title="The Multicast-Response-Feedback-Divider Option.&nbsp;&nbsp;&nbsp;
+C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -1043,21 +1036,13 @@ Details on the additional message exchange and processing are defined in {{inter
 
 In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.
 
-The option is called Listen-To-Multicast-Responses and is intended only for requests. As summarized in {{ltmr-table}}, the option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
+The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in {{ltmr-table}}, which extends Table 4 of {{RFC7252}}. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
 
-~~~~~~~~~~
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-| No. | C | U | N | R | Name              | Format | Len.   | Default |
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-| TBD | x | x | - |   | Listen-To-        |  (*)   | 3-1024 | (none)  |
-|     |   |   |   |   | Multicast-        |        |        |         |
-|     |   |   |   |   | Responses         |        |        |         |
-+-----+---+---+---+---+-------------------+--------+--------+---------+
-
-      C = Critical, U = Unsafe, N = NoCacheKey, R = Repeatable
-      (*) See below.
-~~~~~~~~~~
-{: #ltmr-table title="Listen-To-Multicast-Responses" artwork-align="center"}
+| No.  | C | U | N | R | Name                              | Format | Length | Default |
+| TBD  | x | x | - |   | Listen-To-<br>Multicast-Responses | (*)    | 3-1024 | (none)  |
+{: #ltmr-table title="The Listen-To-Multicast-Responses Option.&#13;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 The Listen-To-Multicast-Responses Option includes the byte serialization of a CBOR array. This specifies transport-specific message information required for listening to the multicast notifications of a group observation, and intended to the proxy adjacent to the origin server sending those notifications. In particular, the serialized CBOR array has the same format specified in {{sssec-transport-specific-encoding}} for the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}).
 
