@@ -480,7 +480,7 @@ At a certain point in time, a client may become not interested in receiving furt
 
 When, later on, the server sends the next multicast notification, the client will not recognize the Token value T in the message. Since the multicast notification is Non-confirmable, it is OPTIONAL for the client to reject the multicast notification with a Reset message, as defined in {{Section 3.5 of RFC7641}}.
 
-In case the server has cancelled a group observation as defined in {{ssec-server-side-cancellation}}, the client simply forgets about the group observation and frees up the used Token value T for that endpoint, upon receiving the multicast error response defined in {{ssec-server-side-cancellation}}.
+In case the server has canceled a group observation as defined in {{ssec-server-side-cancellation}}, the client simply forgets about the group observation and frees up the used Token value T for that endpoint, upon receiving the multicast error response defined in {{ssec-server-side-cancellation}}.
 
 # Web Linking # {#sec-web-linking}
 
@@ -685,7 +685,7 @@ To produce a most accurate updated counter, a server can include a Multicast-Res
 
    This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see {{sec-secured-notifications}} and {{intermediaries-e2e-security}}). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.
 
-   Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin enpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.
+   Therefore, if the server uses the rough counting process defined in this section but communications are not protected end-to-end between the origin endpoints, then it is practically required that the proxy recognizes and understands the Multicast-Response-Feedback-Divider Option. If that is not the case, then every execution of the rough counting process will effectively prevent the clients from receiving further notifications for the group observation, until they register again as observers at the proxy.
 
 * The following holds when the proxy receives a multicast notification including the Multicast-Response-Feedback-Divider Option.
 
