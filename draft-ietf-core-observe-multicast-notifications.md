@@ -2312,7 +2312,7 @@ C1      C2      P         S
 
 ## Version -08 to -09 ## {#sec-08-09}
 
-* Section restructing: impact from proxies on rough counting of clients.
+* Section restructuring: impact from proxies on rough counting of clients.
 
 * Fixes in the examples with message exchanges.
 
