@@ -711,9 +711,9 @@ In any other case, the server MAY communicate to clients what OSCORE group they 
 
 Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{RFC9200}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
 
-If multicast notifications are protected using Group OSCORE, the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server.
+If multicast notifications are protected using Group OSCORE, then the original registration requests and related unicast (notification) responses MUST also be secured, including and especially the informative responses from the server. An exception is the case discussed in {{deterministic-phantom-Request}}, where the informative response from the server is not protected.
 
-To this end, alternative security protocols than Group OSCORE, such as OSCORE {{RFC8613}} and/or DTLS {{RFC9147}}, can be used to protect other exchanges via unicast between the server and each client, including the original client registration (see {{sec-client-side}}).
+In order to protect unicast messages exchanged between the server and each client, including the original client registration (see {{sec-client-side}}), alternative security protocols than Group OSCORE can be used, such as OSCORE {{RFC8613}} and/or DTLS {{RFC9147}}. However, it is RECOMMENDED to use OSCORE or Group OSCORE.
 
 ## Signaling the OSCORE Group in the Informative Response ## {#sec-inf-response}
 
