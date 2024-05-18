@@ -1193,7 +1193,7 @@ Removing the option would result in the proxy adjacent to the origin server to n
 
 Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.
 
-In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. This can be achieved by the client protecting the ticket request sent to the proxy using OSCORE (see {{I-D.ietf-core-oscore-capable-proxies}}) and/or DTLS {{RFC9147}}.
+In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. To this end, the client can further protect the ticket request by means of a secure communication association that it shares with the proxy, e.g., by using OSCORE (see {{I-D.ietf-core-oscore-capable-proxies}}) and/or DTLS {{RFC9147}}.
 
 # IANA Considerations # {#iana}
 
