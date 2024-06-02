@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 19 November 2024                                               
+Expires: 4 December 2024                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                             18 May 2024
+                                                             2 June 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 November 2024.
+   This Internet-Draft will expire on 4 December 2024.
 
 Copyright Notice
 
@@ -4246,9 +4246,10 @@ Acknowledgments
    Jiménez, John Preuß Mattsson, Jim Schaad, Ludwig Seitz, and Göran
    Selander for their comments and feedback.
 
-   The work on this document has been partly supported by VINNOVA and
-   the Celtic-Next project CRITISEC; and by the H2020 project SIFIS-Home
-   (Grant agreement 952652).
+   The work on this document has been partly supported by the Sweden's
+   Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and
+   CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement
+   952652).
 
 Authors' Addresses
 
