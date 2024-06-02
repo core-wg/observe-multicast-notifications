@@ -1240,7 +1240,7 @@ Reference: {{&SELF}}
 
 ## CoAP Option Numbers Registry ## {#iana-coap-options}
 
-IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "CoRE Parameters" registry group.
+IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 | Number | Name                                | Reference |
 |  TBD   | Multicast-Response-Feedback-Divider | {{&SELF}} |
@@ -1265,7 +1265,7 @@ This registry has been initially populated by the values in {{informative-respon
 
 ## CoAP Transport Information Registry {#iana-transport-protocol-identifiers}
 
-This document establishes the "CoAP Transport Information" registry within the "CoRE Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
+This document establishes the "CoAP Transport Information" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}. It should be noted that, in addition to the expert review, some portions of the Registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
 
@@ -1285,7 +1285,7 @@ This registry has been initially populated by the values in {{transport-protocol
 
 ## Target Attributes Registry ## {#iana-target-attributes}
 
-IANA is asked to register the following entry in the "Target Attributes" registry within the "CoRE Parameters" registry group.
+IANA is asked to register the following entry in the "Target Attributes" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 ~~~~~~~~~~~
 Attribute Name: gp-obs
