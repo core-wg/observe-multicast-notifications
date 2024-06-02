@@ -2395,7 +2395,8 @@ Table of Contents
 16.3.  CoAP Option Numbers Registry
 
    IANA is asked to enter the following option numbers to the "CoAP
-   Option Numbers" registry within the "CoRE Parameters" registry group.
+   Option Numbers" registry within the "Constrained RESTful Environments
+   (CoRE) Parameters" registry group.
 
        +========+=====================================+============+
        | Number | Name                                | Reference  |
@@ -2439,12 +2440,13 @@ Table of Contents
 16.5.  CoAP Transport Information Registry
 
    This document establishes the "CoAP Transport Information" registry
-   within the "CoRE Parameters" registry group.  The registry has been
-   created to use the "Expert Review" registration procedure [RFC8126].
-   Expert review guidelines are provided in Section 16.7.  It should be
-   noted that, in addition to the expert review, some portions of the
-   Registry require a specification, potentially a Standards Track RFC,
-   to be supplied as well.
+   within the "Constrained RESTful Environments (CoRE) Parameters"
+   registry group.  The registry has been created to use the "Expert
+   Review" registration procedure [RFC8126].  Expert review guidelines
+   are provided in Section 16.7.  It should be noted that, in addition
+   to the expert review, some portions of the Registry require a
+   specification, potentially a Standards Track RFC, to be supplied as
+   well.
 
    The columns of this registry are:
 
@@ -2481,7 +2483,8 @@ Table of Contents
 16.6.  Target Attributes Registry
 
    IANA is asked to register the following entry in the "Target
-   Attributes" registry within the "CoRE Parameters" registry group.
+   Attributes" registry within the "Constrained RESTful Environments
+   (CoRE) Parameters" registry group.
 
    Attribute Name: gp-obs
    Brief Description: Observable resource supporting group observation
