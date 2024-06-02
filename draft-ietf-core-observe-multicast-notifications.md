@@ -916,7 +916,7 @@ C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |    Content-Format: application/informative-response+cbor,    |
 |    <Other class E options>,                                  |
 |    0xff,                                                     |
-|    CBOR_payload {                                            |
+|    Payload {                                                 |
 |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
 |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
 |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
@@ -954,7 +954,7 @@ C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |    Content-Format: application/informative-response+cbor,    |
 |    <Other class E options>,                                  |
 |    0xff,                                                     |
-|    CBOR_payload {                                            |
+|    Payload {                                                 |
 |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
 |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
 |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
@@ -981,7 +981,7 @@ C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
 |      Observe: [empty],                                       |
 |      <Other class E options>,                                |
 |      0xff,                                                   |
-|      CBOR_Payload: "5678"                                    |
+|      Payload: "5678"                                         |
 |    }                                                         |
 |    <Signature>                                               |
 |                                                              |
@@ -1854,7 +1854,7 @@ C1      C2      P         S
 |       |       |         |       informative-response+cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |    CBOR_payload {
+|       |       |         |    Payload {
 |       |       |         |       tp_info : [1, bstr(SRV_ADDR),
 |       |       |         |                  SRV_PORT, 0x7b,
 |       |       |         |                  bstr(GRP_ADDR), GRP_PORT],
@@ -1950,7 +1950,7 @@ C1      C2      P         S
 |       |       |         |       informative-response+cbor,
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |    CBOR_payload {
+|       |       |         |    Payload {
 |       |       |         |       tp_info : [1, bstr(SRV_ADDR),
 |       |       |         |                  SRV_PORT, 0x7b,
 |       |       |         |                  bstr(GRP_ADDR), GRP_PORT],
@@ -2015,7 +2015,7 @@ C1      C2      P         S
 |       |       |         |    Observe: [empty],
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |    CBOR_Payload: "5678"
+|       |       |         |    Payload: "5678"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |  (#)  |       |         |
@@ -2182,7 +2182,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    CBOR_Payload: "1234"
+|       |       |         |    Payload: "1234"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
@@ -2197,7 +2197,7 @@ C1      C2      P         S
 |       |       |         |    informative-response+cbor
 |       |       |         |  Max-Age: 0
 |       |       |         |  0xff,
-|       |       |         |  CBOR_payload {
+|       |       |         |  Payload {
 |       |       |         |     tp_info : [1, bstr(SRV_ADDR), SRV_PORT,
 |       |       |         |                0x7b, bstr(GRP_ADDR),
 |       |       |         |                GRP_PORT],
@@ -2223,7 +2223,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    CBOR_Payload: "1234"
+|       |       |         |    Payload: "1234"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
@@ -2259,7 +2259,7 @@ C1      C2      P         S
 |       |       |         |  Encrypted_payload {
 |       |       |         |    0x45 (2.05 Content),
 |       |       |         |    Observe: [empty],
-|       |       |         |    CBOR_Payload: "1234"
+|       |       |         |    Payload: "1234"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
@@ -2281,7 +2281,7 @@ C1      C2      P         S
 |       |       |         |    Observe: [empty],
 |       |       |         |    <Other class E options>,
 |       |       |         |    0xff,
-|       |       |         |    CBOR_Payload: "5678"
+|       |       |         |    Payload: "5678"
 |       |       |         |  }
 |       |       |         |  <Signature>
 |       |       |         |
