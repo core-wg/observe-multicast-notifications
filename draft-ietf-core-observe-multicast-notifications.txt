@@ -1801,7 +1801,7 @@ Table of Contents
    |    Content-Format: application/informative-response+cbor,    |
    |    <Other class E options>,                                  |
    |    0xff,                                                     |
-   |    CBOR_payload {                                            |
+   |    Payload {                                                 |
    |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
    |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
    |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
@@ -1839,7 +1839,7 @@ Table of Contents
    |    Content-Format: application/informative-response+cbor,    |
    |    <Other class E options>,                                  |
    |    0xff,                                                     |
-   |    CBOR_payload {                                            |
+   |    Payload {                                                 |
    |      tp_info    : [1, bstr(SRV_ADDR), SRV_PORT,              |
    |                    0x7b, bstr(GRP_ADDR), GRP_PORT],          |
    |      ph_req     : bstr(0x05 | OPT | 0xff | PAYLOAD | SIGN),  |
@@ -1866,7 +1866,7 @@ Table of Contents
    |      Observe: [empty],                                       |
    |      <Other class E options>,                                |
    |      0xff,                                                   |
-   |      CBOR_Payload: "5678"                                    |
+   |      Payload: "5678"                                         |
    |    }                                                         |
    |    <Signature>                                               |
    |                                                              |
@@ -3572,7 +3572,7 @@ Appendix F.  Example with a Proxy and Group OSCORE
  |       |       |         |       informative-response+cbor,
  |       |       |         |    <Other class E options>,
  |       |       |         |    0xff,
- |       |       |         |    CBOR_payload {
+ |       |       |         |    Payload {
  |       |       |         |       tp_info : [1, bstr(SRV_ADDR),
  |       |       |         |                  SRV_PORT, 0x7b,
  |       |       |         |                  bstr(GRP_ADDR), GRP_PORT],
@@ -3668,7 +3668,7 @@ Appendix F.  Example with a Proxy and Group OSCORE
  |       |       |         |       informative-response+cbor,
  |       |       |         |    <Other class E options>,
  |       |       |         |    0xff,
- |       |       |         |    CBOR_payload {
+ |       |       |         |    Payload {
  |       |       |         |       tp_info : [1, bstr(SRV_ADDR),
  |       |       |         |                  SRV_PORT, 0x7b,
  |       |       |         |                  bstr(GRP_ADDR), GRP_PORT],
@@ -3733,7 +3733,7 @@ Appendix F.  Example with a Proxy and Group OSCORE
  |       |       |         |    Observe: [empty],
  |       |       |         |    <Other class E options>,
  |       |       |         |    0xff,
- |       |       |         |    CBOR_Payload: "5678"
+ |       |       |         |    Payload: "5678"
  |       |       |         |  }
  |       |       |         |  <Signature>
  |  (#)  |       |         |
@@ -3968,7 +3968,7 @@ G.2.  Message Exchange
  |       |       |         |  Encrypted_payload {
  |       |       |         |    0x45 (2.05 Content),
  |       |       |         |    Observe: [empty],
- |       |       |         |    CBOR_Payload: "1234"
+ |       |       |         |    Payload: "1234"
  |       |       |         |  }
  |       |       |         |  <Signature>
  |       |       |         |
@@ -3983,7 +3983,7 @@ G.2.  Message Exchange
  |       |       |         |    informative-response+cbor
  |       |       |         |  Max-Age: 0
  |       |       |         |  0xff,
- |       |       |         |  CBOR_payload {
+ |       |       |         |  Payload {
  |       |       |         |     tp_info : [1, bstr(SRV_ADDR), SRV_PORT,
  |       |       |         |                0x7b, bstr(GRP_ADDR),
  |       |       |         |                GRP_PORT],
@@ -4009,7 +4009,7 @@ G.2.  Message Exchange
  |       |       |         |  Encrypted_payload {
  |       |       |         |    0x45 (2.05 Content),
  |       |       |         |    Observe: [empty],
- |       |       |         |    CBOR_Payload: "1234"
+ |       |       |         |    Payload: "1234"
  |       |       |         |  }
  |       |       |         |  <Signature>
  |       |       |         |
@@ -4045,7 +4045,7 @@ G.2.  Message Exchange
  |       |       |         |  Encrypted_payload {
  |       |       |         |    0x45 (2.05 Content),
  |       |       |         |    Observe: [empty],
- |       |       |         |    CBOR_Payload: "1234"
+ |       |       |         |    Payload: "1234"
  |       |       |         |  }
  |       |       |         |  <Signature>
  |       |       |         |
@@ -4067,7 +4067,7 @@ G.2.  Message Exchange
  |       |       |         |    Observe: [empty],
  |       |       |         |    <Other class E options>,
  |       |       |         |    0xff,
- |       |       |         |    CBOR_Payload: "5678"
+ |       |       |         |    Payload: "5678"
  |       |       |         |  }
  |       |       |         |  <Signature>
  |       |       |         |
