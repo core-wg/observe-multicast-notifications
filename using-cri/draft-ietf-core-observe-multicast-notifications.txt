@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 4 December 2024                                                
+Expires: 5 December 2024                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                             2 June 2024
+                                                             3 June 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 December 2024.
+   This Internet-Draft will expire on 5 December 2024.
 
 Copyright Notice
 
@@ -233,8 +233,9 @@ Table of Contents
    Readers are expected to be familiar with terms and concepts described
    in CoAP [RFC7252], group communication for CoAP
    [I-D.ietf-core-groupcomm-bis], Observe [RFC7641], CDDL [RFC8610],
-   CBOR [RFC8949], OSCORE [RFC8613], and Group OSCORE
-   [I-D.ietf-core-oscore-groupcomm].
+   CBOR [RFC8949], OSCORE [RFC8613], Group OSCORE
+   [I-D.ietf-core-oscore-groupcomm], and Constrained Resource
+   Identifiers (CRIs) [I-D.ietf-core-href].
 
    This document additionally defines the following terminology.
 
@@ -908,10 +909,11 @@ Table of Contents
 
        *  As destination address and port number, the IP multicast
           address GRP_ADDR and port number GRP_PORT.  These are
-          specified by the CRI conveyed by an element of 'tpi_details'
-          within the 'tp_info' parameter, in the informative response.
-          In particular, when transporting CoAP over UDP, the CRI is
-          conveyed by the element 'tpi_client' (see Section 4.2.1.1).
+          specified by the CRI conveyed by a dedicated element of
+          'tpi_details' within the 'tp_info' parameter, in the
+          informative response.  In particular, when transporting CoAP
+          over UDP, the CRI is conveyed by the element 'tpi_client' (see
+          Section 4.2.1.1).
 
           If the port number is not present in the CRI, then the client
           MUST use as GRP_PORT the default port number defined for the
@@ -920,10 +922,10 @@ Table of Contents
 
    2.  The client rebuilds the phantom registration request as follows.
 
-       *  The client uses the Token value T, specified by an element of
-          'tpi_details' within the 'tp_info' parameter, in the
-          informative response.  In particular, when transporting CoAP
-          over UDP, the Token value is specified by the element
+       *  The client uses the Token value T, specified by a dedicated
+          element of 'tpi_details' within the 'tp_info' parameter, in
+          the informative response.  In particular, when transporting
+          CoAP over UDP, the Token value is specified by the element
           'tpi_token' (see Section 4.2.1.1).
 
        *  If the 'ph_req' parameter is not present in the informative
@@ -1992,17 +1994,18 @@ Table of Contents
    taking part in the group observation.
 
    As a consequence, the proxy listens to the IP multicast address and
-   port number indicated by the server, i.e., per the CRI specified by
-   an element of 'tpi_details' within the 'tp_info' parameter, in the
-   informative response.  In particular, when transporting CoAP over
+   port number indicated by the server, i.e., per the CRI specified by a
+   dedicated element of 'tpi_details' within the 'tp_info' parameter, in
+   the informative response.  In particular, when transporting CoAP over
    UDP, the CRI is conveyed by the element 'tpi_client' (see
    Section 4.2.1.1).
 
    Furthermore, multicast notifications will match the phantom request
-   stored at the proxy, based on the Token value specified by an element
-   of 'tpi_details' within the 'tp_info' parameter, in the informative
-   response.  In particular, when transporting CoAP over UDP, the Token
-   value is specified by the element 'tpi_token' (see Section 4.2.1.1).
+   stored at the proxy, based on the Token value specified by a
+   dedicated element of 'tpi_details' within the 'tp_info' parameter, in
+   the informative response.  In particular, when transporting CoAP over
+   UDP, the Token value is specified by the element 'tpi_token' (see
+   Section 4.2.1.1).
 
    Then, the proxy performs the following actions.
 
@@ -2131,7 +2134,7 @@ Table of Contents
    adjacent to the origin server sending those notifications.  In
    particular, the serialized CBOR array has the same format specified
    in Section 4.2.1 for the 'tp_info' parameter of the informative
-   response defined Section 4.2.
+   response defined in Section 4.2.
 
    The Listen-To-Multicast-Responses Option is of class U for OSCORE
    [RFC8613][I-D.ietf-core-oscore-groupcomm].
@@ -2225,17 +2228,17 @@ Table of Contents
 
    After that, the proxy listens to the IP multicast address and port
    number indicated in the Listen-To-Multicast-Responses Option, i.e.,
-   per the CRI specified by an element of 'tpi_details' within the
-   'tp_info' parameter, in the serialized CBOR array conveyed in the
-   option.  In particular, when transporting CoAP over UDP, the CRI is
-   conveyed by the element 'tpi_client' (see Section 4.2.1.1).
+   per the CRI specified by a dedicated element of 'tpi_details' within
+   the serialized CBOR array conveyed in the option.  In particular,
+   when transporting CoAP over UDP, the CRI is conveyed by the element
+   'tpi_client' (see Section 4.2.1.1).
 
    Furthermore, multicast notifications will match the phantom request
-   stored at the proxy, based on the Token value specified by an element
-   of 'tpi_details' within the 'tp_info' parameter, in the serialized
-   CBOR array conveyed in the Listen-To-Multicast-Responses Option.  In
-   particular, when transporting CoAP over UDP, the Token value is
-   specified by the element 'tpi_token' (see Section 4.2.1.1).
+   stored at the proxy, based on the Token value specified by a
+   dedicated element of 'tpi_details' within the serialized CBOR array
+   conveyed in the Listen-To-Multicast-Responses Option.  In particular,
+   when transporting CoAP over UDP, the Token value is specified by the
+   element 'tpi_token' (see Section 4.2.1.1).
 
    An example is provided in Appendix F.
 
@@ -2562,8 +2565,6 @@ Table of Contents
       the item.
 
    This registry has been initially populated by the entry in Table 4.
-   The "Reference" column for all of these entries refers to sections of
-   this document.
 
 16.6.  Target Attributes Registry
 
