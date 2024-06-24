@@ -1044,7 +1044,7 @@ C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
 |      Observe: [empty],                                       |
 |      <Other class E options>,                                |
 |      0xff,                                                   |
-|      Payload: "5678"                                    |
+|      Payload: "5678"                                         |
 |    }                                                         |
 |    <Signature>                                               |
 |                                                              |
