@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 26 December 2024                                               
+Expires: 9 January 2025                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                            24 June 2024
+                                                             8 July 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 December 2024.
+   This Internet-Draft will expire on 9 January 2025.
 
 Copyright Notice
 
@@ -1179,8 +1179,9 @@ Table of Contents
     |     | | | |   | Feedback-Divider    |        |        |         |
     +-----+-+-+-+---+---------------------+--------+--------+---------+
 
-        Table 1: The Multicast-Response-Feedback-Divider Option.   
-              C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable
+                 Table 1: The Multicast-Response-Feedback-
+            Divider Option.                C=Critical, U=Unsafe,
+                         N=NoCacheKey, R=Repeatable
 
    The Multicast-Response-Feedback-Divider Option is of class E for
    OSCORE [RFC8613][I-D.ietf-core-oscore-groupcomm].
@@ -2124,8 +2125,9 @@ Table of Contents
     |     | | | |   | Multicast-Responses |        |        |         |
     +-----+-+-+-+---+---------------------+--------+--------+---------+
 
-             Table 2: The Listen-To-Multicast-Responses Option.
-              C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable
+                     Table 2: The Listen-To-Multicast-
+          Responses Option.                           C=Critical,
+                    U=Unsafe, N=NoCacheKey, R=Repeatable
 
    The Listen-To-Multicast-Responses Option includes the byte
    serialization of a CBOR array.  This specifies transport-specific
