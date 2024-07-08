@@ -655,7 +655,8 @@ The option is called Multicast-Response-Feedback-Divider and has the properties 
 
 | No.  | C | U | N | R | Name                                    | Format | Length | Default |
 | TBD  |   | x | - |   | Multicast-Response-<br>Feedback-Divider | uint   | 0-1    | (none)  |
-{: #mrfd-table title="The Multicast-Response-Feedback-Divider Option.&nbsp;&nbsp;&nbsp;
+{: #mrfd-table title="The&nbsp;Multicast-Response-Feedback-Divider&nbsp;Option.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
@@ -1109,8 +1110,9 @@ The option is called Listen-To-Multicast-Response, is intended only for requests
 
 | No.  | C | U | N | R | Name                              | Format | Length | Default |
 | TBD  | x | x | - |   | Listen-To-<br>Multicast-Responses | (*)    | 3-1024 | (none)  |
-{: #ltmr-table title="The Listen-To-Multicast-Responses Option.&#13;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{: #ltmr-table title="The&nbsp;Listen-To-Multicast-Responses&nbsp;Option.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 The Listen-To-Multicast-Responses Option includes the byte serialization of a CBOR array. This specifies transport-specific message information required for listening to the multicast notifications of a group observation, and intended to the proxy adjacent to the origin server sending those notifications. In particular, the serialized CBOR array has the same format specified in {{sssec-transport-specific-encoding}} for the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}.
