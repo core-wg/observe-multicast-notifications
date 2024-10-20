@@ -9,7 +9,7 @@ docname: draft-ietf-core-observe-multicast-notifications-latest
 # stand_alone: true
 
 ipr: trust200902
-area: ART
+area: WIT
 wg: CoRE Working Group
 kw: Internet-Draft
 cat: std
@@ -17,11 +17,6 @@ submissiontype: IETF
 updates: 7252, 7641
 
 coding: utf-8
-pi:    # can use array (if all yes) or hash here
-
-  toc: yes
-  sortrefs:   # defaults to yes
-  symrefs: yes
 
 author:
       -
@@ -66,7 +61,6 @@ normative:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-href:
-  RFC2119:
   RFC4944:
   RFC6838:
   RFC7252:
@@ -74,7 +68,6 @@ normative:
   RFC7967:
   RFC8085:
   RFC8126:
-  RFC8174:
   RFC8288:
   RFC8610:
   RFC8613:
