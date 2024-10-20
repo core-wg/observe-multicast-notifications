@@ -804,9 +804,9 @@ When using Group OSCORE to protect multicast notifications, the server performs 
 
 ### Registration ### {#ssec-server-side-request-oscore}
 
-The phantom registration request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
+The phantom registration request MUST be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The server protects the phantom registration request as defined in {{Section 8.1 of I-D.ietf-core-oscore-groupcomm}}, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE Option in the phantom registration request includes:
+The server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}}, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE Option in the phantom registration request includes:
 
 * As 'kid', the Sender ID of the server in the OSCORE group.
 
@@ -822,9 +822,9 @@ Optionally, the informative response includes information on the OSCORE group to
 
 ### Notifications ### {#ssec-server-side-notifications-oscore}
 
-The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 8 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
+The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The process described in {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}).
+The process described in {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
 
 *  The 'request_kid' is the 'kid' value in the OSCORE Option of the phantom registration request, i.e., the Sender ID of the server.
 
@@ -836,7 +836,7 @@ Note that these same values are used to protect each and every multicast notific
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation (see {{ssec-server-side-cancellation}}), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 8.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
+When canceling a group observation (see {{ssec-server-side-cancellation}}), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -848,7 +848,7 @@ Upon receiving the informative response from the server, the client performs as 
 
 When performing step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
-Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in {{Section 8.2 of I-D.ietf-core-oscore-groupcomm}}, with the following differences.
+Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in {{Section 7.2 of I-D.ietf-core-oscore-groupcomm}}, with the following differences.
 
 * The client MUST NOT perform any replay check. That is, the client skips step 3 in {{Section 8.2 of RFC8613}}.
 
@@ -868,9 +868,9 @@ If the informative response includes the parameter 'last_notif', the client also
 
 ### Notifications ### {#ssec-client-side-notifications-oscore}
 
-After having successfully processed the informative response as defined in {{ssec-client-side-informative-oscore}}, the client will decrypt and verify every multicast notification for the target resource as defined in {{Section 8.4 of I-D.ietf-core-oscore-groupcomm}}, with the following difference.
+After having successfully processed the informative response as defined in {{ssec-client-side-informative-oscore}}, the client will decrypt and verify every multicast notification for the target resource as defined in {{Section 7.4 of I-D.ietf-core-oscore-groupcomm}}, with the following difference.
 
-For both decryption and signature verification, the client MUST set the 'external_aad' defined in {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
+For both decryption and signature verification, the client MUST set the 'external_aad' defined in {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
 
 * 'request_kid' takes the value of the 'kid' field from the OSCORE Option of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
@@ -1610,11 +1610,11 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-   Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will never use the pairwise mode of Group OSCORE as per {{Section 9 of I-D.ietf-core-oscore-groupcomm}}, and will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
+   Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will never use the pairwise mode of Group OSCORE as per {{Section 8 of I-D.ietf-core-oscore-groupcomm}}, and will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
 
-   * In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see {{Section 2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 2.1.9 of I-D.ietf-core-oscore-groupcomm}}).
+   * In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see {{Section 2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-   * Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
+   * Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
 
 * 'srv_cred': this element is a CBOR byte string, with value the original binary representation of the server's authentication credential used in the OSCORE group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
@@ -1632,7 +1632,7 @@ Note that the informative response does not require to include an explicit proof
 
 A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs the Security Context like a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
-Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}).
+Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
 
 Furthermore, the server complies with the following points.
 
@@ -1648,7 +1648,7 @@ Upon expiration of the group keying material as indicated in the informative res
 
    - The server MUST update the OSCORE Master Secret.
 
-   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}.
+   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}.
 
    - The server MAY update the OSCORE Master Salt.
 
@@ -1656,7 +1656,7 @@ Upon expiration of the group keying material as indicated in the informative res
 
 Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, this is an informative response (see {{ssec-server-side-informative}}) that: i) additionally contains the abovementioned parameters for the next group keying material to be used; and ii) MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime. The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
 
-When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 3.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, and they both remain part of the group until the group ceases to exist.
+When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime, and they both remain part of the group until the group ceases to exist.
 
 As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
@@ -1698,9 +1698,9 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
 Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
 
-* In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.9 of I-D.ietf-core-oscore-groupcomm}}).
+* In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-* Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 4.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
+* Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
 
 If a deterministic request is used as phantom observation request for a group observation, the server does not assist clients that are interested to take part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
@@ -2379,6 +2379,12 @@ C1      C2      P         S
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -09 to -10 ## {#sec-09-10}
+
+* Fixed section numbered of referred documents.
+
+* Editorial improvements.
 
 ## Version -08 to -09 ## {#sec-08-09}
 
