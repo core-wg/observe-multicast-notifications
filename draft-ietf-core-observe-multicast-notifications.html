@@ -1442,9 +1442,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-2">CoAP supports group communication <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, e.g., over IP multicast. This includes support for Observe registration requests over multicast, in order for clients to efficiently register as observers of a resource hosted at multiple servers.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">However, in a number of use cases, using multicast messages for responses would also be desirable. That is, it would be useful that a server sends observe notifications for a same target resource to multiple observers as responses over IP multicast.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">For instance, in CoAP publish-subscribe <span>[<a href="#I-D.ietf-core-coap-pubsub" class="cite xref">I-D.ietf-core-coap-pubsub</a>]</span>, multiple clients can subscribe to a topic, by observing the related resource hosted at the responsible broker. When a new value is published on that topic, it would be convenient for the broker to send a single multicast notification at once, to all the subscriber clients observing that topic.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">A different use case concerns clients observing a same registration resource at the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>. For example, multiple clients can benefit of observation for discovering (to-be-created) OSCORE groups <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, by retrieving from the Resource Directory updated links and descriptions to join them through the respective Group Manager <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="cite xref">I-D.tiloca-core-oscore-discovery</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-5">A different use case concerns clients observing a same registration resource at the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>. For example, multiple clients can benefit of observation for discovering (to-be-created) groups that use the security protocol Group Object Security for Constrained RESTful Environments (Group OSCORE) <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, by retrieving from the Resource Directory updated links and descriptions to join those groups through the respective Group Manager <span>[<a href="#I-D.tiloca-core-oscore-discovery" class="cite xref">I-D.tiloca-core-oscore-discovery</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">More in general, multicast notifications would be beneficial whenever several CoAP clients observe a same target resource at a CoAP server, and can be all notified at once by means of a single response message. However, CoAP does not originally define response messages addressed to multiple clients, e.g., over IP multicast. This document fills this gap and provides the following twofold contribution.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">First, it updates <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In the proposed method, the group of potential observers entrusts the server to manage the Token space for multicast notifications. By doing so, the server provides all the observers of a target resource with the same Token value to bind to their own observation. That Token value is then used in every multicast notification for the target resource. This is achieved by means of a unicast informative response sent by the server to each observer client.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-7">First, it updates <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, by defining a method to deliver Observe notifications as CoAP responses addressed to multiple clients, e.g., over IP multicast. In particular, the group of potential observers entrusts the server to manage the Token space for multicast notifications. Building on that, the server provides all the observers of a target resource with the same Token value to bind to their own observation, by sending a unicast informative response to each observer client. That Token value is then used in every multicast notification for the target resource under that observation.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">Second, this document defines how to use Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> to protect multicast notifications end-to-end between the server and the observer clients. This is also achieved by means of the unicast informative response mentioned above, which additionally includes parameter values used by the server to protect every multicast notification for the target resource by using Group OSCORE. This provides a secure binding between each of such notifications and the observation of each of the clients.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
@@ -1455,7 +1455,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
-<p id="section-1.1-2">Readers are expected to be familiar with terms and concepts described in CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, group communication for CoAP <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>, CBOR <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>, Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, and Constrained Resource Identifiers (CRIs) <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">Readers are expected to be familiar with terms and concepts described in CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, group communication for CoAP <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, Concise Data Definition Language (CDDL) <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>, Concise Binary Object Representation (CBOR) <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, Object Security for Constrained RESTful Environments (OSCORE) <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>, Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, and Constrained Resource Identifiers (CRIs) <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">This document additionally defines the following terminology.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-4.1">
@@ -1489,11 +1489,11 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <p id="section-2-2.2.1">The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-12.8" class="relref">Section 12.8</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>) are not suitable for this purpose.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-2.3">
-          <p id="section-2-2.3.1">The server and the clients need to agree out of band that multicast notifications may be used.<a href="#section-2-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-2-2.3.1">The server and the clients need to agree out-of-band that multicast notifications may be used.<a href="#section-2-2.3.1" class="pilcrow">¶</a></p>
 <p id="section-2-2.3.2">
 This document does not describe a way for a client to influence the server's decision to start group observations and thus to use multicast notifications. This is done on purpose.<a href="#section-2-2.3.2" class="pilcrow">¶</a></p>
 <p id="section-2-2.3.3">
-That is, the mechanism specified in this document is expected to be used in situations where sending individual notifications is not feasible, or is not preferred beyond a certain number of clients observing a target resource.<a href="#section-2-2.3.3" class="pilcrow">¶</a></p>
+That is, the method specified in this document is expected to be used in situations where sending individual notifications is not feasible, or is not preferred beyond a certain number of clients observing a target resource.<a href="#section-2-2.3.3" class="pilcrow">¶</a></p>
 <p id="section-2-2.3.4">
 If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means for clients to opt in for receiving multicast notifications.<a href="#section-2-2.3.4" class="pilcrow">¶</a></p>
 </li>
@@ -1516,7 +1516,7 @@ If applications arise where a negotiation between the clients and the server doe
               <p id="section-3-4.1.2.1.1">Without end-to-end security - Messages pertaining to the group observation are not protected. This basic case is defined in <a href="#sec-server-side" class="auto internal xref">Section 4</a> and <a href="#sec-client-side" class="auto internal xref">Section 5</a> from the server and the client side, respectively. An example is provided in <a href="#sec-example-no-security" class="auto internal xref">Section 7</a>.<a href="#section-3-4.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3-4.1.2.2">
-              <p id="section-3-4.1.2.2.1">With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the Group OSCORE security protocol <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. This case is defined in <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a>. An example is provided in <a href="#sec-example-with-security" class="auto internal xref">Section 10</a>.<a href="#section-3-4.1.2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-3-4.1.2.2.1">With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the security protocol Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. This case is defined in <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a>. An example is provided in <a href="#sec-example-with-security" class="auto internal xref">Section 10</a>.<a href="#section-3-4.1.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-3-4.1.2.2.2">
 If the participating endpoints using Group OSCORE also support the concept of Deterministic Client <span>[<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Then, all the clients are able to compute the same protected phantom request to use (see <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>).<a href="#section-3-4.1.2.2.2" class="pilcrow">¶</a></p>
 </li>
@@ -1529,7 +1529,7 @@ If the participating endpoints using Group OSCORE also support the concept of De
               <p id="section-3-4.2.2.1.1">Without end-to-end security - Messages pertaining to the group observation are not protected end-to-end between the clients and the server. This basic case is defined in <a href="#intermediaries" class="auto internal xref">Section 11</a>. An example is provided in <a href="#intermediaries-example" class="auto internal xref">Appendix E</a>.<a href="#section-3-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-3-4.2.2.2">
-              <p id="section-3-4.2.2.2.1">With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the Group OSCORE security protocol <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. In particular, the clients are required to separately provide the proxy with the obtained phantom request, thus enabling the proxy to receive the multicast notifications from the server. This case is defined in <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>. An example is provided in <a href="#intermediaries-example-e2e-security" class="auto internal xref">Appendix F</a>.<a href="#section-3-4.2.2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-3-4.2.2.2.1">With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the security protocol Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. In particular, the clients are required to separately provide the proxy with the obtained phantom request, thus enabling the proxy to receive the multicast notifications from the server. This case is defined in <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>. An example is provided in <a href="#intermediaries-example-e2e-security" class="auto internal xref">Appendix F</a>.<a href="#section-3-4.2.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-3-4.2.2.2.2">
 If the participating endpoints using Group OSCORE also support the concept of Deterministic Client <span>[<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>, the same advantages mentioned above for the case without a proxy applies (see <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>). In addition, this allows for a more efficient setup and enforcement of the group observation, by reducing the amount of message exchanges and allowing the proxy to effectively serve protected multicast notifications from its cache. An example is provided in <a href="#intermediaries-example-e2e-security-det-exchange" class="auto internal xref">Appendix G.2</a>.<a href="#section-3-4.2.2.2.2" class="pilcrow">¶</a></p>
 </li>
@@ -1565,7 +1565,7 @@ If the participating endpoints using Group OSCORE also support the concept of De
             <p id="section-4.1-2.1.1">The server builds a phantom observation request, i.e., a GET request with an Observe Option set to 0 (register).<a href="#section-4.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-2.2">
-            <p id="section-4.1-2.2.1">The server selects an available value T, from the Token space of a CoAP endpoint used for messages having:<a href="#section-4.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-2.2.1">The server selects an available value T, from the Token space of a CoAP endpoint used for messages that have:<a href="#section-4.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1-2.2.2.1">
                 <p id="section-4.1-2.2.2.1.1">As source address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT.<a href="#section-4.1-2.2.2.1.1" class="pilcrow">¶</a></p>
@@ -1587,7 +1587,9 @@ This Token space is under exclusive control of the server.<a href="#section-4.1-
             <p id="section-4.1-2.5.1">The server does not immediately respond to the phantom observation request with a multicast notification sent on the wire. The server stores the phantom observation request as is, throughout the lifetime of the group observation.<a href="#section-4.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-4.1-2.6">
-            <p id="section-4.1-2.6.1">The server builds a CoAP response message INIT_NOTIF as initial multicast notification for the target resource, in response to the phantom observation request. This message is formatted as other multicast notifications (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>) and <span class="bcp14">MUST</span> include the current representation of the target resource as payload. The server stores the message INIT_NOTIF and does not transmit it. The server considers this message as the latest multicast notification for the target resource, until it transmits a new multicast notification for that resource as a CoAP message on the wire, after which the server deletes the message INIT_NOTIF.<a href="#section-4.1-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-2.6.1">The server builds a CoAP response message INIT_NOTIF as initial multicast notification for the target resource, in response to the phantom observation request. This message is formatted as other multicast notifications (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>) and <span class="bcp14">MUST</span> include the current representation of the target resource as payload.<a href="#section-4.1-2.6.1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2.6.2">
+The server stores the message INIT_NOTIF and does not transmit it. The server considers this message as the latest multicast notification for the target resource, until it transmits a new multicast notification for that resource as a CoAP message on the wire, after which the server deletes the message INIT_NOTIF.<a href="#section-4.1-2.6.2" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -1600,7 +1602,7 @@ This Token space is under exclusive control of the server.<a href="#section-4.1-
 <p id="section-4.2-1">After having started a group observation on a target resource, the server proceeds as follows.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">For each traditional observation ongoing on the target resource, the server <span class="bcp14">MAY</span> cancel that observation. Then, the server considers the corresponding clients as now taking part in the group observation, for which it increases the corresponding observer counter accordingly.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">The server sends to each of such clients an informative response message, encoded as a unicast response with response code 5.03 (Service Unavailable). As per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, such a response does not include an Observe Option. The response <span class="bcp14">MUST</span> be Confirmable and <span class="bcp14">MUST NOT</span> encode link-local addresses.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">The Content-Format of the informative response is set to application/informative-response+cbor, defined in <a href="#content-format" class="auto internal xref">Section 16.2</a>. The payload of the informative response is a CBOR map including the following parameters, whose CBOR abbreviations are defined in <a href="#informative-response-params" class="auto internal xref">Section 13</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">The Content-Format of the informative response is set to application/informative-response+cbor, which is registered in <a href="#content-format" class="auto internal xref">Section 16.2</a>. The payload of the informative response is a CBOR map including the following parameters, whose CBOR abbreviations are defined in <a href="#informative-response-params" class="auto internal xref">Section 13</a>.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2-5.1">
             <p id="section-4.2-5.1.1">'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-4.2-5.1.1" class="pilcrow">¶</a></p>
@@ -1635,7 +1637,7 @@ informative_response_payload = {
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-format-of-the-informative-r" class="selfRef">Format of the informative response payload</a>
+<a href="#name-format-of-the-informative-r" class="selfRef">Format of the Informative Response Payload</a>
           </figcaption></figure>
 </div>
 <p id="section-4.2-8">Upon receiving a registration request to observe the target resource, the server does not create a corresponding individual observation for the requesting client. Instead, the server considers that client as now taking part in the group observation of the target resource, of which it increments the observer counter by 1. Then, the server replies to the client with the same informative response message defined above, which <span class="bcp14">MUST</span> be Confirmable.<a href="#section-4.2-8" class="pilcrow">¶</a></p>
@@ -1678,7 +1680,7 @@ port      = 0..65535
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-general-format-of-tp_info" class="selfRef">General format of 'tp_info'</a>
+<a href="#name-general-format-of-tp_info" class="selfRef">General Format of 'tp_info'</a>
             </figcaption></figure>
 </div>
 <p id="section-4.2.1-3">The following holds for the two elements 'tpi_server' and 'tpi_details'.<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
@@ -1766,7 +1768,7 @@ tp_info_coap_udp = [
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-format-of-tp_info-with-udp-" class="selfRef">Format of 'tp_info' with UDP as transport protocol</a>
+<a href="#name-format-of-tp_info-with-udp-" class="selfRef">Format of 'tp_info' with UDP as Transport Protocol</a>
               </figcaption></figure>
 </div>
 <p id="section-4.2.1.1-5">The CBOR diagnostic notation in <a href="#tp-info-udp-example" class="auto internal xref">Figure 4</a> provides an example of the 'tp_info' CBOR array when using UDP as transport protocol. In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the CoAP default port number), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.<a href="#section-4.2.1.1-5" class="pilcrow">¶</a></p>
@@ -1789,7 +1791,7 @@ tp_info_coap_udp = [
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-example-of-tp_info-with-udp" class="selfRef">Example of 'tp_info' with UDP as transport protocol</a>
+<a href="#name-example-of-tp_info-with-udp" class="selfRef">Example of 'tp_info' with UDP as Transport Protocol</a>
               </figcaption></figure>
 </div>
 </section>
@@ -1899,7 +1901,7 @@ The addressing information above is provided to the observer clients through the
 <p id="section-5.1-1">A client sends an observation request to the server as described in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, i.e., a GET request with an Observe Option set to 0 (register). The request <span class="bcp14">MUST NOT</span> encode link-local addresses. If the server is not configured to accept registrations on that target resource specifically for a group observation, this would still result in a positive notification response to the client as described in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, in case the server is able and willing to add the client to the list of observers.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>) can be pre-configured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). In this case, the client can include a No-Response Option <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span> with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">While the considered client is able to simply set up its multicast address and start receiving multicast notifications for the group observation, sending an observation request as above allows the server to increment the observer counter. This helps the server to assess the current number of clients interested in the group observation over time (e.g., by using the method in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), which in turn can play a role in deciding to cancel the group observation.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">While the considered client is able to simply set up its multicast address and start receiving multicast notifications for the group observation, sending an observation request as above allows the server to increment the observer counter. This helps the server to assess the current number of clients interested in the group observation over time (e.g., by using the method in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), which in turn can play a role in deciding to cancel the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>).<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-client-side-informative">
@@ -1948,7 +1950,7 @@ If the port number is not present in the CRI, then the client <span class="bcp14
             <p id="section-5.2-2.5.1">If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:<a href="#section-5.2-2.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2-2.5.2.1">
-                <p id="section-5.2-2.5.2.1.1">The same Token value T used at step 2; and<a href="#section-5.2-2.5.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-5.2-2.5.2.1.1">The same Token value T used at Step 2; and<a href="#section-5.2-2.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.2-2.5.2.2">
                 <p id="section-5.2-2.5.2.2.1">The transport-independent information, specified in the 'last_notif' parameter of the informative response.<a href="#section-5.2-2.5.2.2.1" class="pilcrow">¶</a></p>
@@ -1956,7 +1958,7 @@ If the port number is not present in the CRI, then the client <span class="bcp14
             </ul>
 </li>
           <li id="section-5.2-2.6">
-            <p id="section-5.2-2.6.1">If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at step 5 as defined in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.<a href="#section-5.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-2.6.1">If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.<a href="#section-5.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.2-2.7">
             <p id="section-5.2-2.7.1">If a traditional observation to the target resource is ongoing, the client <span class="bcp14">MAY</span> silently cancel it without notifying the server.<a href="#section-5.2-2.7.1" class="pilcrow">¶</a></p>
@@ -1995,7 +1997,7 @@ If the port number is not present in the CRI, then the client <span class="bcp14
 <p id="section-6-1">The possible use of multicast notifications in a group observation may be indicated by a target attribute "gp-obs" in a web link <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> to a resource, e.g., using a link-format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">The "gp-obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation, and to receive and process multicast notifications.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">A value <span class="bcp14">MUST NOT</span> be given for the "gp-obs" attribute and any present value <span class="bcp14">MUST</span> be ignored by the recipient.  The "gp-obs" attribute <span class="bcp14">MUST NOT</span> appear more than once in a given link-value; occurrences after the first <span class="bcp14">MUST</span> be ignored by the recipient.<a href="#section-6-3" class="pilcrow">¶</a></p>
-<p id="section-6-4">The example in <a href="#example-web-link" class="auto internal xref">Figure 5</a> shows a use of the "gp-obs" attribute: the client does resource discovery on a server and gets back a list of resources, one of which includes the "gp-obs" attribute indicating that the server might send multicast notifications for observations of that resource. The link-format notation (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-5" class="relref">Section 5</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) is used.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-4">The example in <a href="#example-web-link" class="auto internal xref">Figure 5</a> shows a use of the "gp-obs" attribute: the client does resource discovery on a server and gets back a list of resources, one of which includes the "gp-obs" attribute indicating that the server might send multicast notifications for observations of that resource. The CoRE Link-Format notation from <span><a href="https://rfc-editor.org/rfc/rfc6690#section-5" class="relref">Section 5</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> is used.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <span id="name-the-web-link"></span><div id="example-web-link">
 <figure id="figure-5">
         <div class="alignLeft art-text artwork" id="section-6-5.1">
@@ -2018,7 +2020,7 @@ RES: 2.05 Content
       <h2 id="name-example">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-example" class="section-name selfRef">Example</a>
       </h2>
-<p id="section-7-1">The following example refers to two clients C1 and C2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".<a href="#section-7-1" class="pilcrow">¶</a></p>
 <p id="section-7-2">The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">The following notation is used for the payload of the informative responses:<a href="#section-7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2294,7 +2296,7 @@ RES: 2.05 Content
 </div>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-example-of-group-observatio" class="selfRef">Example of group observation</a>
+<a href="#name-example-of-group-observatio" class="selfRef">Example of Group Observation</a>
         </figcaption></figure>
 </div>
 </section>
@@ -2316,7 +2318,7 @@ RES: 2.05 Content
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-the-multicast-response-feed" class="selfRef">The Multicast-Response-Feedback-Divider Option.                C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
+<a href="#name-the-multicast-response-feed" class="selfRef">The Multicast-Response-Feedback-Divider Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
           </caption>
 <thead>
             <tr>
@@ -2354,8 +2356,8 @@ RES: 2.05 Content
         <h3 id="name-processing-on-the-client-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-processing-on-the-client-si" class="section-name selfRef">Processing on the Client Side</a>
         </h3>
-<p id="section-8.2-1">Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client <span class="bcp14">SHOULD</span> acknowledge its interest in continuing receiving multicast notifications for the target resource, as described below.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different than 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>), and then registers a regular unicast observation on the same target resource.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client that is interested in continuing receiving multicast notifications for the target resource <span class="bcp14">SHOULD</span> acknowledge its interest, as described below.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>), and then registers a regular unicast observation on the same target resource.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request <span class="bcp14">MUST</span> be addressed to the same target resource, and <span class="bcp14">MUST</span> have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 <p id="section-8.2-4">Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client <span class="bcp14">MUST</span> send the unicast request in a non confirmable way, and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client <span class="bcp14">MUST</span> include a Multicast-Response-Feedback-Divider Option, whose value <span class="bcp14">MUST</span> be set to 0. As per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses, and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 <p id="section-8.2-5">The client <span class="bcp14">MUST</span> ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and <span class="bcp14">MUST NOT</span> include it in any other request.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
@@ -2427,9 +2429,9 @@ RES: 2.05 Content
 <li class="normal" id="section-8.4-2.1">
             <p id="section-8.4-2.1.1">Since the Multicast-Response-Feedback-Divider Option is not Safe-to-Forward, the proxy needs to recognize and understand the option in order to participate to the rough counting process.<a href="#section-8.4-2.1.1" class="pilcrow">¶</a></p>
 <p id="section-8.4-2.1.2">
-If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and send a 4.02 (Bad Option) response to the observer client (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.<a href="#section-8.4-2.1.2" class="pilcrow">¶</a></p>
+If the proxy receives a request that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the request and sends a 4.02 (Bad Option) response to the observer client (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in the client terminating its observation at the proxy, after which the client stops receiving notifications for the group observation.<a href="#section-8.4-2.1.2" class="pilcrow">¶</a></p>
 <p id="section-8.4-2.1.3">
-If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and send a 5.02 (Bad Gateway) response to each of the observer clients (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.<a href="#section-8.4-2.1.3" class="pilcrow">¶</a></p>
+If the proxy receives a multicast notification that includes the Multicast-Response-Feedback-Divider Option but the proxy does not recognize and understand the option, then the proxy has to stop processing the received multicast notification and sends a 5.02 (Bad Gateway) response to each of the observer clients (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.7.1" class="relref">Section 5.7.1</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>). This results in all the observer clients terminating their observation at the proxy, after which they stop receiving notifications for the group observation. Consequently, the proxy may decide to forget about its participation to the group observation at the server.<a href="#section-8.4-2.1.3" class="pilcrow">¶</a></p>
 <p id="section-8.4-2.1.4">
 This is not an issue if communications between the origin endpoints are protected end-to-end, i.e., both for the requests from the origin clients by using OSCORE or Group OSCORE, as well as for the multicast notifications from the origin server by using Group OSCORE (see <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). In fact, in such a case, the Multicast-Response-Feedback-Divider Option is protected end-to-end as well, and is thus hidden from the proxy.<a href="#section-8.4-2.1.4" class="pilcrow">¶</a></p>
 <p id="section-8.4-2.1.5">
@@ -2464,11 +2466,11 @@ When no interested origin clients remain, the proxy can simply forget about bein
       <h2 id="name-protection-of-multicast-not">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-protection-of-multicast-not" class="section-name selfRef">Protection of Multicast Notifications with Group OSCORE</a>
       </h2>
-<p id="section-9-1">A server can protect multicast notifications by using Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, thus ensuring that they are protected end-to-end for the observer clients. This requires that both the server and the clients interested in receiving multicast notifications from that server are members of the same OSCORE group.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">A server can protect multicast notifications by using the security protocol Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, thus ensuring that they are protected end-to-end for the observer clients. This requires that both the server and the clients interested in receiving multicast notifications from that server are members of the same OSCORE group.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">In some settings, the OSCORE group to refer to can be pre-configured on the clients and the server. In such a case, a server which is aware of such pre-configuration can simply assume a client to be already member of the correct OSCORE group.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">In any other case, the server <span class="bcp14">MAY</span> communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>. Note that clients can already be members of the right OSCORE group, in case they have previously joined it to securely communicate with the same server or with other servers to access their resources.<a href="#section-9-3" class="pilcrow">¶</a></p>
 <p id="section-9-4">Both the clients and the server <span class="bcp14">MAY</span> join the OSCORE group by using the approach described in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and based on the ACE framework for Authentication and Authorization in constrained environments <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>. Further details on how to discover the OSCORE group and join it are out of the scope of this document.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">If multicast notifications are protected using Group OSCORE, then the original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be secured, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-9-5" class="pilcrow">¶</a></p>
+<p id="section-9-5">If multicast notifications are protected using Group OSCORE, then the original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be protected, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-9-5" class="pilcrow">¶</a></p>
 <p id="section-9-6">In order to protect unicast messages exchanged between the server and each client, including the original client registration (see <a href="#sec-client-side" class="auto internal xref">Section 5</a>), alternative security protocols than Group OSCORE can be used, such as OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> and/or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. However, it is <span class="bcp14">RECOMMENDED</span> to use OSCORE or Group OSCORE.<a href="#section-9-6" class="pilcrow">¶</a></p>
 <div id="sec-inf-response">
 <section id="section-9.1">
@@ -2532,7 +2534,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-registration">
 <a href="#section-9.2.1" class="section-number selfRef">9.2.1. </a><a href="#name-registration" class="section-name selfRef">Registration</a>
           </h4>
-<p id="section-9.2.1-1">The phantom registration request <span class="bcp14">MUST</span> be secured, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-23#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> <span class="bcp14">MUST</span> be used.<a href="#section-9.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.2.1-1">The phantom registration request <span class="bcp14">MUST</span> be protected, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-23#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> <span class="bcp14">MUST</span> be used.<a href="#section-9.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.2.1-2">The server protects the phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-23#section-7.1" class="relref">Section 7.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE Option in the phantom registration request includes:<a href="#section-9.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2.1-3.1">
@@ -2549,9 +2551,21 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-informative-response-3">
 <a href="#section-9.2.2" class="section-number selfRef">9.2.2. </a><a href="#name-informative-response-3" class="section-name selfRef">Informative Response</a>
           </h4>
-<p id="section-9.2.2-1">The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see <a href="#ssec-server-side-request-oscore" class="auto internal xref">Section 9.2.1</a>). As a consequence: the specified Code is always 0.05 (FETCH); the sequence of CoAP options will be limited to the outer, non encrypted options; a payload is always present, as the authenticated ciphertext followed by the signature. Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2.2-2">Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see <a href="#ssec-server-side-notifications-oscore" class="auto internal xref">Section 9.2.3</a>). This applies also to the initial multicast notification INIT_NOTIF built at step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-9.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-9.2.2-3">Optionally, the informative response includes information on the OSCORE group to join, as additional parameters (see <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>).<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2.2-1">The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see <a href="#ssec-server-side-request-oscore" class="auto internal xref">Section 9.2.1</a>). Consequently, the following applies:<a href="#section-9.2.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2.2-2.1">
+              <p id="section-9.2.2-2.1.1">The specified Code is always 0.05 (FETCH).<a href="#section-9.2.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.2.2-2.2">
+              <p id="section-9.2.2-2.2.1">The sequence of CoAP options will be limited to the outer, non encrypted options.<a href="#section-9.2.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9.2.2-2.3">
+              <p id="section-9.2.2-2.3.1">A payload is always present, as the authenticated ciphertext followed by the signature.<a href="#section-9.2.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-9.2.2-3">Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2.2-4">Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see <a href="#ssec-server-side-notifications-oscore" class="auto internal xref">Section 9.2.3</a>). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-9.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.2.2-5">Optionally, the informative response includes information on the OSCORE group to join, as additional parameters (see <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>).<a href="#section-9.2.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-server-side-notifications-oscore">
@@ -2597,20 +2611,20 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-9.3.1" class="section-number selfRef">9.3.1. </a><a href="#name-informative-response-4" class="section-name selfRef">Informative Response</a>
           </h4>
 <p id="section-9.3.1-1">Upon receiving the informative response from the server, the client performs as described in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, with the following additions.<a href="#section-9.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.3.1-2">When performing step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.3.1-3">Once completed step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-23#section-7.2" class="relref">Section 7.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following differences.<a href="#section-9.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.3.1-2">When performing Step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.3.1-3">Once completed Step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-23#section-7.2" class="relref">Section 7.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following differences.<a href="#section-9.3.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.3.1-4.1">
-              <p id="section-9.3.1-4.1.1">The client <span class="bcp14">MUST NOT</span> perform any replay check. That is, the client skips step 3 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>.<a href="#section-9.3.1-4.1.1" class="pilcrow">¶</a></p>
+              <p id="section-9.3.1-4.1.1">The client <span class="bcp14">MUST NOT</span> perform any replay check. That is, the client skips Step 3 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>.<a href="#section-9.3.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.3.1-4.2">
               <p id="section-9.3.1-4.2.1">If decryption and verification of the phantom registration request succeed:<a href="#section-9.3.1-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.3.1-4.2.2.1">
-                  <p id="section-9.3.1-4.2.2.1.1">The client <span class="bcp14">MUST NOT</span> update the Replay Window in the Recipient Context associated with the server. That is, the client skips the second bullet of step 6 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>.<a href="#section-9.3.1-4.2.2.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-9.3.1-4.2.2.1.1">The client <span class="bcp14">MUST NOT</span> update the Replay Window in the Recipient Context associated with the server. That is, the client skips the second bullet of Step 6 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>.<a href="#section-9.3.1-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-9.3.1-4.2.2.2">
-                  <p id="section-9.3.1-4.2.2.2.1">The client <span class="bcp14">MUST NOT</span> take any further process as normally expected according to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. That is, the client skips step 8 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>. In particular, the client <span class="bcp14">MUST NOT</span> deliver the phantom registration request to the application, and <span class="bcp14">MUST NOT</span> take any action in the Token space of its unicast endpoint, where the informative response has been received.<a href="#section-9.3.1-4.2.2.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-9.3.1-4.2.2.2.1">The client <span class="bcp14">MUST NOT</span> take any further process as normally expected according to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. That is, the client skips Step 8 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>. In particular, the client <span class="bcp14">MUST NOT</span> deliver the phantom registration request to the application, and <span class="bcp14">MUST NOT</span> take any action in the Token space of its unicast endpoint where the informative response has been received.<a href="#section-9.3.1-4.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-9.3.1-4.2.2.3">
                   <p id="section-9.3.1-4.2.2.3.1">The client stores the values of the 'kid', 'piv', and 'kid context' fields from the OSCORE Option of the phantom registration request.<a href="#section-9.3.1-4.2.2.3.1" class="pilcrow">¶</a></p>
@@ -2621,8 +2635,8 @@ At the time of writing this specification, acceptable formats of authentication 
               <p id="section-9.3.1-4.3.1">If decryption and verification of the phantom registration request fail, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-9.3.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-9.3.1-5">After successful decryption and verification, the client performs step 3 in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, considering the decrypted phantom registration request.<a href="#section-9.3.1-5" class="pilcrow">¶</a></p>
-<p id="section-9.3.1-6">If the informative response includes the parameter 'last_notif', the client also decrypts and verifies the latest multicast notification rebuilt at step 5 in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, just like it would for the multicast notifications transmitted as CoAP messages on the wire (see <a href="#ssec-client-side-notifications-oscore" class="auto internal xref">Section 9.3.2</a>). If decryption and verification succeed, the client proceeds with step 6, considering the decrypted latest multicast notification. Otherwise, the client proceeds to step 7.<a href="#section-9.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-9.3.1-5">After successful decryption and verification, the client performs Step 3 in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, considering the decrypted phantom registration request.<a href="#section-9.3.1-5" class="pilcrow">¶</a></p>
+<p id="section-9.3.1-6">If the informative response includes the parameter 'last_notif', the client also decrypts and verifies the latest multicast notification rebuilt at Step 5 in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, just like it would for the multicast notifications transmitted as CoAP messages on the wire (see <a href="#ssec-client-side-notifications-oscore" class="auto internal xref">Section 9.3.2</a>). If decryption and verification succeed, the client proceeds with Step 6, considering the decrypted latest multicast notification. Otherwise, the client proceeds to Step 7.<a href="#section-9.3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-client-side-notifications-oscore">
@@ -2643,7 +2657,7 @@ At the time of writing this specification, acceptable formats of authentication 
               <p id="section-9.3.2-3.3.1">'request_kid_context' takes the value of the 'kid context' field from the OSCORE Option of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-9.3.2-4">Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource.<a href="#section-9.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.3.2-4">Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource under this group observation.<a href="#section-9.3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2655,7 +2669,7 @@ At the time of writing this specification, acceptable formats of authentication 
       <h2 id="name-example-with-group-oscore">
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-example-with-group-oscore" class="section-name selfRef">Example with Group OSCORE</a>
       </h2>
-<p id="section-10-1">The following example refers to two clients C1 and C2 that register to observe a resource /r at a Server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.<a href="#section-10-2" class="pilcrow">¶</a></p>
 <p id="section-10-3">Pairwise communication over unicast is protected with OSCORE, while S protects multicast notifications with Group OSCORE. Specifically:<a href="#section-10-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3149,7 +3163,7 @@ At the time of writing this specification, acceptable formats of authentication 
 </div>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-example-of-group-observation" class="selfRef">Example of group observation with Group OSCORE</a>
+<a href="#name-example-of-group-observation" class="selfRef">Example of Group Observation with Group OSCORE</a>
         </figcaption></figure>
 </div>
 <p id="section-10-8">The two external_aad used to encrypt and sign the multicast notification above have 'request_kid' = 5, 'request_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv', and 'kid context' field of the OSCORE Option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external_aad for decrypting and verifying this multicast notification and the following ones in the group observation.<a href="#section-10-8" class="pilcrow">¶</a></p>
@@ -3206,7 +3220,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-the-listen-to-multicast-res" class="selfRef">The Listen-To-Multicast-Responses Option.                           C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
+<a href="#name-the-listen-to-multicast-res" class="selfRef">The Listen-To-Multicast-Responses Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
           </caption>
 <thead>
             <tr>
@@ -3335,7 +3349,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">ph_req</td>
             <td class="text-left" rowspan="1" colspan="1">1</td>
-            <td class="text-left" rowspan="1" colspan="1">bstr</td>
+            <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
 </td>
@@ -3343,7 +3357,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">last_notif</td>
             <td class="text-left" rowspan="1" colspan="1">2</td>
-            <td class="text-left" rowspan="1" colspan="1">bstr</td>
+            <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
 </td>
@@ -3351,7 +3365,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">next_not_before</td>
             <td class="text-left" rowspan="1" colspan="1">3</td>
-            <td class="text-left" rowspan="1" colspan="1">uint</td>
+            <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
 </td>
@@ -3359,7 +3373,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">join_uri</td>
             <td class="text-left" rowspan="1" colspan="1">4</td>
-            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3367,7 +3381,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">sec_gp</td>
             <td class="text-left" rowspan="1" colspan="1">5</td>
-            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3375,7 +3389,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">as_uri</td>
             <td class="text-left" rowspan="1" colspan="1">6</td>
-            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3383,7 +3397,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">hkdf</td>
             <td class="text-left" rowspan="1" colspan="1">7</td>
-            <td class="text-left" rowspan="1" colspan="1">int or tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3391,7 +3405,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">cred_fmt</td>
             <td class="text-left" rowspan="1" colspan="1">8</td>
-            <td class="text-left" rowspan="1" colspan="1">int</td>
+            <td class="text-left" rowspan="1" colspan="1">integer</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3399,7 +3413,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">gp_enc_alg</td>
             <td class="text-left" rowspan="1" colspan="1">9</td>
-            <td class="text-left" rowspan="1" colspan="1">int or tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3407,7 +3421,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">sign_alg</td>
             <td class="text-left" rowspan="1" colspan="1">10</td>
-            <td class="text-left" rowspan="1" colspan="1">int or tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
 </td>
@@ -3431,7 +3445,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">srv_cred</td>
             <td class="text-left" rowspan="1" colspan="1">13</td>
-            <td class="text-left" rowspan="1" colspan="1">bstr</td>
+            <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
 </td>
@@ -3439,7 +3453,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">srv_identifier</td>
             <td class="text-left" rowspan="1" colspan="1">14</td>
-            <td class="text-left" rowspan="1" colspan="1">bstr</td>
+            <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
 </td>
@@ -3447,7 +3461,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">exi</td>
             <td class="text-left" rowspan="1" colspan="1">15</td>
-            <td class="text-left" rowspan="1" colspan="1">uint</td>
+            <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
 </td>
@@ -3455,7 +3469,7 @@ Note also that, identically to the phantom request, the ticket request is still 
           <tr>
             <td class="text-left" rowspan="1" colspan="1">exp</td>
             <td class="text-left" rowspan="1" colspan="1">16</td>
-            <td class="text-left" rowspan="1" colspan="1">uint</td>
+            <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
 </td>
@@ -3525,12 +3539,12 @@ Note also that, identically to the phantom request, the ticket request is still 
 <p id="section-15.2-1">If multicast notifications for an observed resource are protected using Group OSCORE as per <a href="#sec-secured-notifications" class="auto internal xref">Section 9</a>, it is ensured that those are securely bound to the phantom registration request that started the group observation of that resource. Furthermore, the following applies.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-15.2-2.1">
-            <p id="section-15.2-2.1.1">The original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be secured, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-15.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-15.2-2.1.1">The original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be protected, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-15.2-2.1.1" class="pilcrow">¶</a></p>
 <p id="section-15.2-2.1.2">
 Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.<a href="#section-15.2-2.1.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-15.2-2.2">
-            <p id="section-15.2-2.2.1">A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), <span class="bcp14">MUST</span> also be secured.<a href="#section-15.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-15.2-2.2.1">A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), <span class="bcp14">MUST</span> also be protected.<a href="#section-15.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3541,11 +3555,11 @@ Protecting informative responses from the server prevents on-path active adversa
 <a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-listen-to-multicast-response" class="section-name selfRef">Listen-To-Multicast-Responses Option</a>
         </h3>
 <p id="section-15.3-1">The CoAP option Listen-To-Multicast-Responses defined in <a href="#ltmr-option" class="auto internal xref">Section 12.1</a> is of class U for OSCORE and Group OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
-<p id="section-15.3-2">This allows the proxy adjacent to the origin server to access the option value conveyed in a ticket request (see <a href="#intermediaries-e2e-security-processing" class="auto internal xref">Section 12.2</a>), and to retrieve from it the transport-specific information about a phantom request. By doing so, the proxy becomes able to configure an observation of the target resource and to receive multicast notifications matching to the phantom request.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
+<p id="section-15.3-2">This allows the proxy adjacent to the origin server to access the option value conveyed in a ticket request (see <a href="#intermediaries-e2e-security-processing" class="auto internal xref">Section 12.2</a>), and to retrieve from it the transport-specific information about a phantom request. By doing so, the proxy becomes able to configure an observation of the target resource and to receive multicast notifications that match the phantom request.<a href="#section-15.3-2" class="pilcrow">¶</a></p>
 <p id="section-15.3-3">Any proxy in the chain, as well as further possible intermediaries or on-path active adversaries, are thus able to remove the option or alter its content, before the ticket request reaches the proxy adjacent to the origin server.<a href="#section-15.3-3" class="pilcrow">¶</a></p>
 <p id="section-15.3-4">Removing the option would result in the proxy adjacent to the origin server to not configure the group observation, if that has not happened yet. In such a case, the proxy would not receive the corresponding multicast notifications to be forwarded back to the clients.<a href="#section-15.3-4" class="pilcrow">¶</a></p>
-<p id="section-15.3-5">Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., by indicating a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.<a href="#section-15.3-5" class="pilcrow">¶</a></p>
-<p id="section-15.3-6">In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop. To this end, the client can further protect the ticket request by means of a secure communication association that it shares with the proxy, e.g., by using OSCORE (see <span>[<a href="#I-D.ietf-core-oscore-capable-proxies" class="cite xref">I-D.ietf-core-oscore-capable-proxies</a>]</span>) and/or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-15.3-6" class="pilcrow">¶</a></p>
+<p id="section-15.3-5">Altering the option content would result in the proxy adjacent to the origin server to incorrectly configure a group observation (e.g., as based on a wrong multicast IP address) hence preventing the correct reception of multicast notifications and their forwarding to the clients; or to configure bogus group observations that are currently not active on the origin server.<a href="#section-15.3-5" class="pilcrow">¶</a></p>
+<p id="section-15.3-6">In order to prevent what is described above, the ticket requests conveying the Listen-To-Multicast-Responses Option can be additionally protected hop-by-hop, e.g., by using OSCORE (see <span>[<a href="#I-D.ietf-core-oscore-capable-proxies" class="cite xref">I-D.ietf-core-oscore-capable-proxies</a>]</span>) and/or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>.<a href="#section-15.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3672,7 +3686,7 @@ Protecting informative responses from the server prevents on-path active adversa
             <p id="section-16.4-3.1.1">Name: This is a descriptive name that enables easier reference to the item. The name <span class="bcp14">MUST</span> be unique. It is not used in the encoding.<a href="#section-16.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.4-3.2">
-            <p id="section-16.4-3.2.1">CBOR Key: This is the value used as CBOR key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be a positive integer, a negative integer, or a text string.<a href="#section-16.4-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-16.4-3.2.1">CBOR Key: This is the value used as CBOR key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be an integer or a text string.<a href="#section-16.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.4-3.3">
             <p id="section-16.4-3.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-16.4-3.3.1" class="pilcrow">¶</a></p>
@@ -3718,14 +3732,20 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
 <a href="#section-16.6" class="section-number selfRef">16.6. </a><a href="#name-target-attributes-registry" class="section-name selfRef">Target Attributes Registry</a>
         </h3>
 <p id="section-16.6-1">IANA is asked to register the following entry in the "Target Attributes" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-16.6-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-16.6-2">
-<pre>
-Attribute Name: gp-obs
-Brief Description: Observable resource supporting group observation
-Change Controller: IETF
-Reference: Section 6 of [RFC-XXXX]
-</pre><a href="#section-16.6-2" class="pilcrow">¶</a>
-</div>
+<ul class="normal">
+<li class="normal" id="section-16.6-2.1">
+            <p id="section-16.6-2.1.1">Attribute Name: gp-obs<a href="#section-16.6-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-16.6-2.2">
+            <p id="section-16.6-2.2.1">Brief Description: Observable resource supporting group observation<a href="#section-16.6-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-16.6-2.3">
+            <p id="section-16.6-2.3.1">Change Controller: IETF<a href="#section-16.6-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-16.6-2.4">
+            <p id="section-16.6-2.4.1">Reference: <a href="#sec-web-linking" class="auto internal xref">Section 6</a> of [RFC-XXXX]<a href="#section-16.6-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="iana-review">
@@ -5418,7 +5438,7 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
             <p id="appendix-G.1-2.3.1">Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per <span><a href="https://datatracker.ietf.org/doc/html/draft-amsuess-core-cachable-oscore-09#section-3" class="relref">Section 3</a> of [<a href="#I-D.amsuess-core-cachable-oscore" class="cite xref">I-D.amsuess-core-cachable-oscore</a>]</span>, thus all computing the same deterministic request to be used as phantom observation request.<a href="#appendix-G.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="appendix-G.1-2.4">
-            <p id="appendix-G.1-2.4.1">If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on step 2 above, the same would happen if the phantom request was not specifically a deterministic request.<a href="#appendix-G.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-G.1-2.4.1">If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on Step 2 above, the same would happen if the phantom request was not specifically a deterministic request.<a href="#appendix-G.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="appendix-G.1-2.5">
             <p id="appendix-G.1-2.5.1">If the client relies on a proxy between itself and the server, it uses the phantom request as a ticket request (see <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). However, unlike the case considered in <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a> where the ticket request is not a deterministic request, the client does not include a Listen-to-Multicast-Responses Option in the phantom request sent to the proxy.<a href="#appendix-G.1-2.5.1" class="pilcrow">¶</a></p>
@@ -6123,7 +6143,7 @@ Note that the phantom request can be omitted, since it is the deterministic phan
             <p id="appendix-H.1-1.1.1">Fixed section numbered of referred documents.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.2">
-            <p id="appendix-H.1-1.2.1">Editorial improvements.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.2.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
