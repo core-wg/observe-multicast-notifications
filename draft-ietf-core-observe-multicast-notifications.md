@@ -63,6 +63,7 @@ normative:
   I-D.ietf-core-href:
   RFC4944:
   RFC6838:
+  RFC7120:
   RFC7252:
   RFC7641:
   RFC7967:
@@ -1304,13 +1305,17 @@ IANA is asked to enter the following option numbers to the "CoAP Option Numbers"
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
-This document establishes the "Informative Response Parameters" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document establishes the "Informative Response Parameters" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{RFC8126}}. "Expert Review" guidelines are provided in {{iana-review}}.
+
+All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per {{Section 4.9 of RFC8126}} with "Expert Review" additionally required per {{Section 4.5 of RFC8126}}. The procedure for early IANA allocation of "standards track code points" defined in {{RFC7120}} also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in {{Section 3.1 of RFC7120}}.
 
 The columns of this registry are:
 
 * Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
 
-* CBOR Key: This is the value used as CBOR key of the item. These values MUST be unique. The value can be an integer or a text string.
+* CBOR Key: This is the value used as the CBOR map key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
 
 * CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
 
@@ -1320,7 +1325,9 @@ This registry has been initially populated by the entries in {{table-informative
 
 ## CoAP Transport Information Registry {#iana-coap-transport-information}
 
-This document establishes the "CoAP Transport Information" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group. The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{iana-review}}.
+This document establishes the "CoAP Transport Information" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+The registration policy is "Expert Review" {{RFC8126}}. "Expert Review" guidelines are provided in {{iana-review}}.
 
 The columns of this registry are:
 
@@ -1349,7 +1356,7 @@ IANA is asked to register the following entry in the "Target Attributes" registr
 
 ## Expert Review Instructions {#iana-review}
 
-The IANA registries established in this document are defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason, so they should be given substantial latitude.
+"Standards Action with Expert Review", "Specification Required", and "Expert Review" are three of the registration policies defined for the IANA registries established in this document. This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason, so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
@@ -1357,7 +1364,7 @@ Expert reviewers should take into consideration the following points:
 
 * Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
 
-* Experts should take into account the expected usage of fields when approving point assignment. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
+* Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
 
 --- back
 
@@ -2386,6 +2393,8 @@ C1      C2      P         S
 ## Version -09 to -10 ## {#sec-09-10}
 
 * Fixed section numbered of referred documents.
+
+* Revised registration policies in the IANA considerations.
 
 * Clarifications and editorial improvements.
 
