@@ -147,15 +147,16 @@ Table of Contents
      G.1.  Assumptions and Walkthrough
      G.2.  Message Exchange
    Appendix H.  Document Updates
-     H.1.  Version -08 to -09
-     H.2.  Version -07 to -08
-     H.3.  Version -06 to -07
-     H.4.  Version -05 to -06
-     H.5.  Version -04 to -05
-     H.6.  Version -03 to -04
-     H.7.  Version -02 to -03
-     H.8.  Version -01 to -02
-     H.9.  Version -00 to -01
+     H.1.  Version -09 to -10
+     H.2.  Version -08 to -09
+     H.3.  Version -07 to -08
+     H.4.  Version -06 to -07
+     H.5.  Version -05 to -06
+     H.6.  Version -04 to -05
+     H.7.  Version -03 to -04
+     H.8.  Version -02 to -03
+     H.9.  Version -01 to -02
+     H.10. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -1605,10 +1606,10 @@ Table of Contents
 
    The phantom registration request MUST be secured, by using Group
    OSCORE.  In particular, the group mode of Group OSCORE defined in
-   Section 8 of [I-D.ietf-core-oscore-groupcomm] MUST be used.
+   Section 7 of [I-D.ietf-core-oscore-groupcomm] MUST be used.
 
    The server protects the phantom registration request as defined in
-   Section 8.1 of [I-D.ietf-core-oscore-groupcomm], as if it was the
+   Section 7.1 of [I-D.ietf-core-oscore-groupcomm], as if it was the
    actual sender, i.e., by using its Sender Context.  As a consequence,
    the server consumes the current value of its Sender Sequence Number
    SN in the OSCORE group, and hence updates it to SN* = (SN + 1).
@@ -1647,13 +1648,13 @@ Table of Contents
 
    The server MUST protect every multicast notification for the target
    resource with Group OSCORE.  In particular, the group mode of Group
-   OSCORE defined in Section 8 of [I-D.ietf-core-oscore-groupcomm] MUST
+   OSCORE defined in Section 7 of [I-D.ietf-core-oscore-groupcomm] MUST
    be used.
 
-   The process described in Section 8.3 of
+   The process described in Section 7.3 of
    [I-D.ietf-core-oscore-groupcomm] applies, with the following
    additions when building the two OSCORE 'external_aad' to encrypt and
-   sign the multicast notification (see Section 4.4 of
+   sign the multicast notification (see Section 3.4 of
    [I-D.ietf-core-oscore-groupcomm]).
 
    *  The 'request_kid' is the 'kid' value in the OSCORE Option of the
@@ -1675,7 +1676,7 @@ Table of Contents
 
    When canceling a group observation (see Section 4.5), the multicast
    response with error code 5.03 (Service Unavailable) is also protected
-   with Group OSCORE, as per Section 8.3 of
+   with Group OSCORE, as per Section 7.3 of
    [I-D.ietf-core-oscore-groupcomm].  The server MUST use its own Sender
    Sequence Number as Partial IV to protect the error response, and
    include its encoding as the Partial IV in the OSCORE Option of the
@@ -1698,7 +1699,7 @@ Table of Contents
    Appendix D.
 
    Once completed step 2, the client decrypts and verifies the rebuilt
-   phantom registration request as defined in Section 8.2 of
+   phantom registration request as defined in Section 7.2 of
    [I-D.ietf-core-oscore-groupcomm], with the following differences.
 
    *  The client MUST NOT perform any replay check.  That is, the client
@@ -1745,11 +1746,11 @@ Table of Contents
    After having successfully processed the informative response as
    defined in Section 9.3.1, the client will decrypt and verify every
    multicast notification for the target resource as defined in
-   Section 8.4 of [I-D.ietf-core-oscore-groupcomm], with the following
+   Section 7.4 of [I-D.ietf-core-oscore-groupcomm], with the following
    difference.
 
    For both decryption and signature verification, the client MUST set
-   the 'external_aad' defined in Section 4.4 of
+   the 'external_aad' defined in Section 3.4 of
    [I-D.ietf-core-oscore-groupcomm] as follows.  The particular way to
    achieve this is implementation specific.
 
@@ -3144,7 +3145,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       Note that no information is provided as related to the AEAD
       Algorithm, or to the Pairwise Key Agreement Algorithm and its
       parameters.  In fact, the clients and the server will never use
-      the pairwise mode of Group OSCORE as per Section 9 of
+      the pairwise mode of Group OSCORE as per Section 8 of
       [I-D.ietf-core-oscore-groupcomm], and will not need to compute a
       cofactor Diffie-Hellman shared secret in this OSCORE group.  It
       follows that:
@@ -3152,12 +3153,12 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       -  In the Common Context of the Group OSCORE Security Context, the
          parameter AEAD Algorithm and the parameter Pairwise Key
          Agreement Algorithm are not set (see Section 2.1.1 of
-         [I-D.ietf-core-oscore-groupcomm] and Section 2.1.9 of
+         [I-D.ietf-core-oscore-groupcomm] and Section 2.1.10 of
          [I-D.ietf-core-oscore-groupcomm]).
 
       -  Consistently, when building the two OSCORE 'external_aad' to
          process messages protected with Group OSCORE in this OSCORE
-         group, (see Section 4.4 of [I-D.ietf-core-oscore-groupcomm]),
+         group, (see Section 3.4 of [I-D.ietf-core-oscore-groupcomm]),
          the elements 'alg_aead' and 'alg_pairwise_key_agreement' within
          the 'algorithms' arrays are set to the CBOR simple value null
          (0xf6).
@@ -3220,7 +3221,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    credential of the server provided in the 'srv_cred' element of the
    informative response is also used in the 'gm_cred' element of the
    external_aad for encrypting and signing the phantom request and
-   multicast notifications (see Section 4.4 of
+   multicast notifications (see Section 3.4 of
    [I-D.ietf-core-oscore-groupcomm]).
 
    Furthermore, the server complies with the following points.
@@ -3251,7 +3252,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       -  The server MUST update the OSCORE Master Secret.
 
       -  The server MUST update the ID Context used as Group Identifier
-         (Gid), consistently with Section 3.2 of
+         (Gid), consistently with Section 12.2 of
          [I-D.ietf-core-oscore-groupcomm].
 
       -  The server MAY update the OSCORE Master Salt.
@@ -3276,7 +3277,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    When some clients leave the OSCORE group and forget about the group
    observation, the server does not have to provide the remaining
    clients with any stale Sender IDs, as normally required for Group
-   OSCORE (see Section 3.2 of [I-D.ietf-core-oscore-groupcomm]).  In
+   OSCORE (see Section 12.2 of [I-D.ietf-core-oscore-groupcomm]).  In
    fact, only two entities in the group have a Sender ID, i.e., the
    server and possibly the Deterministic Client, if the optimization
    defined in this appendix is combined with the use of phantom requests
@@ -3421,11 +3422,11 @@ Appendix D.  Phantom Request as Deterministic Request
 
    *  In the Common Context of the Group OSCORE Security Context, the
       parameter Pairwise Key Agreement Algorithm is not set (see
-      Section 2.1.9 of [I-D.ietf-core-oscore-groupcomm]).
+      Section 2.1.10 of [I-D.ietf-core-oscore-groupcomm]).
 
    *  Consistently, when building the two OSCORE 'external_aad' to
       process messages protected with Group OSCORE in this OSCORE group,
-      (see Section 4.4 of [I-D.ietf-core-oscore-groupcomm]), the element
+      (see Section 3.4 of [I-D.ietf-core-oscore-groupcomm]), the element
       'alg_pairwise_key_agreement' within the 'algorithms' arrays is set
       to the CBOR simple value null (0xf6).
 
@@ -4205,7 +4206,13 @@ Appendix H.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-H.1.  Version -08 to -09
+H.1.  Version -09 to -10
+
+   *  Fixed section numbered of referred documents.
+
+   *  Editorial improvements.
+
+H.2.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -4218,7 +4225,7 @@ H.1.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-H.2.  Version -07 to -08
+H.3.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -4246,7 +4253,7 @@ H.2.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-H.3.  Version -06 to -07
+H.4.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -4264,7 +4271,7 @@ H.3.  Version -06 to -07
 
    *  Editorial improvements.
 
-H.4.  Version -05 to -06
+H.5.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -4272,7 +4279,7 @@ H.4.  Version -05 to -06
 
    *  Editorial improvements.
 
-H.5.  Version -04 to -05
+H.6.  Version -04 to -05
 
    *  If the phantom request is an OSCORE deterministic request, there
       is no parallel group observation for clients that lack support.
@@ -4287,7 +4294,7 @@ H.5.  Version -04 to -05
 
    *  Editorial improvements.
 
-H.6.  Version -03 to -04
+H.7.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -4304,7 +4311,7 @@ H.6.  Version -03 to -04
 
    *  Editorial improvements.
 
-H.7.  Version -02 to -03
+H.8.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -4314,7 +4321,7 @@ H.7.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-H.8.  Version -01 to -02
+H.9.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -4332,7 +4339,7 @@ H.8.  Version -01 to -02
 
    *  Editorial improvements.
 
-H.9.  Version -00 to -01
+H.10.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
