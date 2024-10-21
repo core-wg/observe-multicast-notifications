@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 23 April 2025                                                  
+Expires: 24 April 2025                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                         20 October 2024
+                                                         21 October 2024
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2025.
+   This Internet-Draft will expire on 24 April 2025.
 
 Copyright Notice
 
@@ -4262,7 +4262,7 @@ Appendix H.  Document Updates
 
 H.1.  Version -09 to -10
 
-   *  Fixed section numbered of referred documents.
+   *  Fixed section numbers of referred documents.
 
    *  Revised registration policies in the IANA considerations.
 
