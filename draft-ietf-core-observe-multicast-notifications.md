@@ -2400,7 +2400,7 @@ C1      C2      P         S
 
 ## Version -09 to -10 ## {#sec-09-10}
 
-* Fixed section numbered of referred documents.
+* Fixed section numbers of referred documents.
 
 * Revised registration policies in the IANA considerations.
 
