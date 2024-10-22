@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-12T00:54:51.674334+00:00",
+  "timestamp": "2024-10-22T01:08:53.201918+00:00",
   "repo": "core-wg/observe-multicast-notifications",
   "labels": [
     {
@@ -119,7 +119,7 @@
       "id": "MDU6SXNzdWU4OTA4NzY0NTE=",
       "title": "Alternative 'tp_info' format using CRIs",
       "url": "https://github.com/core-wg/observe-multicast-notifications/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -128,9 +128,31 @@
       "labels": [],
       "body": "We can consider an alternative tp_info as\r\n\r\n```\r\n    [\r\n       // in absolute form, with no path or query\r\n       CORI (tp_id, srv_host, ?srv_port),\r\n       token,\r\n       // in authority-only form, equivalent to a `//host:port` URI reference\r\n       CORI (cl_host, ?cl_port)\r\n    ]\r\n```\r\n\r\nFor consistency, entries in the new Registry \"CoAP Transport Information\" will have to cross-reference the \"Scheme Registry\" or anything else suitable for CRIs (see below, including changes to the current registry format).\r\n\r\n ``` \r\n  +-----------+-------------+--------------+-----------+\r\n  | Scheme    | Description | Req Info     | Reference |\r\n  | (with CRI)|             |              |           |\r\n  +-----------+-------------+--------------+-----------+\r\n  | coap      | UDP is used |  token       | [This     |\r\n  | (-1)      | as per      |  cli (a rel. | document] |\r\n  |           | RFC7252     |     CRI //x) |           |\r\n  +-----------+-------------+--------------+-----------+\r\n  ```\r\n  \r\n  * value: replaced with scheme name or what's in the CRI shorthands\r\n  * srv addr is always a CRI (so no need to have it in the registry), with scheme and authority with empty path and no query or fragment\r\n  * cli is a CRI reference, as used is of shape `//authority`\r\n",
       "createdAt": "2021-05-13T09:16:15Z",
-      "updatedAt": "2021-05-13T09:18:41Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-06-24T17:41:02Z",
+      "closedAt": "2024-06-24T17:41:02Z",
+      "comments": [
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "Added a brief note in 4abb04600309c0beabfbf59887d211c6233bd3bd that this will happen, without actually performing the change yet (giving core-href a bit more time to mature).\r\n\r\n[edit: repo confusion, it's in https://github.com/core-wg/observe-multicast-notifications/commit/2fed0cd097d565cda61cc8e81b30d93eb028eb0a ]",
+          "createdAt": "2021-10-14T10:09:00Z",
+          "updatedAt": "2021-10-14T10:12:18Z"
+        },
+        {
+          "author": "chrysn",
+          "authorAssociation": "MEMBER",
+          "body": "I think CRIs are stable enough to use.",
+          "createdAt": "2022-06-28T07:46:04Z",
+          "updatedAt": "2022-06-28T07:46:04Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closed by https://github.com/core-wg/observe-multicast-notifications/pull/14/",
+          "createdAt": "2024-06-24T17:41:02Z",
+          "updatedAt": "2024-06-24T17:41:02Z"
+        }
+      ]
     },
     {
       "number": 6,
@@ -239,33 +261,141 @@
       "id": "MDU6SXNzdWU5NDEyMTUxMjU=",
       "title": "Optimization when using deterministic phantom requests",
       "url": "https://github.com/core-wg/observe-multicast-notifications/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The appendix \"Phantom Request as Deterministic Request\" considers the use of deterministic requests [1] as phantom registration requests.\r\n\r\nIf the server recognizes an incoming registration request to be exactly a phantom registration request earlier released as deterministic request, then the informative response sent as reply may specify the empty byte string as value of 'ph_req'.\r\n\r\n[1] https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/",
       "createdAt": "2021-07-10T09:43:53Z",
-      "updatedAt": "2021-07-10T09:43:53Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2021-10-18T18:22:26Z",
+      "closedAt": "2021-10-18T18:16:55Z",
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The intended effect is achieved by a broader optimization, i.e., having the 'ph_req' parameter optional to include in the error informative response altogether. Actually omitting 'ph_req' is:\r\n\r\n- Possible (and typical) in the scenario with unsecure communication.\r\n\r\n- Not possible in the scenario with secure communication using Group OSCORE\r\n--- with the exception for the case where a deterministic request is used as phantom request, as per https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/\r\n",
+          "createdAt": "2021-10-18T18:22:25Z",
+          "updatedAt": "2021-10-18T18:22:25Z"
+        }
+      ]
     },
     {
       "number": 11,
       "id": "MDU6SXNzdWU5NDEyMTU0MDE=",
       "title": "Optimization when rekeying the self-managed OSCORE group",
       "url": "https://github.com/core-wg/observe-multicast-notifications/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In the appendix \"OSCORE Group Self-Managed by the Server\", the server acting as Group Manager can send a protected 5.03 multicast response to rekey the self-managed group.\r\n\r\nWhen doing so, the response payload may omit most of the information included in the original informative responses sent to the clients, i.e., 'tp_info', 'ph_req' and 'last_notif'.\r\n\r\nThose elements don't change when the group is rekeyed through the 5.03 multicast response.",
       "createdAt": "2021-07-10T09:45:51Z",
-      "updatedAt": "2021-07-10T09:45:51Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-18T11:53:31Z",
+      "closedAt": "2021-10-18T11:53:31Z",
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOFRpdds4-lDf7",
+      "title": "State that IP / token preconfiguration is allowed",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/issues/12",
+      "state": "CLOSED",
+      "author": "chrysn",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Rough text:\r\n\r\n> In a particular setup, the choice of multicast addresses and tokens can be preconfigured; addresses and tokens can be set aside for particular tasks (like \"all on this IP address, token 00 is used for requests for /time\"), or using some mechanism (eg. the last bytes of the address are some bytes of the request hash, or the token contains parts of the request hash).\r\n>\r\n> Then, an observation could contain the No-Response:16 option, suppressing the informative response; the observation request then just informs the server that there are interested parties around, and are just done for the \"side effect\" of letting the server know that there is interest in that resource being sent (just like with the rough-counting mechanism).",
+      "createdAt": "2021-11-10T14:30:09Z",
+      "updatedAt": "2022-03-02T09:54:52Z",
+      "closedAt": "2022-03-02T09:54:52Z",
       "comments": []
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 13,
+      "id": "PR_kwDOFRpdds46h75c",
+      "title": "Port to using CRIs",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/pull/13",
+      "state": "CLOSED",
+      "author": "chrysn",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes: #5\r\n\r\nThis is incomplete so far -- it needs another run for consistency, and the appendices have not yet been updated to reflect the new structure.",
+      "createdAt": "2022-06-28T23:31:33Z",
+      "updatedAt": "2024-06-24T17:40:13Z",
+      "baseRepository": "core-wg/observe-multicast-notifications",
+      "baseRefName": "main",
+      "baseRefOid": "0b7f288e9a0fcb020a85c279582992aa813ad083",
+      "headRepository": "core-wg/observe-multicast-notifications",
+      "headRefName": "cri",
+      "headRefOid": "b1ca7fe487488b42c88614031450895daa7b4991",
+      "closedAt": "2024-06-24T17:40:12Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closing as superseded by https://github.com/core-wg/observe-multicast-notifications/pull/14/",
+          "createdAt": "2024-06-24T17:40:12Z",
+          "updatedAt": "2024-06-24T17:40:12Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFRpdds5ByV6Q",
+          "commit": {
+            "abbreviatedOid": "b1ca7fe"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-09-12T08:52:44Z",
+          "updatedAt": "2022-09-12T08:52:44Z",
+          "comments": [
+            {
+              "originalPosition": 212,
+              "body": "This has the X-Dash problem -- see CRI draft",
+              "createdAt": "2022-09-12T08:52:44Z",
+              "updatedAt": "2022-09-12T08:52:44Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOFRpdds5xSgN2",
+      "title": "Using CRI",
+      "url": "https://github.com/core-wg/observe-multicast-notifications/pull/14",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR supersedes a previous PR at https://github.com/core-wg/observe-multicast-notifications/pull/13  , and defines how transport-specific information is expressed by means of CRIs, especially in the 'tp_info' array conveyed by the error informative response.",
+      "createdAt": "2024-06-03T11:52:53Z",
+      "updatedAt": "2024-06-24T17:38:47Z",
+      "baseRepository": "core-wg/observe-multicast-notifications",
+      "baseRefName": "main",
+      "baseRefOid": "811bd122755be8af61a9987d83d8c3548f4138a1",
+      "headRepository": "core-wg/observe-multicast-notifications",
+      "headRefName": "using-cri",
+      "headRefOid": "bd4f617f8936dc5df41232f51ffb128af3783fe5",
+      "closedAt": "2024-06-24T17:38:47Z",
+      "mergedAt": "2024-06-24T17:38:47Z",
+      "mergedBy": "marco-tiloca-sics",
+      "mergeCommit": {
+        "oid": "0c6341350a6014e582df2b8a6827ac8684109bd3"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
