@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-20T01:09:02.151931+00:00",
+  "timestamp": "2025-02-23T01:13:32.822892+00:00",
   "repo": "core-wg/observe-multicast-notifications",
   "labels": [
     {
@@ -381,7 +381,7 @@
       "labels": [],
       "body": "This PR supersedes a previous PR at https://github.com/core-wg/observe-multicast-notifications/pull/13  , and defines how transport-specific information is expressed by means of CRIs, especially in the 'tp_info' array conveyed by the error informative response.",
       "createdAt": "2024-06-03T11:52:53Z",
-      "updatedAt": "2024-06-24T17:38:47Z",
+      "updatedAt": "2025-02-22T11:21:29Z",
       "baseRepository": "core-wg/observe-multicast-notifications",
       "baseRefName": "main",
       "baseRefOid": "811bd122755be8af61a9987d83d8c3548f4138a1",
