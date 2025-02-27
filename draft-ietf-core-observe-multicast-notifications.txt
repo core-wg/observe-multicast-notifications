@@ -2498,7 +2498,7 @@ Table of Contents
 
    Content Coding: -
 
-   ID: TBD
+   ID: TBD (value between 0 and 255)
 
    Reference: [RFC-XXXX]
 
