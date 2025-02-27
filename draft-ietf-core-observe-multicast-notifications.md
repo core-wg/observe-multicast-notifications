@@ -252,7 +252,7 @@ For each traditional observation ongoing on the target resource, the server MAY 
 
 The server sends to each of such clients an informative response message, encoded as a unicast response with response code 5.03 (Service Unavailable). As per {{RFC7641}}, such a response does not include an Observe Option. The response MUST be Confirmable and MUST NOT encode link-local addresses.
 
-The Content-Format of the informative response is set to application/informative-response+cbor, which is registered in {{content-format}}. The payload of the informative response is a CBOR map including the following parameters, whose CBOR abbreviations are defined in {{informative-response-params}}.
+The Content-Format of the informative response is set to "application/informative-response+cbor", which is registered in {{content-format}}. The payload of the informative response is a CBOR map including the following parameters, whose CBOR abbreviations are defined in {{informative-response-params}}.
 
 * 'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in {{sssec-transport-specific-encoding}}. This parameter MUST be included.
 
@@ -1168,7 +1168,7 @@ An example is provided in {{intermediaries-example-e2e-security}}.
 
 This document defines a number of fields used in the informative response defined in {{ssec-server-side-informative}}.
 
-The table below summarizes them and specifies the CBOR key to use as abbreviation, instead of the full descriptive name. Note that the media type application/informative-response+cbor MUST be used when these fields are transported.
+The table below summarizes them and specifies the CBOR key to use as abbreviation, instead of the full descriptive name. Note that the media type "application/informative-response+cbor" MUST be used when these fields are transported.
 
  Name            | CBOR Key | CBOR Type              | Reference
 -----------------|----------|------------------------|---------------------------------
@@ -1386,7 +1386,7 @@ To this end, together with topic metadata, the server has to publish the same in
 
 This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
 
-{{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
+{{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the Content-Format "application/informative-response+cbor".
 
 Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_server' and 'tp_info_client', where the former specifies the addressing information of the server (like 'tpi_server' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in {{ssssec-udp-transport-specific}}).
 
@@ -1431,7 +1431,7 @@ GET </.well-known/core/mc-sender?token=6464>
 Response:
 
 2.05 Content
-Content-Format: TBD (application/informative-response+cbor)
+Content-Format: application/informative-response+cbor
 
 {
   / tp_info /    0 : [
