@@ -513,6 +513,14 @@ Table of Contents
       different clients when orchestrating a content distribution
       through multicast notifications.
 
+   *  'ending', with value the point in time when the group observation
+      of the target resource is planned to be canceled, encoded as a
+      CBOR unsigned integer.  The value is the number of seconds from
+      1970-01-01T00:00:00Z UTC until the specified UTC date/time,
+      ignoring leap seconds, analogous to what is specified for
+      NumericDate in Section 2 of [RFC7519].  This parameter MAY be
+      included.
+
    The CDDL notation [RFC8610] provided below describes the payload of
    the informative response.
 
@@ -520,7 +528,8 @@ Table of Contents
       0 => array, ; 'tp_info' (transport-specific information)
     ? 1 => bstr,  ; 'ph_req' (transport-independent information)
     ? 2 => bstr,  ; 'last_notif' (transport-independent information)
-    ? 3 => uint   ; 'next_not_before'
+    ? 3 => uint   ; 'next_not_before',
+    ? 4 => uint   ; 'ending'
    }
 
             Figure 1: Format of the Informative Response Payload
@@ -838,11 +847,13 @@ Table of Contents
 
 4.5.  Cancellation
 
-   At any point in time, the server may want to cancel a group
-   observation of a target resource.  For instance, the server may
-   realize that no clients or not enough clients are interested in
-   taking part in the group observation anymore.  A possible approach
-   that the server can use to assess this is defined in Section 8.
+   At a certain point in time, the server might want to cancel a group
+   observation of a target resource.  For instance, the server realizes
+   that no clients or not enough clients are interested in taking part
+   in the group observation anymore.  Section 8 defines a possible
+   approach that the server can use to make an assessment in this
+   respect.  Another reason is that the group observation has reached
+   its ending time, as originally scheduled by the server.
 
    In order to cancel the group observation, the server sends a
    multicast response with response code 5.03 (Service Unavailable),
@@ -896,9 +907,9 @@ Table of Contents
    observation, sending an observation request as above allows the
    server to increment the observer counter.  This helps the server to
    assess the current number of clients interested in the group
-   observation over time (e.g., by using the method in Section 8), which
-   in turn can play a role in deciding to cancel the group observation
-   (see Section 4.5).
+   observation over time (e.g., by using the method defined in
+   Section 8), which in turn can play a role in deciding to cancel the
+   group observation (see Section 4.5).
 
 5.2.  Informative Response
 
@@ -1336,8 +1347,8 @@ Table of Contents
    this step is completed, the server MUST hold the processing of an
    observation request for the same target resource from a new client.
    Finally, the server considers the result as the current observer
-   counter, and assesses it for possibly canceling the group observation
-   (see Section 4.5).
+   counter, which can be taken into account for possibly canceling the
+   group observation (see Section 4.5).
 
    This estimate is skewed by packet loss, but it gives the server a
    sufficiently good estimation for further counts and for deciding when
@@ -1692,9 +1703,9 @@ Table of Contents
 
 9.2.4.  Cancellation
 
-   When canceling a group observation (see Section 4.5), the multicast
-   response with error code 5.03 (Service Unavailable) is also protected
-   with Group OSCORE, as per Section 7.3 of
+   When canceling a group observation as defined in Section 4.5, the
+   multicast response with error code 5.03 (Service Unavailable) is also
+   protected with Group OSCORE, as per Section 7.3 of
    [I-D.ietf-core-oscore-groupcomm].  The server MUST use its own Sender
    Sequence Number as Partial IV to protect the error response, and
    include its encoding as the Partial IV in the OSCORE Option of the
@@ -2284,34 +2295,36 @@ Table of Contents
    +-----------------+----------+------------------------+-------------+
    | next_not_before | 3        | unsigned integer       | Section 4.2 |
    +-----------------+----------+------------------------+-------------+
-   | join_uri        | 4        | text string            | Section 9.1 |
+   | ending          | 4        | unsigned integer       | Section 4.2 |
    +-----------------+----------+------------------------+-------------+
-   | sec_gp          | 5        | text string            | Section 9.1 |
+   | join_uri        | 5        | text string            | Section 9.1 |
    +-----------------+----------+------------------------+-------------+
-   | as_uri          | 6        | text string            | Section 9.1 |
+   | sec_gp          | 6        | text string            | Section 9.1 |
    +-----------------+----------+------------------------+-------------+
-   | hkdf            | 7        | integer or text        | Section 9.1 |
+   | as_uri          | 7        | text string            | Section 9.1 |
+   +-----------------+----------+------------------------+-------------+
+   | hkdf            | 8        | integer or text        | Section 9.1 |
    |                 |          | string                 |             |
    +-----------------+----------+------------------------+-------------+
-   | cred_fmt        | 8        | integer                | Section 9.1 |
+   | cred_fmt        | 9        | integer                | Section 9.1 |
    +-----------------+----------+------------------------+-------------+
-   | gp_enc_alg      | 9        | integer or text        | Section 9.1 |
+   | gp_enc_alg      | 10       | integer or text        | Section 9.1 |
    |                 |          | string                 |             |
    +-----------------+----------+------------------------+-------------+
-   | sign_alg        | 10       | integer or text        | Section 9.1 |
+   | sign_alg        | 11       | integer or text        | Section 9.1 |
    |                 |          | string                 |             |
    +-----------------+----------+------------------------+-------------+
-   | sign_params     | 11       | array                  | Section 9.1 |
+   | sign_params     | 12       | array                  | Section 9.1 |
    +-----------------+----------+------------------------+-------------+
-   | gp_material     | 12       | map                    | Appendix C  |
+   | gp_material     | 13       | map                    | Appendix C  |
    +-----------------+----------+------------------------+-------------+
-   | srv_cred        | 13       | byte string            | Appendix C  |
+   | srv_cred        | 14       | byte string            | Appendix C  |
    +-----------------+----------+------------------------+-------------+
-   | srv_identifier  | 14       | byte string            | Appendix C  |
+   | srv_identifier  | 15       | byte string            | Appendix C  |
    +-----------------+----------+------------------------+-------------+
-   | exi             | 15       | unsigned integer       | Appendix C  |
+   | exi             | 16       | unsigned integer       | Appendix C  |
    +-----------------+----------+------------------------+-------------+
-   | exp             | 16       | unsigned integer       | Appendix C  |
+   | exp             | 17       | unsigned integer       | Appendix C  |
    +-----------------+----------+------------------------+-------------+
 
                  Table 3: Informative Response Parameters.
@@ -2942,6 +2955,7 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
                   tp_info_token "7b"^^xsd::hexBinary,
                   ph_req "0160.."^^xsd::hexBinary,
                   last_notif "256105.."^^xsd::hexBinary,
+                  ending "2051251201"^^xsd::unsignedLong,
               ]
        ]
 
@@ -2995,7 +3009,9 @@ A.2.  Introspection at the Multicast Notification Sender
                        h'7b'                               / tpi_token /
                       ],
    / ph_req /     1 : h'0160...528c', / elided for brevity/
-   / last_notif / 2 : h'256105...4fa1' / elided for brevity/
+   / last_notif / 2 : h'256105...4fa1', / elided for brevity/
+   / ending /     4 : 2051251201
+
  }
 
     Figure 9: Group Observation Discovery with Server Introspection
@@ -4271,6 +4287,8 @@ Appendix H.  Document Updates
 H.1.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
+
+   *  Defined 'ending' parameter for the informative response payload.
 
    *  Minor fixes in examples.
 
