@@ -268,6 +268,8 @@ The Content-Format of the informative response is set to "application/informativ
 
    This information can help a new client to align itself with the server's timeline, especially in scenarios where multicast notifications are regularly sent. Also, it can help synchronizing different clients when orchestrating a content distribution through multicast notifications.
 
+* 'ending', with value the point in time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
+
 The CDDL notation {{RFC8610}} provided below describes the payload of the informative response.
 
 ~~~~~~~~~~~
@@ -275,7 +277,8 @@ informative_response_payload = {
    0 => array, ; 'tp_info' (transport-specific information)
  ? 1 => bstr,  ; 'ph_req' (transport-independent information)
  ? 2 => bstr,  ; 'last_notif' (transport-independent information)
- ? 3 => uint   ; 'next_not_before'
+ ? 3 => uint   ; 'next_not_before',
+ ? 4 => uint   ; 'ending'
 }
 ~~~~~~~~~~~
 {: #informative-response-payload title="Format of the Informative Response Payload"}
@@ -451,7 +454,7 @@ In order to not cause congestion, the server should conservatively control the s
 
 ## Cancellation ## {#ssec-server-side-cancellation}
 
-At any point in time, the server may want to cancel a group observation of a target resource. For instance, the server may realize that no clients or not enough clients are interested in taking part in the group observation anymore. A possible approach that the server can use to assess this is defined in {{sec-rough-counting}}.
+At a certain point in time, the server might want to cancel a group observation of a target resource. For instance, the server realizes that no clients or not enough clients are interested in taking part in the group observation anymore. {{sec-rough-counting}} defines a possible approach that the server can use to make an assessment in this respect. Another reason is that the group observation has reached its ending time, as originally scheduled by the server.
 
 In order to cancel the group observation, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated. The response has the same Token value T of the phantom registration request, it has no payload, and it does not include an Observe Option.
 
@@ -467,7 +470,7 @@ In a particular setup, the information typically specified in the 'tp_info' para
 
 In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response Option {{RFC7967}} with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation.
 
-While the considered client is able to simply set up its multicast address and start receiving multicast notifications for the group observation, sending an observation request as above allows the server to increment the observer counter. This helps the server to assess the current number of clients interested in the group observation over time (e.g., by using the method in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation (see {{ssec-server-side-cancellation}}).
+While the considered client is able to simply set up its multicast address and start receiving multicast notifications for the group observation, sending an observation request as above allows the server to increment the observer counter. This helps the server to assess the current number of clients interested in the group observation over time (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation (see {{ssec-server-side-cancellation}}).
 
 ## Informative Response ## {#ssec-client-side-informative}
 
@@ -711,7 +714,7 @@ Then, the server computes a feedback indicator as E = R * (2^Q), where "^" is th
 
 Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
 
-In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D > 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server MUST hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, and assesses it for possibly canceling the group observation (see {{ssec-server-side-cancellation}}).
+In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D > 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server MUST hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, which can be taken into account for possibly canceling the group observation (see {{ssec-server-side-cancellation}}).
 
 This estimate is skewed by packet loss, but it gives the server a sufficiently good estimation for further counts and for deciding when to cancel the group observation. It is up to applications to define policies about how the server takes the newly updated estimate into account and determines whether to cancel the group observation.
 
@@ -847,7 +850,7 @@ Note that these same values are used to protect each and every multicast notific
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation (see {{ssec-server-side-cancellation}}), the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
+When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -1176,19 +1179,20 @@ The table below summarizes them and specifies the CBOR key to use as abbreviatio
  ph_req          | 1        | byte string            | {{ssec-server-side-informative}}
  last_notif      | 2        | byte string            | {{ssec-server-side-informative}}
  next_not_before | 3        | unsigned integer       | {{ssec-server-side-informative}}
- join_uri        | 4        | text string            | {{sec-inf-response}}
- sec_gp          | 5        | text string            | {{sec-inf-response}}
- as_uri          | 6        | text string            | {{sec-inf-response}}
- hkdf            | 7        | integer or text string | {{sec-inf-response}}
- cred_fmt        | 8        | integer                | {{sec-inf-response}}
- gp_enc_alg      | 9        | integer or text string | {{sec-inf-response}}
- sign_alg        | 10       | integer or text string | {{sec-inf-response}}
- sign_params     | 11       | array                  | {{sec-inf-response}}
- gp_material     | 12       | map                    | {{self-managed-oscore-group}}
- srv_cred        | 13       | byte string            | {{self-managed-oscore-group}}
- srv_identifier  | 14       | byte string            | {{self-managed-oscore-group}}
- exi             | 15       | unsigned integer       | {{self-managed-oscore-group}}
- exp             | 16       | unsigned integer       | {{self-managed-oscore-group}}
+ ending          | 4        | unsigned integer       | {{ssec-server-side-informative}}
+ join_uri        | 5        | text string            | {{sec-inf-response}}
+ sec_gp          | 6        | text string            | {{sec-inf-response}}
+ as_uri          | 7        | text string            | {{sec-inf-response}}
+ hkdf            | 8        | integer or text string | {{sec-inf-response}}
+ cred_fmt        | 9        | integer                | {{sec-inf-response}}
+ gp_enc_alg      | 10       | integer or text string | {{sec-inf-response}}
+ sign_alg        | 11       | integer or text string | {{sec-inf-response}}
+ sign_params     | 12       | array                  | {{sec-inf-response}}
+ gp_material     | 13       | map                    | {{self-managed-oscore-group}}
+ srv_cred        | 14       | byte string            | {{self-managed-oscore-group}}
+ srv_identifier  | 15       | byte string            | {{self-managed-oscore-group}}
+ exi             | 16       | unsigned integer       | {{self-managed-oscore-group}}
+ exp             | 17       | unsigned integer       | {{self-managed-oscore-group}}
 {: #table-informative-response-params title="Informative Response Parameters." align="center"}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
@@ -1408,6 +1412,7 @@ Response:
                tp_info_token "7b"^^xsd::hexBinary,
                ph_req "0160.."^^xsd::hexBinary,
                last_notif "256105.."^^xsd::hexBinary,
+               ending "2051251201"^^xsd::unsignedLong,
            ]
     ]
 ~~~~~~~~~~~
@@ -1447,7 +1452,9 @@ Content-Format: application/informative-response+cbor
                       h'7b'                               / tpi_token /
                      ],
   / ph_req /     1 : h'0160...528c', / elided for brevity/
-  / last_notif / 2 : h'256105...4fa1' / elided for brevity/
+  / last_notif / 2 : h'256105...4fa1', / elided for brevity/
+  / ending /     4 : 2051251201
+
 }
 ~~~~~~~~~~~
 {: #discovery-introspection title="Group Observation Discovery with Server Introspection"}
@@ -1614,11 +1621,11 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR abbreviations from the OSCORE Security Context Parameters Registry, as in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-    - 'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', and 'sign_params'. These elements MUST be included.
+   * 'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', and 'sign_params'. These elements MUST be included.
 
-       Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+      Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
 
-    - 'hkdf' and 'salt'. These elements MAY be included.
+   * 'hkdf' and 'salt'. These elements MAY be included.
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
@@ -2403,6 +2410,8 @@ C1      C2      P         S
 ## Version -10 to -11 ## {#sec-10-11}
 
 * Do not rule out original observation requests sent over multicast.
+
+* Defined 'ending' parameter for the informative response payload.
 
 * Minor fixes in examples.
 
