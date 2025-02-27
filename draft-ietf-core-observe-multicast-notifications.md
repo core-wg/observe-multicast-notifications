@@ -1372,13 +1372,13 @@ Expert reviewers should take into consideration the following points:
 
 # Different Sources for Group Observation Data # {#appendix-different-sources}
 
-While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the server can make the same data available through different means, such as the following ones.
+While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the server can make the same data available through different means, such as those described in {{appendix-different-sources-pubsub}} and {{appendix-different-sources-introspection}}.
 
 In such a case, the server has to first start the group observation (see {{ssec-server-side-request}}), before making the corresponding data available.
 
-A client that receives such information from different sources may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
+After a client has obtained such information from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
 
-## Topic Discovery in Publish-Subscribe Settings
+## Topic Discovery in Publish-Subscribe Settings # {#appendix-different-sources-pubsub}
 
 In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata.
 
@@ -1388,24 +1388,24 @@ This information especially includes the phantom observation request associated 
 
 {{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}}, that contains properties analogous to those in the content-format application/informative-response+cbor.
 
-Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'tpi_server' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in {{ssssec-udp-transport-specific}}).
+Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_server' and 'tp_info_client', where the former specifies the addressing information of the server (like 'tpi_server' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in {{ssssec-udp-transport-specific}}).
 
 ~~~~~~~~~~~
 Request:
 
     GET </ps/topics?rt=oic.r.temperature>
-    Accept: application/coral+cbor
+    Accept: 65087 (application/coral+cbor)
 
 Response:
 
     2.05 Content
-    Content-Format: application/coral+cbor
+    Content-Format: 65087 (application/coral+cbor)
 
     rdf:type [ = <http://example.org/pubsub/topic-list>,
            topic [ = </ps/topics/1234>,
-               tp_info_srv <coap://[2001:db8::1]>,
+               tp_info_server <coap://[2001:db8::1]>,
+               tp_info_client <coap://[ff35:30:2001:db8::123]>,
                tp_info_token "7b"^^xsd::hexBinary,
-               tp_info_cli <coap://[ff35:30:2001:db8::123]>,
                ph_req "0160.."^^xsd::hexBinary,
                last_notif "256105.."^^xsd::hexBinary,
            ]
@@ -1417,7 +1417,7 @@ With this information from the topic discovery step, the client can already set 
 
 In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.
 
-## Introspection at the Multicast Notification Sender
+## Introspection at the Multicast Notification Sender # {#appendix-different-sources-introspection}
 
 For network debugging purposes, it can be useful to query a server that sends multicast responses as matching a phantom registration request.
 
@@ -1431,7 +1431,7 @@ GET </.well-known/core/mc-sender?token=6464>
 Response:
 
 2.05 Content
-Content-Format: application/informative-response+cbor
+Content-Format: TBD (application/informative-response+cbor)
 
 {
   / tp_info /    0 : [
@@ -1446,8 +1446,8 @@ Content-Format: application/informative-response+cbor
                       ],
                       h'7b'                               / tpi_token /
                      ],
-  / ph_req /     1 : h'0160/.../',
-  / last_notif / 2 : h'256105/.../'
+  / ph_req /     1 : h'0160...528c', / elided for brevity/
+  / last_notif / 2 : h'256105...4fa1' / elided for brevity/
 }
 ~~~~~~~~~~~
 {: #discovery-introspection title="Group Observation Discovery with Server Introspection"}
@@ -2403,6 +2403,10 @@ C1      C2      P         S
 ## Version -10 to -11 ## {#sec-10-11}
 
 * Do not rule out original observation requests sent over multicast.
+
+* Minor fixes in examples.
+
+* Clarifications and editorial improvements.
 
 ## Version -09 to -10 ## {#sec-09-10}
 
