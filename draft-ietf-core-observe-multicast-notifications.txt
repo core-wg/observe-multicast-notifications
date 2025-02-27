@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 24 April 2025                                                  
+Expires: 31 August 2025                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                         21 October 2024
+                                                        27 February 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,11 +55,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2025.
+   This Internet-Draft will expire on 31 August 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -147,16 +147,17 @@ Table of Contents
      G.1.  Assumptions and Walkthrough
      G.2.  Message Exchange
    Appendix H.  Document Updates
-     H.1.  Version -09 to -10
-     H.2.  Version -08 to -09
-     H.3.  Version -07 to -08
-     H.4.  Version -06 to -07
-     H.5.  Version -05 to -06
-     H.6.  Version -04 to -05
-     H.7.  Version -03 to -04
-     H.8.  Version -02 to -03
-     H.9.  Version -01 to -02
-     H.10. Version -00 to -01
+     H.1.  Version -10 to -11
+     H.2.  Version -09 to -10
+     H.3.  Version -08 to -09
+     H.4.  Version -07 to -08
+     H.5.  Version -06 to -07
+     H.6.  Version -05 to -06
+     H.7.  Version -04 to -05
+     H.8.  Version -03 to -04
+     H.9.  Version -02 to -03
+     H.10. Version -01 to -02
+     H.11. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -772,10 +773,14 @@ Table of Contents
       (see Section 4.2.1.1).
 
    *  It MUST be sent from the same IP address SRV_ADDR and port number
-      SRV_PORT where: i) the original Observe registration requests are
-      sent to by the clients; and ii) the corresponding informative
-      responses are sent from by the server (see Section 4.2).  That is,
-      redirection MUST NOT be used.
+      SRV_PORT where the corresponding informative responses are sent
+      from by the server (see Section 4.2).  That is, redirection MUST
+      NOT be used.
+
+      Note that, in most cases, such SRV_ADDR and SRV_PORT are those to
+      which original observation requests are sent to by clients (see
+      Section 5.1), unless those requests are sent to a multicast
+      address (see [I-D.ietf-core-groupcomm-bis]).
 
       The addressing information above is provided to the observer
       clients through the CRI specified by the element 'tpi_server'
@@ -2682,26 +2687,27 @@ Table of Contents
               ace-key-groupcomm-oscore-16>.
 
    [I-D.ietf-core-groupcomm-bis]
-              Dijk, E., Wang, C., and M. Tiloca, "Group Communication
-              for the Constrained Application Protocol (CoAP)", Work in
+              Dijk, E. and M. Tiloca, "Group Communication for the
+              Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              11, 24 April 2024, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-core-groupcomm-bis-11>.
+              13, 24 February 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              groupcomm-bis-13>.
 
    [I-D.ietf-core-href]
               Bormann, C. and H. Birkholz, "Constrained Resource
               Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-16, 24 July 2024,
+              ietf-core-href-18, 3 February 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-16>.
+              href-18>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and R. Höglund, "Group Object Security for Constrained
               RESTful Environments (Group OSCORE)", Work in Progress,
-              Internet-Draft, draft-ietf-core-oscore-groupcomm-23, 26
-              September 2024, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-core-oscore-groupcomm-23>.
+              Internet-Draft, draft-ietf-core-oscore-groupcomm-24, 8
+              February 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-oscore-groupcomm-24>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2782,17 +2788,17 @@ Table of Contents
    [I-D.amsuess-core-cachable-oscore]
               Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
               Progress, Internet-Draft, draft-amsuess-core-cachable-
-              oscore-09, 8 July 2024,
+              oscore-10, 8 January 2025,
               <https://datatracker.ietf.org/doc/html/draft-amsuess-core-
-              cachable-oscore-09>.
+              cachable-oscore-10>.
 
    [I-D.ietf-core-coap-pubsub]
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
               subscribe architecture for the Constrained Application
               Protocol (CoAP)", Work in Progress, Internet-Draft, draft-
-              ietf-core-coap-pubsub-14, 18 April 2024,
+              ietf-core-coap-pubsub-17, 5 February 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              coap-pubsub-14>.
+              coap-pubsub-17>.
 
    [I-D.ietf-core-coral]
               Amsüss, C. and T. Fossati, "The Constrained RESTful
@@ -2804,17 +2810,17 @@ Table of Contents
    [I-D.ietf-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
               in Progress, Internet-Draft, draft-ietf-core-oscore-
-              capable-proxies-02, 8 July 2024,
+              capable-proxies-03, 21 October 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              oscore-capable-proxies-02>.
+              oscore-capable-proxies-03>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-11, 8 July 2024,
+              ietf-cose-cbor-encoded-cert-12, 8 January 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-11>.
+              cbor-encoded-cert-12>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -4260,7 +4266,11 @@ Appendix H.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-H.1.  Version -09 to -10
+H.1.  Version -10 to -11
+
+   *  Do not rule out original observation requests sent over multicast.
+
+H.2.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -4268,7 +4278,7 @@ H.1.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-H.2.  Version -08 to -09
+H.3.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -4281,7 +4291,7 @@ H.2.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-H.3.  Version -07 to -08
+H.4.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -4309,7 +4319,7 @@ H.3.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-H.4.  Version -06 to -07
+H.5.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -4327,7 +4337,7 @@ H.4.  Version -06 to -07
 
    *  Editorial improvements.
 
-H.5.  Version -05 to -06
+H.6.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -4335,7 +4345,7 @@ H.5.  Version -05 to -06
 
    *  Editorial improvements.
 
-H.6.  Version -04 to -05
+H.7.  Version -04 to -05
 
    *  If the phantom request is an OSCORE deterministic request, there
       is no parallel group observation for clients that lack support.
@@ -4350,7 +4360,7 @@ H.6.  Version -04 to -05
 
    *  Editorial improvements.
 
-H.7.  Version -03 to -04
+H.8.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -4367,7 +4377,7 @@ H.7.  Version -03 to -04
 
    *  Editorial improvements.
 
-H.8.  Version -02 to -03
+H.9.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -4377,7 +4387,7 @@ H.8.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-H.9.  Version -01 to -02
+H.10.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -4395,7 +4405,7 @@ H.9.  Version -01 to -02
 
    *  Editorial improvements.
 
-H.10.  Version -00 to -01
+H.11.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
