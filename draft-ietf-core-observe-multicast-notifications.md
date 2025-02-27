@@ -425,7 +425,9 @@ Upon a change in the status of the target resource under group observation, the 
 
   The Token value T is specified by an element of 'tpi_details' within the 'tp_info' parameter, in the informative response sent to the observer clients. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
 
-* It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where: i) the original Observe registration requests are sent to by the clients; and ii) the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). That is, redirection MUST NOT be used.
+* It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). That is, redirection MUST NOT be used.
+
+  Note that, in most cases, such SRV_ADDR and SRV_PORT are those to which original observation requests are sent to by clients (see {{ssec-client-side-request}}), unless those requests are sent to a multicast address (see {{I-D.ietf-core-groupcomm-bis}}).
 
   The addressing information above is provided to the observer clients through the CRI specified by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see {{sssec-transport-specific-encoding}}).
 
@@ -2397,6 +2399,10 @@ C1      C2      P         S
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -10 to -11 ## {#sec-10-11}
+
+* Do not rule out original observation requests sent over multicast.
 
 ## Version -09 to -10 ## {#sec-09-10}
 
