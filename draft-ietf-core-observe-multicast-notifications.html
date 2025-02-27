@@ -3972,10 +3972,10 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
       <h2 id="name-different-sources-for-group">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-different-sources-for-group" class="section-name selfRef">Different Sources for Group Observation Data</a>
       </h2>
-<p id="appendix-A-1">While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), the server can make the same data available through different means, such as the following ones.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), the server can make the same data available through different means, such as those described in <a href="#appendix-different-sources-pubsub" class="auto internal xref">Appendix A.1</a> and <a href="#appendix-different-sources-introspection" class="auto internal xref">Appendix A.2</a>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">In such a case, the server has to first start the group observation (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>), before making the corresponding data available.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
-<p id="appendix-A-3">A client that receives such information from different sources may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see <a href="#intermediaries" class="auto internal xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see <a href="#sec-server-side" class="auto internal xref">Section 4</a>) is not incremented to reflect the presence of the new client.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
-<div id="topic-discovery-in-publish-subscribe-settings">
+<p id="appendix-A-3">After a client has obtained such information from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see <a href="#intermediaries" class="auto internal xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see <a href="#sec-server-side" class="auto internal xref">Section 4</a>) is not incremented to reflect the presence of the new client.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<div id="appendix-different-sources-pubsub">
 <section id="appendix-A.1">
         <h3 id="name-topic-discovery-in-publish-">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-topic-discovery-in-publish-" class="section-name selfRef">Topic Discovery in Publish-Subscribe Settings</a>
@@ -3984,7 +3984,7 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
 <p id="appendix-A.1-2">To this end, together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-3">This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
 <p id="appendix-A.1-4"><a href="#discovery-pub-sub" class="auto internal xref">Figure 8</a> provides an example where a group observation is discovered. The example assumes a CoRAL namespace <span>[<a href="#I-D.ietf-core-coral" class="cite xref">I-D.ietf-core-coral</a>]</span>, that contains properties analogous to those in the content-format application/informative-response+cbor.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-5">Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_srv' and 'tp_info_cli', where the former specifies the addressing information of the server (like 'tpi_server' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-5">Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). Instead, it is expressed through the scheme component of the two URIs specified as 'tp_info_server' and 'tp_info_client', where the former specifies the addressing information of the server (like 'tpi_server' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
 <span id="name-group-observation-discovery"></span><div id="discovery-pub-sub">
 <figure id="figure-8">
           <div class="alignLeft art-text artwork" id="appendix-A.1-6.1">
@@ -3992,18 +3992,18 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
 Request:
 
     GET &lt;/ps/topics?rt=oic.r.temperature&gt;
-    Accept: application/coral+cbor
+    Accept: 65087 (application/coral+cbor)
 
 Response:
 
     2.05 Content
-    Content-Format: application/coral+cbor
+    Content-Format: 65087 (application/coral+cbor)
 
     rdf:type [ = &lt;http://example.org/pubsub/topic-list&gt;,
            topic [ = &lt;/ps/topics/1234&gt;,
-               tp_info_srv &lt;coap://[2001:db8::1]&gt;,
+               tp_info_server &lt;coap://[2001:db8::1]&gt;,
+               tp_info_client &lt;coap://[ff35:30:2001:db8::123]&gt;,
                tp_info_token "7b"^^xsd::hexBinary,
-               tp_info_cli &lt;coap://[ff35:30:2001:db8::123]&gt;,
                ph_req "0160.."^^xsd::hexBinary,
                last_notif "256105.."^^xsd::hexBinary,
            ]
@@ -4018,7 +4018,7 @@ Response:
 <p id="appendix-A.1-8">In heavily asymmetric networks like municipal notification services, discovery and notifications do not necessarily need to use the same network link. For example, a departure monitor could use its (costly and usually-off) cellular uplink to discover the topics it needs to update its display to, and then listen on a LoRA-WAN interface for receiving the actual multicast notifications.<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="introspection-at-the-multicast-notification-sender">
+<div id="appendix-different-sources-introspection">
 <section id="appendix-A.2">
         <h3 id="name-introspection-at-the-multic">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-introspection-at-the-multic" class="section-name selfRef">Introspection at the Multicast Notification Sender</a>
@@ -4036,7 +4036,7 @@ GET &lt;/.well-known/core/mc-sender?token=6464&gt;
 Response:
 
 2.05 Content
-Content-Format: application/informative-response+cbor
+Content-Format: TBD (application/informative-response+cbor)
 
 {
   / tp_info /    0 : [
@@ -4051,8 +4051,8 @@ Content-Format: application/informative-response+cbor
                       ],
                       h'7b'                               / tpi_token /
                      ],
-  / ph_req /     1 : h'0160/.../',
-  / last_notif / 2 : h'256105/.../'
+  / ph_req /     1 : h'0160...528c', / elided for brevity/
+  / last_notif / 2 : h'256105...4fa1' / elided for brevity/
 }
 </pre>
 </div>
@@ -6192,6 +6192,12 @@ Note that the phantom request can be omitted, since it is the deterministic phan
 <ul class="normal">
 <li class="normal" id="appendix-H.1-1.1">
             <p id="appendix-H.1-1.1.1">Do not rule out original observation requests sent over multicast.<a href="#appendix-H.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.2">
+            <p id="appendix-H.1-1.2.1">Minor fixes in examples.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.3">
+            <p id="appendix-H.1-1.3.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

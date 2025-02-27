@@ -2877,21 +2877,23 @@ Appendix A.  Different Sources for Group Observation Data
    While the clients usually receive the phantom registration request
    and other information related to the group observation through an
    informative response (see Section 4.2), the server can make the same
-   data available through different means, such as the following ones.
+   data available through different means, such as those described in
+   Appendix A.1 and Appendix A.2.
 
    In such a case, the server has to first start the group observation
    (see Section 4.1), before making the corresponding data available.
 
-   A client that receives such information from different sources may be
-   able to simply set up the right multicast address and start receiving
-   multicast notifications for the group observation.  In such a case,
-   the client does not need to perform additional setup traffic, e.g.,
-   in order to configure a proxy for listening to multicast
-   notifications on its behalf (see Section 11 and Section 12).
-   Consequently, the server will not receive an observation request due
-   to that client, will not follow-up with a corresponding informative
-   response, and thus its observer counter (see Section 4) is not
-   incremented to reflect the presence of the new client.
+   After a client has obtained such information from different sources
+   than an informative response, the client may be able to simply set up
+   the right multicast address and start receiving multicast
+   notifications for the group observation.  In such a case, the client
+   does not need to perform additional setup traffic, e.g., in order to
+   configure a proxy for listening to multicast notifications on its
+   behalf (see Section 11 and Section 12).  Consequently, the server
+   will not receive an observation request due to that client, will not
+   follow-up with a corresponding informative response, and thus its
+   observer counter (see Section 4) is not incremented to reflect the
+   presence of the new client.
 
 A.1.  Topic Discovery in Publish-Subscribe Settings
 
@@ -2917,27 +2919,27 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
    group observation is not expressed through a dedicated element
    equivalent to 'tp_id' of the informative response (see
    Section 4.2.1).  Instead, it is expressed through the scheme
-   component of the two URIs specified as 'tp_info_srv' and
-   'tp_info_cli', where the former specifies the addressing information
-   of the server (like 'tpi_server' in Section 4.2.1.1), while the
-   latter specifies the addressing information where multicast
+   component of the two URIs specified as 'tp_info_server' and
+   'tp_info_client', where the former specifies the addressing
+   information of the server (like 'tpi_server' in Section 4.2.1.1),
+   while the latter specifies the addressing information where multicast
    notifications are sent to (like 'tpi_client' in Section 4.2.1.1).
 
    Request:
 
        GET </ps/topics?rt=oic.r.temperature>
-       Accept: application/coral+cbor
+       Accept: 65087 (application/coral+cbor)
 
    Response:
 
        2.05 Content
-       Content-Format: application/coral+cbor
+       Content-Format: 65087 (application/coral+cbor)
 
        rdf:type [ = <http://example.org/pubsub/topic-list>,
               topic [ = </ps/topics/1234>,
-                  tp_info_srv <coap://[2001:db8::1]>,
+                  tp_info_server <coap://[2001:db8::1]>,
+                  tp_info_client <coap://[ff35:30:2001:db8::123]>,
                   tp_info_token "7b"^^xsd::hexBinary,
-                  tp_info_cli <coap://[ff35:30:2001:db8::123]>,
                   ph_req "0160.."^^xsd::hexBinary,
                   last_notif "256105.."^^xsd::hexBinary,
               ]
@@ -2977,7 +2979,7 @@ A.2.  Introspection at the Multicast Notification Sender
  Response:
 
  2.05 Content
- Content-Format: application/informative-response+cbor
+ Content-Format: TBD (application/informative-response+cbor)
 
  {
    / tp_info /    0 : [
@@ -2992,8 +2994,8 @@ A.2.  Introspection at the Multicast Notification Sender
                        ],
                        h'7b'                               / tpi_token /
                       ],
-   / ph_req /     1 : h'0160/.../',
-   / last_notif / 2 : h'256105/.../'
+   / ph_req /     1 : h'0160...528c', / elided for brevity/
+   / last_notif / 2 : h'256105...4fa1' / elided for brevity/
  }
 
     Figure 9: Group Observation Discovery with Server Introspection
@@ -4269,6 +4271,10 @@ Appendix H.  Document Updates
 H.1.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
+
+   *  Minor fixes in examples.
+
+   *  Clarifications and editorial improvements.
 
 H.2.  Version -09 to -10
 
