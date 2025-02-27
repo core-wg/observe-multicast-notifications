@@ -1646,7 +1646,7 @@ Note that the registration request from the client may indeed differ from the ph
 This information can help a new client to align itself with the server's timeline, especially in scenarios where multicast notifications are regularly sent. Also, it can help synchronizing different clients when orchestrating a content distribution through multicast notifications.<a href="#section-4.2-5.4.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-5.5">
-            <p id="section-4.2-5.5.1">'ending', with value the point in time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in <span><a href="https://rfc-editor.org/rfc/rfc7519#section-2" class="relref">Section 2</a> of [<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>. This parameter <span class="bcp14">MAY</span> be included.<a href="#section-4.2-5.5.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-5.5.1">'ending', with value the time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in <span><a href="https://rfc-editor.org/rfc/rfc7519#section-2" class="relref">Section 2</a> of [<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>. This parameter <span class="bcp14">MAY</span> be included.<a href="#section-4.2-5.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-4.2-6">The CDDL notation <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> provided below describes the payload of the informative response.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
@@ -3984,9 +3984,10 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
       <h2 id="name-different-sources-for-group">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-different-sources-for-group" class="section-name selfRef">Different Sources for Group Observation Data</a>
       </h2>
-<p id="appendix-A-1">While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), the server can make the same data available through different means, such as those described in <a href="#appendix-different-sources-pubsub" class="auto internal xref">Appendix A.1</a> and <a href="#appendix-different-sources-introspection" class="auto internal xref">Appendix A.2</a>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>), the server can also make the same group observation data available through different means, such as those described in <a href="#appendix-different-sources-pubsub" class="auto internal xref">Appendix A.1</a> and <a href="#appendix-different-sources-introspection" class="auto internal xref">Appendix A.2</a>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">In such a case, the server has to first start the group observation (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>), before making the corresponding data available.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
-<p id="appendix-A-3">After a client has obtained such information from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see <a href="#intermediaries" class="auto internal xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see <a href="#sec-server-side" class="auto internal xref">Section 4</a>) is not incremented to reflect the presence of the new client.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<p id="appendix-A-3">When distributed through different means than informative responses, the group observation data has to specify the time when the group observation is planned to be canceled by the server. In particular, the server commits to keeping the group observation ongoing until the scheduled cancellation time is reached. Before that time, the server might however retract the advertised group observation data and thus make it not available to new clients.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+<p id="appendix-A-4">After a client has obtained the group observation data from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see <a href="#intermediaries" class="auto internal xref">Section 11</a> and <a href="#intermediaries-e2e-security" class="auto internal xref">Section 12</a>). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see <a href="#sec-server-side" class="auto internal xref">Section 4</a>) is not incremented to reflect the presence of the new client.<a href="#appendix-A-4" class="pilcrow">¶</a></p>
 <div id="appendix-different-sources-pubsub">
 <section id="appendix-A.1">
         <h3 id="name-topic-discovery-in-publish-">
@@ -6212,10 +6213,13 @@ Note that the phantom request can be omitted, since it is the deterministic phan
             <p id="appendix-H.1-1.2.1">Defined 'ending' parameter for the informative response payload.<a href="#appendix-H.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.3">
-            <p id="appendix-H.1-1.3.1">Minor fixes in examples.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.3.1">Group observation data available on different sources can be removed.<a href="#appendix-H.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-H.1-1.4">
-            <p id="appendix-H.1-1.4.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-H.1-1.4.1">Minor fixes in examples.<a href="#appendix-H.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-H.1-1.5">
+            <p id="appendix-H.1-1.5.1">Clarifications and editorial improvements.<a href="#appendix-H.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
