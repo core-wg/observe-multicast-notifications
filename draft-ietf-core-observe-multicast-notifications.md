@@ -1292,7 +1292,7 @@ Content Type: application/informative-response+cbor
 
 Content Coding: -
 
-ID: TBD
+ID: TBD (value between 0 and 255)
 
 Reference: {{&SELF}}
 
