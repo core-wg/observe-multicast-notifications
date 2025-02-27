@@ -465,11 +465,11 @@ Table of Contents
    include an Observe Option.  The response MUST be Confirmable and MUST
    NOT encode link-local addresses.
 
-   The Content-Format of the informative response is set to application/
-   informative-response+cbor, which is registered in Section 16.2.  The
-   payload of the informative response is a CBOR map including the
-   following parameters, whose CBOR abbreviations are defined in
-   Section 13.
+   The Content-Format of the informative response is set to
+   "application/informative-response+cbor", which is registered in
+   Section 16.2.  The payload of the informative response is a CBOR map
+   including the following parameters, whose CBOR abbreviations are
+   defined in Section 13.
 
    *  'tp_info', with value a CBOR array.  This includes the transport-
       specific information required to correctly receive multicast
@@ -2270,7 +2270,7 @@ Table of Contents
 
    The table below summarizes them and specifies the CBOR key to use as
    abbreviation, instead of the full descriptive name.  Note that the
-   media type application/informative-response+cbor MUST be used when
+   media type "application/informative-response+cbor" MUST be used when
    these fields are transported.
 
    +=================+==========+========================+=============+
@@ -2912,8 +2912,8 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
 
    Figure 8 provides an example where a group observation is discovered.
    The example assumes a CoRAL namespace [I-D.ietf-core-coral], that
-   contains properties analogous to those in the content-format
-   application/informative-response+cbor.
+   contains properties analogous to those in the Content-Format
+   "application/informative-response+cbor".
 
    Note that the information about the transport protocol used for the
    group observation is not expressed through a dedicated element
@@ -2979,7 +2979,7 @@ A.2.  Introspection at the Multicast Notification Sender
  Response:
 
  2.05 Content
- Content-Format: TBD (application/informative-response+cbor)
+ Content-Format: application/informative-response+cbor
 
  {
    / tp_info /    0 : [
