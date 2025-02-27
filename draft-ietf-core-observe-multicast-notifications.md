@@ -268,7 +268,7 @@ The Content-Format of the informative response is set to "application/informativ
 
    This information can help a new client to align itself with the server's timeline, especially in scenarios where multicast notifications are regularly sent. Also, it can help synchronizing different clients when orchestrating a content distribution through multicast notifications.
 
-* 'ending', with value the point in time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
+* 'ending', with value the time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
 
 The CDDL notation {{RFC8610}} provided below describes the payload of the informative response.
 
@@ -1376,11 +1376,13 @@ Expert reviewers should take into consideration the following points:
 
 # Different Sources for Group Observation Data # {#appendix-different-sources}
 
-While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the server can make the same data available through different means, such as those described in {{appendix-different-sources-pubsub}} and {{appendix-different-sources-introspection}}.
+While the clients usually receive the phantom registration request and other information related to the group observation through an informative response (see {{ssec-server-side-informative}}), the server can also make the same group observation data available through different means, such as those described in {{appendix-different-sources-pubsub}} and {{appendix-different-sources-introspection}}.
 
 In such a case, the server has to first start the group observation (see {{ssec-server-side-request}}), before making the corresponding data available.
 
-After a client has obtained such information from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
+When distributed through different means than informative responses, the group observation data has to specify the time when the group observation is planned to be canceled by the server. In particular, the server commits to keeping the group observation ongoing until the scheduled cancellation time is reached. Before that time, the server might however retract the advertised group observation data and thus make it not available to new clients.
+
+After a client has obtained the group observation data from different sources than an informative response, the client may be able to simply set up the right multicast address and start receiving multicast notifications for the group observation. In such a case, the client does not need to perform additional setup traffic, e.g., in order to configure a proxy for listening to multicast notifications on its behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}). Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
 
 ## Topic Discovery in Publish-Subscribe Settings # {#appendix-different-sources-pubsub}
 
@@ -2412,6 +2414,8 @@ C1      C2      P         S
 * Do not rule out original observation requests sent over multicast.
 
 * Defined 'ending' parameter for the informative response payload.
+
+* Group observation data available on different sources can be removed.
 
 * Minor fixes in examples.
 
