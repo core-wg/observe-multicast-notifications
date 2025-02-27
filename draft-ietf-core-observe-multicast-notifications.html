@@ -4055,15 +4055,15 @@ Content-Format: application/informative-response+cbor
 {
   / tp_info /    0 : [
                       [ / tpi_server /
-                       -1,        / scheme-id -- equivalent to "coap" /
+                       -1, / scheme-id -- equivalent to "coap" /
                         h'20010db80000000000000000000000ab' / host-ip /
                       ],
                       [ / tpi_client /
-                       -1,        / scheme-id -- equivalent to "coap" /
+                       -1, / scheme-id -- equivalent to "coap" /
                        h'ff35003020010db80000000000000023', / host-ip /
-                       61616                                   / port /
+                       61616 / port /
                       ],
-                      h'7b'                               / tpi_token /
+                      h'7b' / tpi_token /
                      ],
   / ph_req /     1 : h'0160...528c', / elided for brevity/
   / last_notif / 2 : h'256105...4fa1', / elided for brevity/
