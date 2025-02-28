@@ -3020,8 +3020,8 @@ A.2.  Introspection at the Multicast Notification Sender
                        ],
                        h'7b' / tpi_token /
                       ],
-   / ph_req /     1 : h'0160...528c', / elided for brevity/
-   / last_notif / 2 : h'256105...4fa1', / elided for brevity/
+   / ph_req /     1 : h'0160...528c', / elided for brevity /
+   / last_notif / 2 : h'256105...4fa1', / elided for brevity /
    / ending /     4 : 2051251201
 
  }
