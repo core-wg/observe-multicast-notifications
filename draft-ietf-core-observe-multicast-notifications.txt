@@ -149,7 +149,7 @@ Table of Contents
    Appendix H.  Example with a Reverse-Proxy and Deterministic
            Requests
      H.1.  Taking Part in Group Observations
-       H.1.1.  Pre-steps for Client Initialization
+       H.1.1.  Client Initialization Procedure
    Appendix I.  Document Updates
      I.1.  Version -10 to -11
      I.2.  Version -09 to -10
@@ -3349,7 +3349,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    In particular, while it is analogous to the informative response
    defined in Section 4.2, this response has the following differences:
 
-   *  it additionally contains the abovementioned parameters for the
+   *  it additionally contains the parameters mentioned above, for the
       next group keying material to be used; and
 
    *  it MAY omit the 'tp_info' and 'ph_req' parameters, since the
@@ -4342,8 +4342,8 @@ Appendix H.  Example with a Reverse-Proxy and Deterministic Requests
       Section 4.2.1), this means that the 'tp_info' array includes only
       the 'tpi_server' element specifying a CRI with addressing
       information PRX_ADDR and PRX_PORT (i.e., targeting PRX).  That is,
-      'tp_info' does not include any further alements, regardless of
-      what is expected per the transport used.
+      'tp_info' does not include the 'tpi_details' element, regardless
+      of what is expected per the transport used.
 
 H.1.  Taking Part in Group Observations
 
@@ -4384,12 +4384,12 @@ H.1.  Taking Part in Group Observations
        information to receive multicast notifications for the target
        resource.  Based on such information, PRX starts listening to
        multicast notifications.  If the informative response includes a
-       latest notification, then PRX chaches that notification and
+       latest notification, then PRX caches that notification and
        forwards it to the client.
 
    Editor's note: add a figure showing an example of message exchange.
 
-H.1.1.  Pre-steps for Client Initialization
+H.1.1.  Client Initialization Procedure
 
    The following early initialization procedure is performed by a client
    that does not have the group observation data and/or is not a member
@@ -4414,8 +4414,9 @@ H.1.1.  Pre-steps for Client Initialization
 
    *  The 'tp_info' parameter, within which the 'tpi_server' element is
       a CRI with addressing information PRX_ADDR and PRX_PORT (i.e.,
-      targeting PRX).  The 'tpi_info' parameter does not include other
-      elements, regardless of what is expected per the transport used.
+      targeting PRX).  The 'tpi_info' parameter does not include the
+      'tpi_details' element, regardless of what is expected per the
+      transport used.
 
    *  The 'ph_req' parameter, conveying the deterministic phantom
       request PH_REQ.
@@ -4432,7 +4433,7 @@ H.1.1.  Pre-steps for Client Initialization
    client takes its payload as the group observation data for the group
    observation of interest.
 
-   Per the instructions specifed in the response, the client takes the
+   Per the instructions specified in the response, the client takes the
    necessary steps to join the correct OSCORE group, in case it is not
    already a member.
 

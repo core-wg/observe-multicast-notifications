@@ -1415,7 +1415,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.25.2.1.1"><a href="#appendix-H.1" class="auto internal xref">H.1</a>.  <a href="#name-taking-part-in-group-observ" class="internal xref">Taking Part in Group Observations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.25.2.1.2.1">
-                    <p id="section-toc.1-1.25.2.1.2.1.1"><a href="#appendix-H.1.1" class="auto internal xref">H.1.1</a>.  <a href="#name-pre-steps-for-client-initia" class="internal xref">Pre-steps for Client Initialization</a></p>
+                    <p id="section-toc.1-1.25.2.1.2.1.1"><a href="#appendix-H.1.1" class="auto internal xref">H.1.1</a>.  <a href="#name-client-initialization-proce" class="internal xref">Client Initialization Procedure</a></p>
 </li>
                 </ul>
 </li>
@@ -4357,7 +4357,7 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
 <p id="appendix-C-15">Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, while it is analogous to the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>, this response has the following differences:<a href="#appendix-C-15" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-16.1">
-          <p id="appendix-C-16.1.1">it additionally contains the abovementioned parameters for the next group keying material to be used; and<a href="#appendix-C-16.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-16.1.1">it additionally contains the parameters mentioned above, for the next group keying material to be used; and<a href="#appendix-C-16.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-16.2">
           <p id="appendix-C-16.2.1">it <span class="bcp14">MAY</span> omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.<a href="#appendix-C-16.2.1" class="pilcrow">¶</a></p>
@@ -6241,7 +6241,7 @@ That is, a request sent with destination address PRX_ADDR and port number PRX_PO
 </li>
           </ul>
 <p id="appendix-H-6.2.3">
-Assuming that the group information data has a format consistent with the 'tp_info' array of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>), this means that the 'tp_info' array includes only the 'tpi_server' element specifying a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). That is, 'tp_info' does not include any further alements, regardless of what is expected per the transport used.<a href="#appendix-H-6.2.3" class="pilcrow">¶</a></p>
+Assuming that the group information data has a format consistent with the 'tp_info' array of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>), this means that the 'tp_info' array includes only the 'tpi_server' element specifying a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). That is, 'tp_info' does not include the 'tpi_details' element, regardless of what is expected per the transport used.<a href="#appendix-H-6.2.3" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="rev-proxy-main-process">
@@ -6271,14 +6271,14 @@ In such a particular situation, the client sends PH_REQ with destination address
 <p id="appendix-H.1-5.2.2">
 That is, if PH_REQ results in a cache hit at PRX, then PRX replies to the client with the latest multicast notification for the target resource from its cache, and takes no further actions.<a href="#appendix-H.1-5.2.2" class="pilcrow">¶</a></p>
 <p id="appendix-H.1-5.2.3">
-Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX chaches that notification and forwards it to the client.<a href="#appendix-H.1-5.2.3" class="pilcrow">¶</a></p>
+Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX caches that notification and forwards it to the client.<a href="#appendix-H.1-5.2.3" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <p id="appendix-H.1-6">Editor's note: add a figure showing an example of message exchange.<a href="#appendix-H.1-6" class="pilcrow">¶</a></p>
 <div id="rev-proxy-client-pre-steps">
 <section id="appendix-H.1.1">
-          <h4 id="name-pre-steps-for-client-initia">
-<a href="#appendix-H.1.1" class="section-number selfRef">H.1.1. </a><a href="#name-pre-steps-for-client-initia" class="section-name selfRef">Pre-steps for Client Initialization</a>
+          <h4 id="name-client-initialization-proce">
+<a href="#appendix-H.1.1" class="section-number selfRef">H.1.1. </a><a href="#name-client-initialization-proce" class="section-name selfRef">Client Initialization Procedure</a>
           </h4>
 <p id="appendix-H.1.1-1">The following early initialization procedure is performed by a client that does not have the group observation data and/or is not a member of the correct OSCORE group, before starting the main process described in <a href="#rev-proxy-main-process" class="auto internal xref">Appendix H.1</a>.<a href="#appendix-H.1.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-H.1.1-2">The client is minimally provided with the pair (PRX_ADDR, PRX_PORT) associated with PRX, which the client believes to be targeting the origin server.<a href="#appendix-H.1.1-2" class="pilcrow">¶</a></p>
@@ -6287,7 +6287,7 @@ Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-b
 <p id="appendix-H.1.1-5">c. The server replies with a 5.03 informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters.<a href="#appendix-H.1.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-H.1.1-6.1">
-              <p id="appendix-H.1.1-6.1.1">The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include other elements, regardless of what is expected per the transport used.<a href="#appendix-H.1.1-6.1.1" class="pilcrow">¶</a></p>
+              <p id="appendix-H.1.1-6.1.1">The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include the 'tpi_details' element, regardless of what is expected per the transport used.<a href="#appendix-H.1.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-H.1.1-6.2">
               <p id="appendix-H.1.1-6.2.1">The 'ph_req' parameter, conveying the deterministic phantom request PH_REQ.<a href="#appendix-H.1.1-6.2.1" class="pilcrow">¶</a></p>
@@ -6298,7 +6298,7 @@ Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-b
           </ul>
 <p id="appendix-H.1.1-7">d. PRX receives the protected 5.03 informative response and forwards it to the client, as usual.<a href="#appendix-H.1.1-7" class="pilcrow">¶</a></p>
 <p id="appendix-H.1.1-8">e. Upon receiving the protected 5.03 informative response, the client takes its payload as the group observation data for the group observation of interest.<a href="#appendix-H.1.1-8" class="pilcrow">¶</a></p>
-<p id="appendix-H.1.1-9">Per the instructions specifed in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.<a href="#appendix-H.1.1-9" class="pilcrow">¶</a></p>
+<p id="appendix-H.1.1-9">Per the instructions specified in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.<a href="#appendix-H.1.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
