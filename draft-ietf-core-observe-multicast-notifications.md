@@ -2406,6 +2406,80 @@ C1      C2      P         S
 ~~~~~~~~~~~
 {: #example-proxy-oscore-det-request title="Example of Group Observation with a Proxy and Group OSCORE, where the Phantom Request is a Deterministic Request"}
 
+# Example with a Reverse-Proxy and Deterministic Requests # {#intermediaries-example-e2e-security-det-rev-proxy}
+
+This section describes an example where specifically a reverse-proxy PRX is used between the clients and the server (see {{Section 5.7.3 of RFC7252}}).
+
+Like for the example in {{intermediaries-example-e2e-security-det}}, the phantom request is especially a deterministic request (see {{deterministic-phantom-Request}}), which is protected with the pairwise mode of Group OSCORE as defined in {{I-D.amsuess-core-cachable-oscore}}.
+
+The same assumptions compiled in {{intermediaries-example-e2e-security-det-intro}} apply in this scenario too, with the following differences:
+
+* Assumption (2): when the server makes the phantom request available through other means (see {{appendix-different-sources}}), the accompanying group observation data does _not_ specify client-side, transport-specific information for listening to multicast notifications bound to the phantom request.
+
+* Assumption (4): this assumption does not apply, since all the clients rely on PRX, although they are not aware to communicate with a proxy.
+
+Furthermore, the following assumptions apply to this scenario:
+
+* The server knows the address PRX_ADDR and port number PRX_PORT that PRX exposes to the clients when acting as stand-in for the server.
+
+  That is, a request sent with destination address PRX_ADDR and port number PRX_PORT will reach PRX, which forwards the request to the server.
+
+* When the server makes the phantom request available through other means (see {{appendix-different-sources}}), the accompanying group observation data is such that:
+
+  * It provides server-side, transport-specific information, which consists of the address PRX_ADDR and port number PRX_PORT associated with PRX.
+
+  * It does not provide any further client-side, transport-specific information.
+
+  Assuming that the group information data has a format consistent with the 'tp_info' array of the informative response (see {{sssec-transport-specific-encoding}}), this means that the 'tp_info' array includes only the 'tpi_server' element specifying a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). That is, 'tp_info' does not include any further alements, regardless of what is expected per the transport used.
+
+## Taking Part in Group Observations # {#rev-proxy-main-process}
+
+The rest of this section describes how a client can take part in a group observation.
+
+If any of the following conditions does not hold, then the client first performs the initialization procedure described in {{rev-proxy-client-pre-steps}}.
+
+* The client has already obtained the group observation data specifying the deterministic phantom request, which the server has made available through other means (see {{appendix-different-sources}}).
+
+* The client is already a member of the correct OSCORE group.
+
+The main process consists of the following steps.
+
+1. From the group observation data, the client knows the deterministic phantom request PH_REQ, the address PRX_ADDR, and the port number PRX_PORT, but no other client-side, transport-specific information.
+
+   In such a particular situation, the client sends PH_REQ with destination address PRX_ADDR and port number PRX_PORT, i.e., to PRX.
+
+2. Upon receiving PH_REQ, PRX performs the same actions performed by the proxy in the scenario of {{intermediaries-example-e2e-security-det}}.
+
+   That is, if PH_REQ results in a cache hit at PRX, then PRX replies to the client with the latest multicast notification for the target resource from its cache, and takes no further actions.
+
+   Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX chaches that notification and forwards it to the client.
+
+Editor's note: add a figure showing an example of message exchange.
+
+### Pre-steps for Client Initialization # {#rev-proxy-client-pre-steps}
+
+The following early initialization procedure is performed by a client that does not have the group observation data and/or is not a member of the correct OSCORE group, before starting the main process described in {{rev-proxy-main-process}}.
+
+The client is minimally provided with the pair (PRX_ADDR, PRX_PORT) associated with PRX, which the client believes to be targeting the origin server.
+
+a. The client sends a traditional Observe registration request with destination address PRX_ADDR and port number PRX_PORT, i.e., to PRX. The request is protected with (Group) OSCORE, i.e., end-to-end between the client and the server.
+
+b. PRX receives the request and forwards it to the server, as usual.
+
+c. The server replies with a 5.03 informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters.
+
+   * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include other elements, regardless of what is expected per the transport used.
+
+   * The 'ph_req' parameter, conveying the deterministic phantom request PH_REQ.
+
+   * Optionally, parameters conveying information that the client can use for joining the OSCORE group if that has not happened yet, or the keying material used in the OSCORE group if the server is managing it (see {{self-managed-oscore-group}}).
+
+d. PRX receives the protected 5.03 informative response and forwards it to the client, as usual.
+
+e. Upon receiving the protected 5.03 informative response, the client takes its payload as the group observation data for the group observation of interest.
+
+   Per the instructions specifed in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.
+
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
@@ -2416,6 +2490,8 @@ C1      C2      P         S
 * Defined 'ending' parameter for the informative response payload.
 
 * Group observation data available on different sources can be removed.
+
+* Initial description of a scenario with a reverse-proxy.
 
 * Minor fixes in examples.
 
