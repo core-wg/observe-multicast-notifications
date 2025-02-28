@@ -1681,7 +1681,7 @@ Upon expiration of the group keying material as indicated in the informative res
 
 Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, while it is analogous to the informative response defined in {{ssec-server-side-informative}}, this response has the following differences:
 
-* it additionally contains the abovementioned parameters for the next group keying material to be used; and
+* it additionally contains the parameters mentioned above, for the next group keying material to be used; and
 
 * it MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
 
@@ -2430,7 +2430,7 @@ Furthermore, the following assumptions apply to this scenario:
 
   * It does not provide any further client-side, transport-specific information.
 
-  Assuming that the group information data has a format consistent with the 'tp_info' array of the informative response (see {{sssec-transport-specific-encoding}}), this means that the 'tp_info' array includes only the 'tpi_server' element specifying a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). That is, 'tp_info' does not include any further alements, regardless of what is expected per the transport used.
+  Assuming that the group information data has a format consistent with the 'tp_info' array of the informative response (see {{sssec-transport-specific-encoding}}), this means that the 'tp_info' array includes only the 'tpi_server' element specifying a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). That is, 'tp_info' does not include the 'tpi_details' element, regardless of what is expected per the transport used.
 
 ## Taking Part in Group Observations # {#rev-proxy-main-process}
 
@@ -2452,11 +2452,11 @@ The main process consists of the following steps.
 
    That is, if PH_REQ results in a cache hit at PRX, then PRX replies to the client with the latest multicast notification for the target resource from its cache, and takes no further actions.
 
-   Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX chaches that notification and forwards it to the client.
+   Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX caches that notification and forwards it to the client.
 
 Editor's note: add a figure showing an example of message exchange.
 
-### Pre-steps for Client Initialization # {#rev-proxy-client-pre-steps}
+### Client Initialization Procedure # {#rev-proxy-client-pre-steps}
 
 The following early initialization procedure is performed by a client that does not have the group observation data and/or is not a member of the correct OSCORE group, before starting the main process described in {{rev-proxy-main-process}}.
 
@@ -2468,7 +2468,7 @@ b. PRX receives the request and forwards it to the server, as usual.
 
 c. The server replies with a 5.03 informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters.
 
-   * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include other elements, regardless of what is expected per the transport used.
+   * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include the 'tpi_details' element, regardless of what is expected per the transport used.
 
    * The 'ph_req' parameter, conveying the deterministic phantom request PH_REQ.
 
@@ -2478,7 +2478,7 @@ d. PRX receives the protected 5.03 informative response and forwards it to the c
 
 e. Upon receiving the protected 5.03 informative response, the client takes its payload as the group observation data for the group observation of interest.
 
-   Per the instructions specifed in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.
+   Per the instructions specified in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
