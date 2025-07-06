@@ -1634,9 +1634,7 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR abbreviations from the OSCORE Security Context Parameters Registry, as in {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   * 'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', and 'sign_params'. These elements MUST be included.
-
-      Editor's note: as per the text above, the referred version of {{I-D.ietf-ace-key-groupcomm-oscore}} still uses 'sign_enc_alg' as parameter name. The next version of {{I-D.ietf-ace-key-groupcomm-oscore}} will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of {{I-D.ietf-core-oscore-groupcomm}}.
+   * 'ms', 'contexId', 'cred_fmt', 'gp_enc_alg', 'sign_alg', and 'sign_params'. These elements MUST be included.
 
    * 'hkdf' and 'salt'. These elements MAY be included.
 
@@ -2501,6 +2499,8 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 * Avoid limiting the informative response to this protocol.
 
 * Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.
+
+* Renamed 'sign_enc_alg' to 'gp_enc_alg', now aligned with draft-ietf-ace-key-groupcomm-oscore.
 
 * Editorial improvements
 
