@@ -5,9 +5,6 @@ title: Observe Notifications as CoAP Multicast Responses
 abbrev: Observe Multicast Notifications
 docname: draft-ietf-core-observe-multicast-notifications-latest
 
-
-# stand_alone: true
-
 ipr: trust200902
 area: WIT
 wg: CoRE Working Group
@@ -2483,6 +2480,10 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
+## Version -11 to -12 ## {#sec-11-12}
+
+* Editorial improvements
+
 ## Version -10 to -11 ## {#sec-10-11}
 
 * Do not rule out original observation requests sent over multicast.
@@ -2632,6 +2633,6 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 # Acknowledgments # {#acknowldegment}
 {: numbered="no"}
 
-The authors sincerely thank {{{Carsten Bormann}}}, {{{Klaus Hartke}}}, {{{Jaime Jiménez}}}, {{{John Preuß Mattsson}}}, {{{Jim Schaad}}}, {{{Ludwig Seitz}}}, and {{{Göran Selander}}} for their comments and feedback.
+The authors sincerely thank {{{Carsten Bormann}}}, {{{Klaus Hartke}}}, {{{Jaime Jiménez}}}, {{{Matthias Kovatsch⁩}}}, {{{John Preuß Mattsson}}}, {{{Jim Schaad}}}, {{{Ludwig Seitz}}}, and {{{Göran Selander}}} for their comments and feedback.
 
 The work on this document has been partly supported by the Sweden's Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and CYPRESS; and by the H2020 project SIFIS-Home (Grant agreement 952652).
