@@ -472,9 +472,16 @@ Table of Contents
 
    The Content-Format of the informative response is set to
    "application/informative-response+cbor", which is registered in
-   Section 16.2.  The payload of the informative response is a CBOR map
-   including the following parameters, whose CBOR abbreviations are
-   defined in Section 13.
+   Section 16.2.  The payload of the informative response is a CBOR map,
+   whose fields use the CBOR abbreviations that are defined in
+   Section 13.
+
+   When using the method specified in this document, the CBOR map
+   conveyed as the payload of the informative response includes the
+   following parameters with the semantics defined below.  Other
+   specifications may define how to use the informative response for
+   providing alternative information that is relevant to other protocols
+   and applications.
 
    *  'tp_info', with value a CBOR array.  This includes the transport-
       specific information required to correctly receive multicast
@@ -4447,6 +4454,8 @@ Appendix I.  Document Updates
 I.1.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
+
+   *  Avoid limiting the informative response to this protocol.
 
    *  Editorial improvements
 
