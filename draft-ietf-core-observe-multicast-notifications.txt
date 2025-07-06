@@ -4451,7 +4451,7 @@ H.1.1.  Client Initialization Procedure
 
    *  The 'tp_info' parameter, within which the 'tpi_server' element is
       a CRI with addressing information PRX_ADDR and PRX_PORT (i.e.,
-      targeting PRX).  The 'tpi_info' parameter does not include the
+      targeting PRX).  The 'tp_info' parameter does not include the
       'tpi_details' element, regardless of what is expected per the
       transport used.
 
