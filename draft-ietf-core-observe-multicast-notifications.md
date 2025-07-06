@@ -2479,7 +2479,7 @@ b. PRX receives the request and forwards it to the server, as usual.
 
 c. The server replies with a 5.03 informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters.
 
-   * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tpi_info' parameter does not include the 'tpi_details' element, regardless of what is expected per the transport used.
+   * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tp_info' parameter does not include the 'tpi_details' element, regardless of what is expected per the transport used.
 
    * The 'ph_req' parameter, conveying the deterministic phantom request PH_REQ.
 
