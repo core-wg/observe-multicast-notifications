@@ -97,6 +97,7 @@ informative:
   I-D.amsuess-core-cachable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-core-oscore-capable-proxies:
+  I-D.ietf-core-dns-over-coap:
   RFC5280:
   RFC6690:
   RFC7519:
@@ -288,7 +289,7 @@ Note that this also applies when, with no ongoing traditional observations on th
 
 ### Transport-Specific Message Information  ### {#sssec-transport-specific-encoding}
 
-The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.
+The CBOR array specified in the 'tp_info' parameter of an informative response is formatted according to the following CDDL notation.
 
 ~~~~~~~~~~~
 tp_info = [
@@ -297,8 +298,9 @@ tp_info = [
 ]
 
 tpi_details = (
-  + elements  ; Number, format, and encoding of the elements depend
-              ; on the scheme-id of the CRI specified as 'tpi_server'
+  + elements  ; The number, format, and encoding of the elements
+              ; depend on the scheme-id and authority of the CRI
+              ; specified as tpi_server
 )
 
 CRI-no-local = [
@@ -327,21 +329,27 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   - The addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.
 
-    Such addressing information MUST be equal to the destination addressing information of the registration requests sent by the clients to observe the target resource at the server.
+    Such addressing information MUST be equal to the source addressing information from which the informative response is sent by the server (see {{ssec-server-side-notifications}}).
 
-  This element specifies a CRI {{I-D.ietf-core-href}}, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given. The CRI scheme is given as a negative integer 'scheme-id', with value taken from the "Scheme ID" column of the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document.
+  This element specifies a CRI {{I-D.ietf-core-href}}, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given.
 
-  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding URI scheme, per the associated entry in the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}}.
+  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding URI scheme, per the associated entry in the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}}.
 
-  Furthermore, the CRI scheme determines how many elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics.
+  The combination of URI scheme and 'authority' component determines the CoAP transport used to distribute multicast notifications for the group observation. Note that:
+
+  * If the 'authority' component specifies a host-ip, then the 'scheme-id' (hence the URI scheme) is sufficient to identify the transport.
+
+  * If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in {{I-D.ietf-core-dns-over-coap}}).
+
+  The identified transport determines what elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics. Those elements are specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see {{iana-coap-transport-information}})
 
 * The 'tpi_details' element MAY be present and specifies transport-specific information related to a pertinent request message, i.e., the phantom observation request in this document.
 
-  The exact format of 'tpi_details' depends on the CRI scheme of the CRI specified by the 'tpi_server' element.
+  The exact format of 'tpi_details' depends on the CoAP transport, which is identified according to the CRI conveyed by the 'tpi_server' element, as described above.
 
-  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document, the entry corresponding to a certain CRI scheme specifies the list of elements composing 'tpi_details' for that CRI scheme, as value of the column "Transport Information Details". Within 'tpi_details', its elements MUST be ordered according to what is specified in the column "Transport Information Details" of the "CoAP Transport Information" registry.
+  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as value of the 'Transport Information Details' column. Within 'tpi_details', its elements MUST be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.
 
-{{transport-protocol-identifiers}} registers an entry in the "CoAP Transport Information" registry, for the CRI scheme identified by the negative integer -1 ("coap"). This value is used as 'scheme-id' for the CRI in the 'tpi_server' element, when CoAP responses are transported over UDP. In such a case, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
+{{transport-protocol-identifiers}} registers an entry in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
 
 If a future specification defines the use of CoAP multicast notifications transported over different transport protocols, then that specification MUST perform the following actions, unless those have been already performed for different reasons:
 
@@ -349,9 +357,7 @@ If a future specification defines the use of CoAP multicast notifications transp
 
 * Register an entry in the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document.
 
-   The value of the column "Scheme ID" is the negative integer ID to be used as 'scheme-id' for the CRI specified by the 'tpi_server' element, which provides source addressing information of the multicast notifications. The same use applies to the CRI specified by an element of 'tpi_details', which provides destination addressing information of the multicast notifications.
-
-   As a pre-condition for such a registration, it is REQUIRED that the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}} includes an entry where the value in the column "CRI scheme number" is (-1 - ID).
+* Register an entry in the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}}, where the value in the 'CRI scheme number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.
 
 #### UDP Transport-Specific Information  ### {#ssssec-udp-transport-specific}
 
@@ -359,7 +365,7 @@ When CoAP multicast notifications are transported over UDP as per {{RFC7252}} an
 
 * In the 'tpi_server' element, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.
 
-  This information consists of the IP address SRV_ADDR (expressed as a literal or resulting from a name resolution) and the port number SRV_PORT of the server hosting the target resource, and from where the server will send multicast notifications for the target resource.
+  This information consists of the IP address SRV_ADDR (expressed as a literal or resulting from a name resolution) and the port number SRV_PORT of the server hosting the target resource, from where the server will send multicast notifications for the target resource.
 
 * The 'tpi_details' element MUST be present and in turn includes the following two elements:
 
@@ -367,9 +373,9 @@ When CoAP multicast notifications are transported over UDP as per {{RFC7252}} an
 
      This information consists of the IP multicast address GRP_ADDR (expressed as a literal or resulting from a name resolution) and the port number GRP_PORT, where the server will send multicast notifications for the target resource.
 
-   * 'tpi_token' is a CBOR byte string, with value the Token value of the phantom observation request generated by the server (see {{ssec-server-side-request}}). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see {{ssec-server-side-notifications}}).
+   * 'tpi_token' is a CBOR byte string, whose value is the Token value of the phantom observation request generated by the server (see {{ssec-server-side-request}}). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see {{ssec-server-side-notifications}}).
 
-The CDDL notation in {{tp-info-udp}} describes the format of the 'tp_info' CBOR array when using UDP as transport protocol.
+The CDDL notation in {{tp-info-udp}} describes the format of the 'tp_info' CBOR array when CoAP is transported over UDP.
 
 ~~~~~~~~~~~
 tp_info_coap_udp = [
@@ -383,7 +389,9 @@ tp_info_coap_udp = [
 ~~~~~~~~~~~
 {: #tp-info-udp title="Format of 'tp_info' with UDP as Transport Protocol"}
 
-The CBOR diagnostic notation in {{tp-info-udp-example}} provides an example of the 'tp_info' CBOR array when using UDP as transport protocol. In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the CoAP default port number), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.
+The CBOR diagnostic notation in {{tp-info-udp-example}} provides an example of the 'tp_info' CBOR array when CoAP is transported over UDP.
+
+In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the default port number when CoAP is transported over UDP), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.
 
 ~~~~~~~~~~~
 [ / tp_info /
@@ -473,17 +481,25 @@ While the considered client is able to simply set up its multicast address and s
 
 ## Informative Response ## {#ssec-client-side-informative}
 
-Upon receiving the informative response defined in {{ssec-server-side-informative}}, the client proceeds as follows.
+Upon receiving the informative response defined in {{ssec-server-side-informative}}, the client has to identify the CoAP transport used to distribute multicast notifications for the group observation.
+
+To this end, the client relies on the element 'tpi_server' within the 'tp_info' parameter of the informative response (see {{sssec-transport-specific-encoding}}).
+
+In particular, the client considers the CRI conveyed by 'tpi_server' and identifies the CoAP transport, by assessing together the 'authority' component and the URI scheme determined from 'scheme-id' (see {{sssec-transport-specific-encoding}}).
+
+After that, the client parses the remainder of the 'tp_info' array, i.e., the information conveyed by 'tpi_details', according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see {{iana-coap-transport-information}}).
+
+Then, the client performs the following steps.
 
 1. The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:
 
     - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see {{sssec-transport-specific-encoding}}).
 
-      If the port number is not present in the CRI, then the client MUST use as SRV_PORT the default port number defined for the URI scheme that corresponds to the CRI scheme number (e.g., 5683 when the URI scheme is "coap").
+      If the port number is not present in the CRI, the client MUST use as SRV_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
     - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
-      If the port number is not present in the CRI, then the client MUST use as GRP_PORT the default port number defined for the URI scheme that corresponds to the CRI scheme number (e.g., 5683 when the URI scheme is "coap").
+      If the port number is not present in the CRI, the client MUST use as GRP_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
 2. The client rebuilds the phantom registration request as follows.
 
@@ -507,7 +523,9 @@ Upon receiving the informative response defined in {{ssec-server-side-informativ
 
 7. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
 
-If any of the expected fields in the informative response are not present or malformed, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
+In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client MUST treat any CRI within the 'tp_info' array as invalid if the 'authority' component is a host-name that, when resolved, indicates multiple transports. As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in {{I-D.ietf-core-dns-over-coap}}).
+
+If any of the expected fields in the informative response are absent, malformed, or invalid, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
 
 {{appendix-different-sources}} describes possible alternative ways for clients to retrieve the phantom registration request and other information related to a group observation.
 
@@ -651,7 +669,7 @@ This section specifies a method that the server can use to keep an estimate of s
 
 In order to enable the rough counting of still active and interested clients, a new CoAP option is introduced, which SHOULD be supported by clients that listen to multicast responses.
 
-The option is called Multicast-Response-Feedback-Divider and has the properties summarized in {{mrfd-table}}, which extends Table 4 of {{RFC7252}}. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
+The option is called Multicast-Response-Feedback-Divider and has the properties summarized in {{mrfd-table}}, which extends Table 4 of {{RFC7252}}. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".
 
 | No.  | C | U | N | R | Name                                    | Format | Length | Default |
 | TBD  |   | x | - |   | Multicast-Response-<br>Feedback-Divider | uint   | 0-1    | (none)  |
@@ -1112,7 +1130,7 @@ Details on the additional message exchange and processing are defined in {{inter
 
 In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.
 
-The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in {{ltmr-table}}, which extends Table 4 of {{RFC7252}}. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".
+The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in {{ltmr-table}}, which extends Table 4 of {{RFC7252}}. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".
 
 | No.  | C | U | N | R | Name                              | Format | Length | Default |
 | TBD  | x | x | - |   | Listen-To-<br>Multicast-Responses | (*)    | 3-1024 | (none)  |
@@ -1200,9 +1218,9 @@ The table below summarizes them and specifies the CBOR key to use as abbreviatio
 
 {{table-transport-information}} defines the corresponding entry that {{iana-coap-transport-information}} registers in the "CoAP Transport Information" registry defined in this document.
 
- Scheme ID | URI Scheme Name | Transport Information Details | Reference
------------|-----------------|-------------------------------|-----------------------------------------------
- -1        | coap            | tpi_client <br> tpi_token     | {{ssssec-udp-transport-specific}} of {{&SELF}}
+ CoAP Transport | Transport Information Details | Reference
+----------------|-------------------------------|-----------------------------------------------
+ CoAP over UDP  | tpi_client <br> tpi_token     | {{ssssec-udp-transport-specific}} of {{&SELF}}
 {: #table-transport-information title="CoAP Transport Information for CoAP over UDP." align="center"}
 
 Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
@@ -1326,7 +1344,7 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This registry has been initially populated by the entries in {{table-informative-response-params}}. The "Reference" column for all of those entries refers to sections of this document.
+This registry has been initially populated by the entries in {{table-informative-response-params}}. The 'Reference' column for all of those entries refers to sections of this document.
 
 ## CoAP Transport Information Registry {#iana-coap-transport-information}
 
@@ -1336,15 +1354,9 @@ The registration policy is "Expert Review" {{RFC8126}}. "Expert Review" guidelin
 
 The columns of this registry are:
 
-* Scheme ID: This field contains the value used as 'scheme-id' to identify a CRI scheme, per {{Section 5.1.1 of I-D.ietf-core-href}}. The value is a negative integer and MUST be unique.
+* CoAP Transport: This field contains a text string. The value MUST be unique and it uniquely identifies the transport used for CoAP messages.
 
-  As a pre-condition for registering a value ID, it is REQUIRED that the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}} includes an entry where the value in the column "CRI scheme number" is (-1 - ID).
-
-* URI Scheme Name: This field contains a text string. Its value is the name of the URI scheme that corresponds to the CRI scheme identified by the value of the "Scheme ID" field in the present entry.
-
-  Given the value ID of the "Scheme ID" field in the present entry, then the value of the "URI Scheme Name" field MUST be the same as in the column "URI scheme name" of the entry of the "CRI Scheme Numbers" registry where the value in the column "CRI scheme number" is (-1 - ID).
-
-* Transport Information Details: This field contains a lists of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?', and MUST be specified next to each other as last ones.
+* Transport Information Details: This field contains a lists of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
 
 * Reference: This contains a pointer to the public specification for the item.
 
@@ -1369,7 +1381,7 @@ Expert reviewers should take into consideration the following points:
 
 * Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
 
-* Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
+* Experts should take into account the expected usage of fields when approving point assignment. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
 
 --- back
 
