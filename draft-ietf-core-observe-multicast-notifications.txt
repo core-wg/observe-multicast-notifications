@@ -520,11 +520,11 @@ Table of Contents
 
    *  'ending', with value the time when the group observation of the
       target resource is planned to be canceled, encoded as a CBOR
-      unsigned integer.  The value is the number of seconds from
-      1970-01-01T00:00:00Z UTC until the specified UTC date/time,
-      ignoring leap seconds, analogous to what is specified for
-      NumericDate in Section 2 of [RFC7519].  This parameter MAY be
-      included.
+      integer or as a CBOR floating-point number.  The value is the
+      number of seconds from 1970-01-01T00:00:00Z UTC until the
+      specified UTC date/time, ignoring leap seconds, analogous to what
+      is specified for NumericDate in Section 2 of [RFC7519].  This
+      parameter MAY be included.
 
    The CDDL notation [RFC8610] provided below describes the payload of
    the informative response.
@@ -533,8 +533,8 @@ Table of Contents
       0 => array, ; 'tp_info' (transport-specific information)
     ? 1 => bstr,  ; 'ph_req' (transport-independent information)
     ? 2 => bstr,  ; 'last_notif' (transport-independent information)
-    ? 3 => uint   ; 'next_not_before',
-    ? 4 => uint   ; 'ending'
+    ? 3 => uint,  ; 'next_not_before'
+    ? 4 => ~time  ; 'ending'
    }
 
             Figure 1: Format of the Informative Response Payload
@@ -2300,7 +2300,7 @@ Table of Contents
    +-----------------+----------+------------------------+-------------+
    | next_not_before | 3        | unsigned integer       | Section 4.2 |
    +-----------------+----------+------------------------+-------------+
-   | ending          | 4        | unsigned integer       | Section 4.2 |
+   | ending          | 4        | integer or float       | Section 4.2 |
    +-----------------+----------+------------------------+-------------+
    | join_uri        | 5        | text string            | Section 9.1 |
    +-----------------+----------+------------------------+-------------+
@@ -2329,7 +2329,7 @@ Table of Contents
    +-----------------+----------+------------------------+-------------+
    | exi             | 16       | unsigned integer       | Appendix C  |
    +-----------------+----------+------------------------+-------------+
-   | exp             | 17       | unsigned integer       | Appendix C  |
+   | exp             | 17       | integer or float       | Appendix C  |
    +-----------------+----------+------------------------+-------------+
 
                  Table 3: Informative Response Parameters.
@@ -3272,12 +3272,13 @@ Appendix C.  OSCORE Group Self-Managed by the Server
 
    *  'exp': this element has as value the expiration time of the keying
       material of the OSCORE group specified in the 'gp_material'
-      parameter, encoded as a CBOR unsigned integer.
+      parameter, encoded as a CBOR integer or as a CBOR floating-point
+      number.
 
-      The value represents the number of seconds from
-      1970-01-01T00:00:00Z UTC until the specified UTC date/time,
-      ignoring leap seconds, analogous to what is specified for
-      NumericDate in Section 2 of [RFC7519].
+      The value is the number of seconds from 1970-01-01T00:00:00Z UTC
+      until the specified UTC date/time, ignoring leap seconds,
+      analogous to what is specified for NumericDate in Section 2 of
+      [RFC7519].
 
    If a client has a reliable way to synchronize its internal clock with
    UTC and the 'exp' parameter is present in the informative response,
@@ -4444,6 +4445,8 @@ Appendix I.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 I.1.  Version -11 to -12
+
+   *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
    *  Editorial improvements
 
