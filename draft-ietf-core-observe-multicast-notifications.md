@@ -265,7 +265,7 @@ The Content-Format of the informative response is set to "application/informativ
 
    This information can help a new client to align itself with the server's timeline, especially in scenarios where multicast notifications are regularly sent. Also, it can help synchronizing different clients when orchestrating a content distribution through multicast notifications.
 
-* 'ending', with value the time when the group observation of the target resource is planned to be canceled, encoded as a CBOR unsigned integer. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
+* 'ending', with value the time when the group observation of the target resource is planned to be canceled, encoded as a CBOR integer or as a CBOR floating-point number. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
 
 The CDDL notation {{RFC8610}} provided below describes the payload of the informative response.
 
@@ -274,8 +274,8 @@ informative_response_payload = {
    0 => array, ; 'tp_info' (transport-specific information)
  ? 1 => bstr,  ; 'ph_req' (transport-independent information)
  ? 2 => bstr,  ; 'last_notif' (transport-independent information)
- ? 3 => uint   ; 'next_not_before',
- ? 4 => uint   ; 'ending'
+ ? 3 => uint,  ; 'next_not_before'
+ ? 4 => ~time  ; 'ending'
 }
 ~~~~~~~~~~~
 {: #informative-response-payload title="Format of the Informative Response Payload"}
@@ -1176,7 +1176,7 @@ The table below summarizes them and specifies the CBOR key to use as abbreviatio
  ph_req          | 1        | byte string            | {{ssec-server-side-informative}}
  last_notif      | 2        | byte string            | {{ssec-server-side-informative}}
  next_not_before | 3        | unsigned integer       | {{ssec-server-side-informative}}
- ending          | 4        | unsigned integer       | {{ssec-server-side-informative}}
+ ending          | 4        | integer or float       | {{ssec-server-side-informative}}
  join_uri        | 5        | text string            | {{sec-inf-response}}
  sec_gp          | 6        | text string            | {{sec-inf-response}}
  as_uri          | 7        | text string            | {{sec-inf-response}}
@@ -1189,7 +1189,7 @@ The table below summarizes them and specifies the CBOR key to use as abbreviatio
  srv_cred        | 14       | byte string            | {{self-managed-oscore-group}}
  srv_identifier  | 15       | byte string            | {{self-managed-oscore-group}}
  exi             | 16       | unsigned integer       | {{self-managed-oscore-group}}
- exp             | 17       | unsigned integer       | {{self-managed-oscore-group}}
+ exp             | 17       | integer or float       | {{self-managed-oscore-group}}
 {: #table-informative-response-params title="Informative Response Parameters." align="center"}
 
 # Transport Protocol Information {#transport-protocol-identifiers}
@@ -1644,9 +1644,9 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
 If the server has a reliable way to synchronize its internal clock with UTC, then the server includes also the following field:
 
-* 'exp': this element has as value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR unsigned integer.
+* 'exp': this element has as value the expiration time of the keying material of the OSCORE group specified in the 'gp_material' parameter, encoded as a CBOR integer or as a CBOR floating-point number.
 
-  The value represents the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}.
+  The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}.
 
 If a client has a reliable way to synchronize its internal clock with UTC and the 'exp' parameter is present in the informative response, then the client MUST use the 'exp' parameter value as expiration time for the group keying material.
 
@@ -2481,6 +2481,8 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 {:removeinrfc}
 
 ## Version -11 to -12 ## {#sec-11-12}
+
+* Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
 * Editorial improvements
 
