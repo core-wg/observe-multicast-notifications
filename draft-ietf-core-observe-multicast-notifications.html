@@ -4293,9 +4293,7 @@ This parameter has as value a subset of the Group_OSCORE_Input_Material object, 
 In particular, the following elements of the Group_OSCORE_Input_Material object are included, using the same CBOR abbreviations from the OSCORE Security Context Parameters Registry, as in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-17#section-6.3" class="relref">Section 6.3</a> of [<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>.<a href="#appendix-C-4.1.3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-4.1.4.1">
-              <p id="appendix-C-4.1.4.1.1">'ms', 'contexId', 'cred_fmt', 'sign_enc_alg', 'sign_alg', and 'sign_params'. These elements <span class="bcp14">MUST</span> be included.<a href="#appendix-C-4.1.4.1.1" class="pilcrow">¶</a></p>
-<p id="appendix-C-4.1.4.1.2">
-Editor's note: as per the text above, the referred version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> still uses 'sign_enc_alg' as parameter name. The next version of <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> will be updated in order to use 'gp_enc_alg' instead, consistently with the naming used in the latest version of <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#appendix-C-4.1.4.1.2" class="pilcrow">¶</a></p>
+              <p id="appendix-C-4.1.4.1.1">'ms', 'contexId', 'cred_fmt', 'gp_enc_alg', 'sign_alg', and 'sign_params'. These elements <span class="bcp14">MUST</span> be included.<a href="#appendix-C-4.1.4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-4.1.4.2">
               <p id="appendix-C-4.1.4.2.1">'hkdf' and 'salt'. These elements <span class="bcp14">MAY</span> be included.<a href="#appendix-C-4.1.4.2.1" class="pilcrow">¶</a></p>
@@ -6342,7 +6340,10 @@ Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-b
             <p id="appendix-I.1-1.3.1">Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.<a href="#appendix-I.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-I.1-1.4">
-            <p id="appendix-I.1-1.4.1">Editorial improvements<a href="#appendix-I.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-I.1-1.4.1">Renamed 'sign_enc_alg' to 'gp_enc_alg', now aligned with draft-ietf-ace-key-groupcomm-oscore.<a href="#appendix-I.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-I.1-1.5">
+            <p id="appendix-I.1-1.5.1">Editorial improvements<a href="#appendix-I.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
