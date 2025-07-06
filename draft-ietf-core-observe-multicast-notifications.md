@@ -2500,6 +2500,8 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 
 * Avoid limiting the informative response to this protocol.
 
+* Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.
+
 * Editorial improvements
 
 ## Version -10 to -11 ## {#sec-10-11}
