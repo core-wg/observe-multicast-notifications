@@ -1691,7 +1691,7 @@ informative_response_payload = {
           <h4 id="name-transport-specific-message-">
 <a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-transport-specific-message-" class="section-name selfRef">Transport-Specific Message Information</a>
           </h4>
-<p id="section-4.2.1-1">The CBOR array specified in the 'tp_info' parameter is formatted according to the following CDDL notation.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-1">The CBOR array specified in the 'tp_info' parameter of an informative response is formatted according to the following CDDL notation.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-general-format-of-tp_info"></span><div id="tp-info-general">
 <figure id="figure-2">
             <div class="alignLeft art-text artwork" id="section-4.2.1-2.1">
@@ -1702,8 +1702,9 @@ tp_info = [
 ]
 
 tpi_details = (
-  + elements  ; Number, format, and encoding of the elements depend
-              ; on the scheme-id of the CRI specified as 'tpi_server'
+  + elements  ; The number, format, and encoding of the elements
+              ; depend on the scheme-id and authority of the CRI
+              ; specified as tpi_server
 )
 
 CRI-no-local = [
@@ -1738,25 +1739,35 @@ port      = 0..65535
                 <li class="normal" id="section-4.2.1-4.1.2.2">
                   <p id="section-4.2.1-4.1.2.2.1">The addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.<a href="#section-4.2.1-4.1.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.1.2.2.2">
-Such addressing information <span class="bcp14">MUST</span> be equal to the destination addressing information of the registration requests sent by the clients to observe the target resource at the server.<a href="#section-4.2.1-4.1.2.2.2" class="pilcrow">¶</a></p>
+Such addressing information <span class="bcp14">MUST</span> be equal to the source addressing information from which the informative response is sent by the server (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>).<a href="#section-4.2.1-4.1.2.2.2" class="pilcrow">¶</a></p>
 </li>
               </ul>
 <p id="section-4.2.1-4.1.3">
-This element specifies a CRI <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given. The CRI scheme is given as a negative integer 'scheme-id', with value taken from the "Scheme ID" column of the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a> of this document.<a href="#section-4.2.1-4.1.3" class="pilcrow">¶</a></p>
+This element specifies a CRI <span>[<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given.<a href="#section-4.2.1-4.1.3" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.1.4">
-Consistent with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-5.1.1" class="relref">Section 5.1.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding URI scheme, per the associated entry in the "CRI Scheme Numbers" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-4.2.1-4.1.4" class="pilcrow">¶</a></p>
+Consistent with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-5.1.1" class="relref">Section 5.1.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding URI scheme, per the associated entry in the "CRI Scheme Numbers" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>.<a href="#section-4.2.1-4.1.4" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.1.5">
-Furthermore, the CRI scheme determines how many elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics.<a href="#section-4.2.1-4.1.5" class="pilcrow">¶</a></p>
+The combination of URI scheme and 'authority' component determines the CoAP transport used to distribute multicast notifications for the group observation. Note that:<a href="#section-4.2.1-4.1.5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2.1-4.1.6.1">
+                  <p id="section-4.2.1-4.1.6.1.1">If the 'authority' component specifies a host-ip, then the 'scheme-id' (hence the URI scheme) is sufficient to identify the transport.<a href="#section-4.2.1-4.1.6.1.1" class="pilcrow">¶</a></p>
+</li>
+                <li class="normal" id="section-4.2.1-4.1.6.2">
+                  <p id="section-4.2.1-4.1.6.2.1">If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in <span>[<a href="#I-D.ietf-core-dns-over-coap" class="cite xref">I-D.ietf-core-dns-over-coap</a>]</span>).<a href="#section-4.2.1-4.1.6.2.1" class="pilcrow">¶</a></p>
+</li>
+              </ul>
+<p id="section-4.2.1-4.1.7">
+The identified transport determines what elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics. Those elements are specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a>)<a href="#section-4.2.1-4.1.7" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.2.1-4.2">
               <p id="section-4.2.1-4.2.1">The 'tpi_details' element <span class="bcp14">MAY</span> be present and specifies transport-specific information related to a pertinent request message, i.e., the phantom observation request in this document.<a href="#section-4.2.1-4.2.1" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.2.2">
-The exact format of 'tpi_details' depends on the CRI scheme of the CRI specified by the 'tpi_server' element.<a href="#section-4.2.1-4.2.2" class="pilcrow">¶</a></p>
+The exact format of 'tpi_details' depends on the CoAP transport, which is identified according to the CRI conveyed by the 'tpi_server' element, as described above.<a href="#section-4.2.1-4.2.2" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.2.3">
-In the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a> of this document, the entry corresponding to a certain CRI scheme specifies the list of elements composing 'tpi_details' for that CRI scheme, as value of the column "Transport Information Details". Within 'tpi_details', its elements <span class="bcp14">MUST</span> be ordered according to what is specified in the column "Transport Information Details" of the "CoAP Transport Information" registry.<a href="#section-4.2.1-4.2.3" class="pilcrow">¶</a></p>
+In the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a> of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as value of the 'Transport Information Details' column. Within 'tpi_details', its elements <span class="bcp14">MUST</span> be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.<a href="#section-4.2.1-4.2.3" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-4.2.1-5"><a href="#transport-protocol-identifiers" class="auto internal xref">Section 14</a> registers an entry in the "CoAP Transport Information" registry, for the CRI scheme identified by the negative integer -1 ("coap"). This value is used as 'scheme-id' for the CRI in the 'tpi_server' element, when CoAP responses are transported over UDP. In such a case, the full encoding of the 'tp_info' CBOR array is as defined in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-5"><a href="#transport-protocol-identifiers" class="auto internal xref">Section 14</a> registers an entry in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, the full encoding of the 'tp_info' CBOR array is as defined in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-6">If a future specification defines the use of CoAP multicast notifications transported over different transport protocols, then that specification <span class="bcp14">MUST</span> perform the following actions, unless those have been already performed for different reasons:<a href="#section-4.2.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2.1-7.1">
@@ -1764,10 +1775,9 @@ In the "CoAP Transport Information" registry defined in <a href="#iana-coap-tran
 </li>
             <li class="normal" id="section-4.2.1-7.2">
               <p id="section-4.2.1-7.2.1">Register an entry in the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a> of this document.<a href="#section-4.2.1-7.2.1" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-7.2.2">
-The value of the column "Scheme ID" is the negative integer ID to be used as 'scheme-id' for the CRI specified by the 'tpi_server' element, which provides source addressing information of the multicast notifications. The same use applies to the CRI specified by an element of 'tpi_details', which provides destination addressing information of the multicast notifications.<a href="#section-4.2.1-7.2.2" class="pilcrow">¶</a></p>
-<p id="section-4.2.1-7.2.3">
-As a pre-condition for such a registration, it is <span class="bcp14">REQUIRED</span> that the "CRI Scheme Numbers" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span> includes an entry where the value in the column "CRI scheme number" is (-1 - ID).<a href="#section-4.2.1-7.2.3" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-4.2.1-7.3">
+              <p id="section-4.2.1-7.3.1">Register an entry in the "CRI Scheme Numbers" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, where the value in the 'CRI scheme number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.<a href="#section-4.2.1-7.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <div id="ssssec-udp-transport-specific">
@@ -1780,7 +1790,7 @@ As a pre-condition for such a registration, it is <span class="bcp14">REQUIRED</
 <li class="normal" id="section-4.2.1.1-2.1">
                 <p id="section-4.2.1.1-2.1.1">In the 'tpi_server' element, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.<a href="#section-4.2.1.1-2.1.1" class="pilcrow">¶</a></p>
 <p id="section-4.2.1.1-2.1.2">
-This information consists of the IP address SRV_ADDR (expressed as a literal or resulting from a name resolution) and the port number SRV_PORT of the server hosting the target resource, and from where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.1.2" class="pilcrow">¶</a></p>
+This information consists of the IP address SRV_ADDR (expressed as a literal or resulting from a name resolution) and the port number SRV_PORT of the server hosting the target resource, from where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.1.2" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.2.1.1-2.2">
                 <p id="section-4.2.1.1-2.2.1">The 'tpi_details' element <span class="bcp14">MUST</span> be present and in turn includes the following two elements:<a href="#section-4.2.1.1-2.2.1" class="pilcrow">¶</a></p>
@@ -1791,12 +1801,12 @@ This information consists of the IP address SRV_ADDR (expressed as a literal or 
 This information consists of the IP multicast address GRP_ADDR (expressed as a literal or resulting from a name resolution) and the port number GRP_PORT, where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.2.2.1.2" class="pilcrow">¶</a></p>
 </li>
                   <li class="normal" id="section-4.2.1.1-2.2.2.2">
-                    <p id="section-4.2.1.1-2.2.2.2.1">'tpi_token' is a CBOR byte string, with value the Token value of the phantom observation request generated by the server (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>).<a href="#section-4.2.1.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+                    <p id="section-4.2.1.1-2.2.2.2.1">'tpi_token' is a CBOR byte string, whose value is the Token value of the phantom observation request generated by the server (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>).<a href="#section-4.2.1.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
             </ul>
-<p id="section-4.2.1.1-3">The CDDL notation in <a href="#tp-info-udp" class="auto internal xref">Figure 3</a> describes the format of the 'tp_info' CBOR array when using UDP as transport protocol.<a href="#section-4.2.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-3">The CDDL notation in <a href="#tp-info-udp" class="auto internal xref">Figure 3</a> describes the format of the 'tp_info' CBOR array when CoAP is transported over UDP.<a href="#section-4.2.1.1-3" class="pilcrow">¶</a></p>
 <span id="name-format-of-tp_info-with-udp-"></span><div id="tp-info-udp">
 <figure id="figure-3">
               <div class="alignLeft art-text artwork" id="section-4.2.1.1-4.1">
@@ -1815,10 +1825,11 @@ tp_info_coap_udp = [
 <a href="#name-format-of-tp_info-with-udp-" class="selfRef">Format of 'tp_info' with UDP as Transport Protocol</a>
               </figcaption></figure>
 </div>
-<p id="section-4.2.1.1-5">The CBOR diagnostic notation in <a href="#tp-info-udp-example" class="auto internal xref">Figure 4</a> provides an example of the 'tp_info' CBOR array when using UDP as transport protocol. In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the CoAP default port number), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.<a href="#section-4.2.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-5">The CBOR diagnostic notation in <a href="#tp-info-udp-example" class="auto internal xref">Figure 4</a> provides an example of the 'tp_info' CBOR array when CoAP is transported over UDP.<a href="#section-4.2.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-6">In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the default port number when CoAP is transported over UDP), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.<a href="#section-4.2.1.1-6" class="pilcrow">¶</a></p>
 <span id="name-example-of-tp_info-with-udp"></span><div id="tp-info-udp-example">
 <figure id="figure-4">
-              <div class="alignLeft art-text artwork" id="section-4.2.1.1-6.1">
+              <div class="alignLeft art-text artwork" id="section-4.2.1.1-7.1">
 <pre>
 [ / tp_info /
   [ / tpi_server /
@@ -1955,63 +1966,68 @@ The addressing information above is provided to the observer clients through the
         <h3 id="name-informative-response-2">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-informative-response-2" class="section-name selfRef">Informative Response</a>
         </h3>
-<p id="section-5.2-1">Upon receiving the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>, the client proceeds as follows.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-5.2-2">
-<li id="section-5.2-2.1">
-            <p id="section-5.2-2.1.1">The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">Upon receiving the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>, the client has to identify the CoAP transport used to distribute multicast notifications for the group observation.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">To this end, the client relies on the element 'tpi_server' within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">In particular, the client considers the CRI conveyed by 'tpi_server' and identifies the CoAP transport, by assessing together the 'authority' component and the URI scheme determined from 'scheme-id' (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">After that, the client parses the remainder of the 'tp_info' array, i.e., the information conveyed by 'tpi_details', according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 16.5</a>).<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">Then, the client performs the following steps.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.2-6">
+<li id="section-5.2-6.1">
+            <p id="section-5.2-6.1.1">The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:<a href="#section-5.2-6.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-2.1.2.1">
-                <p id="section-5.2-2.1.2.1.1">As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-2.1.2.1.1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2.1.2.1.2">
-If the port number is not present in the CRI, then the client <span class="bcp14">MUST</span> use as SRV_PORT the default port number defined for the URI scheme that corresponds to the CRI scheme number (e.g., 5683 when the URI scheme is "coap").<a href="#section-5.2-2.1.2.1.2" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.2-6.1.2.1">
+                <p id="section-5.2-6.1.2.1.1">As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-6.1.2.1.1" class="pilcrow">¶</a></p>
+<p id="section-5.2-6.1.2.1.2">
+If the port number is not present in the CRI, the client <span class="bcp14">MUST</span> use as SRV_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).<a href="#section-5.2-6.1.2.1.2" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-2.1.2.2">
-                <p id="section-5.2-2.1.2.2.1">As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-2.1.2.2.1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2.1.2.2.2">
-If the port number is not present in the CRI, then the client <span class="bcp14">MUST</span> use as GRP_PORT the default port number defined for the URI scheme that corresponds to the CRI scheme number (e.g., 5683 when the URI scheme is "coap").<a href="#section-5.2-2.1.2.2.2" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.2-6.1.2.2">
+                <p id="section-5.2-6.1.2.2.1">As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-6.1.2.2.1" class="pilcrow">¶</a></p>
+<p id="section-5.2-6.1.2.2.2">
+If the port number is not present in the CRI, the client <span class="bcp14">MUST</span> use as GRP_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).<a href="#section-5.2-6.1.2.2.2" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-5.2-2.2">
-            <p id="section-5.2-2.2.1">The client rebuilds the phantom registration request as follows.<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.2">
+            <p id="section-5.2-6.2.1">The client rebuilds the phantom registration request as follows.<a href="#section-5.2-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-2.2.2.1">
-                <p id="section-5.2-2.2.2.1.1">The client uses the Token value T, specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.2-6.2.2.1">
+                <p id="section-5.2-6.2.2.1.1">The client uses the Token value T, specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-6.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-2.2.2.2">
-                <p id="section-5.2-2.2.2.2.1">If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.<a href="#section-5.2-2.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.2-6.2.2.2">
+                <p id="section-5.2-6.2.2.2.1">If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.<a href="#section-5.2-6.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-2.2.2.3">
-                <p id="section-5.2-2.2.2.3.1">If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.<a href="#section-5.2-2.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.2-6.2.2.3">
+                <p id="section-5.2-6.2.2.3.1">If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.<a href="#section-5.2-6.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-5.2-2.3">
-            <p id="section-5.2-2.3.1">If the informative response includes the parameter 'ph_req', and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. If this is not the case, the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.3">
+            <p id="section-5.2-6.3.1">If the informative response includes the parameter 'ph_req', and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. If this is not the case, the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-5.2-6.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-5.2-2.4">
-            <p id="section-5.2-2.4.1">The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client <span class="bcp14">MUST</span> use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.<a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.4">
+            <p id="section-5.2-6.4.1">The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client <span class="bcp14">MUST</span> use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.<a href="#section-5.2-6.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-5.2-2.5">
-            <p id="section-5.2-2.5.1">If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:<a href="#section-5.2-2.5.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.5">
+            <p id="section-5.2-6.5.1">If the informative response includes the parameter 'last_notif', the client rebuilds the latest multicast notification, by using:<a href="#section-5.2-6.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-2.5.2.1">
-                <p id="section-5.2-2.5.2.1.1">The same Token value T used at Step 2; and<a href="#section-5.2-2.5.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-5.2-6.5.2.1">
+                <p id="section-5.2-6.5.2.1.1">The same Token value T used at Step 2; and<a href="#section-5.2-6.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-5.2-2.5.2.2">
-                <p id="section-5.2-2.5.2.2.1">The transport-independent information, specified in the 'last_notif' parameter of the informative response.<a href="#section-5.2-2.5.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-5.2-6.5.2.2">
+                <p id="section-5.2-6.5.2.2.1">The transport-independent information, specified in the 'last_notif' parameter of the informative response.<a href="#section-5.2-6.5.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-5.2-2.6">
-            <p id="section-5.2-2.6.1">If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.<a href="#section-5.2-2.6.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.6">
+            <p id="section-5.2-6.6.1">If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.<a href="#section-5.2-6.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-5.2-2.7">
-            <p id="section-5.2-2.7.1">If a traditional observation to the target resource is ongoing, the client <span class="bcp14">MAY</span> silently cancel it without notifying the server.<a href="#section-5.2-2.7.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-6.7">
+            <p id="section-5.2-6.7.1">If a traditional observation to the target resource is ongoing, the client <span class="bcp14">MAY</span> silently cancel it without notifying the server.<a href="#section-5.2-6.7.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.2-3">If any of the expected fields in the informative response are not present or malformed, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4"><a href="#appendix-different-sources" class="auto internal xref">Appendix A</a> describes possible alternative ways for clients to retrieve the phantom registration request and other information related to a group observation.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client <span class="bcp14">MUST</span> treat any CRI within the 'tp_info' array as invalid if the 'authority' component is a host-name that, when resolved, indicates multiple transports. As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in <span>[<a href="#I-D.ietf-core-dns-over-coap" class="cite xref">I-D.ietf-core-dns-over-coap</a>]</span>).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8">If any of the expected fields in the informative response are absent, malformed, or invalid, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+<p id="section-5.2-9"><a href="#appendix-different-sources" class="auto internal xref">Appendix A</a> describes possible alternative ways for clients to retrieve the phantom registration request and other information related to a group observation.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-client-side-notifications">
@@ -2359,7 +2375,7 @@ RES: 2.05 Content
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-multicast-response-feedback" class="section-name selfRef">Multicast-Response-Feedback-Divider Option</a>
         </h3>
 <p id="section-8.1-1">In order to enable the rough counting of still active and interested clients, a new CoAP option is introduced, which <span class="bcp14">SHOULD</span> be supported by clients that listen to multicast responses.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">The option is called Multicast-Response-Feedback-Divider and has the properties summarized in <a href="#mrfd-table" class="auto internal xref">Table 1</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">The option is called Multicast-Response-Feedback-Divider and has the properties summarized in <a href="#mrfd-table" class="auto internal xref">Table 1</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <span id="name-the-multicast-response-feed"></span><div id="mrfd-table">
 <table class="center" id="table-1">
           <caption>
@@ -3261,7 +3277,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-listen-to-multicast-respons" class="section-name selfRef">Listen-To-Multicast-Responses Option</a>
         </h3>
 <p id="section-12.1-1">In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option <span class="bcp14">MUST</span> be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<p id="section-12.1-2">The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in <a href="#ltmr-table" class="auto internal xref">Table 2</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the column "N" indicates a dash for "not applicable".<a href="#section-12.1-2" class="pilcrow">¶</a></p>
+<p id="section-12.1-2">The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in <a href="#ltmr-table" class="auto internal xref">Table 2</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".<a href="#section-12.1-2" class="pilcrow">¶</a></p>
 <span id="name-the-listen-to-multicast-res"></span><div id="ltmr-table">
 <table class="center" id="table-2">
           <caption>
@@ -3548,16 +3564,14 @@ Note also that, identically to the phantom request, the ticket request is still 
         </caption>
 <thead>
           <tr>
-            <th class="text-left" rowspan="1" colspan="1">Scheme ID</th>
-            <th class="text-left" rowspan="1" colspan="1">URI Scheme Name</th>
+            <th class="text-left" rowspan="1" colspan="1">CoAP Transport</th>
             <th class="text-left" rowspan="1" colspan="1">Transport Information Details</th>
             <th class="text-left" rowspan="1" colspan="1">Reference</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="text-left" rowspan="1" colspan="1">-1</td>
-            <td class="text-left" rowspan="1" colspan="1">coap</td>
+            <td class="text-left" rowspan="1" colspan="1">CoAP over UDP</td>
             <td class="text-left" rowspan="1" colspan="1">tpi_client <br> tpi_token</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a> of [RFC-XXXX]</td>
@@ -3751,7 +3765,7 @@ Protecting informative responses from the server prevents on-path active adversa
             <p id="section-16.4-5.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-16.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-16.4-6">This registry has been initially populated by the entries in <a href="#_table-informative-response-params" class="auto internal xref">Table 3</a>. The "Reference" column for all of those entries refers to sections of this document.<a href="#section-16.4-6" class="pilcrow">¶</a></p>
+<p id="section-16.4-6">This registry has been initially populated by the entries in <a href="#_table-informative-response-params" class="auto internal xref">Table 3</a>. The 'Reference' column for all of those entries refers to sections of this document.<a href="#section-16.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-coap-transport-information">
@@ -3764,20 +3778,13 @@ Protecting informative responses from the server prevents on-path active adversa
 <p id="section-16.5-3">The columns of this registry are:<a href="#section-16.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-16.5-4.1">
-            <p id="section-16.5-4.1.1">Scheme ID: This field contains the value used as 'scheme-id' to identify a CRI scheme, per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-5.1.1" class="relref">Section 5.1.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>. The value is a negative integer and <span class="bcp14">MUST</span> be unique.<a href="#section-16.5-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-16.5-4.1.2">
-As a pre-condition for registering a value ID, it is <span class="bcp14">REQUIRED</span> that the "CRI Scheme Numbers" registry defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-22#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span> includes an entry where the value in the column "CRI scheme number" is (-1 - ID).<a href="#section-16.5-4.1.2" class="pilcrow">¶</a></p>
+            <p id="section-16.5-4.1.1">CoAP Transport: This field contains a text string. The value <span class="bcp14">MUST</span> be unique and it uniquely identifies the transport used for CoAP messages.<a href="#section-16.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.5-4.2">
-            <p id="section-16.5-4.2.1">URI Scheme Name: This field contains a text string. Its value is the name of the URI scheme that corresponds to the CRI scheme identified by the value of the "Scheme ID" field in the present entry.<a href="#section-16.5-4.2.1" class="pilcrow">¶</a></p>
-<p id="section-16.5-4.2.2">
-Given the value ID of the "Scheme ID" field in the present entry, then the value of the "URI Scheme Name" field <span class="bcp14">MUST</span> be the same as in the column "URI scheme name" of the entry of the "CRI Scheme Numbers" registry where the value in the column "CRI scheme number" is (-1 - ID).<a href="#section-16.5-4.2.2" class="pilcrow">¶</a></p>
+            <p id="section-16.5-4.2.1">Transport Information Details: This field contains a lists of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-16.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.5-4.3">
-            <p id="section-16.5-4.3.1">Transport Information Details: This field contains a lists of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?', and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-16.5-4.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-16.5-4.4">
-            <p id="section-16.5-4.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-16.5-4.4.1" class="pilcrow">¶</a></p>
+            <p id="section-16.5-4.3.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-16.5-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-16.5-5">This registry has been initially populated by the entry in <a href="#_table-transport-information" class="auto internal xref">Table 4</a>.<a href="#section-16.5-5" class="pilcrow">¶</a></p>
@@ -3820,7 +3827,7 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
             <p id="section-16.7-3.2.1">Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.<a href="#section-16.7-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.7-3.3">
-            <p id="section-16.7-3.3.1">Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-16.7-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-16.7-3.3.1">Experts should take into account the expected usage of fields when approving point assignment. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-16.7-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3946,6 +3953,10 @@ Given the value ID of the "Scheme ID" field in the present entry, then the value
 <dt id="I-D.ietf-core-coral">[I-D.ietf-core-coral]</dt>
         <dd>
 <span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"The Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coral-06</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-06">https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-06</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-core-dns-over-coap">[I-D.ietf-core-dns-over-coap]</dt>
+        <dd>
+<span class="refAuthor">Lenders, M. S.</span>, <span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Gündoğan, C.</span>, <span class="refAuthor">Schmidt, T. C.</span>, and <span class="refAuthor">M. Wählisch</span>, <span class="refTitle">"DNS over CoAP (DoC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-dns-over-coap-15</span>, <time datetime="2025-06-19" class="refDate">19 June 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-15">https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-oscore-capable-proxies">[I-D.ietf-core-oscore-capable-proxies]</dt>
         <dd>
@@ -6328,7 +6339,10 @@ Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-b
             <p id="appendix-I.1-1.2.1">Avoid limiting the informative response to this protocol.<a href="#appendix-I.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-I.1-1.3">
-            <p id="appendix-I.1-1.3.1">Editorial improvements<a href="#appendix-I.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-I.1-1.3.1">Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.<a href="#appendix-I.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-I.1-1.4">
+            <p id="appendix-I.1-1.4.1">Editorial improvements<a href="#appendix-I.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
