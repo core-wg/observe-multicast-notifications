@@ -249,7 +249,9 @@ For each traditional observation ongoing on the target resource, the server MAY 
 
 The server sends to each of such clients an informative response message, encoded as a unicast response with response code 5.03 (Service Unavailable). As per {{RFC7641}}, such a response does not include an Observe Option. The response MUST be Confirmable and MUST NOT encode link-local addresses.
 
-The Content-Format of the informative response is set to "application/informative-response+cbor", which is registered in {{content-format}}. The payload of the informative response is a CBOR map including the following parameters, whose CBOR abbreviations are defined in {{informative-response-params}}.
+The Content-Format of the informative response is set to "application/informative-response+cbor", which is registered in {{content-format}}. The payload of the informative response is a CBOR map, whose fields use the CBOR abbreviations that are defined in {{informative-response-params}}.
+
+When using the method specified in this document, the CBOR map conveyed as the payload of the informative response includes the following parameters with the semantics defined below. Other specifications may define how to use the informative response for providing alternative information that is relevant to other protocols and applications.
 
 * 'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in {{sssec-transport-specific-encoding}}. This parameter MUST be included.
 
@@ -2483,6 +2485,8 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 ## Version -11 to -12 ## {#sec-11-12}
 
 * Changed CBOR type of 'ending' and 'exp' to be integer or float.
+
+* Avoid limiting the informative response to this protocol.
 
 * Editorial improvements
 
