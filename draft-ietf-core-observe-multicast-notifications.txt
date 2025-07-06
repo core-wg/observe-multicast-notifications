@@ -479,9 +479,9 @@ Table of Contents
    When using the method specified in this document, the CBOR map
    conveyed as the payload of the informative response includes the
    following parameters with the semantics defined below.  Other
-   specifications may define how to use the informative response for
-   providing alternative information that is relevant to other protocols
-   and applications.
+   specifications may define different uses of the informative response
+   for providing alternative information that is relevant to other
+   protocols and applications.
 
    *  'tp_info', with value a CBOR array.  This includes the transport-
       specific information required to correctly receive multicast
