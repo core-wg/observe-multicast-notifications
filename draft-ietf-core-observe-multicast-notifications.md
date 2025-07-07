@@ -347,7 +347,7 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   The exact format of 'tpi_details' depends on the CoAP transport, which is identified according to the CRI conveyed by the 'tpi_server' element, as described above.
 
-  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as value of the 'Transport Information Details' column. Within 'tpi_details', its elements MUST be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.
+  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements MUST be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.
 
 {{transport-protocol-identifiers}} registers an entry in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
 
@@ -413,7 +413,7 @@ In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI o
 
 For both the parameters 'ph_req' and 'last_notif' in the informative response, the value of the CBOR byte string is the concatenation of the following components, in the order specified below.
 
-When defining the value of each component, "CoAP message" refers to the phantom observation request for the 'ph_req' parameter, and to the corresponding latest multicast notification for the 'last_notif' parameter.
+When defining the value of each component, "CoAP message" refers to the phantom observation request for the 'ph_req' parameter and to the corresponding latest multicast notification for the 'last_notif' parameter.
 
 * A single byte, with value the content of the Code field in the CoAP message.
 
@@ -423,7 +423,7 @@ When defining the value of each component, "CoAP message" refers to the phantom 
 
 ## Notifications ## {#ssec-server-side-notifications}
 
-Upon a change in the status of the target resource under group observation, the server sends a multicast notification, intended to all the clients taking part in the group observation of that resource. In particular, each of such multicast notifications is formatted as follows.
+Upon a change in the status of the target resource under group observation, the server sends a multicast notification intended to all the clients taking part in the group observation of that resource. In particular, each of such multicast notifications is formatted as follows.
 
 * It MUST be Non-confirmable.
 
@@ -457,7 +457,7 @@ In order to not cause congestion, the server should conservatively control the s
 
 * The server SHOULD provide multicast notifications with the smallest possible IP multicast scope that fulfills the application needs. For example, following related guidelines from {{Section 3.6 of I-D.ietf-core-groupcomm-bis}}, site-local scope is always preferred over global scope IP multicast, if this fulfills the application needs. Similarly, realm-local scope is always preferred over site-local scope, if this fulfills the application needs. Ultimately, it is up to the server administrator to explicitly configure the most appropriate IP multicast scope.
 
-* Following related guidelines from {{Section 4.5.1 of RFC7641}}, the server SHOULD NOT send more than one multicast notification every 3 seconds, and SHOULD use an even less aggressive rate when possible (see also {{Section 3.1.2 of RFC8085}}). The transmission rate of multicast notifications should also take into account the avoidance of a possible "broadcast storm" problem {{MOBICOM99}}. This prevents a following, considerable increase of the channel load, whose origin would be likely attributed to a router rather than to the server.
+* Following related guidelines from {{Section 4.5.1 of RFC7641}}, the server SHOULD NOT send more than one multicast notification every 3 seconds and SHOULD use an even less aggressive rate when possible (see also {{Section 3.1.2 of RFC8085}}). The transmission rate of multicast notifications should also take into account the avoidance of a possible "broadcast storm" problem {{MOBICOM99}}. This prevents a following considerable increase of the channel load, whose origin would be likely attributed to a router rather than to the server.
 
 ## Cancellation ## {#ssec-server-side-cancellation}
 
@@ -465,7 +465,7 @@ At a certain point in time, the server might want to cancel a group observation 
 
 In order to cancel the group observation, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated. The response has the same Token value T of the phantom registration request, it has no payload, and it does not include an Observe Option.
 
-The server sends the response to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. Finally, the server releases the resources allocated for the group observation, and especially frees up the Token value T used at its CoAP endpoint.
+The server sends the response to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. Finally, the server releases the resources allocated for the group observation and especially frees up the Token value T used at its CoAP endpoint.
 
 # Client-Side Requirements # {#sec-client-side}
 
@@ -503,7 +503,7 @@ Then, the client performs the following steps.
 
 2. The client rebuilds the phantom registration request as follows.
 
-   * The client uses the Token value T, specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
+   * The client uses the Token value T that is specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
 
    * If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.
 
@@ -517,7 +517,7 @@ Then, the client performs the following steps.
 
    * The same Token value T used at Step 2; and
 
-   * The transport-independent information, specified in the 'last_notif' parameter of the informative response.
+   * The transport-independent information specified in the 'last_notif' parameter of the informative response.
 
 6. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.
 
@@ -539,7 +539,7 @@ The client relies on the value of the Observe Option for notification reordering
 
 At a certain point in time, a client may become not interested in receiving further multicast notifications about a target resource. When this happens, the client can simply "forget" about being part of the group observation for that target resource, as per {{Section 3.6 of RFC7641}}.
 
-When, later on, the server sends the next multicast notification, the client will not recognize the Token value T in the message. Since the multicast notification is Non-confirmable, it is OPTIONAL for the client to reject the multicast notification with a Reset message, as defined in {{Section 3.5 of RFC7641}}.
+When, later on, the server sends the next multicast notification, the client will not recognize the Token value T in the message. Since the multicast notification is Non-confirmable, it is OPTIONAL for the client to reject it with a Reset message, as defined in {{Section 3.5 of RFC7641}}.
 
 In case the server has canceled a group observation as defined in {{ssec-server-side-cancellation}}, the client simply forgets about the group observation and frees up the used Token value T for that endpoint, upon receiving the multicast error response defined in {{ssec-server-side-cancellation}}.
 
@@ -547,7 +547,7 @@ In case the server has canceled a group observation as defined in {{ssec-server-
 
 The possible use of multicast notifications in a group observation may be indicated by a target attribute "gp-obs" in a web link {{RFC8288}} to a resource, e.g., using a link-format document {{RFC6690}}.
 
-The "gp-obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation, and to receive and process multicast notifications.
+The "gp-obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation and to receive and process multicast notifications.
 
 A value MUST NOT be given for the "gp-obs" attribute and any present value MUST be ignored by the recipient.  The "gp-obs" attribute MUST NOT appear more than once in a given link-value; occurrences after the first MUST be ignored by the recipient.
 
@@ -566,11 +566,11 @@ RES: 2.05 Content
 
 The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
-The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
+The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT. The server starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section C of I-D.ietf-core-href}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
+* The application-extension identifier "cri" defined in {{Section B of I-D.ietf-core-href}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
@@ -681,13 +681,13 @@ The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC861
 
 Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client that is interested in continuing receiving multicast notifications for the target resource SHOULD acknowledge its interest, as described below.
 
-The client picks an integer random number I, from 0 inclusive to the number Z = (2^Q) exclusive, where Q is the value specified in the option and "^" is the exponentiation operator. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}), and then registers a regular unicast observation on the same target resource.
+The client picks an integer random number I, from 0 inclusive to the number Z = (2<sup>Q</sup>) exclusive, where Q is the value specified in the option. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}) and then registers a regular unicast observation on the same target resource.
 
-To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource, and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
+To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
 
-Since the Observe registration is only done for its side effect of showing as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way, and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be set to 0. As per {{Section 3.2 of RFC7252}}, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses, and can keep processing further notifications on the same Token.
+Since the Observe registration is only done for its side effect of looking as an attempted observation at the server, the client MUST send the unicast request in a non confirmable way and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be set to 0. As per {{Section 3.2 of RFC7252}}, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses and can keep processing further notifications on the same Token.
 
-The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above, and MUST NOT include it in any other request.
+The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above and MUST NOT include it in any other request.
 
 {{appendix-pseudo-code-counting-client}} and {{appendix-pseudo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
 
@@ -697,7 +697,7 @@ In order to avoid needless use of network resources, a server SHOULD keep a roug
 
 ### Request for Feedback
 
-When it wants to obtain a new estimated count, the server considers a number M of confirmations it would like to receive from the clients. It is up to applications to define policies about how the server determines and possibly adjusts the value of M.
+When it wants to obtain a new estimated count, the server considers a number M of confirmations that it would like to receive from the clients. It is up to applications to define policies about how the server determines and possibly adjusts the value of M.
 
 Then, the server computes the value Q = max(L, 0), where:
 
@@ -715,7 +715,7 @@ The server collects unicast observation requests from the clients, for an amount
 
 It is up to applications to define the value of MAX_CONFIRMATION_WAIT, which has to take into account the transmission time of the multicast notification and of unicast observation requests, as well as the leisure time of the clients, which may be hard to know or estimate for the server.
 
-If this information is not known to the server, it is recommended to define MAX_CONFIRMATION_WAIT as follows.
+If this information is not known to the server, it is RECOMMENDED to define MAX_CONFIRMATION_WAIT as follows.
 
 MAX_CONFIRMATION_WAIT = MAX_RTT + MAX_CLIENT_REQUEST_DELAY
 
@@ -725,9 +725,9 @@ If more information is available in deployments, a much shorter MAX_CONFIRMATION
 
 ### Processing of Feedback
 
-Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations arrived as unicast observation requests to the target resource, since the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with value 0.
+Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as unicast observation requests to the target resource, since the time when the multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if it includes a Multicast-Response-Feedback-Divider Option with value 0.
 
-Then, the server computes a feedback indicator as E = R * (2^Q), where "^" is the exponentiation operator. According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
+Then, the server computes a feedback indicator as E = R * (2<sup>Q</sup>). According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
 Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
 
@@ -735,7 +735,7 @@ In particular, the server computes the new estimated count value as COUNT' + ((E
 
 This estimate is skewed by packet loss, but it gives the server a sufficiently good estimation for further counts and for deciding when to cancel the group observation. It is up to applications to define policies about how the server takes the newly updated estimate into account and determines whether to cancel the group observation.
 
-As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends out a notification with Multicast-Response-Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16, and keeps the group observation active.
+As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends out a notification with Multicast-Response-Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16 and keeps the group observation active.
 
 To produce a most accurate updated counter, a server can include a Multicast-Response-Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.
 
@@ -927,7 +927,7 @@ Pairwise communication over unicast is protected with OSCORE, while S protects m
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section C of I-D.ietf-core-href}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
+* The application-extension identifier "cri" defined in {{Section B of I-D.ietf-core-href}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
@@ -1646,7 +1646,7 @@ Additionally to what is defined in {{sec-server-side}}, the CBOR map in the info
 
    * Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
 
-* 'srv_cred': this element is a CBOR byte string, with value the original binary representation of the server's authentication credential used in the OSCORE group. In particular, the original binary representation complies with the format specified by the 'cred_fmt' element of 'gp_material'.
+* 'srv_cred': this element is a CBOR byte string, with value the original byte serialization of the server's authentication credential used in the OSCORE group. In particular, the original byte serialization complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
 * 'srv_identifier': this element is encoded as a CBOR byte string, with value the Sender ID that the server has in the OSCORE group.
 
@@ -2502,7 +2502,7 @@ e. Upon receiving the protected 5.03 informative response, the client takes its 
 
 * Renamed 'sign_enc_alg' to 'gp_enc_alg', now aligned with draft-ietf-ace-key-groupcomm-oscore.
 
-* Editorial improvements
+* Editorial improvements.
 
 ## Version -10 to -11 ## {#sec-10-11}
 
