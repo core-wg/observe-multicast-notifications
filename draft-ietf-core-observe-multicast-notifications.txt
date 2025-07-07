@@ -1792,7 +1792,7 @@ Table of Contents
          expected according to [RFC7252].  That is, the client skips
          Step 8 in Section 8.2 of [RFC8613].  In particular, the client
          MUST NOT deliver the phantom registration request to the
-         application, and MUST NOT take any action in the Token space of
+         application and MUST NOT take any action in the Token space of
          its unicast endpoint where the informative response has been
          received.
 
@@ -1853,26 +1853,28 @@ Table of Contents
    value "1234".
 
    The server S sends multicast notifications to the IP multicast
-   address GRP_ADDR and port number GRP_PORT, and starts the group
-   observation upon receiving a registration request from a first client
-   that wishes to start a traditional observation on the resource /r.
+   address GRP_ADDR and port number GRP_PORT.  The server starts the
+   group observation upon receiving a registration request from a first
+   client that wishes to start a traditional observation on the resource
+   /r.
 
    Pairwise communication over unicast is protected with OSCORE, while S
    protects multicast notifications with Group OSCORE.  Specifically:
 
    *  C1 and S have a pairwise OSCORE Security Context.  In particular,
-      C1 has 'kid' = 0x01 as Sender ID, and SN_1 = 101 as Sender
-      Sequence Number.  Also, S has 'kid' = 0x03 as Sender ID, and SN_3
-      = 301 as Sender Sequence Number.
+      C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 as Sender Sequence
+      Number.  Also, S has 'kid' = 0x03 as Sender ID and SN_3 = 301 as
+      Sender Sequence Number.
 
    *  C2 and S have a pairwise OSCORE Security Context.  In particular,
-      C2 has 'kid' = 0x02 as Sender ID, and SN_2 = 201 as Sender
-      Sequence Number.  Also, S has 'kid' = 0x04 as Sender ID, and SN_4
-      = 401 as Sender Sequence Number.
+      C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 as Sender Sequence
+      Number.  Also, S has 'kid' = 0x04 as Sender ID and SN_4 = 401 as
+      Sender Sequence Number.
 
-   *  S is a member of the OSCORE group with name "myGroup", and 'kid
-      context' = 0x57ab2e as Group ID.  In the OSCORE group, S has 'kid'
-      = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
+   *  S is a member of the OSCORE group with name "myGroup" and with
+      'kid context' = 0x57ab2e as Group ID.  In the OSCORE group, S has
+      'kid' = 0x05 as Sender ID and SN_5 = 501 as Sender Sequence
+      Number.
 
    The following notation is used for the payload of the informative
    responses:
@@ -2060,7 +2062,7 @@ Table of Contents
    hence registering itself as an observer.  If the server has an
    ongoing group observation for the target resource or decides to start
    one, the server considers the proxy as taking part in the group
-   observation, and replies to the proxy with an informative response.
+   observation and replies to the proxy with an informative response.
 
    Upon receiving an informative response, the proxy performs as
    specified for the client in Section 5, with the peculiarity that
@@ -2130,7 +2132,7 @@ Table of Contents
    In the general case with a chain of two or more proxies, every proxy
    in the chain takes the role of client with the (next hop towards the)
    origin server.  Note that the proxy adjacent to the origin server is
-   the only one in the chain that receives informative responses, and
+   the only one in the chain that receives informative responses and
    that listens to an IP multicast address and port number to receive
    notifications for the group observation.  Furthermore, every proxy in
    the chain takes the role of server with the (previous hop towards
@@ -2153,7 +2155,7 @@ Table of Contents
    Then, differently from what is defined in Section 11, each proxy
    receiving an informative response simply forwards it back to the
    client that has sent the corresponding observation request.  Note
-   that the proxy does not even realize that the message is an actual
+   that the proxy does not even realize that the message is an
    informative response, since the outer Code field is set to 2.05
    (Content).
 
@@ -2186,7 +2188,7 @@ Table of Contents
    In order to allow the proxy to listen to the multicast notifications
    sent by the server, a new CoAP option is introduced.  This option
    MUST be supported by clients interested to take part in group
-   observations through intermediaries, and by proxies that collect
+   observations through intermediaries and by proxies that collect
    multicast notifications and forward them back to the observer
    clients.
 
@@ -2208,8 +2210,8 @@ Table of Contents
 
    The Listen-To-Multicast-Responses Option includes the byte
    serialization of a CBOR array.  This specifies transport-specific
-   message information required for listening to the multicast
-   notifications of a group observation, and intended to the proxy
+   message information that is required for listening to the multicast
+   notifications of a group observation and is intended to the proxy
    adjacent to the origin server sending those notifications.  In
    particular, the serialized CBOR array has the same format specified
    in Section 4.2.1 for the 'tp_info' parameter of the informative
@@ -2236,7 +2238,7 @@ Table of Contents
       'ph_req' parameter and on the last notification specified in the
       'last_notif' parameter (if present).
 
-   *  The client builds a ticket request (see Appendix B of
+   *  The client builds a ticket request (see Appendix C of
       [I-D.amsuess-core-cachable-oscore]), as intended to reach the
       proxy adjacent to the origin server.  The ticket request is
       formatted as follows.
@@ -2289,8 +2291,8 @@ Table of Contents
       Cri, or Proxy-Scheme-Number from the ticket request.
 
    *  The proxy removes the Listen-To-Multicast-Responses Option from
-      the ticket request, and extracts the transport-specific
-      information conveyed therein.
+      the ticket request and extracts the transport-specific information
+      conveyed therein.
 
    *  The proxy rebuilds the phantom request associated with the group
       observation, by using the ticket request as directly providing the
@@ -2435,7 +2437,7 @@ Table of Contents
    in Section 8 with unprotected communications, an adversary can craft
    and inject multiple new observation requests including the Multicast-
    Response-Feedback-Divider Option, hence inducing the server to
-   overestimate the number of still interested clients, and thus to
+   overestimate the number of still interested clients and thus to
    inappropriately continue the group observation.
 
 15.2.  Protected Communications
@@ -2467,7 +2469,7 @@ Table of Contents
    [RFC8613][I-D.ietf-core-oscore-groupcomm].
 
    This allows the proxy adjacent to the origin server to access the
-   option value conveyed in a ticket request (see Section 12.2), and to
+   option value conveyed in a ticket request (see Section 12.2) and to
    retrieve from it the transport-specific information about a phantom
    request.  By doing so, the proxy becomes able to configure an
    observation of the target resource and to receive multicast
@@ -2855,9 +2857,9 @@ Table of Contents
    [I-D.ietf-core-dns-over-coap]
               Lenders, M. S., Amsüss, C., Gündoğan, C., Schmidt, T. C.,
               and M. Wählisch, "DNS over CoAP (DoC)", Work in Progress,
-              Internet-Draft, draft-ietf-core-dns-over-coap-15, 19 June
+              Internet-Draft, draft-ietf-core-dns-over-coap-16, 7 July
               2025, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              core-dns-over-coap-15>.
+              core-dns-over-coap-16>.
 
    [I-D.ietf-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
