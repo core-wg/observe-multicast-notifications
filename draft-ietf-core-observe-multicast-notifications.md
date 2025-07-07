@@ -887,7 +887,7 @@ Once completed Step 2, the client decrypts and verifies the rebuilt phantom regi
 
    - The client MUST NOT update the Replay Window in the Recipient Context associated with the server. That is, the client skips the second bullet of Step 6 in {{Section 8.2 of RFC8613}}.
 
-   - The client MUST NOT take any further process as normally expected according to {{RFC7252}}. That is, the client skips Step 8 in {{Section 8.2 of RFC8613}}. In particular, the client MUST NOT deliver the phantom registration request to the application, and MUST NOT take any action in the Token space of its unicast endpoint where the informative response has been received.
+   - The client MUST NOT take any further process as normally expected according to {{RFC7252}}. That is, the client skips Step 8 in {{Section 8.2 of RFC8613}}. In particular, the client MUST NOT deliver the phantom registration request to the application and MUST NOT take any action in the Token space of its unicast endpoint where the informative response has been received.
 
    - The client stores the values of the 'kid', 'piv', and 'kid context' fields from the OSCORE Option of the phantom registration request.
 
@@ -915,15 +915,15 @@ Note that these same values are used to decrypt and verify each and every multic
 
 The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
 
-The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
+The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT. The server starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
 Pairwise communication over unicast is protected with OSCORE, while S protects multicast notifications with Group OSCORE. Specifically:
 
-* C1 and S have a pairwise OSCORE Security Context. In particular, C1 has 'kid' = 0x01 as Sender ID, and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID, and SN_3 = 301 as Sender Sequence Number.
+* C1 and S have a pairwise OSCORE Security Context. In particular, C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID and SN_3 = 301 as Sender Sequence Number.
 
-* C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID, and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID, and SN_4 = 401 as Sender Sequence Number.
+* C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID and SN_4 = 401 as Sender Sequence Number.
 
-* S is a member of the OSCORE group with name "myGroup", and 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
+* S is a member of the OSCORE group with name "myGroup" and with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID and SN_5 = 501 as Sender Sequence Number.
 
 The following notation is used for the payload of the informative responses:
 
@@ -1082,7 +1082,7 @@ The two external_aad used to encrypt and sign the multicast notification above h
 
 This section specifies how the approach presented in {{sec-server-side}} and {{sec-client-side}} works when a proxy is used between the clients and the server. In addition to what is specified in {{Section 5.7 of RFC7252}} and {{Section 5 of RFC7641}}, the following applies.
 
-A client sends its original observation request to the proxy. If the proxy is not already registered at the server for that target resource, the proxy forwards the observation request to the server, hence registering itself as an observer. If the server has an ongoing group observation for the target resource or decides to start one, the server considers the proxy as taking part in the group observation, and replies to the proxy with an informative response.
+A client sends its original observation request to the proxy. If the proxy is not already registered at the server for that target resource, the proxy forwards the observation request to the server, hence registering itself as an observer. If the server has an ongoing group observation for the target resource or decides to start one, the server considers the proxy as taking part in the group observation and replies to the proxy with an informative response.
 
 Upon receiving an informative response, the proxy performs as specified for the client in {{sec-client-side}}, with the peculiarity that "consuming" the last notification (if present) means populating its cache.
 
@@ -1110,7 +1110,7 @@ As a result, the observer counter at the server (see {{sec-server-side}}) is not
 
 An example is provided in {{intermediaries-example}}.
 
-In the general case with a chain of two or more proxies, every proxy in the chain takes the role of client with the (next hop towards the) origin server. Note that the proxy adjacent to the origin server is the only one in the chain that receives informative responses, and that listens to an IP multicast address and port number to receive notifications for the group observation. Furthermore, every proxy in the chain takes the role of server with the (previous hop towards the) origin client.
+In the general case with a chain of two or more proxies, every proxy in the chain takes the role of client with the (next hop towards the) origin server. Note that the proxy adjacent to the origin server is the only one in the chain that receives informative responses and that listens to an IP multicast address and port number to receive notifications for the group observation. Furthermore, every proxy in the chain takes the role of server with the (previous hop towards the) origin client.
 
 # Intermediaries Together with End-to-End Security {#intermediaries-e2e-security}
 
@@ -1118,7 +1118,7 @@ As defined in {{sec-secured-notifications}}, Group OSCORE can be used to protect
 
 In fact, the proxy adjacent to the origin server is not able to access the encrypted payload of such informative responses. Hence, the proxy cannot retrieve the 'ph_req' and 'tp_info' parameters necessary to correctly receive multicast notifications and forward them back to the clients.
 
-Then, differently from what is defined in {{intermediaries}}, each proxy receiving an informative response simply forwards it back to the client that has sent the corresponding observation request. Note that the proxy does not even realize that the message is an actual informative response, since the outer Code field is set to 2.05 (Content).
+Then, differently from what is defined in {{intermediaries}}, each proxy receiving an informative response simply forwards it back to the client that has sent the corresponding observation request. Note that the proxy does not even realize that the message is an informative response, since the outer Code field is set to 2.05 (Content).
 
 Upon receiving the informative response, the client does not configure an observation of the target resource. Instead, the client performs a new observe registration request, by transmitting the re-built phantom request as intended to reach the proxy adjacent to the origin server. In particular, the client includes the new Listen-To-Multicast-Responses CoAP option defined in {{ltmr-option}}, to provide that proxy with the transport-specific information required for receiving multicast notifications for the group observation.
 
@@ -1128,7 +1128,7 @@ Details on the additional message exchange and processing are defined in {{inter
 
 ## Listen-To-Multicast-Responses Option {#ltmr-option}
 
-In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries, and by proxies that collect multicast notifications and forward them back to the observer clients.
+In order to allow the proxy to listen to the multicast notifications sent by the server, a new CoAP option is introduced. This option MUST be supported by clients interested to take part in group observations through intermediaries and by proxies that collect multicast notifications and forward them back to the observer clients.
 
 The option is called Listen-To-Multicast-Response, is intended only for requests, and has the properties summarized in {{ltmr-table}}, which extends Table 4 of {{RFC7252}}. The option is critical and not Safe-to-Forward. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".
 
@@ -1136,7 +1136,7 @@ The option is called Listen-To-Multicast-Response, is intended only for requests
 | TBD  | x | x | - |   | Listen-To-<br>Multicast-Responses | (*)    | 3-1024 | (none)  |
 {: #ltmr-table title="The Listen-To-Multicast-Responses Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
-The Listen-To-Multicast-Responses Option includes the byte serialization of a CBOR array. This specifies transport-specific message information required for listening to the multicast notifications of a group observation, and intended to the proxy adjacent to the origin server sending those notifications. In particular, the serialized CBOR array has the same format specified in {{sssec-transport-specific-encoding}} for the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}.
+The Listen-To-Multicast-Responses Option includes the byte serialization of a CBOR array. This specifies transport-specific message information that is required for listening to the multicast notifications of a group observation and is intended to the proxy adjacent to the origin server sending those notifications. In particular, the serialized CBOR array has the same format specified in {{sssec-transport-specific-encoding}} for the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}.
 
 The Listen-To-Multicast-Responses Option is of class U for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
 
@@ -1150,7 +1150,7 @@ Once received the informative response, the origin client proceeds in a differen
 
 * The client performs all the additional decryption and verification steps of {{ssec-client-side-informative-oscore}} on the phantom request specified in the 'ph_req' parameter and on the last notification specified in the 'last_notif' parameter (if present).
 
-* The client builds a ticket request (see Appendix B of {{I-D.amsuess-core-cachable-oscore}}), as intended to reach the proxy adjacent to the origin server. The ticket request is formatted as follows.
+* The client builds a ticket request (see {{Section C of I-D.amsuess-core-cachable-oscore}}), as intended to reach the proxy adjacent to the origin server. The ticket request is formatted as follows.
 
    - The Token is chosen as the client sees fit. In fact, there is no reason for this Token to be the same as the phantom request's.
 
@@ -1172,7 +1172,7 @@ Then, the client sends the ticket request to the next hop towards the origin ser
 
 * The proxy removes the option Proxy-Uri, or Proxy-Scheme, or Proxy-Cri, or Proxy-Scheme-Number from the ticket request.
 
-* The proxy removes the Listen-To-Multicast-Responses Option from the ticket request, and extracts the transport-specific information conveyed therein.
+* The proxy removes the Listen-To-Multicast-Responses Option from the ticket request and extracts the transport-specific information conveyed therein.
 
 * The proxy rebuilds the phantom request associated with the group observation, by using the ticket request as directly providing the required transport-independent information. This includes the outer Code field, the outer CoAP options, and the encrypted payload with AEAD tag concatenated with the signature.
 
@@ -1237,7 +1237,7 @@ This is not possible to achieve by the same means when using the communication m
 
 For instance, the method defined in {{sec-rough-counting}} to perform the rough counting of still interested clients triggers (some of) them to explicitly send a new observation request to acknowledge their interest. Then, the server can decide to terminate the group observation altogether, in case not enough clients are estimated to be still active.
 
-If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in {{sec-rough-counting}} with unprotected communications, an adversary can craft and inject multiple new observation requests including the Multicast-Response-Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients, and thus to inappropriately continue the group observation.
+If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in {{sec-rough-counting}} with unprotected communications, an adversary can craft and inject multiple new observation requests including the Multicast-Response-Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients and thus to inappropriately continue the group observation.
 
 ## Protected Communications
 
@@ -1253,7 +1253,7 @@ If multicast notifications for an observed resource are protected using Group OS
 
 The CoAP option Listen-To-Multicast-Responses defined in {{ltmr-option}} is of class U for OSCORE and Group OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
 
-This allows the proxy adjacent to the origin server to access the option value conveyed in a ticket request (see {{intermediaries-e2e-security-processing}}), and to retrieve from it the transport-specific information about a phantom request. By doing so, the proxy becomes able to configure an observation of the target resource and to receive multicast notifications that match the phantom request.
+This allows the proxy adjacent to the origin server to access the option value conveyed in a ticket request (see {{intermediaries-e2e-security-processing}}) and to retrieve from it the transport-specific information about a phantom request. By doing so, the proxy becomes able to configure an observation of the target resource and to receive multicast notifications that match the phantom request.
 
 Any proxy in the chain, as well as further possible intermediaries or on-path active adversaries, are thus able to remove the option or alter its content, before the ticket request reaches the proxy adjacent to the origin server.
 
