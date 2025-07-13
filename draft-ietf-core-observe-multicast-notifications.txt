@@ -3068,7 +3068,7 @@ A.2.  Introspection at the Multicast Notification Sender
    For example, a network sniffer could offer sending such a request
    when unknown multicast notifications are seen in the network.
    Consequently, it can associate those notifications with a URI, or
-   decrypt them if it is member of the correct OSCORE group.
+   decrypt them if it is a member of the correct OSCORE group.
 
 Appendix B.  Pseudo-Code for Rough Counting of Clients
 
