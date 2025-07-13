@@ -1472,7 +1472,7 @@ Content-Format: application/informative-response+cbor
 ~~~~~~~~~~~
 {: #discovery-introspection title="Group Observation Discovery with Server Introspection"}
 
-For example, a network sniffer could offer sending such a request when unknown multicast notifications are seen in the network. Consequently, it can associate those notifications with a URI, or decrypt them if it is member of the correct OSCORE group.
+For example, a network sniffer could offer sending such a request when unknown multicast notifications are seen in the network. Consequently, it can associate those notifications with a URI, or decrypt them if it is a member of the correct OSCORE group.
 
 # Pseudo-Code for Rough Counting of Clients # {#appendix-pseudo-code-counting}
 
