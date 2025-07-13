@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 8 January 2026                                                 
+Expires: 14 January 2026                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                             7 July 2025
+                                                            13 July 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 14 January 2026.
 
 Copyright Notice
 
@@ -2744,9 +2744,9 @@ Table of Contents
    [I-D.ietf-core-href]
               Bormann, C. and H. Birkholz, "Constrained Resource
               Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-22, 20 March 2025,
+              ietf-core-href-23, 7 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-22>.
+              href-23>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
@@ -2973,16 +2973,16 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
    multicast notifications are sent to.
 
    Figure 8 provides an example where a group observation is discovered.
-   The example assumes a CoRAL namespace [I-D.ietf-core-coral], that
+   The example assumes a CoRAL namespace [I-D.ietf-core-coral] that
    contains properties analogous to those in the Content-Format
    "application/informative-response+cbor".
 
    Note that the information about the transport protocol used for the
    group observation is not expressed through a dedicated element
    equivalent to 'tp_id' of the informative response (see
-   Section 4.2.1).  Instead, it is expressed through the scheme
-   component of the two URIs specified as 'tp_info_server' and
-   'tp_info_client', where the former specifies the addressing
+   Section 4.2.1).  Instead, it is expressed through the scheme and
+   authority components of the two URIs specified as 'tp_info_server'
+   and 'tp_info_client', where the former specifies the addressing
    information of the server (like 'tpi_server' in Section 4.2.1.1),
    while the latter specifies the addressing information where multicast
    notifications are sent to (like 'tpi_client' in Section 4.2.1.1).
@@ -3031,8 +3031,8 @@ A.2.  Introspection at the Multicast Notification Sender
    request.
 
    Such an interface is left for other documents to specify on demand.
-   As an example, a possible interface can be as follows, and relies on
-   the already known Token value of intercepted multicast notifications
+   Figure 9 shows an example of a possible interface, as relying on the
+   already known Token value of intercepted multicast notifications
    associated with a phantom registration request.
 
  Request:
@@ -3068,7 +3068,7 @@ A.2.  Introspection at the Multicast Notification Sender
    For example, a network sniffer could offer sending such a request
    when unknown multicast notifications are seen in the network.
    Consequently, it can associate those notifications with a URI, or
-   decrypt them if member of the correct OSCORE group.
+   decrypt them if it is member of the correct OSCORE group.
 
 Appendix B.  Pseudo-Code for Rough Counting of Clients
 
@@ -3077,9 +3077,9 @@ Appendix B.  Pseudo-Code for Rough Counting of Clients
    defined in Section 8.
 
    In particular, Appendix B.1 describes the algorithm for the client
-   side, while Appendix B.2 describes an optimized version for
-   constrained clients.  Finally, Appendix B.3 describes the algorithm
-   for the server side.
+   side and Appendix B.2 describes an optimized version for constrained
+   clients.  Finally, Appendix B.3 describes the algorithm for the
+   server side.
 
 B.1.  Client Side
 
@@ -3257,9 +3257,10 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       Algorithm, or to the Pairwise Key Agreement Algorithm and its
       parameters.  In fact, the clients and the server will never use
       the pairwise mode of Group OSCORE as per Section 8 of
-      [I-D.ietf-core-oscore-groupcomm], and will not need to compute a
-      cofactor Diffie-Hellman shared secret in this OSCORE group.  It
-      follows that:
+      [I-D.ietf-core-oscore-groupcomm] and will not need to compute a
+      cofactor Diffie-Hellman shared secret in this OSCORE group.
+
+      It follows that:
 
       -  In the Common Context of the Group OSCORE Security Context, the
          parameter AEAD Algorithm and the parameter Pairwise Key
@@ -3314,11 +3315,11 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    for the group keying material.
 
    Note that the informative response does not require to include an
-   explicit proof-of-possession (PoP) of the server's private key.
-   Although the server is also acting as Group Manager and a PoP
+   explicit proof of possession of the server's private key.  Although
+   the server is also acting as Group Manager and a proof-of-possession
    evidence of the Group Manager's private key is included in a full-
    fledged Join Response (see Section 6.3 of
-   [I-D.ietf-ace-key-groupcomm-oscore]), such proof-of-possession will
+   [I-D.ietf-ace-key-groupcomm-oscore]), such proof of possession will
    be achieved through every multicast notification that the server
    sends, as protected with the group mode of Group OSCORE and including
    a signature computed with its private key.
@@ -3361,7 +3362,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       group observations for which that keying material is used (see
       Section 4.5 and Section 9.2.4).  If the server creates a new group
       observation as a replacement or follow-up using the same OSCORE
-      group:
+      group, then the following applies:
 
       -  The server MUST update the OSCORE Master Secret.
 
@@ -3390,8 +3391,8 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    The response has the same Token value T of the phantom registration
    request and it does not include an Observe Option.  The server MUST
    use its own Sender Sequence Number as Partial IV to protect the error
-   response, and include its encoding as the Partial IV in the OSCORE
-   Option of the response.
+   response and MUST include its encoding as the Partial IV in the
+   OSCORE Option of the response.
 
    When some clients leave the OSCORE group and forget about the group
    observation, the server does not have to provide the remaining
@@ -3401,7 +3402,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    server and possibly the Deterministic Client, if the optimization
    defined in this appendix is combined with the use of phantom requests
    as deterministic requests (see Appendix D).  In particular, both of
-   them never change their Sender ID during the group lifetime, and they
+   them never change their Sender ID during the group lifetime and they
    both remain part of the group until the group ceases to exist.
 
    As an alternative to renewing the keying material before it expires,
@@ -3435,10 +3436,10 @@ Appendix D.  Phantom Request as Deterministic Request
    Section 11 and Section 12).
 
    If Group OSCORE is used to protect the group observation (see
-   Section 9), and the OSCORE group supports the concept of
-   Deterministic Client [I-D.amsuess-core-cachable-oscore], then the
-   server and each client in the OSCORE group can also independently
-   compute the protected phantom observation request.
+   Section 9) and the OSCORE group supports the concept of Deterministic
+   Client [I-D.amsuess-core-cachable-oscore], then the server and each
+   client in the OSCORE group can also independently compute the
+   protected phantom observation request.
 
    In such a case, the unprotected version of the phantom observation
    request can be made available to the clients as a smaller, plain CoAP
@@ -3467,8 +3468,8 @@ Appendix D.  Phantom Request as Deterministic Request
    informative response that MUST NOT be protected.  If a proxy is
    deployed between the clients and the server, the proxy is thus able
    to retrieve from the informative response everything needed to set
-   itself as an observer in the group observation, and to start
-   listening to multicast notifications.
+   itself as an observer in the group observation and to start listening
+   to multicast notifications.
 
    If relying on a proxy, each client sends the deterministic request to
    the proxy as a ticket request (see Section 12).  However, differently
@@ -3488,7 +3489,7 @@ Appendix D.  Phantom Request as Deterministic Request
    if the server receives such a phantom registration request, the
    informative response may omit the 'ph_req' parameter (see
    Section 4.2).  If a client receives an informative response that
-   includes the 'ph_req' parameter, and this specifies transport-
+   includes the 'ph_req' parameter and this specifies transport-
    independent information different from the one of the sent
    deterministic request, then the client considers the informative
    response malformed.
@@ -3499,7 +3500,7 @@ Appendix D.  Phantom Request as Deterministic Request
    observation.  In fact:
 
    *  If a proxy is not deployed, the clients simply set up the right
-      multicast address and port number, and starts listening to
+      multicast address and port number, and start listening to
       multicast notifications bound to the deterministic request.
       Hence, the observer counter at the server is not incremented as
       new clients start listening to multicast notifications.
@@ -3530,7 +3531,7 @@ Appendix D.  Phantom Request as Deterministic Request
 
    *  'det_senderId' and 'det_hash_alg', defined in Section 4 of
       [I-D.amsuess-core-cachable-oscore].  These specify the Sender ID
-      of the Deterministic Client in the OSCORE group, and the hash
+      of the Deterministic Client in the OSCORE group and the hash
       algorithm used to compute the deterministic request (see
       Section 3.4.1 of [I-D.amsuess-core-cachable-oscore]).
 
@@ -3694,7 +3695,7 @@ Appendix E.  Example with a Proxy
           Figure 10: Example of Group Observation with a Proxy
 
    Note that the proxy has all the information to understand the
-   observation request from C2, and can immediately start to serve the
+   observation request from C2 and can immediately start to serve the
    still fresh values.
 
    This behavior is mandated by Section 5 of [RFC7641], i.e., the proxy
@@ -3986,7 +3987,7 @@ Appendix F.  Example with a Proxy and Group OSCORE
  Figure 11: Example of Group Observation with a Proxy and Group OSCORE
 
    Unlike in the unprotected example in Appendix E, the proxy does _not_
-   have all the information to perform request deduplication, and can
+   have all the information to perform request deduplication and can
    only recognize the identical request once the client sends the ticket
    request.
 
