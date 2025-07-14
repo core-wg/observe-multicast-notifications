@@ -2179,9 +2179,9 @@ The example provided in this appendix as reflected by the message exchange shown
 
    Note that the phantom request can be omitted, since it is the deterministic phantom request from the client, and thus "in terms of transport-independent information, identical to the registration request from the client" (see {{ssec-server-side-informative}}).
 
-9. From the received informative response, the proxy retrieves everything needed to set itself as an observer in the group observation, and it starts listening to multicast notifications. If the informative response included a latest notification, the proxy caches it and forwards it back to the client, otherwise it replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
+9. From the received informative response, the proxy retrieves everything needed to set itself as an observer in the group observation and it starts listening to multicast notifications. If the informative response includes a latest notification, the proxy caches it and forwards it back to the client. Otherwise, the proxy replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
 
-10. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, this does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
+10. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, the latter does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
 
 ## Message Exchange {#intermediaries-example-e2e-security-det-exchange}
 
@@ -2191,7 +2191,7 @@ The same assumptions and notation used in {{sec-example-with-security}} are used
 
 * The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT, and starts the group observation already after creating the deterministic phantom request to early disseminate.
 
-* S is a member of the OSCORE group with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID, and SN_5 = 501 as Sender Sequence Number.
+* S is a member of the OSCORE group with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID and SN_5 = 501 as Sender Sequence Number.
 
 In addition:
 
@@ -2412,7 +2412,7 @@ C1      C2      P         S
 
 (#)  Sent over unicast and unprotected.
 
-(##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+(##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT and protected
      with Group OSCORE end-to-end between the server and the clients.
 ~~~~~~~~~~~
 {: #example-proxy-oscore-det-request title="Example of Group Observation with a Proxy and Group OSCORE, where the Phantom Request is a Deterministic Request"}
@@ -2461,7 +2461,7 @@ The main process consists of the following steps.
 
 2. Upon receiving PH_REQ, PRX performs the same actions performed by the proxy in the scenario of {{intermediaries-example-e2e-security-det}}.
 
-   That is, if PH_REQ results in a cache hit at PRX, then PRX replies to the client with the latest multicast notification for the target resource from its cache, and takes no further actions.
+   That is, if PH_REQ results in a cache hit at PRX, then PRX replies to the client with the latest multicast notification for the target resource from its cache and takes no further actions.
 
    Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-byte, the server replies to PRX with an unprotected informative response, where 'tp_info' specifies the information to receive multicast notifications for the target resource. Based on such information, PRX starts listening to multicast notifications. If the informative response includes a latest notification, then PRX caches that notification and forwards it to the client.
 
@@ -2477,7 +2477,7 @@ a. The client sends a traditional Observe registration request with destination 
 
 b. PRX receives the request and forwards it to the server, as usual.
 
-c. The server replies with a 5.03 informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters.
+c. The server replies with a 5.03 (Service Unavailable) informative response. The response is protected with (Group) OSCORE, i.e., end-to-end between the client and the server. The payload of the response specifies the following parameters:
 
    * The 'tp_info' parameter, within which the 'tpi_server' element is a CRI with addressing information PRX_ADDR and PRX_PORT (i.e., targeting PRX). The 'tp_info' parameter does not include the 'tpi_details' element, regardless of what is expected per the transport used.
 
@@ -2485,14 +2485,18 @@ c. The server replies with a 5.03 informative response. The response is protecte
 
    * Optionally, parameters conveying information that the client can use for joining the OSCORE group if that has not happened yet, or the keying material used in the OSCORE group if the server is managing it (see {{self-managed-oscore-group}}).
 
-d. PRX receives the protected 5.03 informative response and forwards it to the client, as usual.
+d. PRX receives the protected informative response and forwards it to the client, as usual.
 
-e. Upon receiving the protected 5.03 informative response, the client takes its payload as the group observation data for the group observation of interest.
+e. Upon receiving the protected informative response, the client takes its payload as the group observation data for the group observation of interest.
 
    Per the instructions specified in the response, the client takes the necessary steps to join the correct OSCORE group, in case it is not already a member.
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -12 to -13 ## {#sec-12-13}
+
+* Editorial improvements.
 
 ## Version -11 to -12 ## {#sec-11-12}
 
