@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 14 January 2026                                                
+Expires: 15 January 2026                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                            13 July 2025
+                                                            14 July 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 January 2026.
+   This Internet-Draft will expire on 15 January 2026.
 
 Copyright Notice
 
@@ -151,18 +151,19 @@ Table of Contents
      H.1.  Taking Part in Group Observations
        H.1.1.  Client Initialization Procedure
    Appendix I.  Document Updates
-     I.1.  Version -11 to -12
-     I.2.  Version -10 to -11
-     I.3.  Version -09 to -10
-     I.4.  Version -08 to -09
-     I.5.  Version -07 to -08
-     I.6.  Version -06 to -07
-     I.7.  Version -05 to -06
-     I.8.  Version -04 to -05
-     I.9.  Version -03 to -04
-     I.10. Version -02 to -03
-     I.11. Version -01 to -02
-     I.12. Version -00 to -01
+     I.1.  Version -12 to -13
+     I.2.  Version -11 to -12
+     I.3.  Version -10 to -11
+     I.4.  Version -09 to -10
+     I.5.  Version -08 to -09
+     I.6.  Version -07 to -08
+     I.7.  Version -06 to -07
+     I.8.  Version -05 to -06
+     I.9.  Version -04 to -05
+     I.10. Version -03 to -04
+     I.11. Version -02 to -03
+     I.12. Version -01 to -02
+     I.13. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -4062,21 +4063,21 @@ G.1.  Assumptions and Walkthrough
 
    9.   From the received informative response, the proxy retrieves
         everything needed to set itself as an observer in the group
-        observation, and it starts listening to multicast notifications.
-        If the informative response included a latest notification, the
-        proxy caches it and forwards it back to the client, otherwise it
-        replies with an empty ACK (if it has not done it already and the
-        request from the client was Confirmable).
+        observation and it starts listening to multicast notifications.
+        If the informative response includes a latest notification, the
+        proxy caches it and forwards it back to the client.  Otherwise,
+        the proxy replies with an empty ACK (if it has not done it
+        already and the request from the client was Confirmable).
 
    10.  Like in the case with a non-deterministic phantom request
         considered in Section 12, the proxy fans out the multicast
         notifications to the origin clients as they come.  Also, as new
-        clients following the first one contact the proxy, this does not
-        have to contact the server again as in Section 12, since the
-        deterministic phantom request would produce a cache hit as per
-        [I-D.amsuess-core-cachable-oscore].  Thus, the proxy can serve
-        such clients with the latest fresh multicast notification from
-        its cache.
+        clients following the first one contact the proxy, the latter
+        does not have to contact the server again as in Section 12,
+        since the deterministic phantom request would produce a cache
+        hit as per [I-D.amsuess-core-cachable-oscore].  Thus, the proxy
+        can serve such clients with the latest fresh multicast
+        notification from its cache.
 
 G.2.  Message Exchange
 
@@ -4094,7 +4095,7 @@ G.2.  Message Exchange
       request to early disseminate.
 
    *  S is a member of the OSCORE group with 'kid context' = 0x57ab2e as
-      Group ID.  In the OSCORE group, S has 'kid' = 0x05 as Sender ID,
+      Group ID.  In the OSCORE group, S has 'kid' = 0x05 as Sender ID
       and SN_5 = 501 as Sender Sequence Number.
 
    In addition:
@@ -4318,7 +4319,7 @@ G.2.  Message Exchange
 
  (#)  Sent over unicast and unprotected.
 
- (##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT, and protected
+ (##) Sent over IP multicast to GROUP_ADDR:GROUP_PORT and protected
       with Group OSCORE end-to-end between the server and the clients.
 
      Figure 12: Example of Group Observation with a Proxy and Group
@@ -4408,7 +4409,7 @@ H.1.  Taking Part in Group Observations
 
        That is, if PH_REQ results in a cache hit at PRX, then PRX
        replies to the client with the latest multicast notification for
-       the target resource from its cache, and takes no further actions.
+       the target resource from its cache and takes no further actions.
 
        Otherwise, PRX forwards PH_REQ to the server.  After recognizing
        PH_REQ byte-by-byte, the server replies to PRX with an
@@ -4439,10 +4440,10 @@ H.1.1.  Client Initialization Procedure
 
    b.  PRX receives the request and forwards it to the server, as usual.
 
-   c.  The server replies with a 5.03 informative response.  The
-   response is protected with (Group) OSCORE, i.e., end-to-end between
-   the client and the server.  The payload of the response specifies the
-   following parameters.
+   c.  The server replies with a 5.03 (Service Unavailable) informative
+   response.  The response is protected with (Group) OSCORE, i.e., end-
+   to-end between the client and the server.  The payload of the
+   response specifies the following parameters:
 
    *  The 'tp_info' parameter, within which the 'tpi_server' element is
       a CRI with addressing information PRX_ADDR and PRX_PORT (i.e.,
@@ -4458,11 +4459,11 @@ H.1.1.  Client Initialization Procedure
       the keying material used in the OSCORE group if the server is
       managing it (see Appendix C).
 
-   d.  PRX receives the protected 5.03 informative response and forwards
-   it to the client, as usual.
+   d.  PRX receives the protected informative response and forwards it
+   to the client, as usual.
 
-   e.  Upon receiving the protected 5.03 informative response, the
-   client takes its payload as the group observation data for the group
+   e.  Upon receiving the protected informative response, the client
+   takes its payload as the group observation data for the group
    observation of interest.
 
    Per the instructions specified in the response, the client takes the
@@ -4473,7 +4474,11 @@ Appendix I.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-I.1.  Version -11 to -12
+I.1.  Version -12 to -13
+
+   *  Editorial improvements.
+
+I.2.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
@@ -4487,7 +4492,7 @@ I.1.  Version -11 to -12
 
    *  Editorial improvements.
 
-I.2.  Version -10 to -11
+I.3.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
 
@@ -4502,7 +4507,7 @@ I.2.  Version -10 to -11
 
    *  Clarifications and editorial improvements.
 
-I.3.  Version -09 to -10
+I.4.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -4510,7 +4515,7 @@ I.3.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-I.4.  Version -08 to -09
+I.5.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -4523,7 +4528,7 @@ I.4.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-I.5.  Version -07 to -08
+I.6.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -4551,7 +4556,7 @@ I.5.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-I.6.  Version -06 to -07
+I.7.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -4569,7 +4574,7 @@ I.6.  Version -06 to -07
 
    *  Editorial improvements.
 
-I.7.  Version -05 to -06
+I.8.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -4577,7 +4582,7 @@ I.7.  Version -05 to -06
 
    *  Editorial improvements.
 
-I.8.  Version -04 to -05
+I.9.  Version -04 to -05
 
    *  If the phantom request is an OSCORE deterministic request, there
       is no parallel group observation for clients that lack support.
@@ -4592,7 +4597,7 @@ I.8.  Version -04 to -05
 
    *  Editorial improvements.
 
-I.9.  Version -03 to -04
+I.10.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -4609,7 +4614,7 @@ I.9.  Version -03 to -04
 
    *  Editorial improvements.
 
-I.10.  Version -02 to -03
+I.11.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -4619,7 +4624,7 @@ I.10.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-I.11.  Version -01 to -02
+I.12.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -4637,7 +4642,7 @@ I.11.  Version -01 to -02
 
    *  Editorial improvements.
 
-I.12.  Version -00 to -01
+I.13.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
