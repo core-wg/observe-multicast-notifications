@@ -1356,7 +1356,7 @@ The columns of this registry are:
 
 * CoAP Transport: This field contains a text string. The value MUST be unique and it uniquely identifies the transport used for CoAP messages.
 
-* Transport Information Details: This field contains a lists of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
+* Transport Information Details: This field contains a list of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
 
 * Reference: This contains a pointer to the public specification for the item.
 
