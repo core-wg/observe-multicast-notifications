@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 15 January 2026                                                
+Expires: 19 January 2026                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                            14 July 2025
+                                                            18 July 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 January 2026.
+   This Internet-Draft will expire on 19 January 2026.
 
 Copyright Notice
 
@@ -2645,7 +2645,7 @@ Table of Contents
       be unique and it uniquely identifies the transport used for CoAP
       messages.
 
-   *  Transport Information Details: This field contains a lists of text
+   *  Transport Information Details: This field contains a list of text
       strings.  Each text string is the name of an element that provides
       transport-specific information related to a pertinent CoAP
       request.  Optional elements are prepended by '?' and MUST be
