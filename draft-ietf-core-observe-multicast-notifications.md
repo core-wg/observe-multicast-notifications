@@ -248,7 +248,7 @@ After having started a group observation on a target resource, the server procee
 
 For each traditional observation ongoing on the target resource, the server MAY cancel that observation. Then, the server considers the corresponding clients as now taking part in the group observation, for which it increases the corresponding observer counter accordingly.
 
-The server sends to each of such clients an informative response message, encoded as a unicast response with response code 5.03 (Service Unavailable). As per {{RFC7641}}, such a response does not include an Observe Option. The response MUST be Confirmable and MUST NOT encode link-local addresses.
+The server sends to each of such clients an informative response message, encoded as a unicast response with response code 5.03 (Service Unavailable). As per {{RFC7641}}, such a response does not include an Observe Option. The response MUST be Confirmable, MUST NOT have link-local source or destination addresses, and MUST NOT provide link-local or site-local addresses in the transport-specific information specified in its payload (see below).
 
 The Content-Format of the informative response is set to "application/informative-response+cbor", which is registered in {{content-format}}. The payload of the informative response is a CBOR map, whose fields use the CBOR abbreviations that are defined in {{informative-response-params}}.
 
@@ -471,7 +471,7 @@ The server sends the response to the same multicast IP address GRP_ADDR and port
 
 ## Request ## {#ssec-client-side-request}
 
-A client sends an observation request to the server as described in {{RFC7641}}, i.e., a GET request with an Observe Option set to 0 (register). The request MUST NOT encode link-local addresses. If the server is not configured to accept registrations on that target resource specifically for a group observation, this would still result in a positive notification response to the client as described in {{RFC7641}}, in case the server is able and willing to add the client to the list of observers.
+A client sends an observation request to the server as described in {{RFC7641}}, i.e., a GET request with an Observe Option set to 0 (register). The request MUST NOT have link-local source or destination addresses. If the server is not configured to accept registrations on that target resource specifically for a group observation, this would still result in a positive notification response to the client as described in {{RFC7641}}, in case the server is able and willing to add the client to the list of observers.
 
 In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be pre-configured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
 
@@ -2501,6 +2501,8 @@ e. Upon receiving the protected informative response, the client takes its paylo
 {:removeinrfc}
 
 ## Version -12 to -13 ## {#sec-12-13}
+
+* Clarified avoidance of link-local addresses.
 
 * Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".
 
