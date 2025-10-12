@@ -2573,12 +2573,22 @@ Table of Contents
        +========+=====================================+============+
        | Number | Name                                | Reference  |
        +========+=====================================+============+
-       | TBD    | Multicast-Response-Feedback-Divider | [RFC-XXXX] |
+       | TBD18  | Multicast-Response-Feedback-Divider | [RFC-XXXX] |
        +--------+-------------------------------------+------------+
-       | TBD    | Listen-To-Multicast-Responses       | [RFC-XXXX] |
+       | TBD47  | Listen-To-Multicast-Responses       | [RFC-XXXX] |
        +--------+-------------------------------------+------------+
 
          Table 5: Registrations in the CoAP Option Numbers Registry
+
+   For the Multicast-Response-Feedback-Divider Option, the preferred
+   value range is 0-255.  In particular, 18 is the preferred option
+   number.
+
+   For the Listen-To-Multicast-Responses Option, the preferred value
+   range is 0-255.  In particular, 47 is the preferred option number.
+
+   Note to RFC Editor: Please delete the two paragraphs above and then
+   delete this paragraph.
 
 16.4.  Informative Response Parameters Registry
 
@@ -4476,6 +4486,9 @@ Appendix I.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 I.1.  Version -12 to -13
+
+   *  Suggested range and value for the registration in the IANA
+      registry "CoAP Option Numbers".
 
    *  Updated references.
 
