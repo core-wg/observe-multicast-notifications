@@ -1220,7 +1220,7 @@ The table below summarizes them and specifies the CBOR key to use as abbreviatio
 
  CoAP Transport | Transport Information Details | Reference
 ----------------|-------------------------------|-----------------------------------------------
- CoAP over UDP  | tpi_client <br> tpi_token     | {{ssssec-udp-transport-specific}} of {{&SELF}}
+ CoAP over UDP  | tpi_client,tpi_token          | {{ssssec-udp-transport-specific}} of {{&SELF}}
 {: #table-transport-information title="CoAP Transport Information for CoAP over UDP." align="center"}
 
 Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
@@ -1362,7 +1362,7 @@ The columns of this registry are:
 
 * CoAP Transport: This field contains a text string. The value MUST be unique and it uniquely identifies the transport used for CoAP messages.
 
-* Transport Information Details: This field contains a list of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
+* Transport Information Details: This field contains a list of text strings, where two adjacent strings are separated by a single comma character. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
 
 * Reference: This contains a pointer to the public specification for the item.
 
@@ -2501,6 +2501,8 @@ e. Upon receiving the protected informative response, the client takes its paylo
 {:removeinrfc}
 
 ## Version -12 to -13 ## {#sec-12-13}
+
+* Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".
 
 * Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".
 
