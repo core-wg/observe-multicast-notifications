@@ -468,8 +468,10 @@ Table of Contents
    The server sends to each of such clients an informative response
    message, encoded as a unicast response with response code 5.03
    (Service Unavailable).  As per [RFC7641], such a response does not
-   include an Observe Option.  The response MUST be Confirmable and MUST
-   NOT encode link-local addresses.
+   include an Observe Option.  The response MUST be Confirmable, MUST
+   NOT have link-local source or destination addresses, and MUST NOT
+   provide link-local or site-local addresses in the transport-specific
+   information specified in its payload (see below).
 
    The Content-Format of the informative response is set to
    "application/informative-response+cbor", which is registered in
@@ -899,12 +901,12 @@ Table of Contents
 
    A client sends an observation request to the server as described in
    [RFC7641], i.e., a GET request with an Observe Option set to 0
-   (register).  The request MUST NOT encode link-local addresses.  If
-   the server is not configured to accept registrations on that target
-   resource specifically for a group observation, this would still
-   result in a positive notification response to the client as described
-   in [RFC7641], in case the server is able and willing to add the
-   client to the list of observers.
+   (register).  The request MUST NOT have link-local source or
+   destination addresses.  If the server is not configured to accept
+   registrations on that target resource specifically for a group
+   observation, this would still result in a positive notification
+   response to the client as described in [RFC7641], in case the server
+   is able and willing to add the client to the list of observers.
 
    In a particular setup, the information typically specified in the
    'tp_info' parameter of the informative response (see Section 4.2) can
@@ -4487,6 +4489,8 @@ Appendix I.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 I.1.  Version -12 to -13
+
+   *  Clarified avoidance of link-local addresses.
 
    *  Revised value syntax for the 'Transport Information Details'
       column of the new IANA registry "CoAP Transport Information".
