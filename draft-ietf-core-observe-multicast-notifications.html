@@ -3575,7 +3575,7 @@ Note also that, identically to the phantom request, the ticket request is still 
         <tbody>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">CoAP over UDP</td>
-            <td class="text-left" rowspan="1" colspan="1">tpi_client <br> tpi_token</td>
+            <td class="text-left" rowspan="1" colspan="1">tpi_client,tpi_token</td>
             <td class="text-left" rowspan="1" colspan="1">
               <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a> of [RFC-XXXX]</td>
           </tr>
@@ -3787,7 +3787,7 @@ Protecting informative responses from the server prevents on-path active adversa
             <p id="section-16.5-4.1.1">CoAP Transport: This field contains a text string. The value <span class="bcp14">MUST</span> be unique and it uniquely identifies the transport used for CoAP messages.<a href="#section-16.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.5-4.2">
-            <p id="section-16.5-4.2.1">Transport Information Details: This field contains a list of text strings. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-16.5-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-16.5-4.2.1">Transport Information Details: This field contains a list of text strings, where two adjacent strings are separated by a single comma character. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-16.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-16.5-4.3">
             <p id="section-16.5-4.3.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-16.5-4.3.1" class="pilcrow">¶</a></p>
@@ -6339,13 +6339,16 @@ Otherwise, PRX forwards PH_REQ to the server. After recognizing PH_REQ byte-by-b
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-I.1-1.1">
-            <p id="appendix-I.1-1.1.1">Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".<a href="#appendix-I.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-I.1-1.1.1">Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".<a href="#appendix-I.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-I.1-1.2">
-            <p id="appendix-I.1-1.2.1">Updated references.<a href="#appendix-I.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-I.1-1.2.1">Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".<a href="#appendix-I.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-I.1-1.3">
-            <p id="appendix-I.1-1.3.1">Editorial improvements.<a href="#appendix-I.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-I.1-1.3.1">Updated references.<a href="#appendix-I.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-I.1-1.4">
+            <p id="appendix-I.1-1.4.1">Editorial improvements.<a href="#appendix-I.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

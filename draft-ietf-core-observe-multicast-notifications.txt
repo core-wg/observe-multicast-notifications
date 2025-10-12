@@ -2393,8 +2393,8 @@ Table of Contents
    +================+===============================+=================+
    | CoAP Transport | Transport Information Details | Reference       |
    +================+===============================+=================+
-   | CoAP over UDP  | tpi_client                    | Section 4.2.1.1 |
-   |                | tpi_token                     | of [RFC-XXXX]   |
+   | CoAP over UDP  | tpi_client,tpi_token          | Section 4.2.1.1 |
+   |                |                               | of [RFC-XXXX]   |
    +----------------+-------------------------------+-----------------+
 
           Table 4: CoAP Transport Information for CoAP over UDP.
@@ -2656,9 +2656,10 @@ Table of Contents
       messages.
 
    *  Transport Information Details: This field contains a list of text
-      strings.  Each text string is the name of an element that provides
-      transport-specific information related to a pertinent CoAP
-      request.  Optional elements are prepended by '?' and MUST be
+      strings, where two adjacent strings are separated by a single
+      comma character.  Each text string is the name of an element that
+      provides transport-specific information related to a pertinent
+      CoAP request.  Optional elements are prepended by '?' and MUST be
       specified next to each other as last ones.
 
    *  Reference: This contains a pointer to the public specification for
@@ -4486,6 +4487,9 @@ Appendix I.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 I.1.  Version -12 to -13
+
+   *  Revised value syntax for the 'Transport Information Details'
+      column of the new IANA registry "CoAP Transport Information".
 
    *  Suggested range and value for the registration in the IANA
       registry "CoAP Option Numbers".
