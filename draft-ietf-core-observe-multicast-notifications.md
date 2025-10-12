@@ -1322,9 +1322,15 @@ Reference: {{&SELF}}
 IANA is asked to enter the following option numbers to the "CoAP Option Numbers" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 | Number | Name                                | Reference |
-|  TBD   | Multicast-Response-Feedback-Divider | {{&SELF}} |
-|  TBD   | Listen-To-Multicast-Responses       | {{&SELF}} |
+| TBD18  | Multicast-Response-Feedback-Divider | {{&SELF}} |
+| TBD47  | Listen-To-Multicast-Responses       | {{&SELF}} |
 {: align="center" title="Registrations in the CoAP Option Numbers Registry"}
+
+For the Multicast-Response-Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.
+
+For the Listen-To-Multicast-Responses Option, the preferred value range is 0-255. In particular, 47 is the preferred option number.
+
+Note to RFC Editor: Please delete the two paragraphs above and then delete this paragraph.
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
@@ -2495,6 +2501,8 @@ e. Upon receiving the protected informative response, the client takes its paylo
 {:removeinrfc}
 
 ## Version -12 to -13 ## {#sec-12-13}
+
+* Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".
 
 * Updated references.
 
