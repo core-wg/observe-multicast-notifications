@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 19 January 2026                                                
+Expires: 15 April 2026                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                            18 July 2025
+                                                         12 October 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 January 2026.
+   This Internet-Draft will expire on 15 April 2026.
 
 Copyright Notice
 
@@ -338,7 +338,7 @@ Table of Contents
 
          If the participating endpoints using Group OSCORE also support
          the concept of Deterministic Client
-         [I-D.amsuess-core-cachable-oscore], then the possible early
+         [I-D.ietf-core-cacheable-oscore], then the possible early
          distribution of the phantom request can specifically make
          available its smaller, plain version.  Then, all the clients
          are able to compute the same protected phantom request to use
@@ -366,13 +366,13 @@ Table of Contents
 
          If the participating endpoints using Group OSCORE also support
          the concept of Deterministic Client
-         [I-D.amsuess-core-cachable-oscore], the same advantages
-         mentioned above for the case without a proxy applies (see
-         Appendix D).  In addition, this allows for a more efficient
-         setup and enforcement of the group observation, by reducing the
-         amount of message exchanges and allowing the proxy to
-         effectively serve protected multicast notifications from its
-         cache.  An example is provided in Appendix G.2.
+         [I-D.ietf-core-cacheable-oscore], the same advantages mentioned
+         above for the case without a proxy applies (see Appendix D).
+         In addition, this allows for a more efficient setup and
+         enforcement of the group observation, by reducing the amount of
+         message exchanges and allowing the proxy to effectively serve
+         protected multicast notifications from its cache.  An example
+         is provided in Appendix G.2.
 
 4.  Server-Side Requirements
 
@@ -2240,9 +2240,9 @@ Table of Contents
       'last_notif' parameter (if present).
 
    *  The client builds a ticket request (see Appendix C of
-      [I-D.amsuess-core-cachable-oscore]), as intended to reach the
-      proxy adjacent to the origin server.  The ticket request is
-      formatted as follows.
+      [I-D.ietf-core-cacheable-oscore]), as intended to reach the proxy
+      adjacent to the origin server.  The ticket request is formatted as
+      follows.
 
       -  The Token is chosen as the client sees fit.  In fact, there is
          no reason for this Token to be the same as the phantom
@@ -2731,31 +2731,32 @@ Table of Contents
               Object Security for Constrained RESTful Environments
               (Group OSCORE) Using Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-17, 11
-              April 2025, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-ace-key-groupcomm-oscore-17>.
+              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-18, 28
+              August 2025, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-ace-key-groupcomm-oscore-18>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
               Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              14, 2 July 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-core-groupcomm-bis-14>.
+              15, 25 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              groupcomm-bis-15>.
 
    [I-D.ietf-core-href]
               Bormann, C. and H. Birkholz, "Constrained Resource
               Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-23, 7 July 2025,
+              ietf-core-href-25, 27 September 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-23>.
+              href-25>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and R. Höglund, "Group Object Security for Constrained
               RESTful Environments (Group OSCORE)", Work in Progress,
-              Internet-Draft, draft-ietf-core-oscore-groupcomm-26, 5
-              July 2025, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-core-oscore-groupcomm-26>.
+              Internet-Draft, draft-ietf-core-oscore-groupcomm-27, 12
+              September 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-oscore-groupcomm-27>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2833,12 +2834,12 @@ Table of Contents
 
 17.2.  Informative References
 
-   [I-D.amsuess-core-cachable-oscore]
+   [I-D.ietf-core-cacheable-oscore]
               Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
-              Progress, Internet-Draft, draft-amsuess-core-cachable-
-              oscore-11, 6 July 2025,
-              <https://datatracker.ietf.org/doc/html/draft-amsuess-core-
-              cachable-oscore-11>.
+              Progress, Internet-Draft, draft-ietf-core-cacheable-
+              oscore-00, 22 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              cacheable-oscore-00>.
 
    [I-D.ietf-core-coap-pubsub]
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
@@ -2858,32 +2859,32 @@ Table of Contents
    [I-D.ietf-core-dns-over-coap]
               Lenders, M. S., Amsüss, C., Gündoğan, C., Schmidt, T. C.,
               and M. Wählisch, "DNS over CoAP (DoC)", Work in Progress,
-              Internet-Draft, draft-ietf-core-dns-over-coap-16, 7 July
-              2025, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              core-dns-over-coap-16>.
+              Internet-Draft, draft-ietf-core-dns-over-coap-20, 16
+              September 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-dns-over-coap-20>.
 
    [I-D.ietf-core-oscore-capable-proxies]
               Tiloca, M. and R. Höglund, "OSCORE-capable Proxies", Work
               in Progress, Internet-Draft, draft-ietf-core-oscore-
-              capable-proxies-04, 3 March 2025,
+              capable-proxies-05, 3 September 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              oscore-capable-proxies-04>.
+              oscore-capable-proxies-05>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-14, 23 June 2025,
+              ietf-cose-cbor-encoded-cert-15, 18 August 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-14>.
+              cbor-encoded-cert-15>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-17, 3 March 2025,
+              discovery-18, 3 September 2025,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-discovery-17>.
+              oscore-discovery-18>.
 
    [MOBICOM99]
               Ni, S., Tseng, Y., Chen, Y., and J. Sheu, "The Broadcast
@@ -3438,7 +3439,7 @@ Appendix D.  Phantom Request as Deterministic Request
 
    If Group OSCORE is used to protect the group observation (see
    Section 9) and the OSCORE group supports the concept of Deterministic
-   Client [I-D.amsuess-core-cachable-oscore], then the server and each
+   Client [I-D.ietf-core-cacheable-oscore], then the server and each
    client in the OSCORE group can also independently compute the
    protected phantom observation request.
 
@@ -3448,7 +3449,7 @@ Appendix D.  Phantom Request as Deterministic Request
    they can obtain it through dedicated means (see Appendix A).  In
    either case, the clients and the server can independently protect the
    plain CoAP message by using the approach defined in Section 3 of
-   [I-D.amsuess-core-cachable-oscore], thus all computing the same
+   [I-D.ietf-core-cacheable-oscore], thus all computing the same
    protected deterministic request.  The latter is used as the actual
    phantom observation request that the protected multicast
    notifications will match under the group observation in question.
@@ -3481,7 +3482,7 @@ Appendix D.  Phantom Request as Deterministic Request
    and obtaining the information required to listen to multicast
    notifications, unless the proxy has already set itself to do so.
    Also, the proxy will be able to serve multicast notifications from
-   its cache as per [I-D.amsuess-core-cachable-oscore].  An example
+   its cache as per [I-D.ietf-core-cacheable-oscore].  An example
    considering such a setup is shown in Appendix G.
 
    Note that the phantom registration request is, in terms of transport-
@@ -3531,10 +3532,10 @@ Appendix D.  Phantom Request as Deterministic Request
    *  'alg', as per Section 6.3 of [I-D.ietf-ace-key-groupcomm-oscore].
 
    *  'det_senderId' and 'det_hash_alg', defined in Section 4 of
-      [I-D.amsuess-core-cachable-oscore].  These specify the Sender ID
-      of the Deterministic Client in the OSCORE group and the hash
+      [I-D.ietf-core-cacheable-oscore].  These specify the Sender ID of
+      the Deterministic Client in the OSCORE group and the hash
       algorithm used to compute the deterministic request (see
-      Section 3.4.1 of [I-D.amsuess-core-cachable-oscore]).
+      Section 3.4.1 of [I-D.ietf-core-cacheable-oscore]).
 
    Note that, like in Appendix C, no information is provided as related
    to the Pairwise Key Agreement Algorithm and its parameters.  In fact,
@@ -4000,7 +4001,7 @@ Appendix G.  Example with a Proxy and Deterministic Requests
 
    In addition, the phantom request is especially a deterministic
    request (see Appendix D), which is protected with the pairwise mode
-   of Group OSCORE as defined in [I-D.amsuess-core-cachable-oscore].
+   of Group OSCORE as defined in [I-D.ietf-core-cacheable-oscore].
 
 G.1.  Assumptions and Walkthrough
 
@@ -4009,7 +4010,7 @@ G.1.  Assumptions and Walkthrough
 
    1.   The OSCORE group supports deterministic requests.  Thus, the
         server creates the phantom request as a deterministic request
-        [I-D.amsuess-core-cachable-oscore], stores it locally as one of
+        [I-D.ietf-core-cacheable-oscore], stores it locally as one of
         its issued phantom requests, and starts the group observation.
 
    2.   The server makes the phantom request available through other
@@ -4021,7 +4022,7 @@ G.1.  Assumptions and Walkthrough
         can more efficiently make it available in its smaller, plain
         version.  The clients can obtain it from the particular
         alternative source and protect it as per Section 3 of
-        [I-D.amsuess-core-cachable-oscore], thus all computing the same
+        [I-D.ietf-core-cacheable-oscore], thus all computing the same
         deterministic request to be used as phantom observation request.
 
    4.   If the client does not rely on a proxy between itself and the
@@ -4075,7 +4076,7 @@ G.1.  Assumptions and Walkthrough
         clients following the first one contact the proxy, the latter
         does not have to contact the server again as in Section 12,
         since the deterministic phantom request would produce a cache
-        hit as per [I-D.amsuess-core-cachable-oscore].  Thus, the proxy
+        hit as per [I-D.ietf-core-cacheable-oscore].  Thus, the proxy
         can serve such clients with the latest fresh multicast
         notification from its cache.
 
@@ -4334,7 +4335,7 @@ Appendix H.  Example with a Reverse-Proxy and Deterministic Requests
    Like for the example in Appendix G, the phantom request is especially
    a deterministic request (see Appendix D), which is protected with the
    pairwise mode of Group OSCORE as defined in
-   [I-D.amsuess-core-cachable-oscore].
+   [I-D.ietf-core-cacheable-oscore].
 
    The same assumptions compiled in Appendix G.1 apply in this scenario
    too, with the following differences:
@@ -4475,6 +4476,8 @@ Appendix I.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 I.1.  Version -12 to -13
+
+   *  Updated references.
 
    *  Editorial improvements.
 
