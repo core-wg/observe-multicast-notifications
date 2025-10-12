@@ -94,7 +94,7 @@ informative:
   I-D.ietf-core-coap-pubsub:
   I-D.tiloca-core-oscore-discovery:
   I-D.ietf-core-coral:
-  I-D.amsuess-core-cachable-oscore:
+  I-D.ietf-core-cacheable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-core-oscore-capable-proxies:
   I-D.ietf-core-dns-over-coap:
@@ -196,7 +196,7 @@ The following provides an overview of the available variants to enforce a group 
 
    * With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the security protocol Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. This case is defined in {{sec-secured-notifications}}. An example is provided in {{sec-example-with-security}}.
 
-      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Then, all the clients are able to compute the same protected phantom request to use (see {{deterministic-phantom-Request}}).
+      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Then, all the clients are able to compute the same protected phantom request to use (see {{deterministic-phantom-Request}}).
 
 * With proxy - This network configuration is expected in case (some of) the clients participating in the group observation are not capable to listen to multicast traffic. In such a setup, the proxy directly receives multicast notifications from the server, and relays them back to the clients.
 
@@ -204,7 +204,7 @@ The following provides an overview of the available variants to enforce a group 
 
    * With end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the security protocol Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. In particular, the clients are required to separately provide the proxy with the obtained phantom request, thus enabling the proxy to receive the multicast notifications from the server. This case is defined in {{intermediaries-e2e-security}}. An example is provided in {{intermediaries-example-e2e-security}}.
 
-      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, the same advantages mentioned above for the case without a proxy applies (see {{deterministic-phantom-Request}}). In addition, this allows for a more efficient setup and enforcement of the group observation, by reducing the amount of message exchanges and allowing the proxy to effectively serve protected multicast notifications from its cache. An example is provided in {{intermediaries-example-e2e-security-det-exchange}}.
+      If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, the same advantages mentioned above for the case without a proxy applies (see {{deterministic-phantom-Request}}). In addition, this allows for a more efficient setup and enforcement of the group observation, by reducing the amount of message exchanges and allowing the proxy to effectively serve protected multicast notifications from its cache. An example is provided in {{intermediaries-example-e2e-security-det-exchange}}.
 
 # Server-Side Requirements # {#sec-server-side}
 
@@ -1150,7 +1150,7 @@ Once received the informative response, the origin client proceeds in a differen
 
 * The client performs all the additional decryption and verification steps of {{ssec-client-side-informative-oscore}} on the phantom request specified in the 'ph_req' parameter and on the last notification specified in the 'last_notif' parameter (if present).
 
-* The client builds a ticket request (see {{Section C of I-D.amsuess-core-cachable-oscore}}), as intended to reach the proxy adjacent to the origin server. The ticket request is formatted as follows.
+* The client builds a ticket request (see {{Section C of I-D.ietf-core-cacheable-oscore}}), as intended to reach the proxy adjacent to the origin server. The ticket request is formatted as follows.
 
    - The Token is chosen as the client sees fit. In fact, there is no reason for this Token to be the same as the phantom request's.
 
@@ -1712,15 +1712,15 @@ For instance, the clients can be pre-configured with the phantom observation req
 
 Then, the clients either set up the multicast address and group observation for listening to multicast notifications (if able to directly do so), or rely on a proxy to do so on their behalf (see {{intermediaries}} and {{intermediaries-e2e-security}}).
 
-If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}) and the OSCORE group supports the concept of Deterministic Client {{I-D.amsuess-core-cachable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
+If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}) and the OSCORE group supports the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
 
-In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same protected deterministic request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
+In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all computing the same protected deterministic request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
 
 When receiving the deterministic request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
 If the server recognizes the received deterministic request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server MUST reply with an informative response that MUST NOT be protected. If a proxy is deployed between the clients and the server, the proxy is thus able to retrieve from the informative response everything needed to set itself as an observer in the group observation and to start listening to multicast notifications.
 
-If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} where the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses Option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.amsuess-core-cachable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
+If relying on a proxy, each client sends the deterministic request to the proxy as a ticket request (see {{intermediaries-e2e-security}}). However, differently from what is defined in {{intermediaries-e2e-security}} where the ticket request is not a deterministic request, the clients do not include a Listen-to-Multicast-Responses Option. This results in the proxy forwarding the ticket request (i.e., the phantom observation request) to the server and obtaining the information required to listen to multicast notifications, unless the proxy has already set itself to do so. Also, the proxy will be able to serve multicast notifications from its cache as per {{I-D.ietf-core-cacheable-oscore}}. An example considering such a setup is shown in {{intermediaries-example-e2e-security-det}}.
 
 Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client (e.g., if a proxy is deployed). Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
 
@@ -1736,7 +1736,7 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
    * 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.amsuess-core-cachable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.amsuess-core-cachable-oscore}}).
+   * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.ietf-core-cacheable-oscore}}).
 
 Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
 
@@ -2155,17 +2155,17 @@ Unlike in the unprotected example in {{intermediaries-example}}, the proxy does 
 
 This section provides an example when a proxy P is used between the clients and the server, and Group OSCORE is used to protect multicast notifications end-to-end between the server and the clients.
 
-In addition, the phantom request is especially a deterministic request (see {{deterministic-phantom-Request}}), which is protected with the pairwise mode of Group OSCORE as defined in {{I-D.amsuess-core-cachable-oscore}}.
+In addition, the phantom request is especially a deterministic request (see {{deterministic-phantom-Request}}), which is protected with the pairwise mode of Group OSCORE as defined in {{I-D.ietf-core-cacheable-oscore}}.
 
 ## Assumptions and Walkthrough {#intermediaries-example-e2e-security-det-intro}
 
 The example provided in this appendix as reflected by the message exchange shown in {{intermediaries-example-e2e-security-det-exchange}} assumes the following.
 
-1. The OSCORE group supports deterministic requests. Thus, the server creates the phantom request as a deterministic request {{I-D.amsuess-core-cachable-oscore}}, stores it locally as one of its issued phantom requests, and starts the group observation.
+1. The OSCORE group supports deterministic requests. Thus, the server creates the phantom request as a deterministic request {{I-D.ietf-core-cacheable-oscore}}, stores it locally as one of its issued phantom requests, and starts the group observation.
 
 2. The server makes the phantom request available through other means, e.g., a pub-sub broker, together with the transport-specific information for listening to multicast notifications bound to the phantom request (see {{appendix-different-sources}}).
 
-3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per {{Section 3 of I-D.amsuess-core-cachable-oscore}}, thus all computing the same deterministic request to be used as phantom observation request.
+3. Since the phantom request is a deterministic request, the server can more efficiently make it available in its smaller, plain version. The clients can obtain it from the particular alternative source and protect it as per {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all computing the same deterministic request to be used as phantom observation request.
 
 4. If the client does not rely on a proxy between itself and the server, it simply sets the group observation and starts listening to multicast notifications. Building on Step 2 above, the same would happen if the phantom request was not specifically a deterministic request.
 
@@ -2181,7 +2181,7 @@ The example provided in this appendix as reflected by the message exchange shown
 
 9. From the received informative response, the proxy retrieves everything needed to set itself as an observer in the group observation and it starts listening to multicast notifications. If the informative response includes a latest notification, the proxy caches it and forwards it back to the client. Otherwise, the proxy replies with an empty ACK (if it has not done it already and the request from the client was Confirmable).
 
-10. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, the latter does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.amsuess-core-cachable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
+10. Like in the case with a non-deterministic phantom request considered in {{intermediaries-e2e-security}}, the proxy fans out the multicast notifications to the origin clients as they come. Also, as new clients following the first one contact the proxy, the latter does not have to contact the server again as in {{intermediaries-e2e-security}}, since the deterministic phantom request would produce a cache hit as per {{I-D.ietf-core-cacheable-oscore}}. Thus, the proxy can serve such clients with the latest fresh multicast notification from its cache.
 
 ## Message Exchange {#intermediaries-example-e2e-security-det-exchange}
 
@@ -2421,7 +2421,7 @@ C1      C2      P         S
 
 This section describes an example where specifically a reverse-proxy PRX is used between the clients and the server (see {{Section 5.7.3 of RFC7252}}).
 
-Like for the example in {{intermediaries-example-e2e-security-det}}, the phantom request is especially a deterministic request (see {{deterministic-phantom-Request}}), which is protected with the pairwise mode of Group OSCORE as defined in {{I-D.amsuess-core-cachable-oscore}}.
+Like for the example in {{intermediaries-example-e2e-security-det}}, the phantom request is especially a deterministic request (see {{deterministic-phantom-Request}}), which is protected with the pairwise mode of Group OSCORE as defined in {{I-D.ietf-core-cacheable-oscore}}.
 
 The same assumptions compiled in {{intermediaries-example-e2e-security-det-intro}} apply in this scenario too, with the following differences:
 
@@ -2495,6 +2495,8 @@ e. Upon receiving the protected informative response, the client takes its paylo
 {:removeinrfc}
 
 ## Version -12 to -13 ## {#sec-12-13}
+
+* Updated references.
 
 * Editorial improvements.
 
