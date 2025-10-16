@@ -585,9 +585,9 @@ Table of Contents
       scheme is given as a negative integer 'scheme-id'.  In particular,
       a 'scheme-id' with value ID denotes the CRI scheme that has CRI
       scheme number equal to (-1 - ID).  The latter identifies the
-      corresponding URI scheme, per the associated entry in the "CRI
-      Scheme Numbers" registry defined in Section 11.1 of
-      [I-D.ietf-core-href].
+      corresponding registered URI scheme, per the associated entry in
+      the "Uniform Resource Identifier (URI) Schemes" registry defined
+      in [RFC7595] and updated in Section 11.1 of [I-D.ietf-core-href].
 
       The combination of URI scheme and 'authority' component determines
       the CoAP transport used to distribute multicast notifications for
@@ -646,11 +646,12 @@ Table of Contents
    *  Register an entry in the "CoAP Transport Information" registry
       defined in Section 14.5 of this document.
 
-   *  Register an entry in the "CRI Scheme Numbers" registry defined in
-      Section 11.1 of [I-D.ietf-core-href], where the value in the 'CRI
-      scheme number' column is (-1 - ID).  In particular, ID is the
-      negative integer to be used as 'scheme-id' for CRIs conveyed by
-      the 'tpi_server' element and by elements in 'tpi_details'.
+   *  Register an entry in the "Uniform Resource Identifier (URI)
+      Schemes" registry defined in [RFC7595] and updated in Section 11.1
+      of [I-D.ietf-core-href], where the value in the 'CRI Scheme
+      Number' column is (-1 - ID).  In particular, ID is the negative
+      integer to be used as 'scheme-id' for CRIs conveyed by the
+      'tpi_server' element and by elements in 'tpi_details'.
 
 4.2.1.1.  UDP Transport-Specific Information
 
@@ -2370,6 +2371,11 @@ Table of Contents
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
 
+   [RFC7595]  Thaler, D., Ed., Hansen, T., and T. Hardie, "Guidelines
+              and Registration Procedures for URI Schemes", BCP 35,
+              RFC 7595, DOI 10.17487/RFC7595, June 2015,
+              <https://www.rfc-editor.org/rfc/rfc7595>.
+
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
               DOI 10.17487/RFC7641, September 2015,
@@ -3136,6 +3142,9 @@ E.1.  Version -12 to -13
       multicast-notifications-proxy.
 
    *  Clarified avoidance of link-local addresses.
+
+   *  Alignment with the update to the "Uniform Resource Identifier
+      (URI) Schemes" IANA registry made by draft-ietf-core-href-26.
 
    *  Revised value syntax for the 'Transport Information Details'
       column of the new IANA registry "CoAP Transport Information".
