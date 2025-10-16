@@ -63,6 +63,7 @@ normative:
   RFC6838:
   RFC7120:
   RFC7252:
+  RFC7595:
   RFC7641:
   RFC7967:
   RFC8085:
@@ -329,7 +330,7 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   This element specifies a CRI {{I-D.ietf-core-href}}, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given.
 
-  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding URI scheme, per the associated entry in the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}}.
+  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding registered URI scheme, per the associated entry in the "Uniform Resource Identifier (URI) Schemes" registry defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}.
 
   The combination of URI scheme and 'authority' component determines the CoAP transport used to distribute multicast notifications for the group observation. Note that:
 
@@ -353,7 +354,7 @@ If a future specification defines the use of CoAP multicast notifications transp
 
 * Register an entry in the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document.
 
-* Register an entry in the "CRI Scheme Numbers" registry defined in {{Section 11.1 of I-D.ietf-core-href}}, where the value in the 'CRI scheme number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.
+* Register an entry in the "Uniform Resource Identifier (URI) Schemes" registry defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}, where the value in the 'CRI Scheme Number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.
 
 #### UDP Transport-Specific Information  ### {#ssssec-udp-transport-specific}
 
@@ -1611,6 +1612,8 @@ Therefore, the following holds when a group observation for a target resource re
 * Content on proxies moved out to the new document draft-ietf-core-multicast-notifications-proxy.
 
 * Clarified avoidance of link-local addresses.
+
+* Alignment with the update to the "Uniform Resource Identifier (URI) Schemes" IANA registry made by draft-ietf-core-href-26.
 
 * Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".
 
