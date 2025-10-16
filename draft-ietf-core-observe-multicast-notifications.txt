@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 16 April 2026                                                  
+Expires: 19 April 2026                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                         13 October 2025
+                                                         16 October 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2026.
+   This Internet-Draft will expire on 19 April 2026.
 
 Copyright Notice
 
@@ -1096,8 +1096,8 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Appendix B
-      of [I-D.ietf-core-href] is used to notate a CBOR Extended
+   *  The application-extension identifier "cri" defined in Section 3.4
+      of [I-D.ietf-cbor-edn-literals] is used to notate a CBOR Extended
       Diagnostic Notation (EDN) literal for a CRI.
 
    *  'bstr(X)' denotes a CBOR byte string with value the byte
@@ -1764,8 +1764,8 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Appendix B
-      of [I-D.ietf-core-href] is used to notate a CBOR Extended
+   *  The application-extension identifier "cri" defined in Section 3.4
+      of [I-D.ietf-cbor-edn-literals] is used to notate a CBOR Extended
       Diagnostic Notation (EDN) literal for a CRI.
 
    *  'bstr(X)' denotes a CBOR byte string with value the byte
@@ -2316,6 +2316,13 @@ Table of Contents
               August 2025, <https://datatracker.ietf.org/doc/html/draft-
               ietf-ace-key-groupcomm-oscore-18>.
 
+   [I-D.ietf-cbor-edn-literals]
+              Bormann, C., "CBOR Extended Diagnostic Notation (EDN)",
+              Work in Progress, Internet-Draft, draft-ietf-cbor-edn-
+              literals-19, 16 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-cbor-
+              edn-literals-19>.
+
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
               Constrained Application Protocol (CoAP)", Work in
@@ -2327,9 +2334,9 @@ Table of Contents
    [I-D.ietf-core-href]
               Bormann, C. and H. Birkholz, "Constrained Resource
               Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-25, 27 September 2025,
+              ietf-core-href-26, 16 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-25>.
+              href-26>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
