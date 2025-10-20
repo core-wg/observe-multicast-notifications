@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 19 April 2026                                                  
+Expires: 23 April 2026                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                         16 October 2025
+                                                         20 October 2025
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -269,8 +269,8 @@ Table of Contents
       Alternative network setups may leverage intermediaries such as
       proxies, e.g., in order to accommodate clients that are not able
       to directly listen to multicast traffic.  How the method specified
-      in this document can be used in such setups is discussed in NEW-
-      DRAFT.
+      in this document can be used in such setups is discussed in
+      [I-D.ietf-core-multicast-notifications-proxy].
 
    *  The server needs to be provisioned with multicast addresses whose
       token space is placed under its control.  On general purpose
@@ -306,7 +306,8 @@ Table of Contents
    observation are capable to listen to multicast traffic.  In such a
    setup, the clients directly receive multicast notifications from the
    server.  Alternative network setups that rely on intermediaries such
-   as proxies are discussed in NEW-DRAFT.
+   as proxies are discussed in
+   [I-D.ietf-core-multicast-notifications-proxy].
 
    While the server can provide the phantom request in question to the
    interested clients as they reach out for registering to the group
@@ -2456,6 +2457,14 @@ Table of Contents
               Internet-Draft, draft-ietf-core-dns-over-coap-20, 16
               September 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-core-dns-over-coap-20>.
+
+   [I-D.ietf-core-multicast-notifications-proxy]
+              Tiloca, M., Höglund, R., Amsüss, C., and F. Palombini,
+              "Using Proxies for Observe Notifications as CoAP Multicast
+              Responses", Work in Progress, Internet-Draft, draft-ietf-
+              core-multicast-notifications-proxy-00, 20 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-core-
+              multicast-notifications-proxy-00>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and

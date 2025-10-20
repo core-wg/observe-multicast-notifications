@@ -12,22 +12,21 @@
 <meta content='
        The Constrained Application Protocol (CoAP) allows clients to "observe" resources at a server and to receive notifications as unicast responses upon changes of the resource state. In some use cases, such as based on publish-subscribe, it would be convenient for the server to send a single notification addressed to all the clients observing the same target resource. This document updates RFC7252 and RFC7641, and defines how a server sends observe notifications as response messages over multicast, synchronizing  all the observers of the same resource on the same shared Token value. Besides, this document defines how the security protocol Group Object Security for Constrained RESTful Environments (Group OSCORE) can be used to protect multicast notifications end-to-end between the server and the observer clients. 
     ' name="description">
-<meta content="xml2rfc 3.30.2" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-core-observe-multicast-notifications-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.2
-    Python 3.12.11
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.4.0
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.5
-    setuptools 80.9.0
     wcwidth 0.2.14
 -->
 <link href="draft-ietf-core-observe-multicast-notifications.xml" rel="alternate" type="application/rfc+xml">
@@ -1051,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 19 April 2026</td>
+<td class="center">Expires 23 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-16" class="published">16 October 2025</time>
+<time datetime="2025-10-20" class="published">20 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-19">19 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-23">23 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1128,7 +1127,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1479,7 +1478,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <p id="section-2-2.1.2">
 This document focuses on a network setup where the clients are capable to listen to multicast traffic and can directly receive multicast notifications.<a href="#section-2-2.1.2" class="pilcrow">¶</a></p>
 <p id="section-2-2.1.3">
-Alternative network setups may leverage intermediaries such as proxies, e.g., in order to accommodate clients that are not able to directly listen to multicast traffic. How the method specified in this document can be used in such setups is discussed in NEW-DRAFT.<a href="#section-2-2.1.3" class="pilcrow">¶</a></p>
+Alternative network setups may leverage intermediaries such as proxies, e.g., in order to accommodate clients that are not able to directly listen to multicast traffic. How the method specified in this document can be used in such setups is discussed in <span>[<a href="#I-D.ietf-core-multicast-notifications-proxy" class="cite xref">I-D.ietf-core-multicast-notifications-proxy</a>]</span>.<a href="#section-2-2.1.3" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-2.2">
           <p id="section-2-2.2.1">The server needs to be provisioned with multicast addresses whose token space is placed under its control. On general purpose networks, unmanaged multicast addresses such as "All CoAP Nodes" (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-12.8" class="relref">Section 12.8</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>) are not suitable for this purpose.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
@@ -1502,7 +1501,7 @@ If applications arise where a negotiation between the clients and the server doe
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-high-level-overview-of-avai" class="section-name selfRef">High-Level Overview of Available Variants</a>
       </h2>
 <p id="section-3-1">The method defined in this document fundamentally enables a server to set up a group observation. This is associated with a phantom observation request generated by the server, and to which the multicast notifications of the group observation are bound.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Consistent with the scope of this document, the following assumes a network setup where the clients participating in the group observation are capable to listen to multicast traffic. In such a setup, the clients directly receive multicast notifications from the server. Alternative network setups that rely on intermediaries such as proxies are discussed in NEW-DRAFT.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">Consistent with the scope of this document, the following assumes a network setup where the clients participating in the group observation are capable to listen to multicast traffic. In such a setup, the clients directly receive multicast notifications from the server. Alternative network setups that rely on intermediaries such as proxies are discussed in <span>[<a href="#I-D.ietf-core-multicast-notifications-proxy" class="cite xref">I-D.ietf-core-multicast-notifications-proxy</a>]</span>.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">While the server can provide the phantom request in question to the interested clients as they reach out for registering to the group observation, the server may alternatively distribute the phantom request in advance by alternative means (e.g., see <a href="#appendix-different-sources" class="auto internal xref">Appendix A</a>). Clients that have already retrieved the phantom request can immediately start listening to multicast notifications.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">The rest of this section provides an overview of the available variants to enforce a group observation, which differ as to whether exchanged messages are protected end-to-end between the observer clients and the server.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3703,6 +3702,10 @@ Protecting informative responses from the server prevents on-path active adversa
 <dt id="I-D.ietf-core-dns-over-coap">[I-D.ietf-core-dns-over-coap]</dt>
         <dd>
 <span class="refAuthor">Lenders, M. S.</span>, <span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Gündoğan, C.</span>, <span class="refAuthor">Schmidt, T. C.</span>, and <span class="refAuthor">M. Wählisch</span>, <span class="refTitle">"DNS over CoAP (DoC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-dns-over-coap-20</span>, <time datetime="2025-09-16" class="refDate">16 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-20">https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-20</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-core-multicast-notifications-proxy">[I-D.ietf-core-multicast-notifications-proxy]</dt>
+        <dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Amsüss, C.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Using Proxies for Observe Notifications as CoAP Multicast Responses"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-multicast-notifications-proxy-00</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00">https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
