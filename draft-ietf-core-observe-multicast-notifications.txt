@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 23 April 2026                                                  
+Expires: 30 August 2026                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                         20 October 2025
+                                                        26 February 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -20,16 +20,16 @@ Abstract
    The Constrained Application Protocol (CoAP) allows clients to
    "observe" resources at a server and to receive notifications as
    unicast responses upon changes of the resource state.  In some use
-   cases, such as based on publish-subscribe, it would be convenient for
-   the server to send a single notification addressed to all the clients
-   observing the same target resource.  This document updates RFC7252
-   and RFC7641, and defines how a server sends observe notifications as
-   response messages over multicast, synchronizing all the observers of
-   the same resource on the same shared Token value.  Besides, this
-   document defines how the security protocol Group Object Security for
-   Constrained RESTful Environments (Group OSCORE) can be used to
-   protect multicast notifications end-to-end between the server and the
-   observer clients.
+   cases, such as those based on publish-subscribe, it would be
+   convenient for the server to send a single notification addressed to
+   all the clients observing the same target resource.  This document
+   updates RFC7252 and RFC7641, and defines how a server sends observe
+   notifications as response messages over multicast, synchronizing all
+   the observers of the same resource on the same shared Token value.
+   Besides, this document defines how the security protocol Group Object
+   Security for Constrained RESTful Environments (Group OSCORE) can be
+   used to protect multicast notifications end-to-end between the server
+   and the observer clients.
 
 Discussion Venues
 
@@ -57,11 +57,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 30 August 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -182,7 +182,7 @@ Table of Contents
 
    A different use case concerns clients observing the same registration
    resource at the CoRE Resource Directory [RFC9176].  For example,
-   multiple clients can benefit of observation for discovering (to-be-
+   multiple clients can benefit from observation for discovering (to-be-
    created) groups that use the security protocol Group Object Security
    for Constrained RESTful Environments (Group OSCORE)
    [I-D.ietf-core-oscore-groupcomm], by retrieving from the Resource
@@ -237,19 +237,19 @@ Table of Contents
 
    This document additionally defines the following terminology.
 
-   *  Traditional observation.  A resource observation associated with a
+   *  Traditional observation: a resource observation associated with a
       single observer client, as defined in [RFC7641].
 
-   *  Group observation.  A resource observation associated with a group
+   *  Group observation: a resource observation associated with a group
       of clients.  The server sends notifications for the group-observed
       resource over IP multicast to all the observer clients.
 
-   *  Phantom request.  The CoAP request message that the server would
+   *  Phantom request: the CoAP request message that the server would
       have received to start a group observation on one of its
       resources.  A phantom request is generated inside the server and
       does not hit the wire.
 
-   *  Informative response.  A CoAP response message that the server
+   *  Informative response: a CoAP response message that the server
       sends to a given client via unicast, providing the client with
       information on a group observation.
 
@@ -258,12 +258,12 @@ Table of Contents
    In order to use multicast notifications as defined in this document,
    the following prerequisites have to be fulfilled.
 
-   *  The server and the clients need to be on a network on which
-      multicast notifications can reach a sufficiently large portion of
-      the clients.
+   *  The server and the clients need to be on a network where multicast
+      notifications can reach a sufficiently large portion of the
+      clients.
 
       This document focuses on a network setup where the clients are
-      capable to listen to multicast traffic and can directly receive
+      capable of listening to multicast traffic and can directly receive
       multicast notifications.
 
       Alternative network setups may leverage intermediaries such as
@@ -303,7 +303,7 @@ Table of Contents
 
    Consistent with the scope of this document, the following assumes a
    network setup where the clients participating in the group
-   observation are capable to listen to multicast traffic.  In such a
+   observation are capable of listening to multicast traffic.  In such a
    setup, the clients directly receive multicast notifications from the
    server.  Alternative network setups that rely on intermediaries such
    as proxies are discussed in
@@ -349,7 +349,7 @@ Table of Contents
       receives a registration request from a first client wishing to
       start a traditional observation on that resource.
 
-   *  When a certain amount of traditional observations has been
+   *  When a certain number of traditional observations has been
       established on the target resource, the server decides to make the
       corresponding observer clients part of a group observation on that
       resource.
@@ -481,7 +481,7 @@ Table of Contents
       the CBOR byte string is formatted as defined in Section 4.2.2.
       This parameter MAY be included.
 
-   *  'next_not_before', with value the amount of seconds that will
+   *  'next_not_before', with value the number of seconds that will
       minimally elapse before the server sends the next multicast
       notification for the group observation of the target resource,
       encoded as a CBOR unsigned integer.  This parameter MAY be
@@ -490,8 +490,8 @@ Table of Contents
       This information can help a new client to align itself with the
       server's timeline, especially in scenarios where multicast
       notifications are regularly sent.  Also, it can help synchronizing
-      different clients when orchestrating a content distribution
-      through multicast notifications.
+      different clients when orchestrating content distribution through
+      multicast notifications.
 
    *  'ending', with value the time when the group observation of the
       target resource is planned to be canceled, encoded as a CBOR
@@ -752,7 +752,7 @@ Table of Contents
    Upon a change in the status of the target resource under group
    observation, the server sends a multicast notification intended to
    all the clients taking part in the group observation of that
-   resource.  In particular, each of such multicast notifications is
+   resource.  In particular, each such multicast notification is
    formatted as follows.
 
    *  It MUST be Non-confirmable.
@@ -1031,7 +1031,7 @@ Table of Contents
 
 5.4.  Cancellation
 
-   At a certain point in time, a client may become not interested in
+   At a certain point in time, a client may no longer be interested in
    receiving further multicast notifications about a target resource.
    When this happens, the client can simply "forget" about being part of
    the group observation for that target resource, as per Section 3.6 of
@@ -1254,7 +1254,7 @@ Table of Contents
 
    Since the Observe registration is only done for its side effect of
    looking as an attempted observation at the server, the client MUST
-   send the unicast request in a non confirmable way and with the
+   send the unicast request as a Non-confirmable message and with the
    maximum No-Response setting [RFC7967].  In the request, the client
    MUST include a Multicast-Response-Feedback-Divider Option, whose
    value MUST be set to 0.  As per Section 3.2 of [RFC7252], this is
@@ -1376,7 +1376,7 @@ Table of Contents
    account and determines whether to cancel the group observation.
 
    As an example, if the server currently estimates that N = COUNT = 32
-   observers are active and considers a constant M = 8, it sends out a
+   observers are active and considers a constant M = 8, it sends a
    notification with Multicast-Response-Feedback-Divider with value Q =
    2.  Then, out of 18 actually active clients, 5 send a re-registration
    request based on their random draw, of which one request gets lost,
@@ -1410,8 +1410,8 @@ Table of Contents
 
    In some settings, the OSCORE group to refer to can be pre-configured
    on the clients and the server.  In such a case, a server which is
-   aware of such pre-configuration can simply assume a client to be
-   already member of the correct OSCORE group.
+   aware of such pre-configuration can simply assume a client to already
+   be a member of the correct OSCORE group.
 
    In any other case, the server MAY communicate to clients what OSCORE
    group they are required to join, by providing additional guidance in
@@ -1450,7 +1450,7 @@ Table of Contents
    The mechanism defined in this section is OPTIONAL to support for the
    client and server.
 
-   Additionally to what is defined in Section 4, the CBOR map in the
+   In addition to what is defined in Section 4, the CBOR map in the
    informative response payload contains the following fields, whose
    CBOR abbreviations are defined in Section 11.
 
@@ -2187,7 +2187,7 @@ Table of Contents
 
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
-      encoding.
+      encoding of the item.
 
    *  CBOR Key: This is the value used as the CBOR map key of the item.
       These values MUST be unique.  The value can be a positive integer,
@@ -2314,9 +2314,9 @@ Table of Contents
               Object Security for Constrained RESTful Environments
               (Group OSCORE) Using Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-18, 28
-              August 2025, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-ace-key-groupcomm-oscore-18>.
+              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-20, 25
+              February 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-ace-key-groupcomm-oscore-20>.
 
    [I-D.ietf-cbor-edn-literals]
               Bormann, C., "CBOR Extended Diagnostic Notation (EDN)",
@@ -2329,24 +2329,24 @@ Table of Contents
               Dijk, E. and M. Tiloca, "Group Communication for the
               Constrained Application Protocol (CoAP)", Work in
               Progress, Internet-Draft, draft-ietf-core-groupcomm-bis-
-              15, 25 September 2025,
+              18, 10 February 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              groupcomm-bis-15>.
+              groupcomm-bis-18>.
 
    [I-D.ietf-core-href]
               Bormann, C. and H. Birkholz, "Constrained Resource
               Identifiers", Work in Progress, Internet-Draft, draft-
-              ietf-core-href-26, 16 October 2025,
+              ietf-core-href-30, 21 November 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              href-26>.
+              href-30>.
 
    [I-D.ietf-core-oscore-groupcomm]
               Tiloca, M., Selander, G., Palombini, F., Mattsson, J. P.,
               and R. Höglund, "Group Object Security for Constrained
               RESTful Environments (Group OSCORE)", Work in Progress,
-              Internet-Draft, draft-ietf-core-oscore-groupcomm-27, 12
-              September 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-core-oscore-groupcomm-27>.
+              Internet-Draft, draft-ietf-core-oscore-groupcomm-28, 23
+              December 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-core-oscore-groupcomm-28>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2470,9 +2470,9 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-15, 18 August 2025,
+              ietf-cose-cbor-encoded-cert-16, 25 January 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-15>.
+              cbor-encoded-cert-16>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -2612,9 +2612,9 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
    In heavily asymmetric networks like municipal notification services,
    discovery and notifications do not necessarily need to use the same
    network link.  For example, a departure monitor could use its (costly
-   and usually-off) cellular uplink to discover the topics it needs to
-   update its display to, and then listen on a LoRA-WAN interface for
-   receiving the actual multicast notifications.
+   and usually switched off) cellular uplink to discover the topics it
+   needs to update its display to, and then listen on a LoRaWAN
+   interface for receiving the actual multicast notifications.
 
 A.2.  Introspection at the Multicast Notification Sender
 
@@ -2818,7 +2818,7 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    When replying, the server includes the group keying material and
    related information in the informative response (see Section 4.2).
 
-   Additionally to what is defined in Section 4, the CBOR map in the
+   In addition to what is defined in Section 4, the CBOR map in the
    informative response payload contains the following fields, whose
    CBOR abbreviations are defined in Section 11.
 
@@ -3112,9 +3112,9 @@ Appendix D.  Phantom Request as Deterministic Request
       'alg_pairwise_key_agreement' within the 'algorithms' arrays is set
       to the CBOR simple value null (0xf6).
 
-   If a deterministic request is used as phantom observation request for
-   a group observation, the server does not assist clients that are
-   interested to take part in the group observation but do not support
+   If a deterministic request is used as a phantom observation request
+   for a group observation, the server does not assist clients that are
+   interested in taking part in the group observation but do not support
    deterministic requests.  This is consistent with the fact that the
    setup in question already relies on a lot of agreed pre-
    configuration.
