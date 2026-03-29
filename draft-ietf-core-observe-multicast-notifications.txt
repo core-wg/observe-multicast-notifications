@@ -362,11 +362,11 @@ Table of Contents
 
    The server initializes the counter to 0 when starting the group
    observation and increments it after a new client starts taking part
-   in that group observation.  The server keeps the counter up-to-date
-   over time, for instance by using the method described in Section 8.
-   This allows the server to possibly terminate a group observation if,
-   at some point in time, not enough clients are estimated to be still
-   active and interested.
+   in that group observation.  The server is expected to keep the
+   counter up-to-date over time, for instance by using the method
+   described in Section 8.  This allows the server to possibly terminate
+   a group observation if, at some point in time, not enough clients are
+   estimated to be still active and interested.
 
 4.1.  Request
 

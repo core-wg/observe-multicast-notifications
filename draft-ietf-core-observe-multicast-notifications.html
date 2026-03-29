@@ -1536,7 +1536,7 @@ If the participating endpoints using Group OSCORE also support the concept of De
 </li>
       </ul>
 <p id="section-4-3">The server maintains an observer counter for each group observation to a target resource, as a rough estimation of the observers actively taking part in the group observation.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">The server initializes the counter to 0 when starting the group observation and increments it after a new client starts taking part in that group observation. The server keeps the counter up-to-date over time, for instance by using the method described in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>. This allows the server to possibly terminate a group observation if, at some point in time, not enough clients are estimated to be still active and interested.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-4">The server initializes the counter to 0 when starting the group observation and increments it after a new client starts taking part in that group observation. The server is expected to keep the counter up-to-date over time, for instance by using the method described in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>. This allows the server to possibly terminate a group observation if, at some point in time, not enough clients are estimated to be still active and interested.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <div id="ssec-server-side-request">
 <section id="section-4.1">
         <h3 id="name-request">
