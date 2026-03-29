@@ -767,7 +767,7 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
 * Optionally, 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.
 
-* Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+* Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.
 
 * Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistent with {{Section 2.4 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that provides the public key and a comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
@@ -1609,6 +1609,8 @@ Therefore, the following holds when a group observation for a target resource re
 {:removeinrfc}
 
 ## Version -13 to -14 ## {#sec-13-14}
+
+* The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.
 
 * Removed unnecessary normative language.
 
