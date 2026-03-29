@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 30 August 2026                                                 
+Expires: 30 September 2026                                              
                                                             F. Palombini
                                                              Ericsson AB
-                                                        26 February 2026
+                                                           29 March 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -23,13 +23,13 @@ Abstract
    cases, such as those based on publish-subscribe, it would be
    convenient for the server to send a single notification addressed to
    all the clients observing the same target resource.  This document
-   updates RFC7252 and RFC7641, and defines how a server sends observe
-   notifications as response messages over multicast, synchronizing all
-   the observers of the same resource on the same shared Token value.
-   Besides, this document defines how the security protocol Group Object
-   Security for Constrained RESTful Environments (Group OSCORE) can be
-   used to protect multicast notifications end-to-end between the server
-   and the observer clients.
+   updates RFC7252 and RFC7641, and it defines how a server sends
+   observe notifications as response messages over multicast,
+   synchronizing all the observers of the same resource on the same
+   shared Token value.  Besides, this document defines how the security
+   protocol Group Object Security for Constrained RESTful Environments
+   (Group OSCORE) can be used to protect multicast notifications end-to-
+   end between the server and the observer clients.
 
 Discussion Venues
 
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2026.
+   This Internet-Draft will expire on 30 September 2026.
 
 Copyright Notice
 
@@ -138,19 +138,20 @@ Table of Contents
    Appendix C.  OSCORE Group Self-Managed by the Server
    Appendix D.  Phantom Request as Deterministic Request
    Appendix E.  Document Updates
-     E.1.  Version -12 to -13
-     E.2.  Version -11 to -12
-     E.3.  Version -10 to -11
-     E.4.  Version -09 to -10
-     E.5.  Version -08 to -09
-     E.6.  Version -07 to -08
-     E.7.  Version -06 to -07
-     E.8.  Version -05 to -06
-     E.9.  Version -04 to -05
-     E.10. Version -03 to -04
-     E.11. Version -02 to -03
-     E.12. Version -01 to -02
-     E.13. Version -00 to -01
+     E.1.  Version -13 to -14
+     E.2.  Version -12 to -13
+     E.3.  Version -11 to -12
+     E.4.  Version -10 to -11
+     E.5.  Version -09 to -10
+     E.6.  Version -08 to -09
+     E.7.  Version -07 to -08
+     E.8.  Version -06 to -07
+     E.9.  Version -05 to -06
+     E.10. Version -04 to -05
+     E.11. Version -03 to -04
+     E.12. Version -02 to -03
+     E.13. Version -01 to -02
+     E.14. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -159,7 +160,7 @@ Table of Contents
    The Constrained Application Protocol (CoAP) [RFC7252] has been
    extended with a number of mechanisms, including resource Observation
    [RFC7641].  This enables CoAP clients to register at a CoAP server as
-   "observers" of a resource, and hence being automatically notified
+   "observers" of a resource, and hence to be automatically notified
    with an unsolicited response upon changes of the resource state.
 
    CoAP supports group communication [I-D.ietf-core-groupcomm-bis],
@@ -173,12 +174,13 @@ Table of Contents
    a server sends observe notifications for the same target resource to
    multiple observers as responses over IP multicast.
 
-   For instance, in CoAP publish-subscribe [I-D.ietf-core-coap-pubsub],
-   multiple clients can subscribe to a topic, by observing the related
-   resource hosted at the responsible broker.  When a new value is
-   published on that topic, it would be convenient for the broker to
-   send a single multicast notification at once, to all the subscriber
-   clients observing that topic.
+   For instance, in the publish-subscribe architecture for CoAP
+   [I-D.ietf-core-coap-pubsub], multiple clients can subscribe to a
+   topic, by observing the related resource hosted at the responsible
+   broker.  When new data is published on that topic, it would be
+   convenient for the broker to send a single multicast notification at
+   once, addressed to all the subscriber clients observing the resource
+   related to that topic.
 
    A different use case concerns clients observing the same registration
    resource at the CoRE Resource Directory [RFC9176].  For example,
@@ -273,7 +275,7 @@ Table of Contents
       [I-D.ietf-core-multicast-notifications-proxy].
 
    *  The server needs to be provisioned with multicast addresses whose
-      token space is placed under its control.  On general purpose
+      Token space is placed under its control.  On general purpose
       networks, unmanaged multicast addresses such as "All CoAP Nodes"
       (see Section 12.8 of [RFC7252]) are not suitable for this purpose.
 
@@ -298,7 +300,7 @@ Table of Contents
 
    The method defined in this document fundamentally enables a server to
    set up a group observation.  This is associated with a phantom
-   observation request generated by the server, and to which the
+   observation request that is generated by the server and to which the
    multicast notifications of the group observation are bound.
 
    Consistent with the scope of this document, the following assumes a
@@ -335,15 +337,15 @@ Table of Contents
       If the participating endpoints using Group OSCORE also support the
       concept of Deterministic Client [I-D.ietf-core-cacheable-oscore],
       then the possible early distribution of the phantom request can
-      specifically make available its smaller, plain version.  Then, all
-      the clients are able to compute the same protected phantom request
-      to use (see Appendix D).
+      specifically make available its smaller, plain version.
+      Consequently, all the clients are able to compute the same
+      protected phantom request to use (see Appendix D).
 
 4.  Server-Side Requirements
 
    The server can, at any time, start a group observation on one of its
    resources.  Practically, the server may want to do that under the
-   following circumstances.
+   following circumstances:
 
    *  In the absence of observations for the target resource, the server
       receives a registration request from a first client wishing to
@@ -359,12 +361,12 @@ Table of Contents
    taking part in the group observation.
 
    The server initializes the counter to 0 when starting the group
-   observation, and increments it after a new client starts taking part
-   in that group observation.  Also, the server should keep the counter
-   up-to-date over time, for instance by using the method described in
-   Section 8.  This allows the server to possibly terminate a group
-   observation in case, at some point in time, not enough clients are
-   estimated to be still active and interested.
+   observation and increments it after a new client starts taking part
+   in that group observation.  The server keeps the counter up-to-date
+   over time, for instance by using the method described in Section 8.
+   This allows the server to possibly terminate a group observation if,
+   at some point in time, not enough clients are estimated to be still
+   active and interested.
 
 4.1.  Request
 
@@ -392,11 +394,11 @@ Table of Contents
    3.  The server processes the phantom observation request above,
        without transmitting it on the wire.  The request is addressed to
        the resource for which the server wants to start the group
-       observation, as if sent by the group of observers, i.e., with
-       GRP_ADDR as source address and GRP_PORT as source port.
+       observation, as if it was sent by the group of observers, i.e.,
+       with GRP_ADDR as source address and GRP_PORT as source port.
 
    4.  Upon processing the self-generated phantom registration request,
-       the server interprets it as an observe registration received from
+       the server interprets it as an Observe registration request from
        the group of potential observer clients.  In particular, from
        then on, the server MUST use T as its own local Token value
        associated with that observation, with respect to the (previous
@@ -407,11 +409,12 @@ Table of Contents
        wire.  The server stores the phantom observation request as is,
        throughout the lifetime of the group observation.
 
-   6.  The server builds a CoAP response message INIT_NOTIF as initial
-       multicast notification for the target resource, in response to
-       the phantom observation request.  This message is formatted as
-       other multicast notifications (see Section 4.3) and MUST include
-       the current representation of the target resource as payload.
+   6.  The server builds a CoAP response message INIT_NOTIF as the
+       initial multicast notification for the target resource, in
+       response to the phantom observation request.  This message is
+       formatted like other multicast notifications (see Section 4.3)
+       and MUST include the current representation of the target
+       resource as its payload.
 
        The server stores the message INIT_NOTIF and does not transmit
        it.  The server considers this message as the latest multicast
@@ -433,10 +436,11 @@ Table of Contents
    The server sends to each of such clients an informative response
    message, encoded as a unicast response with response code 5.03
    (Service Unavailable).  As per [RFC7641], such a response does not
-   include an Observe Option.  The response MUST be Confirmable, MUST
-   NOT have link-local source or destination addresses, and MUST NOT
-   provide link-local or site-local addresses in the transport-specific
-   information specified in its payload (see below).
+   include an Observe Option.  The response MUST be a Confirmable
+   message sent as a separate response (see Section 5.2.2 of [RFC7252]),
+   MUST NOT have link-local source or destination addresses, and MUST
+   NOT provide link-local or site-local addresses in the transport-
+   specific information specified in its payload (see below).
 
    The Content-Format of the informative response is set to
    "application/informative-response+cbor", which is registered in
@@ -453,7 +457,7 @@ Table of Contents
 
    *  'tp_info', with value a CBOR array.  This includes the transport-
       specific information required to correctly receive multicast
-      notifications bound to the phantom observation request.
+      notifications that are bound to the phantom observation request.
       Typically, this comprises the Token value associated with the
       group observation, as well as the source and destination
       addressing information of the related multicast notifications.
@@ -465,8 +469,8 @@ Table of Contents
       Section 4.1), encoded as a CBOR byte string.  The value of the
       CBOR byte string is formatted as defined in Section 4.2.2.
 
-      This parameter MAY be omitted, in case the phantom request is, in
-      terms of transport-independent information, identical to the
+      This parameter MAY be omitted if the phantom request is, in terms
+      of transport-independent information, identical to the
       registration request from the client.  Otherwise, this parameter
       MUST be included.
 
@@ -520,7 +524,8 @@ Table of Contents
    now taking part in the group observation of the target resource, of
    which it increments the observer counter by 1.  Then, the server
    replies to the client with the same informative response message
-   defined above, which MUST be Confirmable.
+   defined above, which MUST be a Confirmable message sent as a separate
+   response (see Section 5.2.2 of [RFC7252]).
 
    Note that this also applies when, with no ongoing traditional
    observations on the target resource, the server receives a
@@ -532,34 +537,34 @@ Table of Contents
    The CBOR array specified in the 'tp_info' parameter of an informative
    response is formatted according to the following CDDL notation.
 
-  tp_info = [
-      tpi_server: CRI-no-local,  ; Addressing information of the server
-    ? tpi_details                ; Further information about the request
-  ]
+   tp_info = [
+       tpi_server: CRI-no-local,  ; Addressing information of the server
+     ? tpi_details                ; Further information about the request
+   ]
 
-  tpi_details = (
-    + elements  ; The number, format, and encoding of the elements
-                ; depend on the scheme-id and authority of the CRI
-                ; specified as tpi_server
-  )
+   tpi_details = (
+     + elements  ; The number, format, and encoding of the elements
+                 ; depend on the scheme-id and authority of the CRI
+                 ; specified as tpi_server
+   )
 
-  CRI-no-local = [
-    scheme-id,
-    authority
-  ]
+   CRI-no-local = [
+     scheme-id,
+     authority
+   ]
 
-  scheme-id = nint  ; -1 - scheme-number
+   scheme-id = nint  ; -1 - scheme-number
 
-  authority = [?userinfo, host, ?port]
-  userinfo  = (false, text .feature "userinfo")
-  host      = (host-ip // host-name)
-  host-name = (*text) ; lowercase, NFC labels
-  host-ip   = (bytes .size 4 //
-                 (bytes .size 16, ?zone-id))
-  zone-id   = text
-  port      = 0..65535
+   authority = [?userinfo, host, ?port]
+   userinfo  = (false, text .feature "userinfo")
+   host      = (host-ip // host-name)
+   host-name = (*text) ; lowercase, NFC labels
+   host-ip   = (bytes .size 4 //
+                  (bytes .size 16, ?zone-id))
+   zone-id   = text
+   port      = 0..65535
 
-                  Figure 2: General Format of 'tp_info'
+                   Figure 2: General Format of 'tp_info'
 
    The following holds for the two elements 'tpi_server' and
    'tpi_details'.
@@ -575,8 +580,8 @@ Table of Contents
          sent for the group observation.
 
          Such addressing information MUST be equal to the source
-         addressing information from which the informative response is
-         sent by the server (see Section 4.3).
+         addressing information of the informative response sent by the
+         server (see Section 4.3).
 
       This element specifies a CRI [I-D.ietf-core-href], of which both
       'scheme' and 'authority' are given, while 'path', 'query', and
@@ -630,15 +635,15 @@ Table of Contents
       Information Details' column of the "CoAP Transport Information"
       registry.
 
-   Section 12 registers an entry in the "CoAP Transport Information"
-   registry, for the transport "CoAP over UDP".  When such a transport
-   is used, i.e., CoAP responses are transported over UDP as per
-   [RFC7252] and [I-D.ietf-core-groupcomm-bis], the full encoding of the
-   'tp_info' CBOR array is as defined in Section 4.2.1.1.
+   Section 12 defines an entry to be registered in the "CoAP Transport
+   Information" registry, for the transport "CoAP over UDP".  When such
+   a transport is used, i.e., CoAP responses are transported over UDP as
+   per [RFC7252] and [I-D.ietf-core-groupcomm-bis], the full encoding of
+   the 'tp_info' CBOR array is as defined in Section 4.2.1.1.
 
    If a future specification defines the use of CoAP multicast
    notifications transported over different transport protocols, then
-   that specification MUST perform the following actions, unless those
+   that specification must perform the following actions, unless those
    have been already performed for different reasons:
 
    *  Define the elements in 'tpi_details', as to what information they
@@ -666,7 +671,7 @@ Table of Contents
       notifications that are sent for the group observation.
 
       This information consists of the IP address SRV_ADDR (expressed as
-      a literal or resulting from a name resolution) and the port number
+      a literal or as a host-name to be resolved) and the port number
       SRV_PORT of the server hosting the target resource, from where the
       server will send multicast notifications for the target resource.
 
@@ -680,9 +685,9 @@ Table of Contents
          notifications that the server sends for the group observation.
 
          This information consists of the IP multicast address GRP_ADDR
-         (expressed as a literal or resulting from a name resolution)
-         and the port number GRP_PORT, where the server will send
-         multicast notifications for the target resource.
+         (expressed as a literal or as a host-name to be resolved) and
+         the port number GRP_PORT, where the server will send multicast
+         notifications for the target resource.
 
       -  'tpi_token' is a CBOR byte string, whose value is the Token
          value of the phantom observation request generated by the
@@ -755,7 +760,7 @@ Table of Contents
    resource.  In particular, each such multicast notification is
    formatted as follows.
 
-   *  It MUST be Non-confirmable.
+   *  It MUST be a Non-confirmable message.
 
    *  It MUST include an Observe Option, as per [RFC7641].
 
@@ -803,20 +808,21 @@ Table of Contents
 
 4.4.  Congestion Control
 
-   In order to not cause congestion, the server should conservatively
+   In order to not cause congestion, the server ought to conservatively
    control the sending of multicast notifications.  In particular:
 
-   *  The multicast notifications MUST be Non-confirmable.
+   *  The multicast notifications MUST be Non-confirmable messages.
 
    *  In constrained environments such as low-power, lossy networks
-      (LLNs), the server should only support multicast notifications for
-      resources that are small.  Following related guidelines from
-      Section 3.6 of [I-D.ietf-core-groupcomm-bis], this can consist,
-      for example, in having the payload of multicast notifications as
-      limited to approximately 5% of the IP Maximum Transmit Unit (MTU)
-      size, so that it fits into a single link-layer frame in case IPv6
-      over Low-Power Wireless Personal Area Networks (6LoWPAN) (see
-      Section 4 of [RFC4944]) is used.
+      (LLNs), the server SHOULD only support multicast notifications for
+      resources whose representation is small in size.  Following
+      related guidelines from Section 3.6 of
+      [I-D.ietf-core-groupcomm-bis], this can consist, for example, in
+      having the payload of multicast notifications as limited to
+      approximately 5% of the IP Maximum Transmit Unit (MTU) size, so
+      that it fits into a single link-layer frame when using IPv6 over
+      Low-Power Wireless Personal Area Networks (6LoWPAN) (see Section 4
+      of [RFC4944]).
 
    *  The server SHOULD provide multicast notifications with the
       smallest possible IP multicast scope that fulfills the application
@@ -831,12 +837,12 @@ Table of Contents
    *  Following related guidelines from Section 4.5.1 of [RFC7641], the
       server SHOULD NOT send more than one multicast notification every
       3 seconds and SHOULD use an even less aggressive rate when
-      possible (see also Section 3.1.2 of [RFC8085]).  The transmission
-      rate of multicast notifications should also take into account the
-      avoidance of a possible "broadcast storm" problem [MOBICOM99].
-      This prevents a following considerable increase of the channel
-      load, whose origin would be likely attributed to a router rather
-      than to the server.
+      possible (see also Section 3.1.2 of [RFC8085]).  Furthermore, a
+      goal for an appropriate transmission rate of multicast
+      notifications is the avoidance of a possible "broadcast storm"
+      problem [MOBICOM99].  This prevents a following considerable
+      increase of the channel load, whose origin would be likely
+      attributed to a router rather than to the server.
 
 4.5.  Cancellation
 
@@ -858,8 +864,9 @@ Table of Contents
    The server sends the response to the same multicast IP address
    GRP_ADDR and port number GRP_PORT used to send the multicast
    notifications related to the target resource.  Finally, the server
-   releases the resources allocated for the group observation and
-   especially frees up the Token value T used at its CoAP endpoint.
+   releases the memory and network resources allocated for the group
+   observation, and it especially frees up the Token value T used at its
+   CoAP endpoint.
 
 5.  Client-Side Requirements
 
@@ -871,8 +878,9 @@ Table of Contents
    destination addresses.  If the server is not configured to accept
    registrations on that target resource specifically for a group
    observation, this would still result in a positive notification
-   response to the client as described in [RFC7641], in case the server
-   is able and willing to add the client to the list of observers.
+   response to the client as described in [RFC7641], in the case that
+   the server is able and willing to add the client to the list of
+   observers.
 
    In a particular setup, the information typically specified in the
    'tp_info' parameter of the informative response (see Section 4.2) can
@@ -969,7 +977,7 @@ Table of Contents
           response, the client uses the transport-independent
           information specified in the parameter.
 
-   3.  If the informative response includes the parameter 'ph_req', and
+   3.  If the informative response includes the parameter 'ph_req' and
        the transport-independent information specified therein differs
        from the one in the original Observe registration request, then
        the client checks whether a response to the rebuilt phantom
@@ -1003,10 +1011,11 @@ Table of Contents
 
    In addition to 'tpi_server', further elements of the 'tp_info' array
    can convey a CRI.  The client MUST treat any CRI within the 'tp_info'
-   array as invalid if the 'authority' component is a host-name that,
-   when resolved, indicates multiple transports.  As a possible way to
-   verify if that is the case, the client can rely on DNS resolution
-   (e.g., as defined in [I-D.ietf-core-dns-over-coap]).
+   array as invalid, if the 'authority' component is a host-name such
+   that, when resolved, its combination with the URI scheme indicates
+   multiple transports (see Section 4.2.1).  As a possible way to verify
+   if that is the case, the client can rely on DNS resolution (e.g., as
+   defined in [I-D.ietf-core-dns-over-coap]).
 
    If any of the expected fields in the informative response are absent,
    malformed, or invalid, the client MAY try sending a new registration
@@ -1039,11 +1048,11 @@ Table of Contents
 
    When, later on, the server sends the next multicast notification, the
    client will not recognize the Token value T in the message.  Since
-   the multicast notification is Non-confirmable, it is OPTIONAL for the
-   client to reject it with a Reset message, as defined in Section 3.5
-   of [RFC7641].
+   the multicast notification is a Non-confirmable message, it is
+   optional for the client to reject it with a Reset message (see
+   Section 3.5 of [RFC7641]).
 
-   In case the server has canceled a group observation as defined in
+   If the server has canceled a group observation as defined in
    Section 4.5, the client simply forgets about the group observation
    and frees up the used Token value T for that endpoint, upon receiving
    the multicast error response defined in Section 4.5.
@@ -1051,7 +1060,7 @@ Table of Contents
 6.  Web Linking
 
    The possible use of multicast notifications in a group observation
-   may be indicated by a target attribute "gp-obs" in a web link
+   MAY be indicated by a target attribute "gp-obs" in a web link
    [RFC8288] to a resource, e.g., using a link-format document
    [RFC6690].
 
@@ -1204,8 +1213,8 @@ Table of Contents
 8.1.  Multicast-Response-Feedback-Divider Option
 
    In order to enable the rough counting of still active and interested
-   clients, a new CoAP option is introduced, which SHOULD be supported
-   by clients that listen to multicast responses.
+   clients, a new CoAP option is defined, which SHOULD be supported by
+   clients that listen to multicast responses.
 
    The option is called Multicast-Response-Feedback-Divider and has the
    properties summarized in Table 1, which extends Table 4 of [RFC7252].
@@ -1232,16 +1241,16 @@ Table of Contents
 8.2.  Processing on the Client Side
 
    Upon receiving a response with a Multicast-Response-Feedback-Divider
-   Option, a client that is interested in continuing receiving multicast
-   notifications for the target resource SHOULD acknowledge its
-   interest, as described below.
+   Option, a client that supports the option and is interested in
+   continuing receiving multicast notifications for the target resource
+   SHOULD acknowledge its interest, as described below.
 
-   The client picks an integer random number I, from 0 inclusive to the
-   number Z = (2^Q) exclusive, where Q is the value specified in the
-   option.  If I is different from 0, the client takes no further
-   action.  Otherwise, the client should wait a random fraction of the
-   Leisure time (see Section 8.2 of [RFC7252]) and then registers a
-   regular unicast observation on the same target resource.
+   The client picks an integer random number I, from 0 inclusive to Z =
+   (2^Q) exclusive, where Q is the value specified in the option.  If I
+   is different from 0, the client takes no further action.  Otherwise,
+   the client should wait a random fraction of the Leisure time (see
+   Section 8.2 of [RFC7252]) and then registers a regular unicast
+   observation on the same target resource.
 
    To this end, the client essentially follows the steps that got it
    originally subscribed to group notifications for the target resource.
@@ -1252,7 +1261,7 @@ Table of Contents
    registration request, regardless of the source IP address and port
    number of the received multicast notification.
 
-   Since the Observe registration is only done for its side effect of
+   Since this Observe registration is only done for its side effect of
    looking as an attempted observation at the server, the client MUST
    send the unicast request as a Non-confirmable message and with the
    maximum No-Response setting [RFC7967].  In the request, the client
@@ -1339,11 +1348,11 @@ Table of Contents
 
    Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the
    R confirmations that have arrived as unicast observation requests to
-   the target resource, since the time when the multicast notification
-   with the Multicast-Response-Feedback-Divider Option has been sent.
-   In particular, the server considers a unicast observation request as
-   a confirmation from a client only if it includes a Multicast-
-   Response-Feedback-Divider Option with value 0.
+   the target resource, since the time when the latest multicast
+   notification with the Multicast-Response-Feedback-Divider Option has
+   been sent.  In particular, the server considers a unicast observation
+   request as a confirmation from a client only if the request includes
+   a Multicast-Response-Feedback-Divider Option with value 0.
 
    Then, the server computes a feedback indicator as E = R * (2^Q).
    According to what is defined by application policies, the server
@@ -1416,9 +1425,9 @@ Table of Contents
    In any other case, the server MAY communicate to clients what OSCORE
    group they are required to join, by providing additional guidance in
    the informative response as described in Section 9.1.  Note that
-   clients can already be members of the right OSCORE group, in case
-   they have previously joined it to securely communicate with the same
-   server or with other servers to access their resources.
+   clients could already be members of the right OSCORE group, if they
+   previously joined it to securely communicate with the same server or
+   with other servers to access their resources.
 
    Both the clients and the server MAY join the OSCORE group by using
    the approach described in [I-D.ietf-ace-key-groupcomm-oscore] and
@@ -1438,7 +1447,8 @@ Table of Contents
    each client, including the original client registration (see
    Section 5), alternative security protocols than Group OSCORE can be
    used, such as OSCORE [RFC8613] and/or DTLS [RFC9147].  However, it is
-   RECOMMENDED to use OSCORE or Group OSCORE.
+   RECOMMENDED to use OSCORE or Group OSCORE, in order to reduce the
+   number of libraries that the clients and the server have to support.
 
 9.1.  Signaling the OSCORE Group in the Informative Response
 
@@ -1468,17 +1478,19 @@ Table of Contents
       encoded as a CBOR text string.
 
    *  Optionally, 'hkdf', with value the HKDF Algorithm used in the
-      OSCORE group, encoded as a CBOR text string or integer.  The value
-      is taken from the 'Value' column of the "COSE Algorithms" registry
-      [COSE.Algorithms].
+      OSCORE group, encoded as a CBOR text string or integer.  The HKDF
+      Algorithm is specified by the HMAC Algorithm value, which is taken
+      from the 'Value' column of the "COSE Algorithms" registry
+      [COSE.Algorithms].  For example, the HKDF Algorithm HKDF SHA-256
+      is specified as the HMAC Algorithm HMAC 256/256.
 
    *  Optionally, 'cred_fmt', with value the format of the
       authentication credentials used in the OSCORE group, encoded as a
       CBOR integer.  The value is taken from the 'Label' column of the
       "COSE Header Parameters" Registry [COSE.Header.Parameters].
-      Consistently with Section 2.4 of [I-D.ietf-core-oscore-groupcomm],
-      acceptable values denote a format that MUST explicitly provide the
-      comprehensive set of information related to the public key
+      Consistent with Section 2.4 of [I-D.ietf-core-oscore-groupcomm],
+      acceptable values denote a format that provides the public key and
+      a comprehensive set of information related to the public key
       algorithm, including, e.g., the used elliptic curve (when
       applicable).
 
@@ -1486,8 +1498,8 @@ Table of Contents
       authentication credentials are CBOR Web Tokens (CWTs) and CWT
       Claim Sets (CCSs) [RFC8392], X.509 certificates [RFC5280], and
       C509 certificates [I-D.ietf-cose-cbor-encoded-cert].  Further
-      formats may be available in the future, and would be acceptable to
-      use as long as they comply with the criteria defined above.
+      formats may be available in the future, and they would be
+      acceptable to use as long as they comply with the criteria above.
 
       [ As to C509 certificates, there is a pending registration
       requested by draft-ietf-cose-cbor-encoded-cert. ]
@@ -1534,16 +1546,16 @@ Table of Contents
    client is able to decide whether to actually proceed with the (ACE)
    join process, depending on its support for the indicated algorithms.
 
-   As mentioned above, since this mechanism is OPTIONAL, all the fields
-   are OPTIONAL in the informative response.  However, the 'join_uri'
-   and 'sec_gp' fields MUST be present if the mechanism is implemented
-   and used.  If any of the fields are present without the 'join_uri'
-   and 'sec_gp' fields present, the client MUST ignore these fields,
-   since they would not be sufficient to start the (ACE) join procedure.
-   When this happens, the client MAY try sending a new registration
-   request to the server (see Section 5.1).  If the client chooses not
-   to, then the client SHOULD explicitly withdraw from the group
-   observation.
+   As mentioned above, since this mechanism is OPTIONAL, all the
+   corresponding fields are OPTIONAL in the informative response.
+   However, the 'join_uri' and 'sec_gp' fields MUST be present if this
+   mechanism is used.  If any of the fields are present without the
+   'join_uri' and 'sec_gp' fields present, the client MUST ignore these
+   fields, since they would not be sufficient to start the (ACE) join
+   procedure.  When this happens, the client MAY try sending a new
+   registration request to the server (see Section 5.1).  If the client
+   chooses not to, then the client SHOULD explicitly withdraw from the
+   group observation.
 
    Appendix C describes a possible alternative approach, where the
    server self-manages the OSCORE group, and provides the observer
@@ -2023,8 +2035,8 @@ Table of Contents
 
 13.1.  Unprotected Communications
 
-   In case communications are not protected, the server might not be
-   able to effectively authenticate a new client when it registers as an
+   If communications are not protected, the server might not be able to
+   effectively authenticate a new client when it registers as an
    observer.  Section 7 of [RFC7641] specifies how, in such a case, the
    server must strictly limit the number of notifications sent between
    receiving acknowledgements from the client, as confirming to be still
@@ -2040,8 +2052,8 @@ Table of Contents
    counting of still interested clients triggers (some of) them to
    explicitly send a new observation request to acknowledge their
    interest.  Then, the server can decide to terminate the group
-   observation altogether, in case not enough clients are estimated to
-   be still active.
+   observation altogether, in the case that not enough clients are
+   estimated to be still active.
 
    If the method defined in Section 8 is used, the server SHOULD NOT
    send more than a strict number of multicast notifications for a given
@@ -2314,16 +2326,16 @@ Table of Contents
               Object Security for Constrained RESTful Environments
               (Group OSCORE) Using Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-20, 25
-              February 2026, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-ace-key-groupcomm-oscore-20>.
+              Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-21, 14
+              March 2026, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-ace-key-groupcomm-oscore-21>.
 
    [I-D.ietf-cbor-edn-literals]
               Bormann, C., "CBOR Extended Diagnostic Notation (EDN)",
               Work in Progress, Internet-Draft, draft-ietf-cbor-edn-
-              literals-19, 16 October 2025,
+              literals-20, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cbor-
-              edn-literals-19>.
+              edn-literals-20>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
@@ -2430,19 +2442,22 @@ Table of Contents
 15.2.  Informative References
 
    [I-D.ietf-core-cacheable-oscore]
-              Amsüss, C. and M. Tiloca, "Cacheable OSCORE", Work in
+              Amsüss, C. and M. Tiloca, "End-to-End Protected and
+              Cacheable Responses for the Constrained Application
+              Protocol (CoAP) using Group Object Security for
+              Constrained RESTful Environments (Group OSCORE)", Work in
               Progress, Internet-Draft, draft-ietf-core-cacheable-
-              oscore-00, 22 September 2025,
+              oscore-01, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              cacheable-oscore-00>.
+              cacheable-oscore-01>.
 
    [I-D.ietf-core-coap-pubsub]
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
               subscribe architecture for the Constrained Application
               Protocol (CoAP)", Work in Progress, Internet-Draft, draft-
-              ietf-core-coap-pubsub-18, 28 February 2025,
+              ietf-core-coap-pubsub-19, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              coap-pubsub-18>.
+              coap-pubsub-19>.
 
    [I-D.ietf-core-coral]
               Amsüss, C. and T. Fossati, "The Constrained RESTful
@@ -2470,17 +2485,17 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
               M. Furuhed, "CBOR Encoded X.509 Certificates (C509
               Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-16, 25 January 2026,
+              ietf-cose-cbor-encoded-cert-17, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-16>.
+              cbor-encoded-cert-17>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-18, 3 September 2025,
+              discovery-19, 2 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-discovery-18>.
+              oscore-discovery-19>.
 
    [MOBICOM99]
               Ni, S., Tseng, Y., Chen, Y., and J. Sheu, "The Broadcast
@@ -3145,7 +3160,16 @@ Appendix E.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-E.1.  Version -12 to -13
+E.1.  Version -13 to -14
+
+   *  The HKDF Algorithm of Group OSCORE is specified as the
+      corresponding HMAC Algorithm.
+
+   *  Removed unnecessary normative language.
+
+   *  Clarifications and editorial improvements.
+
+E.2.  Version -12 to -13
 
    *  Content on proxies moved out to the new document draft-ietf-core-
       multicast-notifications-proxy.
@@ -3165,7 +3189,7 @@ E.1.  Version -12 to -13
 
    *  Editorial improvements.
 
-E.2.  Version -11 to -12
+E.3.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
@@ -3179,7 +3203,7 @@ E.2.  Version -11 to -12
 
    *  Editorial improvements.
 
-E.3.  Version -10 to -11
+E.4.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
 
@@ -3194,7 +3218,7 @@ E.3.  Version -10 to -11
 
    *  Clarifications and editorial improvements.
 
-E.4.  Version -09 to -10
+E.5.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -3202,7 +3226,7 @@ E.4.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-E.5.  Version -08 to -09
+E.6.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -3215,7 +3239,7 @@ E.5.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-E.6.  Version -07 to -08
+E.7.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -3243,7 +3267,7 @@ E.6.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-E.7.  Version -06 to -07
+E.8.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -3261,7 +3285,7 @@ E.7.  Version -06 to -07
 
    *  Editorial improvements.
 
-E.8.  Version -05 to -06
+E.9.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -3269,7 +3293,7 @@ E.8.  Version -05 to -06
 
    *  Editorial improvements.
 
-E.9.  Version -04 to -05
+E.10.  Version -04 to -05
 
    *  If the phantom request is an OSCORE deterministic request, there
       is no parallel group observation for clients that lack support.
@@ -3284,7 +3308,7 @@ E.9.  Version -04 to -05
 
    *  Editorial improvements.
 
-E.10.  Version -03 to -04
+E.11.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -3301,7 +3325,7 @@ E.10.  Version -03 to -04
 
    *  Editorial improvements.
 
-E.11.  Version -02 to -03
+E.12.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -3311,7 +3335,7 @@ E.11.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-E.12.  Version -01 to -02
+E.13.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -3329,7 +3353,7 @@ E.12.  Version -01 to -02
 
    *  Editorial improvements.
 
-E.13.  Version -00 to -01
+E.14.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
