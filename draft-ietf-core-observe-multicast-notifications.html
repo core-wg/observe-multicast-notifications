@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 30 September 2026</td>
+<td class="center">Expires 1 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-29" class="published">29 March 2026</time>
+<time datetime="2026-03-30" class="published">30 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-30">30 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-01">1 October 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2502,13 +2502,13 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-9.2.1" class="section-number selfRef">9.2.1. </a><a href="#name-registration" class="section-name selfRef">Registration</a>
           </h4>
 <p id="section-9.2.1-1">The phantom registration request <span class="bcp14">MUST</span> be protected, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> <span class="bcp14">MUST</span> be used.<a href="#section-9.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.2.1-2">The server protects the phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.1" class="relref">Section 7.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE Option in the phantom registration request includes:<a href="#section-9.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.2.1-2">The server protects the phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.1" class="relref">Section 7.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> by using its Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1). Consistent with that, the OSCORE Option value in the phantom registration request specifies:<a href="#section-9.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2.1-3.1">
-              <p id="section-9.2.1-3.1.1">As 'kid', the Sender ID of the server in the OSCORE group.<a href="#section-9.2.1-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.1-3.1.1">In the 'kid' field, the Sender ID of the server in the OSCORE group.<a href="#section-9.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.1-3.2">
-              <p id="section-9.2.1-3.2.1">As 'piv', the Partial IV encoding the previously consumed Sender Sequence Number value SN of the server in the OSCORE group, i.e., (SN* - 1).<a href="#section-9.2.1-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.1-3.2.1">In the 'Partial IV' field, the Partial IV encoding the previously consumed Sender Sequence Number value SN of the server in the OSCORE group, i.e., (SN* - 1).<a href="#section-9.2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2521,18 +2521,18 @@ At the time of writing this specification, acceptable formats of authentication 
 <p id="section-9.2.2-1">The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see <a href="#ssec-server-side-request-oscore" class="auto internal xref">Section 9.2.1</a>). Consequently, the following applies:<a href="#section-9.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2.2-2.1">
-              <p id="section-9.2.2-2.1.1">The specified Code is always 0.05 (FETCH).<a href="#section-9.2.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.2-2.1.1">The specified Code is 0.05 (FETCH) <span>[<a href="#RFC8132" class="cite xref">RFC8132</a>]</span>.<a href="#section-9.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.2-2.2">
               <p id="section-9.2.2-2.2.1">The sequence of CoAP options will be limited to the outer, non encrypted options.<a href="#section-9.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.2-2.3">
-              <p id="section-9.2.2-2.3.1">A payload is always present, as the authenticated ciphertext followed by the signature.<a href="#section-9.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.2-2.3.1">A payload is always present, as the authenticated ciphertext followed by the countersignature.<a href="#section-9.2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-9.2.2-3">Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-9.2.2-4">Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see <a href="#ssec-server-side-notifications-oscore" class="auto internal xref">Section 9.2.3</a>). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-9.2.2-4" class="pilcrow">¶</a></p>
-<p id="section-9.2.2-5">Optionally, the informative response includes information on the OSCORE group to join, as additional parameters (see <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>).<a href="#section-9.2.2-5" class="pilcrow">¶</a></p>
+<p id="section-9.2.2-5">Optionally, the informative response includes additional parameters that provide information about the OSCORE group to join (see <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>).<a href="#section-9.2.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-server-side-notifications-oscore">
@@ -2541,16 +2541,16 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-9.2.3" class="section-number selfRef">9.2.3. </a><a href="#name-notifications-3" class="section-name selfRef">Notifications</a>
           </h4>
 <p id="section-9.2.3-1">The server <span class="bcp14">MUST</span> protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7" class="relref">Section 7</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> <span class="bcp14">MUST</span> be used.<a href="#section-9.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-9.2.3-2">The process described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#section-9.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-9.2.3-2">The process described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> applies, with the following additions when building the two OSCORE external_aad structures to encrypt and sign the multicast notification (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#section-9.2.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2.3-3.1">
-              <p id="section-9.2.3-3.1.1">The 'request_kid' is the 'kid' value in the OSCORE Option of the phantom registration request, i.e., the Sender ID of the server.<a href="#section-9.2.3-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.3-3.1.1">The 'request_kid' element contains the value of the 'kid' field in the OSCORE Option value of the phantom registration request, i.e., the Sender ID of the server.<a href="#section-9.2.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.3-3.2">
-              <p id="section-9.2.3-3.2.1">The 'request_piv' is the 'piv' value in the OSCORE Option of the phantom registration request, i.e., the Partial IV encoding the consumed Sender Sequence Number SN of the server.<a href="#section-9.2.3-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.3-3.2.1">The 'request_piv' element contains the value of the 'Partial IV' field in the OSCORE Option value of the phantom registration request, i.e., the Partial IV encoding the consumed Sender Sequence Number SN of the server.<a href="#section-9.2.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.3-3.3">
-              <p id="section-9.2.3-3.3.1">The 'request_kid_context' is the 'kid context' value in the OSCORE Option of the phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.<a href="#section-9.2.3-3.3.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.3-3.3.1">The 'request_kid_context' element contains the value of the 'kid context' field in the OSCORE Option value of the phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.<a href="#section-9.2.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-9.2.3-4">Note that these same values are used to protect each and every multicast notification sent for the target resource under this group observation.<a href="#section-9.2.3-4" class="pilcrow">¶</a></p>
@@ -2561,7 +2561,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-cancellation-3">
 <a href="#section-9.2.4" class="section-number selfRef">9.2.4. </a><a href="#name-cancellation-3" class="section-name selfRef">Cancellation</a>
           </h4>
-<p id="section-9.2.4-1">When canceling a group observation as defined in <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>, the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.<a href="#section-9.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.2.4-1">When canceling a group observation as defined in <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.<a href="#section-9.2.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2577,7 +2577,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-informative-response-4">
 <a href="#section-9.3.1" class="section-number selfRef">9.3.1. </a><a href="#name-informative-response-4" class="section-name selfRef">Informative Response</a>
           </h4>
-<p id="section-9.3.1-1">Upon receiving the informative response from the server, the client performs as described in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, with the following additions.<a href="#section-9.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.3.1-1">Upon receiving the informative response from the server, the client performs the same steps defined in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, with the following additions.<a href="#section-9.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.3.1-2">When performing Step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.3.1-3">Once completed Step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.2" class="relref">Section 7.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following differences.<a href="#section-9.3.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2594,7 +2594,7 @@ At the time of writing this specification, acceptable formats of authentication 
                   <p id="section-9.3.1-4.2.2.2.1">The client <span class="bcp14">MUST NOT</span> take any further process as normally expected according to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. That is, the client skips Step 8 in <span><a href="https://rfc-editor.org/rfc/rfc8613#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>. In particular, the client <span class="bcp14">MUST NOT</span> deliver the phantom registration request to the application and <span class="bcp14">MUST NOT</span> take any action in the Token space of its unicast endpoint where the informative response has been received.<a href="#section-9.3.1-4.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-9.3.1-4.2.2.3">
-                  <p id="section-9.3.1-4.2.2.3.1">The client stores the values of the 'kid', 'piv', and 'kid context' fields from the OSCORE Option of the phantom registration request.<a href="#section-9.3.1-4.2.2.3.1" class="pilcrow">¶</a></p>
+                  <p id="section-9.3.1-4.2.2.3.1">The client stores the values of the 'kid', 'Partial IV', and 'kid context' fields from the OSCORE Option value of the phantom registration request.<a href="#section-9.3.1-4.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </li>
@@ -2612,16 +2612,16 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-9.3.2" class="section-number selfRef">9.3.2. </a><a href="#name-notifications-4" class="section-name selfRef">Notifications</a>
           </h4>
 <p id="section-9.3.2-1">After having successfully processed the informative response as defined in <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>, the client will decrypt and verify every multicast notification for the target resource as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.4" class="relref">Section 7.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, with the following difference.<a href="#section-9.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.3.2-2">For both decryption and signature verification, the client <span class="bcp14">MUST</span> set the 'external_aad' defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> as follows. The particular way to achieve this is implementation specific.<a href="#section-9.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.3.2-2">For both decryption and signature verification, the client <span class="bcp14">MUST</span> set the external_aad structure defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> as follows. The particular way to achieve this is implementation specific.<a href="#section-9.3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.3.2-3.1">
-              <p id="section-9.3.2-3.1.1">'request_kid' takes the value of the 'kid' field from the OSCORE Option of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-9.3.2-3.1.1">The 'request_kid' element takes the value of the 'kid' field from the OSCORE Option value of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.3.2-3.2">
-              <p id="section-9.3.2-3.2.1">'request_piv' takes the value of the 'piv' field from the OSCORE Option of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-9.3.2-3.2.1">The 'request_piv' element takes the value of the 'Partial IV' field from the OSCORE Option value of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.3.2-3.3">
-              <p id="section-9.3.2-3.3.1">'request_kid_context' takes the value of the 'kid context' field from the OSCORE Option of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.3.1" class="pilcrow">¶</a></p>
+              <p id="section-9.3.2-3.3.1">The 'request_kid_context' element takes the value of the 'kid context' field from the OSCORE Option value of the phantom registration request (see <a href="#ssec-client-side-informative-oscore" class="auto internal xref">Section 9.3.1</a>).<a href="#section-9.3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-9.3.2-4">Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource under this group observation.<a href="#section-9.3.2-4" class="pilcrow">¶</a></p>
@@ -2665,7 +2665,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <p id="section-10-6.4.1">'PAYLOAD' denotes an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.<a href="#section-10-6.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-6.5">
-          <p id="section-10-6.5.1">'SIGN' denotes the signature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.<a href="#section-10-6.5.1" class="pilcrow">¶</a></p>
+          <p id="section-10-6.5.1">'SIGN' denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.<a href="#section-10-6.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <span id="name-example-of-group-observation"></span><div id="example-oscore">
@@ -3133,7 +3133,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#name-example-of-group-observation" class="selfRef">Example of Group Observation with Group OSCORE</a>
         </figcaption></figure>
 </div>
-<p id="section-10-8">The two external_aad used to encrypt and sign the multicast notification above have 'request_kid' = 5, 'request_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv', and 'kid context' field of the OSCORE Option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external_aad for decrypting and verifying this multicast notification and the following ones in the group observation.<a href="#section-10-8" class="pilcrow">¶</a></p>
+<p id="section-10-8">The two external_aad structures used to encrypt and sign the multicast notification above include 'request_kid' = 5, 'request_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'Partial IV', and 'kid context' fields of the OSCORE Option value of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external_aad structures for decrypting and verifying this multicast notification and the following ones in the group observation.<a href="#section-10-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="informative-response-params">
@@ -3659,6 +3659,10 @@ Protecting informative responses from the server prevents on-path active adversa
         <dd>
 <span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8132">[RFC8132]</dt>
+        <dd>
+<span class="refAuthor">van der Stok, P.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">A. Sehgal</span>, <span class="refTitle">"PATCH and FETCH Methods for the Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 8132</span>, <span class="seriesInfo">DOI 10.17487/RFC8132</span>, <time datetime="2017-04" class="refDate">April 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8132">https://www.rfc-editor.org/rfc/rfc8132</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
@@ -4060,7 +4064,7 @@ It follows that:<a href="#appendix-C-4.1.7" class="pilcrow">¶</a></p>
               <p id="appendix-C-4.1.8.1.1">In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-2.1.1" class="relref">Section 2.1.1</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span> and <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-2.1.10" class="relref">Section 2.1.10</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-C-4.1.8.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-4.1.8.2">
-              <p id="appendix-C-4.1.8.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-C-4.1.8.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-C-4.1.8.2.1">Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-C-4.1.8.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
@@ -4165,7 +4169,7 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
           <p id="appendix-D-15.1.1">In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-2.1.10" class="relref">Section 2.1.10</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>).<a href="#appendix-D-15.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-D-15.2">
-          <p id="appendix-D-15.2.1">Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-D-15.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-D-15.2.1">Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value <code>null</code> (0xf6).<a href="#appendix-D-15.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-D-16">If a deterministic request is used as a phantom observation request for a group observation, the server does not assist clients that are interested in taking part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.<a href="#appendix-D-16" class="pilcrow">¶</a></p>
