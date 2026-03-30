@@ -1564,7 +1564,7 @@ Upon expiration of the group keying material as indicated in the informative res
 
    - The server MUST update the OSCORE Master Secret.
 
-   - The server MUST update the ID Context used as Group Identifier (Gid), consistent {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}.
+   - The server MUST update the ID Context used as Group Identifier (Gid), consistent with {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}.
 
    - The server MAY update the OSCORE Master Salt.
 
