@@ -68,6 +68,7 @@ normative:
   RFC7967:
   RFC8085:
   RFC8126:
+  RFC8132:
   RFC8288:
   RFC8610:
   RFC8613:
@@ -801,45 +802,45 @@ When using Group OSCORE to protect multicast notifications, the server performs 
 
 The phantom registration request MUST be protected, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}}, as if it was the actual sender, i.e., by using its Sender Context. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group, and hence updates it to SN* = (SN + 1). Consistently, the OSCORE Option in the phantom registration request includes:
+The server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}} by using its Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1). Consistent with that, the OSCORE Option value in the phantom registration request specifies:
 
-* As 'kid', the Sender ID of the server in the OSCORE group.
+* In the 'kid' field, the Sender ID of the server in the OSCORE group.
 
-* As 'piv', the Partial IV encoding the previously consumed Sender Sequence Number value SN of the server in the OSCORE group, i.e., (SN* - 1).
+* In the 'Partial IV' field, the Partial IV encoding the previously consumed Sender Sequence Number value SN of the server in the OSCORE group, i.e., (SN* - 1).
 
 ### Informative Response ### {#ssec-server-side-informative-oscore}
 
 The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom observation request as a message protected with Group OSCORE (see {{ssec-server-side-request-oscore}}). Consequently, the following applies:
 
-* The specified Code is always 0.05 (FETCH).
+* The specified Code is 0.05 (FETCH) {{RFC8132}}.
 
 * The sequence of CoAP options will be limited to the outer, non encrypted options.
 
-* A payload is always present, as the authenticated ciphertext followed by the signature.
+* A payload is always present, as the authenticated ciphertext followed by the countersignature.
 
 Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
 Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of {{ssec-server-side-request}}.
 
-Optionally, the informative response includes information on the OSCORE group to join, as additional parameters (see {{sec-inf-response}}).
+Optionally, the informative response includes additional parameters that provide information about the OSCORE group to join (see {{sec-inf-response}}).
 
 ### Notifications ### {#ssec-server-side-notifications-oscore}
 
 The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
 
-The process described in {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE 'external_aad' to encrypt and sign the multicast notification (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
+The process described in {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE external_aad structures to encrypt and sign the multicast notification (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
 
-*  The 'request_kid' is the 'kid' value in the OSCORE Option of the phantom registration request, i.e., the Sender ID of the server.
+*  The 'request_kid' element contains the value of the 'kid' field in the OSCORE Option value of the phantom registration request, i.e., the Sender ID of the server.
 
-* The 'request_piv' is the 'piv' value in the OSCORE Option of the phantom registration request, i.e., the Partial IV encoding the consumed Sender Sequence Number SN of the server.
+* The 'request_piv' element contains the value of the 'Partial IV' field in the OSCORE Option value of the phantom registration request, i.e., the Partial IV encoding the consumed Sender Sequence Number SN of the server.
 
-* The 'request_kid_context' is the 'kid context' value in the OSCORE Option of the phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.
+* The 'request_kid_context' element contains the value of the 'kid context' field in the OSCORE Option value of the phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.
 
 Note that these same values are used to protect each and every multicast notification sent for the target resource under this group observation.
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is also protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response, and include its encoding as the Partial IV in the OSCORE Option of the response.
+When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -847,7 +848,7 @@ When using Group OSCORE to protect multicast notifications, the client performs 
 
 ### Informative Response ### {#ssec-client-side-informative-oscore}
 
-Upon receiving the informative response from the server, the client performs as described in {{ssec-client-side-informative}}, with the following additions.
+Upon receiving the informative response from the server, the client performs the same steps defined in {{ssec-client-side-informative}}, with the following additions.
 
 When performing Step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
@@ -861,7 +862,7 @@ Once completed Step 2, the client decrypts and verifies the rebuilt phantom regi
 
    - The client MUST NOT take any further process as normally expected according to {{RFC7252}}. That is, the client skips Step 8 in {{Section 8.2 of RFC8613}}. In particular, the client MUST NOT deliver the phantom registration request to the application and MUST NOT take any action in the Token space of its unicast endpoint where the informative response has been received.
 
-   - The client stores the values of the 'kid', 'piv', and 'kid context' fields from the OSCORE Option of the phantom registration request.
+   - The client stores the values of the 'kid', 'Partial IV', and 'kid context' fields from the OSCORE Option value of the phantom registration request.
 
 * If decryption and verification of the phantom registration request fail, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
 
@@ -873,13 +874,13 @@ If the informative response includes the parameter 'last_notif', the client also
 
 After having successfully processed the informative response as defined in {{ssec-client-side-informative-oscore}}, the client will decrypt and verify every multicast notification for the target resource as defined in {{Section 7.4 of I-D.ietf-core-oscore-groupcomm}}, with the following difference.
 
-For both decryption and signature verification, the client MUST set the 'external_aad' defined in {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
+For both decryption and signature verification, the client MUST set the external_aad structure defined in {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}} as follows. The particular way to achieve this is implementation specific.
 
-* 'request_kid' takes the value of the 'kid' field from the OSCORE Option of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
+* The 'request_kid' element takes the value of the 'kid' field from the OSCORE Option value of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
-* 'request_piv' takes the value of the 'piv' field from the OSCORE Option of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
+* The 'request_piv' element takes the value of the 'Partial IV' field from the OSCORE Option value of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
-* 'request_kid_context' takes the value of the 'kid context' field from the OSCORE Option of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
+* The 'request_kid_context' element takes the value of the 'kid context' field from the OSCORE Option value of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
 Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource under this group observation.
 
@@ -907,7 +908,7 @@ The following notation is used for the payload of the informative responses:
 
 * 'PAYLOAD' denotes an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
 
-* 'SIGN' denotes the signature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
+* 'SIGN' denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
 
 ~~~~~~~~~~~ aasvg
 C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
@@ -1048,7 +1049,7 @@ C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
 ~~~~~~~~~~~
 {: #example-oscore title="Example of Group Observation with Group OSCORE"}
 
-The two external_aad used to encrypt and sign the multicast notification above have 'request\_kid' = 5, 'request\_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'piv', and 'kid context' field of the OSCORE Option of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external\_aad for decrypting and verifying this multicast notification and the following ones in the group observation.
+The two external_aad structures used to encrypt and sign the multicast notification above include 'request\_kid' = 5, 'request\_piv' = 501, and 'request_kid_context' = 0x57ab2e. These values are specified in the 'kid', 'Partial IV', and 'kid context' fields of the OSCORE Option value of the phantom observation request, which is encoded in the 'ph_req' parameter of the unicast informative response to the two clients. Thus, the two clients can build the two same external_aad structures for decrypting and verifying this multicast notification and the following ones in the group observation.
 
 # Informative Response Parameters {#informative-response-params}
 
@@ -1501,7 +1502,7 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
    * In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see {{Section 2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-   * Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
+   * Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
 
 * 'srv_cred': this element is a CBOR byte string, with value the original byte serialization of the server's authentication credential used in the OSCORE group. In particular, the original byte serialization complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
@@ -1593,7 +1594,7 @@ Note that, like in {{self-managed-oscore-group}}, no information is provided as 
 
 * In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-* Consistently, when building the two OSCORE 'external_aad' to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
+* Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
 
 If a deterministic request is used as a phantom observation request for a group observation, the server does not assist clients that are interested in taking part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
