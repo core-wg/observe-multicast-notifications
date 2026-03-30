@@ -1317,13 +1317,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.14.2.3.1"><a href="#section-14.3" class="auto internal xref">14.3</a>.  <a href="#name-coap-option-numbers-registr" class="internal xref">CoAP Option Numbers Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.4">
-                <p id="section-toc.1-1.14.2.4.1"><a href="#section-14.4" class="auto internal xref">14.4</a>.  <a href="#name-informative-response-paramete" class="internal xref">Informative Response Parameters Registry</a></p>
+                <p id="section-toc.1-1.14.2.4.1"><a href="#section-14.4" class="auto internal xref">14.4</a>.  <a href="#name-target-attributes-registry" class="internal xref">Target Attributes Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.5">
-                <p id="section-toc.1-1.14.2.5.1"><a href="#section-14.5" class="auto internal xref">14.5</a>.  <a href="#name-coap-transport-information-r" class="internal xref">CoAP Transport Information Registry</a></p>
+                <p id="section-toc.1-1.14.2.5.1"><a href="#section-14.5" class="auto internal xref">14.5</a>.  <a href="#name-informative-response-paramete" class="internal xref">Informative Response Parameters Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.6">
-                <p id="section-toc.1-1.14.2.6.1"><a href="#section-14.6" class="auto internal xref">14.6</a>.  <a href="#name-target-attributes-registry" class="internal xref">Target Attributes Registry</a></p>
+                <p id="section-toc.1-1.14.2.6.1"><a href="#section-14.6" class="auto internal xref">14.6</a>.  <a href="#name-coap-transport-information-r" class="internal xref">CoAP Transport Information Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.7">
                 <p id="section-toc.1-1.14.2.7.1"><a href="#section-14.7" class="auto internal xref">14.7</a>.  <a href="#name-expert-review-instructions" class="internal xref">Expert Review Instructions</a></p>
@@ -1701,14 +1701,14 @@ The combination of URI scheme and 'authority' component determines the CoAP tran
 </li>
               </ul>
 <p id="section-4.2.1-4.1.7">
-The identified transport determines what elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics. Those elements are specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.5</a>)<a href="#section-4.2.1-4.1.7" class="pilcrow">¶</a></p>
+The identified transport determines what elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics. Those elements are specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a>)<a href="#section-4.2.1-4.1.7" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.2.1-4.2">
               <p id="section-4.2.1-4.2.1">The 'tpi_details' element <span class="bcp14">MAY</span> be present and specifies transport-specific information related to a pertinent request message, i.e., the phantom observation request in this document.<a href="#section-4.2.1-4.2.1" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.2.2">
 The exact format of 'tpi_details' depends on the CoAP transport, which is identified according to the CRI conveyed by the 'tpi_server' element, as described above.<a href="#section-4.2.1-4.2.2" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-4.2.3">
-In the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.5</a> of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements <span class="bcp14">MUST</span> be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.<a href="#section-4.2.1-4.2.3" class="pilcrow">¶</a></p>
+In the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a> of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements <span class="bcp14">MUST</span> be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.<a href="#section-4.2.1-4.2.3" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-4.2.1-5"><a href="#transport-protocol-identifiers" class="auto internal xref">Section 12</a> defines an entry to be registered in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, the full encoding of the 'tp_info' CBOR array is as defined in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
@@ -1718,7 +1718,7 @@ In the "CoAP Transport Information" registry defined in <a href="#iana-coap-tran
               <p id="section-4.2.1-7.1.1">Define the elements in 'tpi_details', as to what information they convey, their encoding, and their semantics.<a href="#section-4.2.1-7.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.2.1-7.2">
-              <p id="section-4.2.1-7.2.1">Register an entry in the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.5</a> of this document.<a href="#section-4.2.1-7.2.1" class="pilcrow">¶</a></p>
+              <p id="section-4.2.1-7.2.1">Register an entry in the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a> of this document.<a href="#section-4.2.1-7.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.2.1-7.3">
               <p id="section-4.2.1-7.3.1">Register an entry in the "Uniform Resource Identifier (URI) Schemes" registry defined in <span>[<a href="#RFC7595" class="cite xref">RFC7595</a>]</span> and updated in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-href-30#section-11.1" class="relref">Section 11.1</a> of [<a href="#I-D.ietf-core-href" class="cite xref">I-D.ietf-core-href</a>]</span>, where the value in the 'CRI Scheme Number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.<a href="#section-4.2.1-7.3.1" class="pilcrow">¶</a></p>
@@ -1913,7 +1913,7 @@ The addressing information above is provided to the observer clients through the
 <p id="section-5.2-1">Upon receiving the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>, the client has to identify the CoAP transport used to distribute multicast notifications for the group observation.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">To this end, the client relies on the element 'tpi_server' within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">In particular, the client considers the CRI conveyed by 'tpi_server' and identifies the CoAP transport, by assessing together the 'authority' component and the URI scheme determined from 'scheme-id' (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">After that, the client parses the remainder of the 'tp_info' array, i.e., the information conveyed by 'tpi_details', according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.5</a>).<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">After that, the client parses the remainder of the 'tp_info' array, i.e., the information conveyed by 'tpi_details', according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a>).<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.2-5">Then, the client performs the following steps.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.2-6">
 <li id="section-5.2-6.1">
@@ -3163,148 +3163,131 @@ At the time of writing this specification, acceptable formats of authentication 
             <td class="text-left" rowspan="1" colspan="1">0</td>
             <td class="text-left" rowspan="1" colspan="1">array</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
-</td>
+              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">ph_req</td>
             <td class="text-left" rowspan="1" colspan="1">1</td>
             <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
-</td>
+              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">last_notif</td>
             <td class="text-left" rowspan="1" colspan="1">2</td>
             <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
-</td>
+              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">next_not_before</td>
             <td class="text-left" rowspan="1" colspan="1">3</td>
             <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
-</td>
+              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">ending</td>
             <td class="text-left" rowspan="1" colspan="1">4</td>
             <td class="text-left" rowspan="1" colspan="1">integer or float</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>
-</td>
+              <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">join_uri</td>
             <td class="text-left" rowspan="1" colspan="1">5</td>
             <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">sec_gp</td>
             <td class="text-left" rowspan="1" colspan="1">6</td>
             <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">as_uri</td>
             <td class="text-left" rowspan="1" colspan="1">7</td>
             <td class="text-left" rowspan="1" colspan="1">text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">hkdf</td>
             <td class="text-left" rowspan="1" colspan="1">8</td>
             <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">cred_fmt</td>
             <td class="text-left" rowspan="1" colspan="1">9</td>
             <td class="text-left" rowspan="1" colspan="1">integer</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">gp_enc_alg</td>
             <td class="text-left" rowspan="1" colspan="1">10</td>
             <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">sign_alg</td>
             <td class="text-left" rowspan="1" colspan="1">11</td>
             <td class="text-left" rowspan="1" colspan="1">integer or text string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">sign_params</td>
             <td class="text-left" rowspan="1" colspan="1">12</td>
             <td class="text-left" rowspan="1" colspan="1">array</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>
-</td>
+              <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">gp_material</td>
             <td class="text-left" rowspan="1" colspan="1">13</td>
             <td class="text-left" rowspan="1" colspan="1">map</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
-</td>
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">srv_cred</td>
             <td class="text-left" rowspan="1" colspan="1">14</td>
             <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
-</td>
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">srv_identifier</td>
             <td class="text-left" rowspan="1" colspan="1">15</td>
             <td class="text-left" rowspan="1" colspan="1">byte string</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
-</td>
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">exi</td>
             <td class="text-left" rowspan="1" colspan="1">16</td>
             <td class="text-left" rowspan="1" colspan="1">unsigned integer</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
-</td>
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> of [RFC-XXXX]</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">exp</td>
             <td class="text-left" rowspan="1" colspan="1">17</td>
             <td class="text-left" rowspan="1" colspan="1">integer or float</td>
             <td class="text-left" rowspan="1" colspan="1">
-              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a>
-</td>
+              <a href="#self-managed-oscore-group" class="auto internal xref">Appendix C</a> of [RFC-XXXX]</td>
           </tr>
         </tbody>
       </table>
 </div>
+<p id="section-11-4">Note to RFC Editor: In the table above, please replace "[RFC-XXXX]" with the RFC number of this specification and delete this paragraph.<a href="#section-11-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="transport-protocol-identifiers">
@@ -3313,7 +3296,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <a href="#section-12" class="section-number selfRef">12. </a><a href="#name-transport-protocol-informat" class="section-name selfRef">Transport Protocol Information</a>
       </h2>
 <p id="section-12-1"><a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a> defines the transport-specific information that the server has to specify as elements of 'tpi_details' within the 'tp_info' parameter of the informative response defined in <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>, when CoAP responses are transported over UDP.<a href="#section-12-1" class="pilcrow">¶</a></p>
-<p id="section-12-2"><a href="#_table-transport-information" class="auto internal xref">Table 3</a> defines the corresponding entry that <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.5</a> registers in the "CoAP Transport Information" registry defined in this document.<a href="#section-12-2" class="pilcrow">¶</a></p>
+<p id="section-12-2"><a href="#_table-transport-information" class="auto internal xref">Table 3</a> defines the corresponding entry that <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a> registers in the "CoAP Transport Information" registry defined in this document.<a href="#section-12-2" class="pilcrow">¶</a></p>
 <span id="name-coap-transport-information-"></span><div id="_table-transport-information">
 <table class="center" id="table-3">
         <caption>
@@ -3447,7 +3430,7 @@ Protecting informative responses from the server prevents on-path active adversa
         <h3 id="name-coap-content-formats-regist">
 <a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-coap-content-formats-regist" class="section-name selfRef">CoAP Content-Formats Registry</a>
         </h3>
-<p id="section-14.2-1">IANA is asked to add the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.2-1" class="pilcrow">¶</a></p>
+<p id="section-14.2-1">IANA is asked to add the following entry to the "CoAP Content-Formats" registry <span>[<a href="#CoAP.Content.Formats" class="cite xref">CoAP.Content.Formats</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.2-1" class="pilcrow">¶</a></p>
 <p id="section-14.2-2">Content Type: application/informative-response+cbor<a href="#section-14.2-2" class="pilcrow">¶</a></p>
 <p id="section-14.2-3">Content Coding: -<a href="#section-14.2-3" class="pilcrow">¶</a></p>
 <p id="section-14.2-4">ID: TBD (value between 0 and 255)<a href="#section-14.2-4" class="pilcrow">¶</a></p>
@@ -3459,7 +3442,7 @@ Protecting informative responses from the server prevents on-path active adversa
         <h3 id="name-coap-option-numbers-registr">
 <a href="#section-14.3" class="section-number selfRef">14.3. </a><a href="#name-coap-option-numbers-registr" class="section-name selfRef">CoAP Option Numbers Registry</a>
         </h3>
-<p id="section-14.3-1">IANA is asked to enter the following option number to the "CoAP Option Numbers" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.3-1" class="pilcrow">¶</a></p>
+<p id="section-14.3-1">IANA is asked to enter the following option number to the "CoAP Option Numbers" registry <span>[<a href="#CoAP.Option.Numbers" class="cite xref">CoAP.Option.Numbers</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.3-1" class="pilcrow">¶</a></p>
 <span id="name-registrations-in-the-coap-o"></span><table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
@@ -3484,74 +3467,74 @@ Protecting informative responses from the server prevents on-path active adversa
 <p id="section-14.3-4">Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph and the previous paragraph.<a href="#section-14.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="iana-informative-response-params">
+<div id="iana-target-attributes">
 <section id="section-14.4">
-        <h3 id="name-informative-response-paramete">
-<a href="#section-14.4" class="section-number selfRef">14.4. </a><a href="#name-informative-response-paramete" class="section-name selfRef">Informative Response Parameters Registry</a>
+        <h3 id="name-target-attributes-registry">
+<a href="#section-14.4" class="section-number selfRef">14.4. </a><a href="#name-target-attributes-registry" class="section-name selfRef">Target Attributes Registry</a>
         </h3>
-<p id="section-14.4-1">This document establishes the "Informative Response Parameters" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.4-1" class="pilcrow">¶</a></p>
-<p id="section-14.4-2">The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. "Expert Review" guidelines are provided in <a href="#iana-review" class="auto internal xref">Section 14.7</a>.<a href="#section-14.4-2" class="pilcrow">¶</a></p>
-<p id="section-14.4-3">All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per <span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span> with "Expert Review" additionally required per <span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.5" class="relref">Section 4.5</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. The procedure for early IANA allocation of "standards track code points" defined in <span>[<a href="#RFC7120" class="cite xref">RFC7120</a>]</span> also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in <span><a href="https://rfc-editor.org/rfc/rfc7120#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC7120" class="cite xref">RFC7120</a>]</span>.<a href="#section-14.4-3" class="pilcrow">¶</a></p>
-<p id="section-14.4-4">The columns of this registry are:<a href="#section-14.4-4" class="pilcrow">¶</a></p>
+<p id="section-14.4-1">IANA is asked to register the following entry in the "Target Attributes" registry <span>[<a href="#Target.Attributes" class="cite xref">Target.Attributes</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-14.4-5.1">
-            <p id="section-14.4-5.1.1">Name: This is a descriptive name that enables easier reference to the item. The name <span class="bcp14">MUST</span> be unique. It is not used in the encoding of the item.<a href="#section-14.4-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-14.4-2.1">
+            <p id="section-14.4-2.1.1">Attribute Name: gp-obs<a href="#section-14.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-14.4-5.2">
-            <p id="section-14.4-5.2.1">CBOR Key: This is the value used as the CBOR map key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-14.4-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-14.4-2.2">
+            <p id="section-14.4-2.2.1">Brief Description: Observable resource supporting group observation<a href="#section-14.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-14.4-5.3">
-            <p id="section-14.4-5.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-14.4-5.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-14.4-2.3">
+            <p id="section-14.4-2.3.1">Change Controller: IETF<a href="#section-14.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-14.4-5.4">
-            <p id="section-14.4-5.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-14.4-5.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-14.4-2.4">
+            <p id="section-14.4-2.4.1">Reference: <a href="#sec-web-linking" class="auto internal xref">Section 6</a> of [RFC-XXXX]<a href="#section-14.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-14.4-6">This registry has been initially populated by the entries in <a href="#_table-informative-response-params" class="auto internal xref">Table 2</a>. The 'Reference' column for all of those entries refers to sections of this document.<a href="#section-14.4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-informative-response-params">
+<section id="section-14.5">
+        <h3 id="name-informative-response-paramete">
+<a href="#section-14.5" class="section-number selfRef">14.5. </a><a href="#name-informative-response-paramete" class="section-name selfRef">Informative Response Parameters Registry</a>
+        </h3>
+<p id="section-14.5-1">This document establishes the "Informative Response Parameters" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.5-1" class="pilcrow">¶</a></p>
+<p id="section-14.5-2">The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. "Expert Review" guidelines are provided in <a href="#iana-review" class="auto internal xref">Section 14.7</a>.<a href="#section-14.5-2" class="pilcrow">¶</a></p>
+<p id="section-14.5-3">All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per <span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span> with "Expert Review" additionally required per <span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.5" class="relref">Section 4.5</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. The procedure for early IANA allocation of "standards track code points" defined in <span>[<a href="#RFC7120" class="cite xref">RFC7120</a>]</span> also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in <span><a href="https://rfc-editor.org/rfc/rfc7120#section-3.1" class="relref">Section 3.1</a> of [<a href="#RFC7120" class="cite xref">RFC7120</a>]</span>.<a href="#section-14.5-3" class="pilcrow">¶</a></p>
+<p id="section-14.5-4">The columns of this registry are:<a href="#section-14.5-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-14.5-5.1">
+            <p id="section-14.5-5.1.1">Name: This is a descriptive name that enables easier reference to the item. The name <span class="bcp14">MUST</span> be unique. It is not used in the encoding of the item.<a href="#section-14.5-5.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-14.5-5.2">
+            <p id="section-14.5-5.2.1">CBOR Key: This is the value used as the CBOR map key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-14.5-5.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-14.5-5.3">
+            <p id="section-14.5-5.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-14.5-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-14.5-5.4">
+            <p id="section-14.5-5.4.1">Reference: This contains a pointer to the public specification for the item, if one exists.<a href="#section-14.5-5.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-14.5-6">This registry has been initially populated by the entries in <a href="#_table-informative-response-params" class="auto internal xref">Table 2</a>.<a href="#section-14.5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-coap-transport-information">
-<section id="section-14.5">
-        <h3 id="name-coap-transport-information-r">
-<a href="#section-14.5" class="section-number selfRef">14.5. </a><a href="#name-coap-transport-information-r" class="section-name selfRef">CoAP Transport Information Registry</a>
-        </h3>
-<p id="section-14.5-1">This document establishes the "CoAP Transport Information" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.5-1" class="pilcrow">¶</a></p>
-<p id="section-14.5-2">The registration policy is "Expert Review" <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. "Expert Review" guidelines are provided in <a href="#iana-review" class="auto internal xref">Section 14.7</a>.<a href="#section-14.5-2" class="pilcrow">¶</a></p>
-<p id="section-14.5-3">The columns of this registry are:<a href="#section-14.5-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-14.5-4.1">
-            <p id="section-14.5-4.1.1">CoAP Transport: This field contains a text string. The value <span class="bcp14">MUST</span> be unique and it uniquely identifies the transport used for CoAP messages.<a href="#section-14.5-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-14.5-4.2">
-            <p id="section-14.5-4.2.1">Transport Information Details: This field contains a list of text strings, where two adjacent strings are separated by a single comma character. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-14.5-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-14.5-4.3">
-            <p id="section-14.5-4.3.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-14.5-4.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-14.5-5">This registry has been initially populated by the entry in <a href="#_table-transport-information" class="auto internal xref">Table 3</a>.<a href="#section-14.5-5" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="iana-target-attributes">
 <section id="section-14.6">
-        <h3 id="name-target-attributes-registry">
-<a href="#section-14.6" class="section-number selfRef">14.6. </a><a href="#name-target-attributes-registry" class="section-name selfRef">Target Attributes Registry</a>
+        <h3 id="name-coap-transport-information-r">
+<a href="#section-14.6" class="section-number selfRef">14.6. </a><a href="#name-coap-transport-information-r" class="section-name selfRef">CoAP Transport Information Registry</a>
         </h3>
-<p id="section-14.6-1">IANA is asked to register the following entry in the "Target Attributes" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.6-1" class="pilcrow">¶</a></p>
+<p id="section-14.6-1">This document establishes the "CoAP Transport Information" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.6-1" class="pilcrow">¶</a></p>
+<p id="section-14.6-2">The registration policy is "Expert Review" <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. "Expert Review" guidelines are provided in <a href="#iana-review" class="auto internal xref">Section 14.7</a>.<a href="#section-14.6-2" class="pilcrow">¶</a></p>
+<p id="section-14.6-3">The columns of this registry are:<a href="#section-14.6-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-14.6-2.1">
-            <p id="section-14.6-2.1.1">Attribute Name: gp-obs<a href="#section-14.6-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-14.6-4.1">
+            <p id="section-14.6-4.1.1">CoAP Transport: This field contains a text string. The value <span class="bcp14">MUST</span> be unique and it uniquely identifies the transport used for CoAP messages.<a href="#section-14.6-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-14.6-2.2">
-            <p id="section-14.6-2.2.1">Brief Description: Observable resource supporting group observation<a href="#section-14.6-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-14.6-4.2">
+            <p id="section-14.6-4.2.1">Transport Information Details: This field contains a list of text strings, where two adjacent strings are separated by a single comma character. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and <span class="bcp14">MUST</span> be specified next to each other as last ones.<a href="#section-14.6-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-14.6-2.3">
-            <p id="section-14.6-2.3.1">Change Controller: IETF<a href="#section-14.6-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-14.6-2.4">
-            <p id="section-14.6-2.4.1">Reference: <a href="#sec-web-linking" class="auto internal xref">Section 6</a> of [RFC-XXXX]<a href="#section-14.6-2.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-14.6-4.3">
+            <p id="section-14.6-4.3.1">Reference: This contains a pointer to the public specification for the item, if one exists.<a href="#section-14.6-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-14.6-5">This registry has been initially populated by the entry in <a href="#_table-transport-information" class="auto internal xref">Table 3</a>.<a href="#section-14.6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-review">
@@ -3587,6 +3570,14 @@ Protecting informative responses from the server prevents on-path active adversa
 <a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="CoAP.Content.Formats">[CoAP.Content.Formats]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Content-Formats"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="CoAP.Option.Numbers">[CoAP.Option.Numbers]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Option Numbers"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="COSE.Algorithms">[COSE.Algorithms]</dt>
         <dd>
 <span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Algorithms"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#algorithms">https://www.iana.org/assignments/cose/cose.xhtml#algorithms</a>&gt;</span>. </dd>
@@ -3684,8 +3675,12 @@ Protecting informative responses from the server prevents on-path active adversa
 <span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9203">[RFC9203]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, and <span class="refAuthor">M. Gunnarsson</span>, <span class="refTitle">"The Object Security for Constrained RESTful Environments (OSCORE) Profile of the Authentication and Authorization for Constrained Environments (ACE) Framework"</span>, <span class="seriesInfo">RFC 9203</span>, <span class="seriesInfo">DOI 10.17487/RFC9203</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9203">https://www.rfc-editor.org/rfc/rfc9203</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Target.Attributes">[Target.Attributes]</dt>
+      <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Target Attributes"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

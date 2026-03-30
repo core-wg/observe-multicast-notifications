@@ -121,9 +121,9 @@ Table of Contents
      14.1.  Media Type Registrations
      14.2.  CoAP Content-Formats Registry
      14.3.  CoAP Option Numbers Registry
-     14.4.  Informative Response Parameters Registry
-     14.5.  CoAP Transport Information Registry
-     14.6.  Target Attributes Registry
+     14.4.  Target Attributes Registry
+     14.5.  Informative Response Parameters Registry
+     14.6.  CoAP Transport Information Registry
      14.7.  Expert Review Instructions
    15. References
      15.1.  Normative References
@@ -616,7 +616,7 @@ Table of Contents
       Those elements are specified in the 'Transport Information
       Details' column of the "CoAP Transport Information" registry for
       the entry associated with the identified CoAP transport (see
-      Section 14.5)
+      Section 14.6)
 
    *  The 'tpi_details' element MAY be present and specifies transport-
       specific information related to a pertinent request message, i.e.,
@@ -627,7 +627,7 @@ Table of Contents
       'tpi_server' element, as described above.
 
       In the "CoAP Transport Information" registry defined in
-      Section 14.5 of this document, the entry corresponding to the
+      Section 14.6 of this document, the entry corresponding to the
       identified CoAP transport specifies the list of elements composing
       'tpi_details' for that transport, as indicated in the 'Transport
       Information Details' column.  Within 'tpi_details', its elements
@@ -650,7 +650,7 @@ Table of Contents
       convey, their encoding, and their semantics.
 
    *  Register an entry in the "CoAP Transport Information" registry
-      defined in Section 14.5 of this document.
+      defined in Section 14.6 of this document.
 
    *  Register an entry in the "Uniform Resource Identifier (URI)
       Schemes" registry defined in [RFC7595] and updated in Section 11.1
@@ -930,7 +930,7 @@ Table of Contents
    i.e., the information conveyed by 'tpi_details', according to what is
    specified in the 'Transport Information Details' column of the "CoAP
    Transport Information" registry for the entry associated with the
-   identified CoAP transport (see Section 14.5).
+   identified CoAP transport (see Section 14.6).
 
    Then, the client performs the following steps.
 
@@ -1967,50 +1967,68 @@ Table of Contents
    media type "application/informative-response+cbor" MUST be used when
    these fields are transported.
 
-   +=================+==========+========================+=============+
-   | Name            | CBOR Key | CBOR Type              | Reference   |
-   +=================+==========+========================+=============+
-   | tp_info         | 0        | array                  | Section 4.2 |
-   +-----------------+----------+------------------------+-------------+
-   | ph_req          | 1        | byte string            | Section 4.2 |
-   +-----------------+----------+------------------------+-------------+
-   | last_notif      | 2        | byte string            | Section 4.2 |
-   +-----------------+----------+------------------------+-------------+
-   | next_not_before | 3        | unsigned integer       | Section 4.2 |
-   +-----------------+----------+------------------------+-------------+
-   | ending          | 4        | integer or float       | Section 4.2 |
-   +-----------------+----------+------------------------+-------------+
-   | join_uri        | 5        | text string            | Section 9.1 |
-   +-----------------+----------+------------------------+-------------+
-   | sec_gp          | 6        | text string            | Section 9.1 |
-   +-----------------+----------+------------------------+-------------+
-   | as_uri          | 7        | text string            | Section 9.1 |
-   +-----------------+----------+------------------------+-------------+
-   | hkdf            | 8        | integer or text        | Section 9.1 |
-   |                 |          | string                 |             |
-   +-----------------+----------+------------------------+-------------+
-   | cred_fmt        | 9        | integer                | Section 9.1 |
-   +-----------------+----------+------------------------+-------------+
-   | gp_enc_alg      | 10       | integer or text        | Section 9.1 |
-   |                 |          | string                 |             |
-   +-----------------+----------+------------------------+-------------+
-   | sign_alg        | 11       | integer or text        | Section 9.1 |
-   |                 |          | string                 |             |
-   +-----------------+----------+------------------------+-------------+
-   | sign_params     | 12       | array                  | Section 9.1 |
-   +-----------------+----------+------------------------+-------------+
-   | gp_material     | 13       | map                    | Appendix C  |
-   +-----------------+----------+------------------------+-------------+
-   | srv_cred        | 14       | byte string            | Appendix C  |
-   +-----------------+----------+------------------------+-------------+
-   | srv_identifier  | 15       | byte string            | Appendix C  |
-   +-----------------+----------+------------------------+-------------+
-   | exi             | 16       | unsigned integer       | Appendix C  |
-   +-----------------+----------+------------------------+-------------+
-   | exp             | 17       | integer or float       | Appendix C  |
-   +-----------------+----------+------------------------+-------------+
+       +=================+==========+=============+===============+
+       | Name            | CBOR Key | CBOR Type   | Reference     |
+       +=================+==========+=============+===============+
+       | tp_info         | 0        | array       | Section 4.2   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | ph_req          | 1        | byte string | Section 4.2   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | last_notif      | 2        | byte string | Section 4.2   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | next_not_before | 3        | unsigned    | Section 4.2   |
+       |                 |          | integer     | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | ending          | 4        | integer or  | Section 4.2   |
+       |                 |          | float       | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | join_uri        | 5        | text string | Section 9.1   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | sec_gp          | 6        | text string | Section 9.1   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | as_uri          | 7        | text string | Section 9.1   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | hkdf            | 8        | integer or  | Section 9.1   |
+       |                 |          | text string | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | cred_fmt        | 9        | integer     | Section 9.1   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | gp_enc_alg      | 10       | integer or  | Section 9.1   |
+       |                 |          | text string | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | sign_alg        | 11       | integer or  | Section 9.1   |
+       |                 |          | text string | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | sign_params     | 12       | array       | Section 9.1   |
+       |                 |          |             | of [RFC-XXXX] |
+       +-----------------+----------+-------------+---------------+
+       | gp_material     | 13       | map         | Appendix C of |
+       |                 |          |             | [RFC-XXXX]    |
+       +-----------------+----------+-------------+---------------+
+       | srv_cred        | 14       | byte string | Appendix C of |
+       |                 |          |             | [RFC-XXXX]    |
+       +-----------------+----------+-------------+---------------+
+       | srv_identifier  | 15       | byte string | Appendix C of |
+       |                 |          |             | [RFC-XXXX]    |
+       +-----------------+----------+-------------+---------------+
+       | exi             | 16       | unsigned    | Appendix C of |
+       |                 |          | integer     | [RFC-XXXX]    |
+       +-----------------+----------+-------------+---------------+
+       | exp             | 17       | integer or  | Appendix C of |
+       |                 |          | float       | [RFC-XXXX]    |
+       +-----------------+----------+-------------+---------------+
 
-                 Table 2: Informative Response Parameters.
+                Table 2: Informative Response Parameters.
+
+   Note to RFC Editor: In the table above, please replace "[RFC-XXXX]"
+   with the RFC number of this specification and delete this paragraph.
 
 12.  Transport Protocol Information
 
@@ -2019,7 +2037,7 @@ Table of Contents
    'tp_info' parameter of the informative response defined in
    Section 4.2, when CoAP responses are transported over UDP.
 
-   Table 3 defines the corresponding entry that Section 14.5 registers
+   Table 3 defines the corresponding entry that Section 14.6 registers
    in the "CoAP Transport Information" registry defined in this
    document.
 
@@ -2150,8 +2168,8 @@ Table of Contents
 14.2.  CoAP Content-Formats Registry
 
    IANA is asked to add the following entry to the "CoAP Content-
-   Formats" registry within the "Constrained RESTful Environments (CoRE)
-   Parameters" registry group.
+   Formats" registry [CoAP.Content.Formats] within the "Constrained
+   RESTful Environments (CoRE) Parameters" registry group.
 
    Content Type: application/informative-response+cbor
 
@@ -2164,8 +2182,8 @@ Table of Contents
 14.3.  CoAP Option Numbers Registry
 
    IANA is asked to enter the following option number to the "CoAP
-   Option Numbers" registry within the "Constrained RESTful Environments
-   (CoRE) Parameters" registry group.
+   Option Numbers" registry [CoAP.Option.Numbers] within the
+   "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
        +========+=====================================+============+
        | Number | Name                                | Reference  |
@@ -2183,7 +2201,22 @@ Table of Contents
    registered option number.  Then, please delete this paragraph and the
    previous paragraph.
 
-14.4.  Informative Response Parameters Registry
+14.4.  Target Attributes Registry
+
+   IANA is asked to register the following entry in the "Target
+   Attributes" registry [Target.Attributes] within the "Constrained
+   RESTful Environments (CoRE) Parameters" registry group.
+
+   *  Attribute Name: gp-obs
+
+   *  Brief Description: Observable resource supporting group
+      observation
+
+   *  Change Controller: IETF
+
+   *  Reference: Section 6 of [RFC-XXXX]
+
+14.5.  Informative Response Parameters Registry
 
    This document establishes the "Informative Response Parameters"
    registry within the "Constrained RESTful Environments (CoRE)
@@ -2227,13 +2260,11 @@ Table of Contents
       another item.
 
    *  Reference: This contains a pointer to the public specification for
-      the item.
+      the item, if one exists.
 
    This registry has been initially populated by the entries in Table 2.
-   The 'Reference' column for all of those entries refers to sections of
-   this document.
 
-14.5.  CoAP Transport Information Registry
+14.6.  CoAP Transport Information Registry
 
    This document establishes the "CoAP Transport Information" registry
    within the "Constrained RESTful Environments (CoRE) Parameters"
@@ -2256,24 +2287,9 @@ Table of Contents
       specified next to each other as last ones.
 
    *  Reference: This contains a pointer to the public specification for
-      the item.
+      the item, if one exists.
 
    This registry has been initially populated by the entry in Table 3.
-
-14.6.  Target Attributes Registry
-
-   IANA is asked to register the following entry in the "Target
-   Attributes" registry within the "Constrained RESTful Environments
-   (CoRE) Parameters" registry group.
-
-   *  Attribute Name: gp-obs
-
-   *  Brief Description: Observable resource supporting group
-      observation
-
-   *  Change Controller: IETF
-
-   *  Reference: Section 6 of [RFC-XXXX]
 
 14.7.  Expert Review Instructions
 
@@ -2314,6 +2330,16 @@ Table of Contents
 15.  References
 
 15.1.  Normative References
+
+   [CoAP.Content.Formats]
+              IANA, "CoAP Content-Formats",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#content-formats>.
+
+   [CoAP.Option.Numbers]
+              IANA, "CoAP Option Numbers",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#option-numbers>.
 
    [COSE.Algorithms]
               IANA, "COSE Algorithms",
@@ -2452,6 +2478,11 @@ Table of Contents
               for Constrained Environments (ACE) Framework", RFC 9203,
               DOI 10.17487/RFC9203, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9203>.
+
+   [Target.Attributes]
+              IANA, "Target Attributes",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#target-attributes>.
 
 15.2.  Informative References
 
