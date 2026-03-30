@@ -915,7 +915,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  0.05 (FETCH)                                                |
 |  Token: 0x4a                                                 |
 |  Observe: 0 (register)                                       |
-|  OSCORE: {kid: 0x01; Partial IV: 101; ...}                   |
+|  OSCORE: [kid:0x01, Partial IV:101]                          |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
@@ -933,20 +933,20 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |    /                                                         |
 |    \                                                         |
 |     `------------------------------------------------------> |  /r
-|                         0.05 (FETCH)                         |
-|                         Token: 0x7b                          |
-|                         Observe: 0 (register)                |
-|                         OSCORE: {kid: 0x05 ; Partial IV 501; |
-|                                  kid_context: 0x57ab2e; ...} |
-|                         <Other class U/I options>            |
-|                         0xff                                 |
-|                         Encrypted_payload {                  |
-|                           0x01 (GET),                        |
-|                           Observe: 0 (register),             |
-|                           Uri-Path: "r",                     |
-|                           <Other class E options>            |
-|                         }                                    |
-|                         <Signature>                          |
+|                           0.05 (FETCH)                       |
+|                           Token: 0x7b                        |
+|                           Observe: 0 (register)              |
+|                           OSCORE: [kid:0x05, Partial IV:501, |
+|                                    kid context:0x57ab2e]     |
+|                           <Other class U/I options>          |
+|                           0xff                               |
+|                           Encrypted_payload {                |
+|                             0x01 (GET),                      |
+|                             Observe: 0 (register),           |
+|                             Uri-Path: "r",                   |
+|                             <Other class E options>          |
+|                           }                                  |
+|                           <Countersignature>                 |
 |                                                              |
 |                           ( S steps SN_5 in the Group OSCORE |
 |                             Security Context: SN_5 <-- 502 ) |
@@ -960,7 +960,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.05 (Content)                                              |
 |  Token: 0x4a                                                 |
-|  OSCORE: [empty]                                             |
+|  OSCORE: - (empty)                                           |
 |  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
@@ -988,7 +988,7 @@ C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  0.05 (FETCH)                                                |
 |  Token: 0x01                                                 |
 |  Observe: 0 (register)                                       |
-|  OSCORE: {kid: 0x02; piv: 201; ...}                          |
+|  OSCORE: [kid:0x02, Partial IV:201]                          |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
@@ -1004,7 +1004,7 @@ C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.05 (Content)                                              |
 |  Token: 0x01                                                 |
-|  OSCORE: [empty]                                             |
+|  OSCORE: - (empty)                                           |
 |  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff,                                                       |
@@ -1038,12 +1038,12 @@ C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
 |    2.05 (Content)                                            |
 |    Token: 0x7b                                               |
 |    Observe: 2                                                |
-|    OSCORE: {kid: 0x05; piv: 502; ...}                        |
+|    OSCORE: [kid:0x05, Partial IV:502]                        |
 |    <Other class U/I options>                                 |
 |    0xff                                                      |
 |    Encrypted_payload {                                       |
 |      2.05 (Content),                                         |
-|      Observe: [empty],                                       |
+|      Observe: - (empty),                                     |
 |      <Other class E options>,                                |
 |      0xff,                                                   |
 |      Payload: "5678"                                         |
