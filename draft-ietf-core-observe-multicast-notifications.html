@@ -2726,12 +2726,9 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="104" y="84">0</text>
                 <text x="156" y="84">(register)</text>
                 <text x="56" y="100">OSCORE:</text>
-                <text x="112" y="100">{kid:</text>
-                <text x="160" y="100">0x01;</text>
-                <text x="216" y="100">Partial</text>
-                <text x="264" y="100">IV:</text>
-                <text x="300" y="100">101;</text>
-                <text x="340" y="100">...}</text>
+                <text x="132" y="100">[kid:0x01,</text>
+                <text x="208" y="100">Partial</text>
+                <text x="272" y="100">IV:101]</text>
                 <text x="52" y="116">&lt;Other</text>
                 <text x="104" y="116">class</text>
                 <text x="144" y="116">U/I</text>
@@ -2780,43 +2777,39 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="420" y="308">GRP_ADDR</text>
                 <text x="472" y="308">)</text>
                 <text x="540" y="372">/r</text>
-                <text x="228" y="388">0.05</text>
-                <text x="280" y="388">(FETCH)</text>
-                <text x="236" y="404">Token:</text>
-                <text x="284" y="404">0x7b</text>
-                <text x="244" y="420">Observe:</text>
-                <text x="288" y="420">0</text>
-                <text x="340" y="420">(register)</text>
-                <text x="240" y="436">OSCORE:</text>
-                <text x="296" y="436">{kid:</text>
-                <text x="340" y="436">0x05</text>
-                <text x="368" y="436">;</text>
+                <text x="244" y="388">0.05</text>
+                <text x="296" y="388">(FETCH)</text>
+                <text x="252" y="404">Token:</text>
+                <text x="300" y="404">0x7b</text>
+                <text x="260" y="420">Observe:</text>
+                <text x="304" y="420">0</text>
+                <text x="356" y="420">(register)</text>
+                <text x="256" y="436">OSCORE:</text>
+                <text x="332" y="436">[kid:0x05,</text>
                 <text x="408" y="436">Partial</text>
-                <text x="452" y="436">IV</text>
-                <text x="484" y="436">501;</text>
-                <text x="332" y="452">kid_context:</text>
-                <text x="424" y="452">0x57ab2e;</text>
-                <text x="484" y="452">...}</text>
-                <text x="236" y="468">&lt;Other</text>
-                <text x="288" y="468">class</text>
-                <text x="328" y="468">U/I</text>
-                <text x="380" y="468">options&gt;</text>
-                <text x="228" y="484">0xff</text>
-                <text x="280" y="500">Encrypted_payload</text>
-                <text x="360" y="500">{</text>
-                <text x="244" y="516">0x01</text>
-                <text x="292" y="516">(GET),</text>
-                <text x="260" y="532">Observe:</text>
-                <text x="304" y="532">0</text>
-                <text x="360" y="532">(register),</text>
-                <text x="264" y="548">Uri-Path:</text>
-                <text x="324" y="548">"r",</text>
-                <text x="252" y="564">&lt;Other</text>
-                <text x="304" y="564">class</text>
-                <text x="336" y="564">E</text>
-                <text x="380" y="564">options&gt;</text>
-                <text x="216" y="580">}</text>
-                <text x="256" y="596">&lt;Signature&gt;</text>
+                <text x="472" y="436">IV:501,</text>
+                <text x="312" y="452">kid</text>
+                <text x="400" y="452">context:0x57ab2e]</text>
+                <text x="252" y="468">&lt;Other</text>
+                <text x="304" y="468">class</text>
+                <text x="344" y="468">U/I</text>
+                <text x="396" y="468">options&gt;</text>
+                <text x="244" y="484">0xff</text>
+                <text x="296" y="500">Encrypted_payload</text>
+                <text x="376" y="500">{</text>
+                <text x="260" y="516">0x01</text>
+                <text x="308" y="516">(GET),</text>
+                <text x="276" y="532">Observe:</text>
+                <text x="320" y="532">0</text>
+                <text x="376" y="532">(register),</text>
+                <text x="280" y="548">Uri-Path:</text>
+                <text x="340" y="548">"r",</text>
+                <text x="268" y="564">&lt;Other</text>
+                <text x="320" y="564">class</text>
+                <text x="352" y="564">E</text>
+                <text x="396" y="564">options&gt;</text>
+                <text x="232" y="580">}</text>
+                <text x="300" y="596">&lt;Countersignature&gt;</text>
                 <text x="232" y="628">(</text>
                 <text x="248" y="628">S</text>
                 <text x="280" y="628">steps</text>
@@ -2864,7 +2857,8 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="52" y="804">Token:</text>
                 <text x="100" y="804">0x4a</text>
                 <text x="56" y="820">OSCORE:</text>
-                <text x="120" y="820">[empty]</text>
+                <text x="96" y="820">-</text>
+                <text x="136" y="820">(empty)</text>
                 <text x="60" y="836">Max-Age:</text>
                 <text x="104" y="836">0</text>
                 <text x="52" y="852">&lt;Other</text>
@@ -2954,11 +2948,9 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="104" y="1252">0</text>
                 <text x="156" y="1252">(register)</text>
                 <text x="56" y="1268">OSCORE:</text>
-                <text x="112" y="1268">{kid:</text>
-                <text x="160" y="1268">0x02;</text>
-                <text x="204" y="1268">piv:</text>
-                <text x="244" y="1268">201;</text>
-                <text x="284" y="1268">...}</text>
+                <text x="132" y="1268">[kid:0x02,</text>
+                <text x="208" y="1268">Partial</text>
+                <text x="272" y="1268">IV:201]</text>
                 <text x="52" y="1284">&lt;Other</text>
                 <text x="104" y="1284">class</text>
                 <text x="144" y="1284">U/I</text>
@@ -3003,7 +2995,8 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="52" y="1508">Token:</text>
                 <text x="100" y="1508">0x01</text>
                 <text x="56" y="1524">OSCORE:</text>
-                <text x="120" y="1524">[empty]</text>
+                <text x="96" y="1524">-</text>
+                <text x="136" y="1524">(empty)</text>
                 <text x="60" y="1540">Max-Age:</text>
                 <text x="104" y="1540">0</text>
                 <text x="52" y="1556">&lt;Other</text>
@@ -3108,11 +3101,9 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="76" y="2052">Observe:</text>
                 <text x="120" y="2052">2</text>
                 <text x="72" y="2068">OSCORE:</text>
-                <text x="128" y="2068">{kid:</text>
-                <text x="176" y="2068">0x05;</text>
-                <text x="220" y="2068">piv:</text>
-                <text x="260" y="2068">502;</text>
-                <text x="300" y="2068">...}</text>
+                <text x="148" y="2068">[kid:0x05,</text>
+                <text x="224" y="2068">Partial</text>
+                <text x="288" y="2068">IV:502]</text>
                 <text x="68" y="2084">&lt;Other</text>
                 <text x="120" y="2084">class</text>
                 <text x="160" y="2084">U/I</text>
@@ -3123,7 +3114,8 @@ At the time of writing this specification, acceptable formats of authentication 
                 <text x="76" y="2132">2.05</text>
                 <text x="140" y="2132">(Content),</text>
                 <text x="92" y="2148">Observe:</text>
-                <text x="164" y="2148">[empty],</text>
+                <text x="136" y="2148">-</text>
+                <text x="180" y="2148">(empty),</text>
                 <text x="84" y="2164">&lt;Other</text>
                 <text x="136" y="2164">class</text>
                 <text x="168" y="2164">E</text>
