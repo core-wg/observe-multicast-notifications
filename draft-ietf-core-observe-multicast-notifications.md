@@ -22,7 +22,7 @@ author:
         org: RISE AB
         street: Isafjordsgatan 22
         city: Kista
-        code: SE-16440 Stockholm
+        code: SE-164 40
         country: Sweden
         email: marco.tiloca@ri.se
       -
@@ -31,7 +31,7 @@ author:
         org: RISE AB
         street: Isafjordsgatan 22
         city: Kista
-        code: SE-16440 Stockholm
+        code: SE-164 40
         country: Sweden
         email: rikard.hoglund@ri.se
       -
@@ -49,7 +49,7 @@ author:
         org: Ericsson AB
         street: Torshamnsgatan 23
         city: Kista
-        code: SE-16440 Stockholm
+        code: SE-164 40
         country: Sweden
         email: francesca.palombini@ericsson.com
 
