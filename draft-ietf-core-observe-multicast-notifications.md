@@ -92,6 +92,24 @@ normative:
     date: false
     title: COSE Header Parameters
     target: https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
+  CoAP.Content.Formats:
+    author:
+      org: IANA
+    date: false
+    title: CoAP Content-Formats
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats
+  CoAP.Option.Numbers:
+    author:
+      org: IANA
+    date: false
+    title: CoAP Option Numbers
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers
+  Target.Attributes:
+    author:
+      org: IANA
+    date: false
+    title: Target Attributes
+    target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes
 
 informative:
   I-D.ietf-core-coap-pubsub:
@@ -1062,26 +1080,28 @@ This document defines a number of fields used in the informative response define
 The table below summarizes them and specifies the CBOR key to use as abbreviation, instead of the full descriptive name. Note that the media type "application/informative-response+cbor" MUST be used when these fields are transported.
 
  Name            | CBOR Key | CBOR Type              | Reference
------------------|----------|------------------------|---------------------------------
- tp_info         | 0        | array                  | {{ssec-server-side-informative}}
- ph_req          | 1        | byte string            | {{ssec-server-side-informative}}
- last_notif      | 2        | byte string            | {{ssec-server-side-informative}}
- next_not_before | 3        | unsigned integer       | {{ssec-server-side-informative}}
- ending          | 4        | integer or float       | {{ssec-server-side-informative}}
- join_uri        | 5        | text string            | {{sec-inf-response}}
- sec_gp          | 6        | text string            | {{sec-inf-response}}
- as_uri          | 7        | text string            | {{sec-inf-response}}
- hkdf            | 8        | integer or text string | {{sec-inf-response}}
- cred_fmt        | 9        | integer                | {{sec-inf-response}}
- gp_enc_alg      | 10       | integer or text string | {{sec-inf-response}}
- sign_alg        | 11       | integer or text string | {{sec-inf-response}}
- sign_params     | 12       | array                  | {{sec-inf-response}}
- gp_material     | 13       | map                    | {{self-managed-oscore-group}}
- srv_cred        | 14       | byte string            | {{self-managed-oscore-group}}
- srv_identifier  | 15       | byte string            | {{self-managed-oscore-group}}
- exi             | 16       | unsigned integer       | {{self-managed-oscore-group}}
- exp             | 17       | integer or float       | {{self-managed-oscore-group}}
+-----------------|----------|------------------------|----------------------------------------------
+ tp_info         | 0        | array                  | {{ssec-server-side-informative}} of {{&SELF}}
+ ph_req          | 1        | byte string            | {{ssec-server-side-informative}} of {{&SELF}}
+ last_notif      | 2        | byte string            | {{ssec-server-side-informative}} of {{&SELF}}
+ next_not_before | 3        | unsigned integer       | {{ssec-server-side-informative}} of {{&SELF}}
+ ending          | 4        | integer or float       | {{ssec-server-side-informative}} of {{&SELF}}
+ join_uri        | 5        | text string            | {{sec-inf-response}} of {{&SELF}}
+ sec_gp          | 6        | text string            | {{sec-inf-response}} of {{&SELF}}
+ as_uri          | 7        | text string            | {{sec-inf-response}} of {{&SELF}}
+ hkdf            | 8        | integer or text string | {{sec-inf-response}} of {{&SELF}}
+ cred_fmt        | 9        | integer                | {{sec-inf-response}} of {{&SELF}}
+ gp_enc_alg      | 10       | integer or text string | {{sec-inf-response}} of {{&SELF}}
+ sign_alg        | 11       | integer or text string | {{sec-inf-response}} of {{&SELF}}
+ sign_params     | 12       | array                  | {{sec-inf-response}} of {{&SELF}}
+ gp_material     | 13       | map                    | {{self-managed-oscore-group}} of {{&SELF}}
+ srv_cred        | 14       | byte string            | {{self-managed-oscore-group}} of {{&SELF}}
+ srv_identifier  | 15       | byte string            | {{self-managed-oscore-group}} of {{&SELF}}
+ exi             | 16       | unsigned integer       | {{self-managed-oscore-group}} of {{&SELF}}
+ exp             | 17       | integer or float       | {{self-managed-oscore-group}} of {{&SELF}}
 {: #table-informative-response-params title="Informative Response Parameters." align="center"}
+
+Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
@@ -1164,7 +1184,7 @@ This document registers the media type "application/informative-response+cbor" f
 
 ## CoAP Content-Formats Registry {#content-format}
 
-IANA is asked to add the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to add the following entry to the "CoAP Content-Formats" registry {{CoAP.Content.Formats} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 Content Type: application/informative-response+cbor
 
@@ -1176,7 +1196,7 @@ Reference: {{&SELF}}
 
 ## CoAP Option Numbers Registry ## {#iana-coap-options}
 
-IANA is asked to enter the following option number to the "CoAP Option Numbers" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to enter the following option number to the "CoAP Option Numbers" registry {{CoAP.Option.Numbers}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 | Number | Name                                | Reference |
 | TBD18  | Multicast-Response-Feedback-Divider | {{&SELF}} |
@@ -1185,6 +1205,15 @@ IANA is asked to enter the following option number to the "CoAP Option Numbers" 
 For the Multicast-Response-Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.
 
 Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph and the previous paragraph.
+
+## Target Attributes Registry ## {#iana-target-attributes}
+
+IANA is asked to register the following entry in the "Target Attributes" registry {{Target.Attributes}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+* Attribute Name: gp-obs
+* Brief Description: Observable resource supporting group observation
+* Change Controller: IETF
+* Reference: {{sec-web-linking}} of {{&SELF}}
 
 ## Informative Response Parameters Registry {#iana-informative-response-params}
 
@@ -1202,9 +1231,9 @@ The columns of this registry are:
 
 * CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
 
-* Reference: This contains a pointer to the public specification for the item.
+* Reference: This contains a pointer to the public specification for the item, if one exists.
 
-This registry has been initially populated by the entries in {{table-informative-response-params}}. The 'Reference' column for all of those entries refers to sections of this document.
+This registry has been initially populated by the entries in {{table-informative-response-params}}.
 
 ## CoAP Transport Information Registry {#iana-coap-transport-information}
 
@@ -1218,18 +1247,9 @@ The columns of this registry are:
 
 * Transport Information Details: This field contains a list of text strings, where two adjacent strings are separated by a single comma character. Each text string is the name of an element that provides transport-specific information related to a pertinent CoAP request. Optional elements are prepended by '?' and MUST be specified next to each other as last ones.
 
-* Reference: This contains a pointer to the public specification for the item.
+* Reference: This contains a pointer to the public specification for the item, if one exists.
 
 This registry has been initially populated by the entry in {{table-transport-information}}.
-
-## Target Attributes Registry ## {#iana-target-attributes}
-
-IANA is asked to register the following entry in the "Target Attributes" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
-
-* Attribute Name: gp-obs
-* Brief Description: Observable resource supporting group observation
-* Change Controller: IETF
-* Reference: {{sec-web-linking}} of {{&SELF}}
 
 ## Expert Review Instructions {#iana-review}
 
