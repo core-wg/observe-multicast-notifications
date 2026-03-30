@@ -1184,7 +1184,7 @@ This document registers the media type "application/informative-response+cbor" f
 
 ## CoAP Content-Formats Registry {#content-format}
 
-IANA is asked to add the following entry to the "CoAP Content-Formats" registry {{CoAP.Content.Formats} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to add the following entry to the "CoAP Content-Formats" registry {{CoAP.Content.Formats}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 Content Type: application/informative-response+cbor
 
@@ -1273,19 +1273,19 @@ In such a case, the server has to first start the group observation (see {{ssec-
 
 When distributed through different means than informative responses, the group observation data has to specify the time when the group observation is planned to be canceled by the server. In particular, the server commits to keeping the group observation ongoing until the scheduled cancellation time is reached. Before that time, the server might however retract the advertised group observation data and thus make it not available to new clients.
 
-After a client has obtained the group observation data from different sources than an informative response, the client can simply set up the right multicast address and start receiving multicast notifications for the group observation. Consequently, the server will not receive an observation request due to that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
+After a client has obtained the group observation data from different sources than an informative response, the client can simply set up the right multicast address and start receiving multicast notifications for the group observation. Consequently, the server will not receive an observation request from that client, will not follow-up with a corresponding informative response, and thus its observer counter (see {{sec-server-side}}) is not incremented to reflect the presence of the new client.
 
 ## Topic Discovery in Publish-Subscribe Settings # {#appendix-different-sources-pubsub}
 
-In a Publish-Subscribe scenario {{I-D.ietf-core-coap-pubsub}}, a group observation can be discovered along with topic metadata.
+In a Publish-Subscribe scenario (e.g., see {{I-D.ietf-core-coap-pubsub}}), a group observation can be discovered along with topic metadata.
 
-To this end, together with topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see {{ssec-server-side-informative}}).
+To this end, together with the topic metadata, the server has to publish the same information associated with the group observation that would be conveyed in the informative response returned to observer clients (see {{ssec-server-side-informative}}).
 
 This information especially includes the phantom observation request associated with the group observation, as well as the addressing information of the server and the addressing information where multicast notifications are sent to.
 
 {{discovery-pub-sub}} provides an example where a group observation is discovered. The example assumes a CoRAL namespace {{I-D.ietf-core-coral}} that contains properties analogous to those in the Content-Format "application/informative-response+cbor".
 
-Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Instead, it is expressed through the scheme and authority components of the two URIs specified as 'tp_info_server' and 'tp_info_client', where the former specifies the addressing information of the server (like 'tpi_server' in {{ssssec-udp-transport-specific}}), while the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in {{ssssec-udp-transport-specific}}).
+Note that the information about the transport protocol used for the group observation is not expressed through a dedicated element equivalent to 'tp_id' of the informative response (see {{sssec-transport-specific-encoding}}). Instead, it is expressed through the scheme and authority components of the two URIs specified as 'tp_info_server' and 'tp_info_client', where the former specifies the addressing information of the server (like 'tpi_server' in {{ssssec-udp-transport-specific}}), and the latter specifies the addressing information where multicast notifications are sent to (like 'tpi_client' in {{ssssec-udp-transport-specific}}).
 
 ~~~~~~~~~~~
 Request:
@@ -1397,7 +1397,7 @@ if (I == 0) {
 }
 ~~~~~~~~~~~
 
-## Client Side - Optimized Version # {#appendix-pseudo-code-counting-client-constrained}
+## Client Side (Optimized Version) # {#appendix-pseudo-code-counting-client-constrained}
 
 ~~~~~~~~~~~
 input:  int Q, // Value of the MRFD option
@@ -1526,7 +1526,7 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
    * In the Common Context of the Group OSCORE Security Context, the parameter AEAD Algorithm and the parameter Pairwise Key Agreement Algorithm are not set (see {{Section 2.1.1 of I-D.ietf-core-oscore-groupcomm}} and {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-   * Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
+   * Aligned with the previous point, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the elements 'alg_aead' and 'alg_pairwise_key_agreement' within the 'algorithms' arrays are set to the CBOR simple value `null` (0xf6).
 
 * 'srv_cred': this element is a CBOR byte string, with value the original byte serialization of the server's authentication credential used in the OSCORE group. In particular, the original byte serialization complies with the format specified by the 'cred_fmt' element of 'gp_material'.
 
@@ -1546,13 +1546,13 @@ If a client has a reliable way to synchronize its internal clock with UTC and th
 
 Note that the informative response does not require to include an explicit proof of possession of the server's private key. Although the server is also acting as Group Manager and a proof-of-possession evidence of the Group Manager's private key is included in a full-fledged Join Response (see {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}), such proof of possession will be achieved through every multicast notification that the server sends, as protected with the group mode of Group OSCORE and including a signature computed with its private key.
 
-A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs the Security Context like a "silent server" would, i.e., without Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
+A client receiving an informative response uses the information above to set up the Group OSCORE Security Context, as described in {{Section 2 of I-D.ietf-core-oscore-groupcomm}}. Note that the client does not obtain a Sender ID of its own, hence it installs the Security Context like a "silent server" would, i.e., without a Sender Context. From then on, the client uses the received keying material to process the incoming multicast notifications from the server.
 
-Since the server is also acting as Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad for encrypting and signing the phantom request and multicast notifications (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
+Since the server is also acting as the Group Manager, the authentication credential of the server provided in the 'srv_cred' element of the informative response is also used in the 'gm_cred' element of the external_aad structure for encrypting and signing the phantom request and multicast notifications (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
 
 Furthermore, the server complies with the following points.
 
-* The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of the phantom requests and the multicast notifications in group observations that it hosts, as defined in this document.
+* The server MUST NOT self-manage OSCORE groups and provide the related keying material in the informative response for any other purpose than the protection of the phantom requests and the multicast notifications in group observations that it hosts, according to the method defined in this document.
 
    The server MAY use the same self-managed OSCORE group to protect the phantom request and the multicast notifications of multiple group observations that it hosts.
 
@@ -1564,7 +1564,7 @@ Upon expiration of the group keying material as indicated in the informative res
 
    - The server MUST update the OSCORE Master Secret.
 
-   - The server MUST update the ID Context used as Group Identifier (Gid), consistently with {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}.
+   - The server MUST update the ID Context used as Group Identifier (Gid), consistent {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}.
 
    - The server MAY update the OSCORE Master Salt.
 
@@ -1576,9 +1576,9 @@ Before the keying material has expired, the server can send a multicast response
 
 * it MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
 
-The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include its encoding as the Partial IV in the OSCORE Option of the response.
+The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.
 
-When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as deterministic requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime and they both remain part of the group until the group ceases to exist.
+When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as Deterministic Requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime and they both remain part of the group until the group ceases to exist.
 
 As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
@@ -1594,41 +1594,41 @@ Then, the clients can set up the multicast address and group observation for lis
 
 If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}) and the OSCORE group supports the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the server and each client in the OSCORE group can also independently compute the protected phantom observation request.
 
-In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all computing the same protected deterministic request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
+In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all computing the same protected Deterministic Request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
 
-When receiving the deterministic request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
+When receiving the Deterministic Request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
-If the server recognizes the received deterministic request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server MUST reply with an informative response that MUST NOT be protected.
+If the server recognizes the received Deterministic Request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server MUST reply with an informative response that MUST NOT be protected.
 
-Note that the phantom registration request is, in terms of transport-independent information, identical to the same deterministic request possibly sent by each client. Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter and this specifies transport-independent information different from the one of the sent deterministic request, then the client considers the informative response malformed.
+Note that the phantom registration request is, in terms of transport-independent information, identical to the same Deterministic Request possibly sent by each client. Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter and this specifies transport-independent information different from the one of the sent Deterministic Request, then the client considers the informative response malformed.
 
-When using a deterministic request as a phantom observation request, the observer counter at the server (see {{sec-server-side}}) is not reliably incremented when new clients start participating in the group observation.
+When using a Deterministic Request as a phantom observation request, the observer counter at the server (see {{sec-server-side}}) is not reliably incremented when new clients start participating in the group observation.
 
-That is, the clients can simply set up the right multicast address and port number, and then start listening to multicast notifications bound to the deterministic request. Hence, the observer counter at the server is not incremented as new clients start listening to multicast notifications.
+That is, the clients can simply set up the right multicast address and port number, and then start listening to multicast notifications bound to the Deterministic Request. Hence, the observer counter at the server is not incremented as new clients start listening to multicast notifications.
 
-Furthermore, the security identity associated with the sender of any deterministic request in the OSCORE group is exactly the same one, i.e., the pair (SID, OSCORE ID Context), where SID is the OSCORE Sender ID of the Deterministic Client in the OSCORE group, which all the clients in the group rely on to produce deterministic requests.
+Furthermore, the security identity associated with the sender of any Deterministic Request in the OSCORE group is exactly the same one, i.e., the pair (SID, OSCORE ID Context), where SID is the OSCORE Sender ID of the Deterministic Client in the OSCORE group, which all the clients in the group rely on to produce Deterministic Requests.
 
 If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
 
-   * 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
+* 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-   * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute the deterministic request (see {{Section 3.4.1 of I-D.ietf-core-cacheable-oscore}}).
+* 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute Deterministic Requests (see {{Section 3.4.1 of I-D.ietf-core-cacheable-oscore}}).
 
 Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
 
 * In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
-* Consistently, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
+* Aligned with the previous point, when building the two OSCORE external_aad structures to process messages protected with Group OSCORE in this OSCORE group, (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}), the element 'alg_pairwise_key_agreement' within the 'algorithms' arrays is set to the CBOR simple value `null` (0xf6).
 
-If a deterministic request is used as a phantom observation request for a group observation, the server does not assist clients that are interested in taking part in the group observation but do not support deterministic requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
+If a Deterministic Request is used as a phantom observation request for a group observation, the server does not assist clients that are interested in taking part in the group observation but do not support Deterministic Requests. This is consistent with the fact that the setup in question already relies on a lot of agreed pre-configuration.
 
-Therefore, the following holds when a group observation for a target resource relies on a deterministic request as a phantom observation request.
+Therefore, the following holds when a group observation for a target resource relies on a Deterministic Request as a phantom observation request.
 
-* Every client interested to take part in such a group observation: has to support deterministic requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
+* Every client that is interested to take part in such a group observation: has to support Deterministic Requests; and has to know the phantom observation request, as a result of pre-configuration or following its retrieval through dedicated means (see {{appendix-different-sources}}).
 
-* The server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support deterministic requests.
+* The server does not simultaneously run a parallel group observation for the same target resource, as associated with a different phantom observation request and intended to clients that do not support Deterministic Requests.
 
-* If the server receives an observation request for the target resource that differs from the specific deterministic request associated with the group observation for that target resource, then the server replies as usual with an informative response, including: the transport-specific information, the phantom request (i.e., the expected deterministic request), and (optionally) the latest notification.
+* If the server receives an observation request for the target resource that differs from the specific Deterministic Request associated with the group observation for that target resource, then the server replies as usual with an informative response, including: the transport-specific information, the phantom request (i.e., the expected Deterministic Request), and (optionally) the latest notification.
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
@@ -1733,7 +1733,7 @@ Therefore, the following holds when a group observation for a target resource re
 
 * Added more details on the reliability of the client rough counting.
 
-* Added more details on the unreliability of counting new clients, when the phantom request is obtained from other sources or is an OSCORE deterministic request.
+* Added more details on the unreliability of counting new clients, when the phantom request is obtained from other sources or is an OSCORE Deterministic Request.
 
 * Revised parameter naming.
 
@@ -1751,7 +1751,7 @@ Therefore, the following holds when a group observation for a target resource re
 
 ## Version -04 to -05 ## {#sec-04-05}
 
-* If the phantom request is an OSCORE deterministic request, there is no parallel group observation for clients that lack support.
+* If the phantom request is an OSCORE Deterministic Request, there is no parallel group observation for clients that lack support.
 
 * Clarification on pre-configured clients.
 
@@ -1775,7 +1775,7 @@ Therefore, the following holds when a group observation for a target resource re
 
 * Revised example with early retrieval of phantom request.
 
-* Clarified use, rationale and example of phantom request as deterministic request.
+* Clarified use, rationale and example of phantom request as Deterministic Request.
 
 * Editorial improvements.
 
@@ -1811,7 +1811,7 @@ Therefore, the following holds when a group observation for a target resource re
 
 * Aligned parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.
 
-* Clarifications about self-managed OSCORE group and use of deterministic requests for cacheable OSCORE.
+* Clarifications about self-managed OSCORE group and use of Deterministic Requests for cacheable OSCORE.
 
 * New example with a proxy, Group OSCORE and a deterministic phantom request.
 
