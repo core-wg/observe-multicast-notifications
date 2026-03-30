@@ -892,9 +892,9 @@ The server S sends multicast notifications to the IP multicast address GRP_ADDR 
 
 Pairwise communication over unicast is protected with OSCORE, while S protects multicast notifications with Group OSCORE. Specifically:
 
-* C1 and S have a pairwise OSCORE Security Context. In particular, C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 as Sender Sequence Number. Also, S has 'kid' = 0x03 as Sender ID and SN_3 = 301 as Sender Sequence Number.
+* C1 and S have a pairwise OSCORE Security Context. In particular, C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 as Sender Sequence Number.
 
-* C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 as Sender Sequence Number. Also, S has 'kid' = 0x04 as Sender ID and SN_4 = 401 as Sender Sequence Number.
+* C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 as Sender Sequence Number.
 
 * S is a member of the OSCORE group with name "myGroup" and with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID and SN_5 = 501 as Sender Sequence Number.
 
@@ -914,7 +914,8 @@ The following notation is used for the payload of the informative responses:
 C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  0.05 (FETCH)                                                |
 |  Token: 0x4a                                                 |
-|  OSCORE: {kid: 0x01; piv: 101; ...}                          |
+|  Observe: 0 (register)                                       |
+|  OSCORE: {kid: 0x01; Partial IV: 101; ...}                   |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
@@ -934,8 +935,9 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |     `------------------------------------------------------> |  /r
 |                         0.05 (FETCH)                         |
 |                         Token: 0x7b                          |
-|                         OSCORE: {kid: 0x05 ; piv: 501;       |
-|                                  kid context: 0x57ab2e; ...} |
+|                         Observe: 0 (register)                |
+|                         OSCORE: {kid: 0x05 ; Partial IV 501; |
+|                                  kid_context: 0x57ab2e; ...} |
 |                         <Other class U/I options>            |
 |                         0xff                                 |
 |                         Encrypted_payload {                  |
@@ -958,7 +960,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.05 (Content)                                              |
 |  Token: 0x4a                                                 |
-|  OSCORE: {piv: 301; ...}                                     |
+|  OSCORE: [empty]                                             |
 |  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
@@ -985,6 +987,7 @@ C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  0.05 (FETCH)                                                |
 |  Token: 0x01                                                 |
+|  Observe: 0 (register)                                       |
 |  OSCORE: {kid: 0x02; piv: 201; ...}                          |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
@@ -1001,7 +1004,7 @@ C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.05 (Content)                                              |
 |  Token: 0x01                                                 |
-|  OSCORE: {piv: 401; ...}                                     |
+|  OSCORE: [empty]                                             |
 |  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff,                                                       |
@@ -1034,6 +1037,7 @@ C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
 +--+                                                           |
 |    2.05 (Content)                                            |
 |    Token: 0x7b                                               |
+|    Observe: 2                                                |
 |    OSCORE: {kid: 0x05; piv: 502; ...}                        |
 |    <Other class U/I options>                                 |
 |    0xff                                                      |
@@ -1614,6 +1618,8 @@ Therefore, the following holds when a group observation for a target resource re
 * The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.
 
 * Removed unnecessary normative language.
+
+* Fixes and simplifications in the example with Group OSCORE.
 
 * Clarifications and editorial improvements.
 
