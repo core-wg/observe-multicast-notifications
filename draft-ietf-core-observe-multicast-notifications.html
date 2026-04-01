@@ -1048,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Observe Multicast Notifications</td>
-<td class="right">March 2026</td>
+<td class="right">April 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 1 October 2026</td>
+<td class="center">Expires 3 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-30" class="published">30 March 2026</time>
+<time datetime="2026-04-01" class="published">1 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-01">1 October 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-03">3 October 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1697,7 +1697,7 @@ The combination of URI scheme and 'authority' component determines the CoAP tran
                   <p id="section-4.2.1-4.1.6.1.1">If the 'authority' component specifies a host-ip, then the 'scheme-id' (hence the URI scheme) is sufficient to identify the transport.<a href="#section-4.2.1-4.1.6.1.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-4.2.1-4.1.6.2">
-                  <p id="section-4.2.1-4.1.6.2.1">If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in <span>[<a href="#I-D.ietf-core-dns-over-coap" class="cite xref">I-D.ietf-core-dns-over-coap</a>]</span>).<a href="#section-4.2.1-4.1.6.2.1" class="pilcrow">¶</a></p>
+                  <p id="section-4.2.1-4.1.6.2.1">If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in <span>[<a href="#RFC9953" class="cite xref">RFC9953</a>]</span>).<a href="#section-4.2.1-4.1.6.2.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 <p id="section-4.2.1-4.1.7">
@@ -1969,7 +1969,7 @@ If the port number is not present in the CRI, the client <span class="bcp14">MUS
             <p id="section-5.2-6.7.1">If a traditional observation to the target resource is ongoing, the client <span class="bcp14">MAY</span> silently cancel it without notifying the server.<a href="#section-5.2-6.7.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.2-7">In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client <span class="bcp14">MUST</span> treat any CRI within the 'tp_info' array as invalid, if the 'authority' component is a host-name such that, when resolved, its combination with the URI scheme indicates multiple transports (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in <span>[<a href="#I-D.ietf-core-dns-over-coap" class="cite xref">I-D.ietf-core-dns-over-coap</a>]</span>).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-7">In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client <span class="bcp14">MUST</span> treat any CRI within the 'tp_info' array as invalid, if the 'authority' component is a host-name such that, when resolved, its combination with the URI scheme indicates multiple transports (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in <span>[<a href="#RFC9953" class="cite xref">RFC9953</a>]</span>).<a href="#section-5.2-7" class="pilcrow">¶</a></p>
 <p id="section-5.2-8">If any of the expected fields in the informative response are absent, malformed, or invalid, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
 <p id="section-5.2-9"><a href="#appendix-different-sources" class="auto internal xref">Appendix A</a> describes possible alternative ways for clients to retrieve the phantom registration request and other information related to a group observation.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
 </section>
@@ -2031,7 +2031,7 @@ RES: 2.05 Content
 <p id="section-7-3">The following notation is used for the payload of the informative responses:<a href="#section-7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7-4.1">
-          <p id="section-7-4.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-20#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
+          <p id="section-7-4.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-21#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-4.2">
           <p id="section-7-4.2.1">'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '|' denoting byte concatenation.<a href="#section-7-4.2.1" class="pilcrow">¶</a></p>
@@ -2653,7 +2653,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <p id="section-10-5">The following notation is used for the payload of the informative responses:<a href="#section-10-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-6.1">
-          <p id="section-10-6.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-20#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-10-6.1.1" class="pilcrow">¶</a></p>
+          <p id="section-10-6.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-21#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-10-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-6.2">
           <p id="section-10-6.2.1">'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '|' denoting byte concatenation.<a href="#section-10-6.2.1" class="pilcrow">¶</a></p>
@@ -3596,7 +3596,7 @@ Protecting informative responses from the server prevents on-path active adversa
 <dd class="break"></dd>
 <dt id="I-D.ietf-cbor-edn-literals">[I-D.ietf-cbor-edn-literals]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"CBOR Extended Diagnostic Notation (EDN)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-edn-literals-20</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-20">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-20</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"CBOR Extended Diagnostic Notation (EDN)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-edn-literals-21</span>, <time datetime="2026-03-30" class="refDate">30 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-21">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-groupcomm-bis">[I-D.ietf-core-groupcomm-bis]</dt>
         <dd>
@@ -3703,10 +3703,6 @@ Protecting informative responses from the server prevents on-path active adversa
         <dd>
 <span class="refAuthor">Amsüss, C.</span> and <span class="refAuthor">T. Fossati</span>, <span class="refTitle">"The Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coral-06</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-06">https://datatracker.ietf.org/doc/html/draft-ietf-core-coral-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-core-dns-over-coap">[I-D.ietf-core-dns-over-coap]</dt>
-        <dd>
-<span class="refAuthor">Lenders, M. S.</span>, <span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Gündoğan, C.</span>, <span class="refAuthor">Schmidt, T. C.</span>, and <span class="refAuthor">M. Wählisch</span>, <span class="refTitle">"DNS over CoAP (DoC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-dns-over-coap-20</span>, <time datetime="2025-09-16" class="refDate">16 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-20">https://datatracker.ietf.org/doc/html/draft-ietf-core-dns-over-coap-20</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-core-multicast-notifications-proxy">[I-D.ietf-core-multicast-notifications-proxy]</dt>
         <dd>
 <span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Amsüss, C.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Using Proxies for Observe Notifications as CoAP Multicast Responses"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-multicast-notifications-proxy-00</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00">https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00</a>&gt;</span>. </dd>
@@ -3748,8 +3744,12 @@ Protecting informative responses from the server prevents on-path active adversa
 <span class="refAuthor">Amsüss, C., Ed.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. van der Stok</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Resource Directory"</span>, <span class="seriesInfo">RFC 9176</span>, <span class="seriesInfo">DOI 10.17487/RFC9176</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9176">https://www.rfc-editor.org/rfc/rfc9176</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9200">[RFC9200]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authentication and Authorization for Constrained Environments Using the OAuth 2.0 Framework (ACE-OAuth)"</span>, <span class="seriesInfo">RFC 9200</span>, <span class="seriesInfo">DOI 10.17487/RFC9200</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9200">https://www.rfc-editor.org/rfc/rfc9200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9953">[RFC9953]</dt>
+      <dd>
+<span class="refAuthor">Lenders, M. S.</span>, <span class="refAuthor">Amsüss, C.</span>, <span class="refAuthor">Gündoğan, C.</span>, <span class="refAuthor">Schmidt, T. C.</span>, and <span class="refAuthor">M. Wählisch</span>, <span class="refTitle">"DNS over CoAP (DoC)"</span>, <span class="seriesInfo">RFC 9953</span>, <span class="seriesInfo">DOI 10.17487/RFC9953</span>, <time datetime="2026-03" class="refDate">March 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9953">https://www.rfc-editor.org/rfc/rfc9953</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -4204,7 +4204,10 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
             <p id="appendix-E.1-1.3.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.4.1">Updated references.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.1-1.5">
+            <p id="appendix-E.1-1.5.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
