@@ -1429,16 +1429,16 @@ Table of Contents
    with other servers to access their resources.
 
    Both the clients and the server MAY join the OSCORE group by using
-   the approach described in [I-D.ietf-ace-key-groupcomm-oscore] and
-   based on the ACE framework for Authentication and Authorization in
-   constrained environments [RFC9200].  When doing so, the server joins
-   the group (also) with the roles of Requester and Responder.  Instead,
-   a client can join the group with any permitted role or combination of
-   roles, unless it intends to send its original observation requests
-   (see Section 5.1) protected with Group OSCORE.  In such a case, the
-   client joins the group (also) as a Requester.  Further details on how
-   to discover the OSCORE group and join it are out of the scope of this
-   document.
+   the approach defined in [I-D.ietf-ace-key-groupcomm-oscore] and based
+   on the ACE framework for Authentication and Authorization in
+   constrained environments [RFC9200].  When doing so, the server has to
+   join the group (also) with the roles of Requester and Responder.
+   Instead, a client can join the group with any permitted role or
+   combination of roles, unless it intends to send its original
+   observation requests (see Section 5.1) protected with Group OSCORE.
+   In such a case, the client has to join the group (also) as a
+   Requester.  Further details on how to discover the OSCORE group and
+   join it are out of the scope of this document.
 
    If multicast notifications are protected using Group OSCORE, then the
    original registration requests and related unicast (notification)
