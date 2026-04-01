@@ -117,7 +117,6 @@ informative:
   I-D.ietf-core-coral:
   I-D.ietf-core-cacheable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
-  I-D.ietf-core-dns-over-coap:
   I-D.ietf-core-multicast-notifications-proxy:
   RFC5280:
   RFC6690:
@@ -126,6 +125,7 @@ informative:
   RFC9147:
   RFC9176:
   RFC9200:
+  RFC9953:
   MOBICOM99:
     author:
       -
@@ -356,7 +356,7 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   * If the 'authority' component specifies a host-ip, then the 'scheme-id' (hence the URI scheme) is sufficient to identify the transport.
 
-  * If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in {{I-D.ietf-core-dns-over-coap}}).
+  * If the 'authority' component specifies a host-name, then the consumer of the CRI has to resolve the host-name and consider the result together with the 'scheme-id' (hence the URI scheme) in order to identify the transport. For instance, DNS resolution can be used (e.g., as defined in {{RFC9953}}).
 
   The identified transport determines what elements are required in the 'tpi_details' element of the 'tp_info' array, as well as what information they convey, their encoding, and their semantics. Those elements are specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry for the entry associated with the identified CoAP transport (see {{iana-coap-transport-information}})
 
@@ -540,7 +540,7 @@ Then, the client performs the following steps.
 
 7. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
 
-In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client MUST treat any CRI within the 'tp_info' array as invalid, if the 'authority' component is a host-name such that, when resolved, its combination with the URI scheme indicates multiple transports (see {{sssec-transport-specific-encoding}}). As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in {{I-D.ietf-core-dns-over-coap}}).
+In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client MUST treat any CRI within the 'tp_info' array as invalid, if the 'authority' component is a host-name such that, when resolved, its combination with the URI scheme indicates multiple transports (see {{sssec-transport-specific-encoding}}). As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in {{RFC9953}}).
 
 If any of the expected fields in the informative response are absent, malformed, or invalid, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
 
@@ -1640,6 +1640,8 @@ Therefore, the following holds when a group observation for a target resource re
 * Removed unnecessary normative language.
 
 * Fixes and simplifications in the example with Group OSCORE.
+
+* Updated references.
 
 * Clarifications and editorial improvements.
 
