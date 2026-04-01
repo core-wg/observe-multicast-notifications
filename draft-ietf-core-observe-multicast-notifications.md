@@ -682,31 +682,37 @@ C2 |      ( Destination address/port: GRP_ADDR/GRP_PORT )      |
 
 This section specifies a method that the server can use to keep an estimate of still active and interested clients, without creating undue traffic on the network.
 
-## Multicast-Response-Feedback-Divider Option
+## Feedback-Divider Option
 
-In order to enable the rough counting of still active and interested clients, a new CoAP option is defined, which SHOULD be supported by clients that listen to multicast responses.
+This section defines the new CoAP option Feedback-Divider. By including the option in an outgoing message, a sender endpoint elicits a stochastic reaction and thereby a feedback from the message recipient(s) that would otherwise not react.
 
-The option is called Multicast-Response-Feedback-Divider and has the properties summarized in {{mrfd-table}}, which extends Table 4 of {{RFC7252}}. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".
+If the sender endpoint triggering a feedback is a client sending a request, the Feedback-Divider Option included in the request triggers the recipient server(s) to send a response with some probability. In particular, the Feedback-Divider Option stochastically overrides the possible response suppression performed by the server(s). Such an influence affects response suppression that can otherwise be performed, e.g., according to: default processing; the No-Response Option {{RFC7967}}, if present in the request; an unmatching filter from the URI query component, when the request is sent over multicast and targets the /.well-known/core resource (see {{Section 4.1 of RFC6690}}).
 
-| No.   | C | U | N | R | Name                                    | Format | Length | Default |
-| TBD18 |   | x | - |   | Multicast-Response-<br>Feedback-Divider | uint   | 0-1    | (none)  |
-{: #mrfd-table title="The Multicast-Response-Feedback-Divider Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
+If the sender endpoint triggering a feedback is a server sending a response, the feedback elicitation is currently limited to using observe notifications. In particular, the Feedback-Divider Option included in an observe notification triggers the recipient client(s) to send with some probability a new request to the server. Such a request includes the Observe Option set to 0 (register) and is addressed to the same target resource for which the observe notification was sent. That is, a reacting client (re-)registers a regular unicast observation on the same target resource.
+
+This document specifically defines how the Feedback-Divider Option is used when the sender endpoint triggering a feedback is a server sending multicast notifications. Note that it is not so useful to include the Feedback-Divider Option in an observe notification sent over unicast to a single client. That is, the server can more efficiently query a single client by means of an observe notification sent as a Confirmable message, thereby eliciting an Acknowledgement message in return.
+
+The Feedback-Divider Option has the properties summarized in {{fd-table}}, which extends Table 4 of {{RFC7252}}. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".
+
+| No.   | C | U | N | R | Name             | Format | Length | Default |
+| TBD18 |   | x | - |   | Feedback-Divider | uint   | 0-1    | (none)  |
+{: #fd-table title="The Feedback-Divider Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable" align="center"}
 
 Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph.
 
-The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
+The Feedback-Divider Option is of class E for OSCORE {{RFC8613}}{{I-D.ietf-core-oscore-groupcomm}}.
 
 ## Processing on the Client Side # {#ssec-rough-counting-client-side}
 
-Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client that supports the option and is interested in continuing receiving multicast notifications for the target resource SHOULD acknowledge its interest, as described below.
+Upon receiving a response with a Feedback-Divider Option, a client that supports the option and is interested in continuing receiving multicast notifications for the target resource SHOULD acknowledge its interest, as described below.
 
 The client picks an integer random number I, from 0 inclusive to Z = (2<sup>Q</sup>) exclusive, where Q is the value specified in the option. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}) and then registers a regular observation on the same target resource.
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
 
-Since this Observe registration is only done for its side effect of looking as an attempted observation at the server, the client MUST send the unicast request as a Non-confirmable message and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Multicast-Response-Feedback-Divider Option, whose value MUST be set to 0. As per {{Section 3.2 of RFC7252}}, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses and can keep processing further notifications on the same Token.
+Since this Observe registration is only done for its side effect of looking as an attempted observation at the server, the client MUST send the unicast request as a Non-confirmable message and with the maximum No-Response setting {{RFC7967}}. In the request, the client MUST include a Feedback-Divider Option, whose value MUST be set to 0. As per {{Section 3.2 of RFC7252}}, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses and can keep processing further notifications on the same Token.
 
-The client MUST ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above and MUST NOT include it in any other request.
+The client MUST ignore the Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see {{ssec-server-side-informative}}). A client includes the Feedback-Divider Option only in a re-registration request triggered by the server as described above and MUST NOT include it in any other request.
 
 {{appendix-pseudo-code-counting-client}} and {{appendix-pseudo-code-counting-client-constrained}} provide a description in pseudo-code of the operations above performed by the client.
 
@@ -724,9 +730,9 @@ Then, the server computes the value Q = max(L, 0), where:
 
 * N is the current value of the observer counter, possibly rounded up to 1, i.e., N = max(COUNT, 1).
 
-Finally, the server sets Q as the value of the Multicast-Response-Feedback-Divider Option, which is sent within a successful multicast notification.
+Finally, the server sets Q as the value of the Feedback-Divider Option, which is sent within a successful multicast notification.
 
-If several multicast notifications are sent in a burst fashion, it is RECOMMENDED for the server to include the Multicast-Response-Feedback-Divider Option only in the first notification of such a burst.
+If several multicast notifications are sent in a burst fashion, it is RECOMMENDED for the server to include the Feedback-Divider Option only in the first notification of such a burst.
 
 ### Collection of Feedback
 
@@ -744,7 +750,7 @@ If more information is available in deployments, a much shorter MAX_CONFIRMATION
 
 ### Processing of Feedback
 
-Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as observation requests to the target resource, since the time when the latest multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers an observation request as a confirmation from a client only if the request includes a Multicast-Response-Feedback-Divider Option with value 0.
+Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as observation requests to the target resource, since the time when the latest multicast notification with the Feedback-Divider Option has been sent. In particular, the server considers an observation request as a confirmation from a client only if the request includes a Feedback-Divider Option with value 0.
 
 Then, the server computes a feedback indicator as E = R * (2<sup>Q</sup>). According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
@@ -754,9 +760,9 @@ In particular, the server computes the new estimated count value as COUNT' + ((E
 
 This estimate is skewed by packet loss, but it gives the server a sufficiently good estimation for further counts and for deciding when to cancel the group observation. It is up to applications to define policies about how the server takes the newly updated estimate into account and determines whether to cancel the group observation.
 
-As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends a notification with Multicast-Response-Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16 and keeps the group observation active.
+As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends a notification with Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16 and keeps the group observation active.
 
-To produce a most accurate updated counter, a server can include a Multicast-Response-Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.
+To produce a most accurate updated counter, a server can include a Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.
 
 {{appendix-pseudo-code-counting-server}} provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.
 
@@ -1128,7 +1134,7 @@ This is not possible to achieve by the same means when using the communication m
 
 For instance, the method defined in {{sec-rough-counting}} to perform the rough counting of still interested clients triggers (some of) them to explicitly send a new observation request to acknowledge their interest. Then, the server can decide to terminate the group observation altogether, in the case that not enough clients are estimated to be still active.
 
-If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in {{sec-rough-counting}} with unprotected communications, an adversary can craft and inject multiple new observation requests including the Multicast-Response-Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients and thus to inappropriately continue the group observation.
+If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in {{sec-rough-counting}} with unprotected communications, an adversary can craft and inject multiple new observation requests including the Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients and thus to inappropriately continue the group observation.
 
 ## Protected Communications
 
@@ -1138,7 +1144,7 @@ If multicast notifications for an observed resource are protected using Group OS
 
   Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.
 
-* A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), MUST also be protected.
+* A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), MUST also be protected.
 
 # IANA Considerations # {#iana}
 
@@ -1198,11 +1204,11 @@ Reference: {{&SELF}}
 
 IANA is asked to enter the following option number to the "CoAP Option Numbers" registry {{CoAP.Option.Numbers}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-| Number | Name                                | Reference |
-| TBD18  | Multicast-Response-Feedback-Divider | {{&SELF}} |
+| Number | Name             | Reference |
+| TBD18  | Feedback-Divider | {{&SELF}} |
 {: align="center" title="Registrations in the CoAP Option Numbers Registry"}
 
-For the Multicast-Response-Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.
+For the Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.
 
 Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph and the previous paragraph.
 
@@ -1363,7 +1369,7 @@ In particular, {{appendix-pseudo-code-counting-client}} describes the algorithm 
 ## Client Side # {#appendix-pseudo-code-counting-client}
 
 ~~~~~~~~~~~
-input:  int Q, // Value of the MRFD option
+input:  int Q, // Value of the FEEDBACK-DIVIDER Option
         int LEISURE_TIME, // DEFAULT_LEISURE from RFC 7252,
                           // unless overridden
 
@@ -1389,7 +1395,7 @@ if (I == 0) {
     opt.set(0);
     req.setOption(opt);
 
-    opt = new Option(MRFD);
+    opt = new Option(FEEDBACK-DIVIDER);
     opt.set(0);
     req.setOption(opt);
 
@@ -1400,7 +1406,7 @@ if (I == 0) {
 ## Client Side (Optimized Version) # {#appendix-pseudo-code-counting-client-constrained}
 
 ~~~~~~~~~~~
-input:  int Q, // Value of the MRFD option
+input:  int Q, // Value of the FEEDBACK-DIVIDER Option
         int LEISURE_TIME, // DEFAULT_LEISURE from RFC 7252,
                           // unless overridden
 
@@ -1424,7 +1430,7 @@ if (respond_to(Q) == true) {
     opt.set(0);
     req.setOption(opt);
 
-    opt = new Option(MRFD);
+    opt = new Option(FEEDBACK-DIVIDER);
     opt.set(0);
     req.setOption(opt);
 
@@ -1459,7 +1465,7 @@ float CANCEL_THRESHOLD = 0.2;
 
 int N = max(COUNT, 1);
 int Q = max(ceil(log2(N / M)), 0);
-Option opt = new Option(MRFD);
+Option opt = new Option(FEEDBACK-DIVIDER);
 opt.set(Q);
 
 notification.setOption(opt);
@@ -1474,7 +1480,7 @@ while(!t.isExpired());
 
 int R = <number of requests to the target resource
          received between t1 and t2, and including
-         the MRFD option with value 0>;
+         the FEEDBACK-DIVIDER Option with value 0>;
 
 int E = R * (2^Q);
 
@@ -1640,6 +1646,8 @@ Therefore, the following holds when a group observation for a target resource re
 * Clarified expected roles in the OSCORE group for clients and server.
 
 * The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.
+
+* Generalized semantics of the Multicast-Response-Feedback-Divider Option and renamed it as Feedback-Divider.
 
 * Clarified pre-conditions and advantages of using deterministic phantom requests.
 
