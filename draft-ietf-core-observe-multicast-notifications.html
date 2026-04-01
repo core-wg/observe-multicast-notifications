@@ -1227,7 +1227,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-rough-counting-of-clients-i" class="internal xref">Rough Counting of Clients in the Group Observation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-multicast-response-feedback" class="internal xref">Multicast-Response-Feedback-Divider Option</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-feedback-divider-option" class="internal xref">Feedback-Divider Option</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-processing-on-the-client-si" class="internal xref">Processing on the Client Side</a></p>
@@ -2313,18 +2313,21 @@ RES: 2.05 Content
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-rough-counting-of-clients-i" class="section-name selfRef">Rough Counting of Clients in the Group Observation</a>
       </h2>
 <p id="section-8-1">This section specifies a method that the server can use to keep an estimate of still active and interested clients, without creating undue traffic on the network.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<div id="multicast-response-feedback-divider-option">
+<div id="feedback-divider-option">
 <section id="section-8.1">
-        <h3 id="name-multicast-response-feedback">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-multicast-response-feedback" class="section-name selfRef">Multicast-Response-Feedback-Divider Option</a>
+        <h3 id="name-feedback-divider-option">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-feedback-divider-option" class="section-name selfRef">Feedback-Divider Option</a>
         </h3>
-<p id="section-8.1-1">In order to enable the rough counting of still active and interested clients, a new CoAP option is defined, which <span class="bcp14">SHOULD</span> be supported by clients that listen to multicast responses.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">The option is called Multicast-Response-Feedback-Divider and has the properties summarized in <a href="#mrfd-table" class="auto internal xref">Table 1</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<span id="name-the-multicast-response-feed"></span><div id="mrfd-table">
+<p id="section-8.1-1">This section defines the new CoAP option Feedback-Divider. By including the option in an outgoing message, a sender endpoint elicits a stochastic reaction and thereby a feedback from the message recipient(s) that would otherwise not react.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">If the sender endpoint triggering a feedback is a client sending a request, the Feedback-Divider Option included in the request triggers the recipient server(s) to send a response with some probability. In particular, the Feedback-Divider Option stochastically overrides the possible response suppression performed by the server(s). Such an influence affects response suppression that can otherwise be performed, e.g., according to: default processing; the No-Response Option <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>, if present in the request; an unmatching filter from the URI query component, when the request is sent over multicast and targets the /.well-known/core resource (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>).<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">If the sender endpoint triggering a feedback is a server sending a response, the feedback elicitation is currently limited to using observe notifications. In particular, the Feedback-Divider Option included in an observe notification triggers the recipient client(s) to send with some probability a new request to the server. Such a request includes the Observe Option set to 0 (register) and is addressed to the same target resource for which the observe notification was sent. That is, a reacting client (re-)registers a regular unicast observation on the same target resource.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">This document specifically defines how the Feedback-Divider Option is used when the sender endpoint triggering a feedback is a server sending multicast notifications. Note that it is not so useful to include the Feedback-Divider Option in an observe notification sent over unicast to a single client. That is, the server can more efficiently query a single client by means of an observe notification sent as a Confirmable message, thereby eliciting an Acknowledgement message in return.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-5">The Feedback-Divider Option has the properties summarized in <a href="#fd-table" class="auto internal xref">Table 1</a>, which extends Table 4 of <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. The option is not Critical, not Safe-to-Forward, and integer valued. Since the option is not Safe-to-Forward, the 'N' column indicates a dash for "not applicable".<a href="#section-8.1-5" class="pilcrow">¶</a></p>
+<span id="name-the-feedback-divider-option"></span><div id="fd-table">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-the-multicast-response-feed" class="selfRef">The Multicast-Response-Feedback-Divider Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
+<a href="#name-the-feedback-divider-option" class="selfRef">The Feedback-Divider Option. C=Critical, U=Unsafe, N=NoCacheKey, R=Repeatable</a>
           </caption>
 <thead>
             <tr>
@@ -2346,7 +2349,7 @@ RES: 2.05 Content
               <td class="text-left" rowspan="1" colspan="1">x</td>
               <td class="text-left" rowspan="1" colspan="1">-</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">Multicast-Response-<br>Feedback-Divider</td>
+              <td class="text-left" rowspan="1" colspan="1">Feedback-Divider</td>
               <td class="text-left" rowspan="1" colspan="1">uint</td>
               <td class="text-left" rowspan="1" colspan="1">0-1</td>
               <td class="text-left" rowspan="1" colspan="1">(none)</td>
@@ -2354,8 +2357,8 @@ RES: 2.05 Content
           </tbody>
         </table>
 </div>
-<p id="section-8.1-4">Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.1-5">The Multicast-Response-Feedback-Divider Option is of class E for OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-8.1-5" class="pilcrow">¶</a></p>
+<p id="section-8.1-7">Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
+<p id="section-8.1-8">The Feedback-Divider Option is of class E for OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span><span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-rough-counting-client-side">
@@ -2363,11 +2366,11 @@ RES: 2.05 Content
         <h3 id="name-processing-on-the-client-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-processing-on-the-client-si" class="section-name selfRef">Processing on the Client Side</a>
         </h3>
-<p id="section-8.2-1">Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client that supports the option and is interested in continuing receiving multicast notifications for the target resource <span class="bcp14">SHOULD</span> acknowledge its interest, as described below.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">Upon receiving a response with a Feedback-Divider Option, a client that supports the option and is interested in continuing receiving multicast notifications for the target resource <span class="bcp14">SHOULD</span> acknowledge its interest, as described below.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">The client picks an integer random number I, from 0 inclusive to Z = (2<sup>Q</sup>) exclusive, where Q is the value specified in the option. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see <span><a href="https://rfc-editor.org/rfc/rfc7252#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>) and then registers a regular observation on the same target resource.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request <span class="bcp14">MUST</span> be addressed to the same target resource and <span class="bcp14">MUST</span> have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
-<p id="section-8.2-4">Since this Observe registration is only done for its side effect of looking as an attempted observation at the server, the client <span class="bcp14">MUST</span> send the unicast request as a Non-confirmable message and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client <span class="bcp14">MUST</span> include a Multicast-Response-Feedback-Divider Option, whose value <span class="bcp14">MUST</span> be set to 0. As per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
-<p id="section-8.2-5">The client <span class="bcp14">MUST</span> ignore the Multicast-Response-Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). A client includes the Multicast-Response-Feedback-Divider Option only in a re-registration request triggered by the server as described above and <span class="bcp14">MUST NOT</span> include it in any other request.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">Since this Observe registration is only done for its side effect of looking as an attempted observation at the server, the client <span class="bcp14">MUST</span> send the unicast request as a Non-confirmable message and with the maximum No-Response setting <span>[<a href="#RFC7967" class="cite xref">RFC7967</a>]</span>. In the request, the client <span class="bcp14">MUST</span> include a Feedback-Divider Option, whose value <span class="bcp14">MUST</span> be set to 0. As per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, this is represented with an empty option value (a zero-length sequence of bytes). The client does not need to wait for responses and can keep processing further notifications on the same Token.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The client <span class="bcp14">MUST</span> ignore the Feedback-Divider Option, if the multicast notification is retrieved from the 'last_notif' parameter of an informative response (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>). A client includes the Feedback-Divider Option only in a re-registration request triggered by the server as described above and <span class="bcp14">MUST NOT</span> include it in any other request.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 <p id="section-8.2-6"><a href="#appendix-pseudo-code-counting-client" class="auto internal xref">Appendix B.1</a> and <a href="#appendix-pseudo-code-counting-client-constrained" class="auto internal xref">Appendix B.2</a> provide a description in pseudo-code of the operations above performed by the client.<a href="#section-8.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2392,8 +2395,8 @@ RES: 2.05 Content
               <p id="section-8.3.1-3.2.1">N is the current value of the observer counter, possibly rounded up to 1, i.e., N = max(COUNT, 1).<a href="#section-8.3.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-8.3.1-4">Finally, the server sets Q as the value of the Multicast-Response-Feedback-Divider Option, which is sent within a successful multicast notification.<a href="#section-8.3.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.3.1-5">If several multicast notifications are sent in a burst fashion, it is <span class="bcp14">RECOMMENDED</span> for the server to include the Multicast-Response-Feedback-Divider Option only in the first notification of such a burst.<a href="#section-8.3.1-5" class="pilcrow">¶</a></p>
+<p id="section-8.3.1-4">Finally, the server sets Q as the value of the Feedback-Divider Option, which is sent within a successful multicast notification.<a href="#section-8.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.3.1-5">If several multicast notifications are sent in a burst fashion, it is <span class="bcp14">RECOMMENDED</span> for the server to include the Feedback-Divider Option only in the first notification of such a burst.<a href="#section-8.3.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="collection-of-feedback">
@@ -2414,13 +2417,13 @@ RES: 2.05 Content
           <h4 id="name-processing-of-feedback">
 <a href="#section-8.3.3" class="section-number selfRef">8.3.3. </a><a href="#name-processing-of-feedback" class="section-name selfRef">Processing of Feedback</a>
           </h4>
-<p id="section-8.3.3-1">Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as observation requests to the target resource, since the time when the latest multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers an observation request as a confirmation from a client only if the request includes a Multicast-Response-Feedback-Divider Option with value 0.<a href="#section-8.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3.3-1">Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as observation requests to the target resource, since the time when the latest multicast notification with the Feedback-Divider Option has been sent. In particular, the server considers an observation request as a confirmation from a client only if the request includes a Feedback-Divider Option with value 0.<a href="#section-8.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-2">Then, the server computes a feedback indicator as E = R * (2<sup>Q</sup>). According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).<a href="#section-8.3.3-2" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-3">Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see <a href="#ssec-server-side-informative" class="auto internal xref">Section 4.2</a>).<a href="#section-8.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-4">In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D &gt; 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server <span class="bcp14">MUST</span> hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, which can be taken into account for possibly canceling the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>).<a href="#section-8.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-5">This estimate is skewed by packet loss, but it gives the server a sufficiently good estimation for further counts and for deciding when to cancel the group observation. It is up to applications to define policies about how the server takes the newly updated estimate into account and determines whether to cancel the group observation.<a href="#section-8.3.3-5" class="pilcrow">¶</a></p>
-<p id="section-8.3.3-6">As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends a notification with Multicast-Response-Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16 and keeps the group observation active.<a href="#section-8.3.3-6" class="pilcrow">¶</a></p>
-<p id="section-8.3.3-7">To produce a most accurate updated counter, a server can include a Multicast-Response-Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.<a href="#section-8.3.3-7" class="pilcrow">¶</a></p>
+<p id="section-8.3.3-6">As an example, if the server currently estimates that N = COUNT = 32 observers are active and considers a constant M = 8, it sends a notification with Feedback-Divider with value Q = 2. Then, out of 18 actually active clients, 5 send a re-registration request based on their random draw, of which one request gets lost, thus leaving 4 re-registration requests received by the server. Also, no new clients have been added to the group observation during this time, i.e., COUNT' is equal to COUNT. As a consequence, assuming that a dampener value D = 1 is used, the server computes the new estimated count value as 32 + (16 - 32) = 16 and keeps the group observation active.<a href="#section-8.3.3-6" class="pilcrow">¶</a></p>
+<p id="section-8.3.3-7">To produce a most accurate updated counter, a server can include a Feedback-Divider Option with value Q = 0 in its multicast notifications, as if M is equal to N. This will trigger all the active clients to state their interest in continuing receiving notifications for the target resource. Thus, the amount R of arrived confirmations is affected only by possible packet loss.<a href="#section-8.3.3-7" class="pilcrow">¶</a></p>
 <p id="section-8.3.3-8"><a href="#appendix-pseudo-code-counting-server" class="auto internal xref">Appendix B.3</a> provides a description in pseudo-code of the operations above performed by the server, including example behaviors for scheduling the next count update and deciding whether to cancel the group observation.<a href="#section-8.3.3-8" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3337,7 +3340,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <p id="section-13.1-1">If communications are not protected, the server might not be able to effectively authenticate a new client when it registers as an observer. <span><a href="https://rfc-editor.org/rfc/rfc7641#section-7" class="relref">Section 7</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> specifies how, in such a case, the server must strictly limit the number of notifications sent between receiving acknowledgements from the client, as confirming to be still interested in the observation; i.e., any notifications sent in Non-confirmable messages must be interspersed with confirmable messages.<a href="#section-13.1-1" class="pilcrow">¶</a></p>
 <p id="section-13.1-2">This is not possible to achieve by the same means when using the communication model defined in this document, since multicast notifications are sent as Non-confirmable messages. Nonetheless, the server might obtain such acknowledgements by other means.<a href="#section-13.1-2" class="pilcrow">¶</a></p>
 <p id="section-13.1-3">For instance, the method defined in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a> to perform the rough counting of still interested clients triggers (some of) them to explicitly send a new observation request to acknowledge their interest. Then, the server can decide to terminate the group observation altogether, in the case that not enough clients are estimated to be still active.<a href="#section-13.1-3" class="pilcrow">¶</a></p>
-<p id="section-13.1-4">If the method defined in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a> is used, the server <span class="bcp14">SHOULD NOT</span> send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a> with unprotected communications, an adversary can craft and inject multiple new observation requests including the Multicast-Response-Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients and thus to inappropriately continue the group observation.<a href="#section-13.1-4" class="pilcrow">¶</a></p>
+<p id="section-13.1-4">If the method defined in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a> is used, the server <span class="bcp14">SHOULD NOT</span> send more than a strict number of multicast notifications for a given group observation, without having first performed a new rough counting of active clients. Note that, when using the method defined in <a href="#sec-rough-counting" class="auto internal xref">Section 8</a> with unprotected communications, an adversary can craft and inject multiple new observation requests including the Feedback-Divider Option, hence inducing the server to overestimate the number of still interested clients and thus to inappropriately continue the group observation.<a href="#section-13.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protected-communications">
@@ -3353,7 +3356,7 @@ At the time of writing this specification, acceptable formats of authentication 
 Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.<a href="#section-13.2-2.1.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-13.2-2.2">
-            <p id="section-13.2-2.2.1">A re-registration request, possibly including the Multicast-Response-Feedback-Divider Option to support the rough counting of clients (see <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), <span class="bcp14">MUST</span> also be protected.<a href="#section-13.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-13.2-2.2.1">A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see <a href="#sec-rough-counting" class="auto internal xref">Section 8</a>), <span class="bcp14">MUST</span> also be protected.<a href="#section-13.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3458,12 +3461,12 @@ Protecting informative responses from the server prevents on-path active adversa
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">TBD18</td>
-              <td class="text-left" rowspan="1" colspan="1">Multicast-Response-Feedback-Divider</td>
+              <td class="text-left" rowspan="1" colspan="1">Feedback-Divider</td>
               <td class="text-left" rowspan="1" colspan="1">[RFC-XXXX]</td>
             </tr>
           </tbody>
         </table>
-<p id="section-14.3-3">For the Multicast-Response-Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.<a href="#section-14.3-3" class="pilcrow">¶</a></p>
+<p id="section-14.3-3">For the Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.<a href="#section-14.3-3" class="pilcrow">¶</a></p>
 <p id="section-14.3-4">Note to RFC Editor: In the table above, please replace TBD18 with the registered option number. Then, please delete this paragraph and the previous paragraph.<a href="#section-14.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3872,7 +3875,7 @@ Content-Format: application/informative-response+cbor
         </h3>
 <div class="alignLeft art-text artwork" id="appendix-B.1-1">
 <pre>
-input:  int Q, // Value of the MRFD option
+input:  int Q, // Value of the FEEDBACK-DIVIDER Option
         int LEISURE_TIME, // DEFAULT_LEISURE from RFC 7252,
                           // unless overridden
 
@@ -3898,7 +3901,7 @@ if (I == 0) {
     opt.set(0);
     req.setOption(opt);
 
-    opt = new Option(MRFD);
+    opt = new Option(FEEDBACK-DIVIDER);
     opt.set(0);
     req.setOption(opt);
 
@@ -3915,7 +3918,7 @@ if (I == 0) {
         </h3>
 <div class="alignLeft art-text artwork" id="appendix-B.2-1">
 <pre>
-input:  int Q, // Value of the MRFD option
+input:  int Q, // Value of the FEEDBACK-DIVIDER Option
         int LEISURE_TIME, // DEFAULT_LEISURE from RFC 7252,
                           // unless overridden
 
@@ -3939,7 +3942,7 @@ if (respond_to(Q) == true) {
     opt.set(0);
     req.setOption(opt);
 
-    opt = new Option(MRFD);
+    opt = new Option(FEEDBACK-DIVIDER);
     opt.set(0);
     req.setOption(opt);
 
@@ -3980,7 +3983,7 @@ float CANCEL_THRESHOLD = 0.2;
 
 int N = max(COUNT, 1);
 int Q = max(ceil(log2(N / M)), 0);
-Option opt = new Option(MRFD);
+Option opt = new Option(FEEDBACK-DIVIDER);
 opt.set(Q);
 
 notification.setOption(opt);
@@ -3995,7 +3998,7 @@ while(!t.isExpired());
 
 int R = &lt;number of requests to the target resource
          received between t1 and t2, and including
-         the MRFD option with value 0&gt;;
+         the FEEDBACK-DIVIDER Option with value 0&gt;;
 
 int E = R * (2^Q);
 
@@ -4202,19 +4205,22 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
             <p id="appendix-E.1-1.2.1">The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.3">
-            <p id="appendix-E.1-1.3.1">Clarified pre-conditions and advantages of using deterministic phantom requests.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.3.1">Generalized semantics of the Multicast-Response-Feedback-Divider Option and renamed it as Feedback-Divider.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Removed unnecessary normative language.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.4.1">Clarified pre-conditions and advantages of using deterministic phantom requests.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.5">
-            <p id="appendix-E.1-1.5.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.5.1">Removed unnecessary normative language.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.6">
-            <p id="appendix-E.1-1.6.1">Updated references.<a href="#appendix-E.1-1.6.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.6.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.7">
-            <p id="appendix-E.1-1.7.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.7.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.7.1">Updated references.<a href="#appendix-E.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.1-1.8">
+            <p id="appendix-E.1-1.8.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
