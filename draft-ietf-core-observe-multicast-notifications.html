@@ -2436,7 +2436,7 @@ RES: 2.05 Content
 <p id="section-9-1">A server can protect multicast notifications by using the security protocol Group OSCORE <span>[<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, thus ensuring that they are protected end-to-end for the observer clients. This requires that both the server and the clients interested in receiving multicast notifications from that server are members of the same OSCORE group.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">In some settings, the OSCORE group to refer to can be pre-configured on the clients and the server. In such a case, a server which is aware of such pre-configuration can simply assume a client to already be a member of the correct OSCORE group.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">In any other case, the server <span class="bcp14">MAY</span> communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>. Note that clients could already be members of the right OSCORE group, if they previously joined it to securely communicate with the same server or with other servers to access their resources.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">Both the clients and the server <span class="bcp14">MAY</span> join the OSCORE group by using the approach described in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and based on the ACE framework for Authentication and Authorization in constrained environments <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>. Further details on how to discover the OSCORE group and join it are out of the scope of this document.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-4">Both the clients and the server <span class="bcp14">MAY</span> join the OSCORE group by using the approach described in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span> and based on the ACE framework for Authentication and Authorization in constrained environments <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span>. When doing so, the server joins the group (also) with the roles of Requester and Responder. Instead, a client can join the group with any permitted role or combination of roles, unless it intends to send its original observation requests (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>) protected with Group OSCORE. In such a case, the client joins the group (also) as a Requester. Further details on how to discover the OSCORE group and join it are out of the scope of this document.<a href="#section-9-4" class="pilcrow">¶</a></p>
 <p id="section-9-5">If multicast notifications are protected using Group OSCORE, then the original registration requests and related unicast (notification) responses <span class="bcp14">MUST</span> also be protected, including and especially the informative responses from the server. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>, where the informative response from the server is not protected.<a href="#section-9-5" class="pilcrow">¶</a></p>
 <p id="section-9-6">In order to protect unicast messages exchanged between the server and each client, including the original client registration (see <a href="#sec-client-side" class="auto internal xref">Section 5</a>), alternative security protocols than Group OSCORE can be used, such as OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> and/or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. However, it is <span class="bcp14">RECOMMENDED</span> to use OSCORE or Group OSCORE, in order to reduce the number of libraries that the clients and the server have to support.<a href="#section-9-6" class="pilcrow">¶</a></p>
 <div id="sec-inf-response">
@@ -4195,19 +4195,22 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-E.1-1.1">
-            <p id="appendix-E.1-1.1.1">The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.1.1">Clarified expected roles in the OSCORE group for clients and server.<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.2">
-            <p id="appendix-E.1-1.2.1">Removed unnecessary normative language.<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.2.1">The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.3">
-            <p id="appendix-E.1-1.3.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.3.1">Removed unnecessary normative language.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Updated references.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.4.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-E.1-1.5">
-            <p id="appendix-E.1-1.5.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.5.1">Updated references.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.1-1.6">
+            <p id="appendix-E.1-1.6.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
