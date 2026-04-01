@@ -768,7 +768,7 @@ In some settings, the OSCORE group to refer to can be pre-configured on the clie
 
 In any other case, the server MAY communicate to clients what OSCORE group they are required to join, by providing additional guidance in the informative response as described in {{sec-inf-response}}. Note that clients could already be members of the right OSCORE group, if they previously joined it to securely communicate with the same server or with other servers to access their resources.
 
-Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{RFC9200}}. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
+Both the clients and the server MAY join the OSCORE group by using the approach described in {{I-D.ietf-ace-key-groupcomm-oscore}} and based on the ACE framework for Authentication and Authorization in constrained environments {{RFC9200}}. When doing so, the server joins the group (also) with the roles of Requester and Responder. Instead, a client can join the group with any permitted role or combination of roles, unless it intends to send its original observation requests (see {{ssec-client-side-request}}) protected with Group OSCORE. In such a case, the client joins the group (also) as a Requester. Further details on how to discover the OSCORE group and join it are out of the scope of this document.
 
 If multicast notifications are protected using Group OSCORE, then the original registration requests and related unicast (notification) responses MUST also be protected, including and especially the informative responses from the server. An exception is the case discussed in {{deterministic-phantom-Request}}, where the informative response from the server is not protected.
 
@@ -1634,6 +1634,8 @@ Therefore, the following holds when a group observation for a target resource re
 {:removeinrfc}
 
 ## Version -13 to -14 ## {#sec-13-14}
+
+* Clarified expected roles in the OSCORE group for clients and server.
 
 * The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.
 
