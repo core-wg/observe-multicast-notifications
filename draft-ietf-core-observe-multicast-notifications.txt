@@ -1248,8 +1248,8 @@ Table of Contents
    (2^Q) exclusive, where Q is the value specified in the option.  If I
    is different from 0, the client takes no further action.  Otherwise,
    the client should wait a random fraction of the Leisure time (see
-   Section 8.2 of [RFC7252]) and then registers a regular unicast
-   observation on the same target resource.
+   Section 8.2 of [RFC7252]) and then registers a regular observation on
+   the same target resource.
 
    To this end, the client essentially follows the steps that got it
    originally subscribed to group notifications for the target resource.
@@ -1313,16 +1313,16 @@ Table of Contents
 
 8.3.2.  Collection of Feedback
 
-   The server collects unicast observation requests from the clients,
-   for an amount of time of MAX_CONFIRMATION_WAIT seconds.  During this
-   time, the server regularly increments the observer counter when
-   adding a new client to the group observation (see Section 4.2).
+   The server collects observation requests from the clients, for an
+   amount of time of MAX_CONFIRMATION_WAIT seconds.  During this time,
+   the server regularly increments the observer counter when adding a
+   new client to the group observation (see Section 4.2).
 
    It is up to applications to define the value of
    MAX_CONFIRMATION_WAIT, which has to take into account the
-   transmission time of the multicast notification and of unicast
-   observation requests, as well as the leisure time of the clients,
-   which may be hard to know or estimate for the server.
+   transmission time of the multicast notification and of observation
+   requests, as well as the leisure time of the clients, which may be
+   hard to know or estimate for the server.
 
    If this information is not known to the server, it is RECOMMENDED to
    define MAX_CONFIRMATION_WAIT as follows.
@@ -1346,10 +1346,10 @@ Table of Contents
 8.3.3.  Processing of Feedback
 
    Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the
-   R confirmations that have arrived as unicast observation requests to
-   the target resource, since the time when the latest multicast
+   R confirmations that have arrived as observation requests to the
+   target resource, since the time when the latest multicast
    notification with the Multicast-Response-Feedback-Divider Option has
-   been sent.  In particular, the server considers a unicast observation
+   been sent.  In particular, the server considers an observation
    request as a confirmation from a client only if the request includes
    a Multicast-Response-Feedback-Divider Option with value 0.
 
