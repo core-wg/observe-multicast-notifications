@@ -700,7 +700,7 @@ The Multicast-Response-Feedback-Divider Option is of class E for OSCORE {{RFC861
 
 Upon receiving a response with a Multicast-Response-Feedback-Divider Option, a client that supports the option and is interested in continuing receiving multicast notifications for the target resource SHOULD acknowledge its interest, as described below.
 
-The client picks an integer random number I, from 0 inclusive to Z = (2<sup>Q</sup>) exclusive, where Q is the value specified in the option. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}) and then registers a regular unicast observation on the same target resource.
+The client picks an integer random number I, from 0 inclusive to Z = (2<sup>Q</sup>) exclusive, where Q is the value specified in the option. If I is different from 0, the client takes no further action. Otherwise, the client should wait a random fraction of the Leisure time (see {{Section 8.2 of RFC7252}}) and then registers a regular observation on the same target resource.
 
 To this end, the client essentially follows the steps that got it originally subscribed to group notifications for the target resource. In particular, the client sends an observation request to the server, i.e., a GET request with an Observe Option set to 0 (register). The request MUST be addressed to the same target resource and MUST have the same destination IP address and port number used for the original registration request, regardless of the source IP address and port number of the received multicast notification.
 
@@ -730,9 +730,9 @@ If several multicast notifications are sent in a burst fashion, it is RECOMMENDE
 
 ### Collection of Feedback
 
-The server collects unicast observation requests from the clients, for an amount of time of MAX_CONFIRMATION_WAIT seconds. During this time, the server regularly increments the observer counter when adding a new client to the group observation (see {{ssec-server-side-informative}}).
+The server collects observation requests from the clients, for an amount of time of MAX_CONFIRMATION_WAIT seconds. During this time, the server regularly increments the observer counter when adding a new client to the group observation (see {{ssec-server-side-informative}}).
 
-It is up to applications to define the value of MAX_CONFIRMATION_WAIT, which has to take into account the transmission time of the multicast notification and of unicast observation requests, as well as the leisure time of the clients, which may be hard to know or estimate for the server.
+It is up to applications to define the value of MAX_CONFIRMATION_WAIT, which has to take into account the transmission time of the multicast notification and of observation requests, as well as the leisure time of the clients, which may be hard to know or estimate for the server.
 
 If this information is not known to the server, it is RECOMMENDED to define MAX_CONFIRMATION_WAIT as follows.
 
@@ -744,7 +744,7 @@ If more information is available in deployments, a much shorter MAX_CONFIRMATION
 
 ### Processing of Feedback
 
-Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as unicast observation requests to the target resource, since the time when the latest multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers a unicast observation request as a confirmation from a client only if the request includes a Multicast-Response-Feedback-Divider Option with value 0.
+Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirmations that have arrived as observation requests to the target resource, since the time when the latest multicast notification with the Multicast-Response-Feedback-Divider Option has been sent. In particular, the server considers an observation request as a confirmation from a client only if the request includes a Multicast-Response-Feedback-Divider Option with value 0.
 
 Then, the server computes a feedback indicator as E = R * (2<sup>Q</sup>). According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
