@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 15 October 2026                                                
+Expires: 21 October 2026                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                           13 April 2026
+                                                           19 April 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 October 2026.
+   This Internet-Draft will expire on 21 October 2026.
 
 Copyright Notice
 
@@ -1633,8 +1633,8 @@ Table of Contents
    *  The sequence of CoAP options will be limited to the outer, non
       encrypted options.
 
-   *  A payload is always present, as the authenticated ciphertext
-      followed by the countersignature.
+   *  A payload is always present, as the ciphertext followed by the
+      countersignature.
 
    Note that, in terms of transport-independent information, the
    registration request from the client typically differs from the
@@ -1689,8 +1689,8 @@ Table of Contents
    multicast response with error code 5.03 (Service Unavailable) is
    protected with Group OSCORE, as per Section 7.3 of
    [I-D.ietf-core-oscore-groupcomm].  The server MUST use its own Sender
-   Sequence Number as Partial IV to protect the error response and
-   includes the Partial IV in the OSCORE Option value of the response.
+   Sequence Number as Partial IV to protect the error response and MUST
+   include the Partial IV in the OSCORE Option value of the response.
 
 9.3.  Client-Side Requirements
 
@@ -3073,8 +3073,8 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    The response has the same Token value T of the phantom registration
    request and it does not include an Observe Option.  The server MUST
    use its own Sender Sequence Number as Partial IV to protect the error
-   response and includes the Partial IV in the OSCORE Option value of
-   the response.
+   response and MUST include the Partial IV in the OSCORE Option value
+   of the response.
 
    When some clients leave the OSCORE group and forget about the group
    observation, the server does not have to provide the remaining

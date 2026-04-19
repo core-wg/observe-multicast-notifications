@@ -12,18 +12,18 @@
 <meta content='
        The Constrained Application Protocol (CoAP) allows clients to "observe" resources at a server and to receive notifications as unicast responses upon changes of the resource state. In some use cases, such as those based on publish-subscribe, it would be convenient for the server to send a single notification addressed to all the clients observing the same target resource. This document updates RFC7252 and RFC7641, and it defines how a server sends observe notifications as response messages over multicast, synchronizing  all the observers of the same resource on the same shared Token value. Besides, this document defines how the security protocol Group Object Security for Constrained RESTful Environments (Group OSCORE) can be used to protect multicast notifications end-to-end between the server and the observer clients. 
     ' name="description">
-<meta content="xml2rfc 3.32.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-core-observe-multicast-notifications-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.32.0
-    Python 3.12.12
+  xml2rfc 3.33.0
+    Python 3.12.13
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.0.2
-    platformdirs 4.9.4
+    platformdirs 4.9.6
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.32.5
@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 15 October 2026</td>
+<td class="center">Expires 21 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-13" class="published">13 April 2026</time>
+<time datetime="2026-04-19" class="published">19 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-15">15 October 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-21">21 October 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2530,7 +2530,7 @@ At the time of writing this specification, acceptable formats of authentication 
               <p id="section-9.2.2-2.2.1">The sequence of CoAP options will be limited to the outer, non encrypted options.<a href="#section-9.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-9.2.2-2.3">
-              <p id="section-9.2.2-2.3.1">A payload is always present, as the authenticated ciphertext followed by the countersignature.<a href="#section-9.2.2-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-9.2.2-2.3.1">A payload is always present, as the ciphertext followed by the countersignature.<a href="#section-9.2.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-9.2.2-3">Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
@@ -2564,7 +2564,7 @@ At the time of writing this specification, acceptable formats of authentication 
           <h4 id="name-cancellation-3">
 <a href="#section-9.2.4" class="section-number selfRef">9.2.4. </a><a href="#name-cancellation-3" class="section-name selfRef">Cancellation</a>
           </h4>
-<p id="section-9.2.4-1">When canceling a group observation as defined in <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.<a href="#section-9.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-9.2.4-1">When canceling a group observation as defined in <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a>, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-7.3" class="relref">Section 7.3</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response and <span class="bcp14">MUST</span> include the Partial IV in the OSCORE Option value of the response.<a href="#section-9.2.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4130,7 +4130,7 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
           <p id="appendix-C-16.2.1">it <span class="bcp14">MAY</span> omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.<a href="#appendix-C-16.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-17">The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.<a href="#appendix-C-17" class="pilcrow">¶</a></p>
+<p id="appendix-C-17">The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server <span class="bcp14">MUST</span> use its own Sender Sequence Number as Partial IV to protect the error response and <span class="bcp14">MUST</span> include the Partial IV in the OSCORE Option value of the response.<a href="#appendix-C-17" class="pilcrow">¶</a></p>
 <p id="appendix-C-18">When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-12.2" class="relref">Section 12.2</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as Deterministic Requests (see <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>). In particular, both of them never change their Sender ID during the group lifetime and they both remain part of the group until the group ceases to exist.<a href="#appendix-C-18" class="pilcrow">¶</a></p>
 <p id="appendix-C-19">As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see <a href="#ssec-server-side-cancellation" class="auto internal xref">Section 4.5</a> and <a href="#ssec-server-side-cancellation-oscore" class="auto internal xref">Section 9.2.4</a>), which results in the eventual re-registration of the clients that are still interested in the group observation.<a href="#appendix-C-19" class="pilcrow">¶</a></p>
 <p id="appendix-C-20">Applications requiring backward security or forward security are <span class="bcp14">REQUIRED</span> to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in <span>[<a href="#I-D.ietf-ace-key-groupcomm-oscore" class="cite xref">I-D.ietf-ace-key-groupcomm-oscore</a>]</span>. The server can facilitate the clients by providing them with information about the OSCORE group to join, as described in <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>.<a href="#appendix-C-20" class="pilcrow">¶</a></p>
