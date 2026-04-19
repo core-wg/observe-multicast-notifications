@@ -840,7 +840,7 @@ The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom 
 
 * The sequence of CoAP options will be limited to the outer, non encrypted options.
 
-* A payload is always present, as the authenticated ciphertext followed by the countersignature.
+* A payload is always present, as the ciphertext followed by the countersignature.
 
 Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
@@ -864,7 +864,7 @@ Note that these same values are used to protect each and every multicast notific
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.
+When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -1582,7 +1582,7 @@ Before the keying material has expired, the server can send a multicast response
 
 * it MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
 
-The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and includes the Partial IV in the OSCORE Option value of the response.
+The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
 When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as Deterministic Requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime and they both remain part of the group until the group ceases to exist.
 
