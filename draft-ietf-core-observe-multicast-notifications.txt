@@ -1799,17 +1799,17 @@ Table of Contents
    protects multicast notifications with Group OSCORE.  Specifically:
 
    *  C1 and S have a pairwise OSCORE Security Context.  In particular,
-      C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 as Sender Sequence
-      Number.
+      C1 has 'kid' = 0x01 as Sender ID and SN_1 = 101 (i.e., 0x65) as
+      Sender Sequence Number.
 
    *  C2 and S have a pairwise OSCORE Security Context.  In particular,
-      C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 as Sender Sequence
-      Number.
+      C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 (i.e., 0xc9) as
+      Sender Sequence Number.
 
    *  S is a member of the OSCORE group with name "myGroup" and with
       'kid context' = 0x57ab2e as Group ID.  In the OSCORE group, S has
-      'kid' = 0x05 as Sender ID and SN_5 = 501 as Sender Sequence
-      Number.
+      'kid' = 0x05 as Sender ID and SN_5 = 501 (i.e., 0x01f5) as Sender
+      Sequence Number.
 
    The following notation is used for the payload of the informative
    responses:
@@ -1840,7 +1840,7 @@ Table of Contents
    |  0.05 (FETCH)                                                |
    |  Token: 0x4a                                                 |
    |  Observe: 0 (register)                                       |
-   |  OSCORE: [kid:0x01, Partial IV:101]                          |
+   |  OSCORE: [kid:0x01, Partial IV:0x65]                         |
    |  <Other class U/I options>                                   |
    |  0xff                                                        |
    |  Encrypted_payload {                                         |
@@ -1858,20 +1858,20 @@ Table of Contents
    |    /                                                         |
    |    \                                                         |
    |     `------------------------------------------------------> |  /r
-   |                           0.05 (FETCH)                       |
-   |                           Token: 0x7b                        |
-   |                           Observe: 0 (register)              |
-   |                           OSCORE: [kid:0x05, Partial IV:501, |
-   |                                    kid context:0x57ab2e]     |
-   |                           <Other class U/I options>          |
-   |                           0xff                               |
-   |                           Encrypted_payload {                |
-   |                             0x01 (GET),                      |
-   |                             Observe: 0 (register),           |
-   |                             Uri-Path: "r",                   |
-   |                             <Other class E options>          |
-   |                           }                                  |
-   |                           <Countersignature>                 |
+   |                        0.05 (FETCH)                          |
+   |                        Token: 0x7b                           |
+   |                        Observe: 0 (register)                 |
+   |                        OSCORE: [kid:0x05, Partial IV:0x01f5, |
+   |                                 kid context:0x57ab2e]        |
+   |                        <Other class U/I options>             |
+   |                        0xff                                  |
+   |                        Encrypted_payload {                   |
+   |                          0x01 (GET),                         |
+   |                          Observe: 0 (register),              |
+   |                          Uri-Path: "r",                      |
+   |                          <Other class E options>             |
+   |                        }                                     |
+   |                        <Countersignature>                    |
    |                                                              |
    |                           ( S steps SN_5 in the Group OSCORE |
    |                             Security Context: SN_5 <-- 502 ) |
@@ -1913,7 +1913,7 @@ Table of Contents
    |  0.05 (FETCH)                                                |
    |  Token: 0x01                                                 |
    |  Observe: 0 (register)                                       |
-   |  OSCORE: [kid:0x02, Partial IV:201]                          |
+   |  OSCORE: [kid:0x02, Partial IV:0xc9]                         |
    |  <Other class U/I options>                                   |
    |  0xff                                                        |
    |  Encrypted_payload {                                         |
@@ -1958,12 +1958,13 @@ Table of Contents
    +--+                                                           |
    C1 |                                                           |
       | <----------- [ Multicast w/ Group OSCORE ] -------------- S
-   C2 |      (Destination address/port: GRP_ADDR/GRP_PORT)        |
+   C2 |       (Destination address/port: GRP_ADDR/GRP_PORT)       |
    +--+                                                           |
    |    2.05 (Content)                                            |
    |    Token: 0x7b                                               |
    |    Observe: 2                                                |
-   |    OSCORE: [kid:0x05, Partial IV:502]                        |
+   |    OSCORE: [kid:0x05, Partial IV:0x01f6]                     |
+   |    Max-Age: 0                                                |
    |    <Other class U/I options>                                 |
    |    0xff                                                      |
    |    Encrypted_payload {                                       |
@@ -1979,14 +1980,15 @@ Table of Contents
           Figure 7: Example of Group Observation with Group OSCORE
 
    The two external_aad structures used to encrypt and sign the
-   multicast notification above include 'request_kid' = 5, 'request_piv'
-   = 501, and 'request_kid_context' = 0x57ab2e.  These values are
-   specified in the 'kid', 'Partial IV', and 'kid context' fields of the
-   OSCORE Option value of the phantom observation request, which is
-   encoded in the 'ph_req' parameter of the unicast informative response
-   to the two clients.  Thus, the two clients can build the two same
-   external_aad structures for decrypting and verifying this multicast
-   notification and the following ones in the group observation.
+   multicast notification above include 'request_kid' = 0x05,
+   'request_piv' = 0x01f5, and 'request_kid_context' = 0x57ab2e.  These
+   values are specified in the 'kid', 'Partial IV', and 'kid context'
+   fields of the OSCORE Option value of the phantom observation request,
+   which is encoded in the 'ph_req' parameter of the unicast informative
+   response to the two clients.  Thus, the two clients can build the two
+   same external_aad structures for decrypting and verifying this
+   multicast notification and the following ones in the group
+   observation.
 
 11.  Informative Response Parameters
 
