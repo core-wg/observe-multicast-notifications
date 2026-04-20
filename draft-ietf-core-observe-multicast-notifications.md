@@ -310,14 +310,14 @@ The CBOR array specified in the 'tp_info' parameter of an informative response i
 
 ~~~~~~~~~~~ cddl
 tp_info = [
-    tpi_server: CRI-no-local,  ; Addressing information of the server
-  ? tpi_details                ; Further information about the request
+    tpi_server: CRI-no-local, ; Addressing information of the server
+  ? tpi_details               ; Further information about the request
 ]
 
 tpi_details = (
-  + elements  ; The number, format, and encoding of the elements
-              ; depend on the scheme-id and authority of the CRI
-              ; specified as tpi_server
+  + elements ; The number, format, and encoding of the elements
+             ; depend on the scheme-id and authority of the CRI
+             ; specified as tpi_server
 )
 
 CRI-no-local = [
@@ -396,12 +396,12 @@ The CDDL notation in {{tp-info-udp}} describes the format of the 'tp_info' CBOR 
 
 ~~~~~~~~~~~ cddl
 tp_info_coap_udp = [
-  tpi_server: CRI-no-local,  ; Source addressing information
-                             ; of the multicast notifications
-  tpi_client: CRI-no-local,  ; Destination addressing information
-                             ; of the multicast notifications
-  tpi_token: bstr            ; Token value of the phantom request and
-                             ; associated multicast notifications
+  tpi_server: CRI-no-local, ; Source addressing information
+                            ; of the multicast notifications
+  tpi_client: CRI-no-local, ; Destination addressing information
+                            ; of the multicast notifications
+  tpi_token: bstr           ; Token value of the phantom request and
+                            ; associated multicast notifications
 ]
 ~~~~~~~~~~~
 {: #tp-info-udp title="Format of 'tp_info' with UDP as Transport Protocol"}
