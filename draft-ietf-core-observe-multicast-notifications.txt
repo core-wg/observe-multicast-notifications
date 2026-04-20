@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 21 October 2026                                                
+Expires: 22 October 2026                                                
                                                             F. Palombini
                                                              Ericsson AB
-                                                           19 April 2026
+                                                           20 April 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 October 2026.
+   This Internet-Draft will expire on 22 October 2026.
 
 Copyright Notice
 
@@ -538,14 +538,14 @@ Table of Contents
    response is formatted according to the following CDDL notation.
 
    tp_info = [
-       tpi_server: CRI-no-local,  ; Addressing information of the server
-     ? tpi_details                ; Further information about the request
+       tpi_server: CRI-no-local, ; Addressing information of the server
+     ? tpi_details               ; Further information about the request
    ]
 
    tpi_details = (
-     + elements  ; The number, format, and encoding of the elements
-                 ; depend on the scheme-id and authority of the CRI
-                 ; specified as tpi_server
+     + elements ; The number, format, and encoding of the elements
+                ; depend on the scheme-id and authority of the CRI
+                ; specified as tpi_server
    )
 
    CRI-no-local = [
@@ -698,12 +698,12 @@ Table of Contents
    CBOR array when CoAP is transported over UDP.
 
    tp_info_coap_udp = [
-     tpi_server: CRI-no-local,  ; Source addressing information
-                                ; of the multicast notifications
-     tpi_client: CRI-no-local,  ; Destination addressing information
-                                ; of the multicast notifications
-     tpi_token: bstr            ; Token value of the phantom request and
-                                ; associated multicast notifications
+     tpi_server: CRI-no-local, ; Source addressing information
+                               ; of the multicast notifications
+     tpi_client: CRI-no-local, ; Destination addressing information
+                               ; of the multicast notifications
+     tpi_token: bstr           ; Token value of the phantom request and
+                               ; associated multicast notifications
    ]
 
         Figure 3: Format of 'tp_info' with UDP as Transport Protocol
