@@ -74,37 +74,37 @@ normative:
   RFC8613:
   RFC8949:
   RFC9203:
-  COSE.Algorithms:
+  IANA.COSE.Algorithms:
     author:
       org: IANA
     date: false
     title: COSE Algorithms
     target: https://www.iana.org/assignments/cose/cose.xhtml#algorithms
-  COSE.Key.Types:
+  IANA.COSE.Key.Types:
     author:
       org: IANA
     date: false
     title: COSE Key Types
     target: https://www.iana.org/assignments/cose/cose.xhtml#key-type
-  COSE.Header.Parameters:
+  IANA.COSE.Header.Parameters:
     author:
       org: IANA
     date: false
     title: COSE Header Parameters
     target: https://www.iana.org/assignments/cose/cose.xhtml#header-parameters
-  CoAP.Content.Formats:
+  IANA.CoAP.Content.Formats:
     author:
       org: IANA
     date: false
     title: CoAP Content-Formats
     target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats
-  CoAP.Option.Numbers:
+  IANA.CoAP.Option.Numbers:
     author:
       org: IANA
     date: false
     title: CoAP Option Numbers
     target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers
-  Target.Attributes:
+  IANA.Target.Attributes:
     author:
       org: IANA
     date: false
@@ -792,23 +792,23 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
 * Optionally, 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.
 
-* Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.
+* Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry {{IANA.COSE.Algorithms}}. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.
 
-* Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{COSE.Header.Parameters}}. Consistent with {{Section 2.4 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that provides the public key and a comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
+* Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry {{IANA.COSE.Header.Parameters}}. Consistent with {{Section 2.4 of I-D.ietf-core-oscore-groupcomm}}, acceptable values denote a format that provides the public key and a comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).
 
   At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) {{RFC8392}}, X.509 certificates {{RFC5280}}, and C509 certificates {{I-D.ietf-cose-cbor-encoded-cert}}. Further formats may be available in the future, and they would be acceptable to use as long as they comply with the criteria above.
 
   \[ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. \]
 
-* Optionally, 'gp_enc_alg', with value the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+* Optionally, 'gp_enc_alg', with value the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{IANA.COSE.Algorithms}}.
 
-* Optionally, 'sign_alg', with value the Signature Algorithm used to sign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{COSE.Algorithms}}.
+* Optionally, 'sign_alg', with value the Signature Algorithm used to sign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry {{IANA.COSE.Algorithms}}.
 
 * Optionally, 'sign_params', encoded as a CBOR array and including the following two elements:
 
-  - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the 'Capabilities' column of the "COSE Algorithms" Registry {{COSE.Algorithms}}.
+  - 'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the 'Capabilities' column of the "COSE Algorithms" Registry {{IANA.COSE.Algorithms}}.
 
-  - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry {{COSE.Key.Types}}.
+  - 'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry {{IANA.COSE.Key.Types}}.
 
 The values of 'sign_alg', 'sign_params', and 'cred_fmt' provide an early knowledge of the format of authentication credentials as well as of the type of public keys used in the OSCORE group. Thus, the client does not need to ask the Group Manager for this information as a preliminary step before the (ACE) join process, or to perform a trial-and-error exchange with the Group Manager upon joining the group. Hence, the client is able to provide the Group Manager with its own authentication credential in the correct expected format and including a public key of the correct expected type, at the very first step of the (ACE) join process.
 
@@ -1191,7 +1191,7 @@ This document registers the media type "application/informative-response+cbor" f
 
 ## CoAP Content-Formats Registry {#content-format}
 
-IANA is asked to add the following entry to the "CoAP Content-Formats" registry {{CoAP.Content.Formats}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to add the following entry to the "CoAP Content-Formats" registry {{IANA.CoAP.Content.Formats}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 Content Type: application/informative-response+cbor
 
@@ -1203,7 +1203,7 @@ Reference: {{&SELF}}
 
 ## CoAP Option Numbers Registry ## {#iana-coap-options}
 
-IANA is asked to enter the following option number to the "CoAP Option Numbers" registry {{CoAP.Option.Numbers}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to enter the following option number to the "CoAP Option Numbers" registry {{IANA.CoAP.Option.Numbers}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 | Number | Name             | Reference |
 | TBD18  | Feedback-Divider | {{&SELF}} |
@@ -1215,7 +1215,7 @@ Note to RFC Editor: In the table above, please replace TBD18 with the registered
 
 ## Target Attributes Registry ## {#iana-target-attributes}
 
-IANA is asked to register the following entry in the "Target Attributes" registry {{Target.Attributes}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+IANA is asked to register the following entry in the "Target Attributes" registry {{IANA.Target.Attributes}} within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 * Attribute Name: gp-obs
 * Brief Description: Observable resource supporting group observation
@@ -1641,6 +1641,10 @@ Therefore, the following holds when a group observation for a target resource re
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -14 to -15 ## {#sec-14-15}
+
+* Clarifications and editorial improvements.
 
 ## Version -13 to -14 ## {#sec-13-14}
 
