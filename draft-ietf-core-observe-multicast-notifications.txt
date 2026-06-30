@@ -244,8 +244,10 @@ Table of Contents
       single observer client, as defined in [RFC7641].
 
    *  Group observation: a resource observation associated with a group
-      of clients.  The server sends notifications for the group-observed
-      resource over IP multicast to all the observer clients.
+      of clients.  The server sends multicast notifications for the
+      group-observed resource to all the observer clients at once.  For
+      example, such notifications can be transported over UDP and IP
+      multicast.
 
    *  Phantom request: the CoAP request message that the server would
       have received to start a group observation on one of its
@@ -293,9 +295,9 @@ Table of Contents
       observing a target resource.
 
       If applications arise where a negotiation between the clients and
-      the server does make sense, those applications are welcome to
-      specify additional means for clients to opt in for receiving
-      multicast notifications.
+      the server does make sense, those applications can specify
+      additional means for clients to opt in for receiving multicast
+      notifications.
 
 3.  High-Level Overview of Available Variants
 
@@ -377,7 +379,7 @@ Table of Contents
    notifications for the target resource to the multicast IP address
    GRP_ADDR and port number GRP_PORT.
 
-   1.  The server builds a phantom observation request, i.e., a GET
+   1.  The server composes a phantom observation request, i.e., a GET
        request with an Observe Option set to 0 (register).
 
    2.  The server selects an available value T, from the Token space of
@@ -405,12 +407,12 @@ Table of Contents
        associated with that observation, with respect to the (previous
        hop towards the) clients.
 
-   5.  The server does not immediately respond to the phantom
-       observation request with a multicast notification sent on the
-       wire.  The server stores the phantom observation request as is,
-       throughout the lifetime of the group observation.
+   5.  The server does not immediately reply to the phantom observation
+       request with a multicast notification sent on the wire.  The
+       server stores the phantom observation request as is, throughout
+       the lifetime of the group observation.
 
-   6.  The server builds a CoAP response message INIT_NOTIF as the
+   6.  The server composes a CoAP response message INIT_NOTIF as the
        initial multicast notification for the target resource, in
        response to the phantom observation request.  This message is
        formatted like other multicast notifications (see Section 4.3)
@@ -421,7 +423,8 @@ Table of Contents
        it.  The server considers this message as the latest multicast
        notification for the target resource, until it transmits a new
        multicast notification for that resource as a CoAP message on the
-       wire, after which the server deletes the message INIT_NOTIF.
+       wire, after which the server deletes the message INIT_NOTIF from
+       its local storage.
 
 4.2.  Informative Response
 
@@ -475,7 +478,7 @@ Table of Contents
       registration request from the client.  Otherwise, this parameter
       MUST be included.
 
-      Note that the registration request from the client may indeed
+      Note that the registration request from the client can indeed
       differ from the phantom observation request in terms of transport-
       independent information, but still be acceptable for the server to
       register the client as taking part in the group observation.
@@ -2556,9 +2559,9 @@ Table of Contents
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J.,
               Furuhed, M., and L. Liao, "CBOR Encoded X.509 Certificates
               (C509 Certificates)", Work in Progress, Internet-Draft,
-              draft-ietf-cose-cbor-encoded-cert-19, 11 May 2026,
+              draft-ietf-cose-cbor-encoded-cert-20, 30 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-19>.
+              cbor-encoded-cert-20>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
