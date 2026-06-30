@@ -1377,7 +1377,6 @@ Content-Format: application/informative-response+cbor
   / ph_req /     1 : h'0160...528c', / elided for brevity /
   / last_notif / 2 : h'256105...4fa1', / elided for brevity /
   / ending /     4 : 2051251201
-
 }
 ~~~~~~~~~~~
 {: #discovery-introspection title="Group Observation Discovery with Server Introspection"}
@@ -1550,7 +1549,7 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
    The 'group_senderId' element of the Group_OSCORE_Input_Material object MUST NOT be included.
 
-   Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will never use the pairwise mode of Group OSCORE as per {{Section 8 of I-D.ietf-core-oscore-groupcomm}} and will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group.
+   Note that no information is provided as related to the AEAD Algorithm, or to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server do not need to use the pairwise mode of Group OSCORE as per {{Section 8 of I-D.ietf-core-oscore-groupcomm}} and do not need to compute a shared secret in this OSCORE group.
 
    It follows that:
 
@@ -1602,9 +1601,9 @@ Upon expiration of the group keying material as indicated in the informative res
 
 Before the keying material has expired, the server can send a multicast response with response code 5.03 (Service Unavailable) to the observing clients, protected with the current keying material. In particular, while it is analogous to the informative response defined in {{ssec-server-side-informative}}, this response has the following differences:
 
-* it additionally contains the parameters mentioned above, for the next group keying material to be used; and
+* It additionally contains the parameters mentioned above, for the next group keying material to be used; and
 
-* it MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
+* It MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
 
 The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
@@ -1612,7 +1611,7 @@ When some clients leave the OSCORE group and forget about the group observation,
 
 As an alternative to renewing the keying material before it expires, the server can simply cancel the group observation (see {{ssec-server-side-cancellation}} and {{ssec-server-side-cancellation-oscore}}), which results in the eventual re-registration of the clients that are still interested in the group observation.
 
-Applications requiring backward security or forward security are REQUIRED to use an actual group joining process (usually through a dedicated Group Manager), e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them with information about the OSCORE group to join, as described in {{sec-inf-response}}.
+For applications that require backward security or forward security, it is REQUIRED to use an actual group joining process through a dedicated Group Manager, e.g., the ACE joining procedure defined in {{I-D.ietf-ace-key-groupcomm-oscore}}. The server can facilitate the clients by providing them with information about the OSCORE group to join, as described in {{sec-inf-response}}.
 
 # Phantom Request as Deterministic Request {#deterministic-phantom-Request}
 
@@ -1628,7 +1627,7 @@ In such a case, the unprotected version of the phantom observation request can b
 
 When receiving the Deterministic Request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
-If the server recognizes the received Deterministic Request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server MUST reply with an informative response that MUST NOT be protected.
+If the server recognizes the received Deterministic Request as one of its self-generated deterministic phantom requests, then the server does not perform any Group OSCORE processing on it. This opens for replying with an unprotected response, although not indicating any OSCORE-related error. In particular, the server replies with an informative response that is not protected.
 
 Note that the phantom registration request is, in terms of transport-independent information, identical to the same Deterministic Request sent by any client that wishes to take part in the group observation. Thus, if the server receives such a phantom registration request, the informative response may omit the 'ph_req' parameter (see {{ssec-server-side-informative}}). If a client receives an informative response that includes the 'ph_req' parameter and this specifies transport-independent information different from the one of the sent Deterministic Request, then the client considers the informative response malformed.
 
@@ -1640,13 +1639,13 @@ Furthermore, the security identity associated with the sender of any Determinist
 
 The setting described above requires the server and all the clients interested in taking part in the group observation to support the approach defined in {{I-D.ietf-core-cacheable-oscore}}. On the other hand, its use allows clients to start from a smaller, unprotected version of the phantom observation request, which does not need to be verified as a request generated by the server. Therefore, in applications where the OSCORE group is configured for the use of Deterministic Requests and observer clients are expected to support the approach defined in {{I-D.ietf-core-cacheable-oscore}}, servers that start group observations are encouraged to do so by using Deterministic Requests as corresponding phantom observation requests.
 
-If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server MUST also include the following elements from the Group_OSCORE_Input_Material object.
+If the optimization defined in {{self-managed-oscore-group}} is also used, the 'gp_material' element in the informative response from the server also includes the following elements from the Group_OSCORE_Input_Material object:
 
 * 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
 * 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute Deterministic Requests (see {{Section 3.4.1 of I-D.ietf-core-cacheable-oscore}}).
 
-Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a cofactor Diffie-Hellman shared secret in this OSCORE group. It follows that:
+Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a shared secret in this OSCORE group. It follows that:
 
 * In the Common Context of the Group OSCORE Security Context, the parameter Pairwise Key Agreement Algorithm is not set (see {{Section 2.1.10 of I-D.ietf-core-oscore-groupcomm}}).
 
