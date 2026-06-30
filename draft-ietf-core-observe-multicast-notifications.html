@@ -12,22 +12,23 @@
 <meta content='
        The Constrained Application Protocol (CoAP) allows clients to "observe" resources at a server and to receive notifications as unicast responses upon changes of the resource state. In some use cases, such as those based on publish-subscribe, it would be convenient for the server to send a single notification addressed to all the clients observing the same target resource. This document updates RFC7252 and RFC7641, and it defines how a server sends observe notifications as response messages over multicast, synchronizing  all the observers of the same resource on the same shared Token value. Besides, this document defines how the security protocol Group Object Security for Constrained RESTful Environments (Group OSCORE) can be used to protect multicast notifications end-to-end between the server and the observer clients. 
     ' name="description">
-<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="xml2rfc 3.34.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-core-observe-multicast-notifications-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.33.0
-    Python 3.12.13
-    ConfigArgParse 1.7
+  xml2rfc 3.34.0
+    Python 3.14.5
+    ConfigArgParse 1.7.5
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 6.0.2
-    platformdirs 4.9.6
+    lxml 6.1.1
+    natsort 8.4.0
+    platformdirs 4.10.0
     pycountry 24.6.1
     PyYAML 6.0.3
-    requests 2.32.5
-    wcwidth 0.6.0
+    requests 2.33.1
+    wcwidth 0.8.1
 -->
 <link href="draft-ietf-core-observe-multicast-notifications.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -294,16 +295,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -323,10 +327,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -337,59 +341,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -427,26 +431,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -462,20 +465,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -511,9 +516,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -523,17 +528,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -583,25 +590,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -621,13 +620,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -638,18 +630,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow, a.pilcrow:focus {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -708,9 +698,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -800,23 +790,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -827,19 +821,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -860,54 +856,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -926,26 +922,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -961,12 +957,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1028,17 +1025,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1048,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Observe Multicast Notifications</td>
-<td class="right">April 2026</td>
+<td class="right">June 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Tiloca, et al.</td>
-<td class="center">Expires 22 October 2026</td>
+<td class="center">Expires 1 January 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="https://www.rfc-editor.org/rfc/rfc7252" class="eref">7252</a>, <a href="https://www.rfc-editor.org/rfc/rfc7641" class="eref">7641</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-04-20" class="published">20 April 2026</time>
+<time datetime="2026-06-30" class="published">30 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-10-22">22 October 2026</time></dd>
+<dd class="expires"><time datetime="2027-01-01">1 January 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1128,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1376,46 +1375,49 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.20.1"><a href="#appendix-E" class="auto internal xref">Appendix E</a>.  <a href="#name-document-updates" class="internal xref">Document Updates</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.1">
-                <p id="section-toc.1-1.20.2.1.1"><a href="#appendix-E.1" class="auto internal xref">E.1</a>.  <a href="#name-version-13-to-14" class="internal xref">Version -13 to -14</a></p>
+                <p id="section-toc.1-1.20.2.1.1"><a href="#appendix-E.1" class="auto internal xref">E.1</a>.  <a href="#name-version-14-to-15" class="internal xref">Version -14 to -15</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.2">
-                <p id="section-toc.1-1.20.2.2.1"><a href="#appendix-E.2" class="auto internal xref">E.2</a>.  <a href="#name-version-12-to-13" class="internal xref">Version -12 to -13</a></p>
+                <p id="section-toc.1-1.20.2.2.1"><a href="#appendix-E.2" class="auto internal xref">E.2</a>.  <a href="#name-version-13-to-14" class="internal xref">Version -13 to -14</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.3">
-                <p id="section-toc.1-1.20.2.3.1"><a href="#appendix-E.3" class="auto internal xref">E.3</a>.  <a href="#name-version-11-to-12" class="internal xref">Version -11 to -12</a></p>
+                <p id="section-toc.1-1.20.2.3.1"><a href="#appendix-E.3" class="auto internal xref">E.3</a>.  <a href="#name-version-12-to-13" class="internal xref">Version -12 to -13</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.4">
-                <p id="section-toc.1-1.20.2.4.1"><a href="#appendix-E.4" class="auto internal xref">E.4</a>.  <a href="#name-version-10-to-11" class="internal xref">Version -10 to -11</a></p>
+                <p id="section-toc.1-1.20.2.4.1"><a href="#appendix-E.4" class="auto internal xref">E.4</a>.  <a href="#name-version-11-to-12" class="internal xref">Version -11 to -12</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.5">
-                <p id="section-toc.1-1.20.2.5.1"><a href="#appendix-E.5" class="auto internal xref">E.5</a>.  <a href="#name-version-09-to-10" class="internal xref">Version -09 to -10</a></p>
+                <p id="section-toc.1-1.20.2.5.1"><a href="#appendix-E.5" class="auto internal xref">E.5</a>.  <a href="#name-version-10-to-11" class="internal xref">Version -10 to -11</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.6">
-                <p id="section-toc.1-1.20.2.6.1"><a href="#appendix-E.6" class="auto internal xref">E.6</a>.  <a href="#name-version-08-to-09" class="internal xref">Version -08 to -09</a></p>
+                <p id="section-toc.1-1.20.2.6.1"><a href="#appendix-E.6" class="auto internal xref">E.6</a>.  <a href="#name-version-09-to-10" class="internal xref">Version -09 to -10</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.7">
-                <p id="section-toc.1-1.20.2.7.1"><a href="#appendix-E.7" class="auto internal xref">E.7</a>.  <a href="#name-version-07-to-08" class="internal xref">Version -07 to -08</a></p>
+                <p id="section-toc.1-1.20.2.7.1"><a href="#appendix-E.7" class="auto internal xref">E.7</a>.  <a href="#name-version-08-to-09" class="internal xref">Version -08 to -09</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.8">
-                <p id="section-toc.1-1.20.2.8.1"><a href="#appendix-E.8" class="auto internal xref">E.8</a>.  <a href="#name-version-06-to-07" class="internal xref">Version -06 to -07</a></p>
+                <p id="section-toc.1-1.20.2.8.1"><a href="#appendix-E.8" class="auto internal xref">E.8</a>.  <a href="#name-version-07-to-08" class="internal xref">Version -07 to -08</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.9">
-                <p id="section-toc.1-1.20.2.9.1"><a href="#appendix-E.9" class="auto internal xref">E.9</a>.  <a href="#name-version-05-to-06" class="internal xref">Version -05 to -06</a></p>
+                <p id="section-toc.1-1.20.2.9.1"><a href="#appendix-E.9" class="auto internal xref">E.9</a>.  <a href="#name-version-06-to-07" class="internal xref">Version -06 to -07</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.10">
-                <p id="section-toc.1-1.20.2.10.1"><a href="#appendix-E.10" class="auto internal xref">E.10</a>. <a href="#name-version-04-to-05" class="internal xref">Version -04 to -05</a></p>
+                <p id="section-toc.1-1.20.2.10.1"><a href="#appendix-E.10" class="auto internal xref">E.10</a>. <a href="#name-version-05-to-06" class="internal xref">Version -05 to -06</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.11">
-                <p id="section-toc.1-1.20.2.11.1"><a href="#appendix-E.11" class="auto internal xref">E.11</a>. <a href="#name-version-03-to-04" class="internal xref">Version -03 to -04</a></p>
+                <p id="section-toc.1-1.20.2.11.1"><a href="#appendix-E.11" class="auto internal xref">E.11</a>. <a href="#name-version-04-to-05" class="internal xref">Version -04 to -05</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.12">
-                <p id="section-toc.1-1.20.2.12.1"><a href="#appendix-E.12" class="auto internal xref">E.12</a>. <a href="#name-version-02-to-03" class="internal xref">Version -02 to -03</a></p>
+                <p id="section-toc.1-1.20.2.12.1"><a href="#appendix-E.12" class="auto internal xref">E.12</a>. <a href="#name-version-03-to-04" class="internal xref">Version -03 to -04</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.13">
-                <p id="section-toc.1-1.20.2.13.1"><a href="#appendix-E.13" class="auto internal xref">E.13</a>. <a href="#name-version-01-to-02" class="internal xref">Version -01 to -02</a></p>
+                <p id="section-toc.1-1.20.2.13.1"><a href="#appendix-E.13" class="auto internal xref">E.13</a>. <a href="#name-version-02-to-03" class="internal xref">Version -02 to -03</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.14">
-                <p id="section-toc.1-1.20.2.14.1"><a href="#appendix-E.14" class="auto internal xref">E.14</a>. <a href="#name-version-00-to-01" class="internal xref">Version -00 to -01</a></p>
+                <p id="section-toc.1-1.20.2.14.1"><a href="#appendix-E.14" class="auto internal xref">E.14</a>. <a href="#name-version-01-to-02" class="internal xref">Version -01 to -02</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20.2.15">
+                <p id="section-toc.1-1.20.2.15.1"><a href="#appendix-E.15" class="auto internal xref">E.15</a>. <a href="#name-version-00-to-01" class="internal xref">Version -00 to -01</a></p>
 </li>
             </ul>
 </li>
@@ -2031,7 +2033,7 @@ RES: 2.05 Content
 <p id="section-7-3">The following notation is used for the payload of the informative responses:<a href="#section-7-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7-4.1">
-          <p id="section-7-4.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-22#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
+          <p id="section-7-4.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-26#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-7-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-4.2">
           <p id="section-7-4.2.1">'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '|' denoting byte concatenation.<a href="#section-7-4.2.1" class="pilcrow">¶</a></p>
@@ -2460,29 +2462,29 @@ RES: 2.05 Content
             <p id="section-9.1-3.3.1">Optionally, 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.<a href="#section-9.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-3.4">
-            <p id="section-9.1-3.4.1">Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#COSE.Algorithms" class="cite xref">COSE.Algorithms</a>]</span>. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.<a href="#section-9.1-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-3.4.1">Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#IANA.COSE.Algorithms" class="cite xref">IANA.COSE.Algorithms</a>]</span>. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.<a href="#section-9.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-3.5">
-            <p id="section-9.1-3.5.1">Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry <span>[<a href="#COSE.Header.Parameters" class="cite xref">COSE.Header.Parameters</a>]</span>. Consistent with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-2.4" class="relref">Section 2.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that provides the public key and a comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-9.1-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-3.5.1">Optionally, 'cred_fmt', with value the format of the authentication credentials used in the OSCORE group, encoded as a CBOR integer. The value is taken from the 'Label' column of the "COSE Header Parameters" Registry <span>[<a href="#IANA.COSE.Header.Parameters" class="cite xref">IANA.COSE.Header.Parameters</a>]</span>. Consistent with <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28#section-2.4" class="relref">Section 2.4</a> of [<a href="#I-D.ietf-core-oscore-groupcomm" class="cite xref">I-D.ietf-core-oscore-groupcomm</a>]</span>, acceptable values denote a format that provides the public key and a comprehensive set of information related to the public key algorithm, including, e.g., the used elliptic curve (when applicable).<a href="#section-9.1-3.5.1" class="pilcrow">¶</a></p>
 <p id="section-9.1-3.5.2">
 At the time of writing this specification, acceptable formats of authentication credentials are CBOR Web Tokens (CWTs) and CWT Claim Sets (CCSs) <span>[<a href="#RFC8392" class="cite xref">RFC8392</a>]</span>, X.509 certificates <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>, and C509 certificates <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="cite xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span>. Further formats may be available in the future, and they would be acceptable to use as long as they comply with the criteria above.<a href="#section-9.1-3.5.2" class="pilcrow">¶</a></p>
 <p id="section-9.1-3.5.3">
 [ As to C509 certificates, there is a pending registration requested by draft-ietf-cose-cbor-encoded-cert. ]<a href="#section-9.1-3.5.3" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-3.6">
-            <p id="section-9.1-3.6.1">Optionally, 'gp_enc_alg', with value the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#COSE.Algorithms" class="cite xref">COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.6.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-3.6.1">Optionally, 'gp_enc_alg', with value the Group Encryption Algorithm used in the OSCORE group to encrypt messages protected with the group mode, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#IANA.COSE.Algorithms" class="cite xref">IANA.COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.6.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-3.7">
-            <p id="section-9.1-3.7.1">Optionally, 'sign_alg', with value the Signature Algorithm used to sign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#COSE.Algorithms" class="cite xref">COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.7.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-3.7.1">Optionally, 'sign_alg', with value the Signature Algorithm used to sign messages in the OSCORE group, encoded as a CBOR text string or integer. The value is taken from the 'Value' column of the "COSE Algorithms" registry <span>[<a href="#IANA.COSE.Algorithms" class="cite xref">IANA.COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.7.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-3.8">
             <p id="section-9.1-3.8.1">Optionally, 'sign_params', encoded as a CBOR array and including the following two elements:<a href="#section-9.1-3.8.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.1-3.8.2.1">
-                <p id="section-9.1-3.8.2.1.1">'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the 'Capabilities' column of the "COSE Algorithms" Registry <span>[<a href="#COSE.Algorithms" class="cite xref">COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.8.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-9.1-3.8.2.1.1">'sign_alg_capab': a CBOR array, with the same format and value of the COSE capabilities array for the algorithm indicated in 'sign_alg', as specified for that algorithm in the 'Capabilities' column of the "COSE Algorithms" Registry <span>[<a href="#IANA.COSE.Algorithms" class="cite xref">IANA.COSE.Algorithms</a>]</span>.<a href="#section-9.1-3.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-9.1-3.8.2.2">
-                <p id="section-9.1-3.8.2.2.1">'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry <span>[<a href="#COSE.Key.Types" class="cite xref">COSE.Key.Types</a>]</span>.<a href="#section-9.1-3.8.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-9.1-3.8.2.2.1">'sign_key_type_capab': a CBOR array, with the same format and value of the COSE capabilities array for the COSE key type of the keys used with the algorithm indicated in 'sign_alg', as specified for that key type in the 'Capabilities' column of the "COSE Key Types" Registry <span>[<a href="#IANA.COSE.Key.Types" class="cite xref">IANA.COSE.Key.Types</a>]</span>.<a href="#section-9.1-3.8.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -2656,7 +2658,7 @@ At the time of writing this specification, acceptable formats of authentication 
 <p id="section-10-5">The following notation is used for the payload of the informative responses:<a href="#section-10-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-6.1">
-          <p id="section-10-6.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-22#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-10-6.1.1" class="pilcrow">¶</a></p>
+          <p id="section-10-6.1.1">The application-extension identifier "cri" defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-26#section-3.4" class="relref">Section 3.4</a> of [<a href="#I-D.ietf-cbor-edn-literals" class="cite xref">I-D.ietf-cbor-edn-literals</a>]</span> is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.<a href="#section-10-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-6.2">
           <p id="section-10-6.2.1">'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '|' denoting byte concatenation.<a href="#section-10-6.2.1" class="pilcrow">¶</a></p>
@@ -3433,7 +3435,7 @@ Protecting informative responses from the server prevents on-path active adversa
         <h3 id="name-coap-content-formats-regist">
 <a href="#section-14.2" class="section-number selfRef">14.2. </a><a href="#name-coap-content-formats-regist" class="section-name selfRef">CoAP Content-Formats Registry</a>
         </h3>
-<p id="section-14.2-1">IANA is asked to add the following entry to the "CoAP Content-Formats" registry <span>[<a href="#CoAP.Content.Formats" class="cite xref">CoAP.Content.Formats</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.2-1" class="pilcrow">¶</a></p>
+<p id="section-14.2-1">IANA is asked to add the following entry to the "CoAP Content-Formats" registry <span>[<a href="#IANA.CoAP.Content.Formats" class="cite xref">IANA.CoAP.Content.Formats</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.2-1" class="pilcrow">¶</a></p>
 <p id="section-14.2-2">Content Type: application/informative-response+cbor<a href="#section-14.2-2" class="pilcrow">¶</a></p>
 <p id="section-14.2-3">Content Coding: -<a href="#section-14.2-3" class="pilcrow">¶</a></p>
 <p id="section-14.2-4">ID: TBD (value between 0 and 255)<a href="#section-14.2-4" class="pilcrow">¶</a></p>
@@ -3445,7 +3447,7 @@ Protecting informative responses from the server prevents on-path active adversa
         <h3 id="name-coap-option-numbers-registr">
 <a href="#section-14.3" class="section-number selfRef">14.3. </a><a href="#name-coap-option-numbers-registr" class="section-name selfRef">CoAP Option Numbers Registry</a>
         </h3>
-<p id="section-14.3-1">IANA is asked to enter the following option number to the "CoAP Option Numbers" registry <span>[<a href="#CoAP.Option.Numbers" class="cite xref">CoAP.Option.Numbers</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.3-1" class="pilcrow">¶</a></p>
+<p id="section-14.3-1">IANA is asked to enter the following option number to the "CoAP Option Numbers" registry <span>[<a href="#IANA.CoAP.Option.Numbers" class="cite xref">IANA.CoAP.Option.Numbers</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.3-1" class="pilcrow">¶</a></p>
 <span id="name-registrations-in-the-coap-o"></span><table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
@@ -3475,7 +3477,7 @@ Protecting informative responses from the server prevents on-path active adversa
         <h3 id="name-target-attributes-registry">
 <a href="#section-14.4" class="section-number selfRef">14.4. </a><a href="#name-target-attributes-registry" class="section-name selfRef">Target Attributes Registry</a>
         </h3>
-<p id="section-14.4-1">IANA is asked to register the following entry in the "Target Attributes" registry <span>[<a href="#Target.Attributes" class="cite xref">Target.Attributes</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.4-1" class="pilcrow">¶</a></p>
+<p id="section-14.4-1">IANA is asked to register the following entry in the "Target Attributes" registry <span>[<a href="#IANA.Target.Attributes" class="cite xref">IANA.Target.Attributes</a>]</span> within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-14.4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-14.4-2.1">
             <p id="section-14.4-2.1.1">Attribute Name: gp-obs<a href="#section-14.4-2.1.1" class="pilcrow">¶</a></p>
@@ -3573,33 +3575,13 @@ Protecting informative responses from the server prevents on-path active adversa
 <a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="CoAP.Content.Formats">[CoAP.Content.Formats]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Content-Formats"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="CoAP.Option.Numbers">[CoAP.Option.Numbers]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Option Numbers"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="COSE.Algorithms">[COSE.Algorithms]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Algorithms"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#algorithms">https://www.iana.org/assignments/cose/cose.xhtml#algorithms</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="COSE.Header.Parameters">[COSE.Header.Parameters]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Header Parameters"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#header-parameters">https://www.iana.org/assignments/cose/cose.xhtml#header-parameters</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="COSE.Key.Types">[COSE.Key.Types]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Key Types"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#key-type">https://www.iana.org/assignments/cose/cose.xhtml#key-type</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-ace-key-groupcomm-oscore">[I-D.ietf-ace-key-groupcomm-oscore]</dt>
         <dd>
 <span class="refAuthor">Tiloca, M.</span> and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Key Management for Group Object Security for Constrained RESTful Environments (Group OSCORE) Using Authentication and Authorization for Constrained Environments (ACE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-21</span>, <time datetime="2026-03-14" class="refDate">14 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-21">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-oscore-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-cbor-edn-literals">[I-D.ietf-cbor-edn-literals]</dt>
         <dd>
-<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"CBOR Extended Diagnostic Notation (EDN)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-edn-literals-22</span>, <time datetime="2026-04-06" class="refDate">6 April 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-22">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-22</a>&gt;</span>. </dd>
+<span class="refAuthor">Bormann, C.</span>, <span class="refTitle">"Concise Diagnostic Notation (CDN)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cbor-edn-literals-26</span>, <time datetime="2026-06-15" class="refDate">15 June 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-26">https://datatracker.ietf.org/doc/html/draft-ietf-cbor-edn-literals-26</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-groupcomm-bis">[I-D.ietf-core-groupcomm-bis]</dt>
         <dd>
@@ -3612,6 +3594,30 @@ Protecting informative responses from the server prevents on-path active adversa
 <dt id="I-D.ietf-core-oscore-groupcomm">[I-D.ietf-core-oscore-groupcomm]</dt>
         <dd>
 <span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Mattsson, J. P.</span>, and <span class="refAuthor">R. Höglund</span>, <span class="refTitle">"Group Object Security for Constrained RESTful Environments (Group OSCORE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-oscore-groupcomm-28</span>, <time datetime="2025-12-23" class="refDate">23 December 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28">https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm-28</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.CoAP.Content.Formats">[IANA.CoAP.Content.Formats]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Content-Formats"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.CoAP.Option.Numbers">[IANA.CoAP.Option.Numbers]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"CoAP Option Numbers"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.COSE.Algorithms">[IANA.COSE.Algorithms]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Algorithms"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#algorithms">https://www.iana.org/assignments/cose/cose.xhtml#algorithms</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.COSE.Header.Parameters">[IANA.COSE.Header.Parameters]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Header Parameters"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#header-parameters">https://www.iana.org/assignments/cose/cose.xhtml#header-parameters</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.COSE.Key.Types">[IANA.COSE.Key.Types]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"COSE Key Types"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cose/cose.xhtml#key-type">https://www.iana.org/assignments/cose/cose.xhtml#key-type</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.Target.Attributes">[IANA.Target.Attributes]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Target Attributes"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3678,12 +3684,8 @@ Protecting informative responses from the server prevents on-path active adversa
 <span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9203">[RFC9203]</dt>
-        <dd>
-<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, and <span class="refAuthor">M. Gunnarsson</span>, <span class="refTitle">"The Object Security for Constrained RESTful Environments (OSCORE) Profile of the Authentication and Authorization for Constrained Environments (ACE) Framework"</span>, <span class="seriesInfo">RFC 9203</span>, <span class="seriesInfo">DOI 10.17487/RFC9203</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9203">https://www.rfc-editor.org/rfc/rfc9203</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="Target.Attributes">[Target.Attributes]</dt>
       <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Target Attributes"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes">https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes</a>&gt;</span>. </dd>
+<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, and <span class="refAuthor">M. Gunnarsson</span>, <span class="refTitle">"The Object Security for Constrained RESTful Environments (OSCORE) Profile of the Authentication and Authorization for Constrained Environments (ACE) Framework"</span>, <span class="seriesInfo">RFC 9203</span>, <span class="seriesInfo">DOI 10.17487/RFC9203</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9203">https://www.rfc-editor.org/rfc/rfc9203</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3700,7 +3702,7 @@ Protecting informative responses from the server prevents on-path active adversa
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-coap-pubsub">[I-D.ietf-core-coap-pubsub]</dt>
         <dd>
-<span class="refAuthor">Jimenez, J.</span>, <span class="refAuthor">Koster, M.</span>, and <span class="refAuthor">A. Keränen</span>, <span class="refTitle">"A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coap-pubsub-19</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-19">https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-19</a>&gt;</span>. </dd>
+<span class="refAuthor">Jimenez, J.</span>, <span class="refAuthor">Koster, M.</span>, and <span class="refAuthor">A. Keränen</span>, <span class="refTitle">"A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-coap-pubsub-20</span>, <time datetime="2026-06-03" class="refDate">3 June 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-20">https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-20</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-coral">[I-D.ietf-core-coral]</dt>
         <dd>
@@ -3708,11 +3710,11 @@ Protecting informative responses from the server prevents on-path active adversa
 <dd class="break"></dd>
 <dt id="I-D.ietf-core-multicast-notifications-proxy">[I-D.ietf-core-multicast-notifications-proxy]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Amsüss, C.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Using Proxies for Observe Notifications as CoAP Multicast Responses"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-multicast-notifications-proxy-00</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00">https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-00</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Amsüss, C.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Using Proxies for Observe Notifications as CoAP Multicast Responses"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-multicast-notifications-proxy-01</span>, <time datetime="2026-04-22" class="refDate">22 April 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-01">https://datatracker.ietf.org/doc/html/draft-ietf-core-multicast-notifications-proxy-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-cose-cbor-encoded-cert">[I-D.ietf-cose-cbor-encoded-cert]</dt>
         <dd>
-<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, and <span class="refAuthor">M. Furuhed</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-17</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-17">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-17</a>&gt;</span>. </dd>
+<span class="refAuthor">Mattsson, J. P.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Raza, S.</span>, <span class="refAuthor">Höglund, J.</span>, <span class="refAuthor">Furuhed, M.</span>, and <span class="refAuthor">L. Liao</span>, <span class="refTitle">"CBOR Encoded X.509 Certificates (C509 Certificates)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-cose-cbor-encoded-cert-19</span>, <time datetime="2026-05-11" class="refDate">11 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-19">https://datatracker.ietf.org/doc/html/draft-ietf-cose-cbor-encoded-cert-19</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.tiloca-core-oscore-discovery">[I-D.tiloca-core-oscore-discovery]</dt>
         <dd>
@@ -4192,374 +4194,386 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
 <a href="#appendix-E" class="section-number selfRef">Appendix E. </a><a href="#name-document-updates" class="section-name selfRef">Document Updates</a>
       </h2>
 <p id="appendix-E-1">This section is to be removed before publishing as an RFC.<a href="#appendix-E-1" class="pilcrow">¶</a></p>
-<div id="sec-13-14">
+<div id="sec-14-15">
 <section id="appendix-E.1">
-        <h3 id="name-version-13-to-14">
-<a href="#appendix-E.1" class="section-number selfRef">E.1. </a><a href="#name-version-13-to-14" class="section-name selfRef">Version -13 to -14</a>
+        <h3 id="name-version-14-to-15">
+<a href="#appendix-E.1" class="section-number selfRef">E.1. </a><a href="#name-version-14-to-15" class="section-name selfRef">Version -14 to -15</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-E.1-1.1">
-            <p id="appendix-E.1-1.1.1">Clarified expected roles in the OSCORE group for clients and server.<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.1.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.2">
-            <p id="appendix-E.1-1.2.1">The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
+        </ul>
+</section>
+</div>
+<div id="sec-13-14">
+<section id="appendix-E.2">
+        <h3 id="name-version-13-to-14">
+<a href="#appendix-E.2" class="section-number selfRef">E.2. </a><a href="#name-version-13-to-14" class="section-name selfRef">Version -13 to -14</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-E.2-1.1">
+            <p id="appendix-E.2-1.1.1">Clarified expected roles in the OSCORE group for clients and server.<a href="#appendix-E.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.3">
-            <p id="appendix-E.1-1.3.1">Generalized semantics of the Multicast-Response-Feedback-Divider Option and renamed it as Feedback-Divider.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.2">
+            <p id="appendix-E.2-1.2.1">The HKDF Algorithm of Group OSCORE is specified as the corresponding HMAC Algorithm.<a href="#appendix-E.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Clarified pre-conditions and advantages of using deterministic phantom requests.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.3">
+            <p id="appendix-E.2-1.3.1">Generalized semantics of the Multicast-Response-Feedback-Divider Option and renamed it as Feedback-Divider.<a href="#appendix-E.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.5">
-            <p id="appendix-E.1-1.5.1">Removed unnecessary normative language.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.4">
+            <p id="appendix-E.2-1.4.1">Clarified pre-conditions and advantages of using deterministic phantom requests.<a href="#appendix-E.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.6">
-            <p id="appendix-E.1-1.6.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.1-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.5">
+            <p id="appendix-E.2-1.5.1">Removed unnecessary normative language.<a href="#appendix-E.2-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.7">
-            <p id="appendix-E.1-1.7.1">Updated references.<a href="#appendix-E.1-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.6">
+            <p id="appendix-E.2-1.6.1">Fixes and simplifications in the example with Group OSCORE.<a href="#appendix-E.2-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.1-1.8">
-            <p id="appendix-E.1-1.8.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.2-1.7">
+            <p id="appendix-E.2-1.7.1">Updated references.<a href="#appendix-E.2-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.2-1.8">
+            <p id="appendix-E.2-1.8.1">Clarifications and editorial improvements.<a href="#appendix-E.2-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-12-13">
-<section id="appendix-E.2">
+<section id="appendix-E.3">
         <h3 id="name-version-12-to-13">
-<a href="#appendix-E.2" class="section-number selfRef">E.2. </a><a href="#name-version-12-to-13" class="section-name selfRef">Version -12 to -13</a>
+<a href="#appendix-E.3" class="section-number selfRef">E.3. </a><a href="#name-version-12-to-13" class="section-name selfRef">Version -12 to -13</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.2-1.1">
-            <p id="appendix-E.2-1.1.1">Content on proxies moved out to the new document draft-ietf-core-multicast-notifications-proxy.<a href="#appendix-E.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.3-1.1">
+            <p id="appendix-E.3-1.1.1">Content on proxies moved out to the new document draft-ietf-core-multicast-notifications-proxy.<a href="#appendix-E.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.2">
-            <p id="appendix-E.2-1.2.1">Clarified avoidance of link-local addresses.<a href="#appendix-E.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.2">
+            <p id="appendix-E.3-1.2.1">Clarified avoidance of link-local addresses.<a href="#appendix-E.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.3">
-            <p id="appendix-E.2-1.3.1">Alignment with the update to the "Uniform Resource Identifier (URI) Schemes" IANA registry made by draft-ietf-core-href-26.<a href="#appendix-E.2-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.3">
+            <p id="appendix-E.3-1.3.1">Alignment with the update to the "Uniform Resource Identifier (URI) Schemes" IANA registry made by draft-ietf-core-href-26.<a href="#appendix-E.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.4">
-            <p id="appendix-E.2-1.4.1">Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".<a href="#appendix-E.2-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.4">
+            <p id="appendix-E.3-1.4.1">Revised value syntax for the 'Transport Information Details' column of the new IANA registry "CoAP Transport Information".<a href="#appendix-E.3-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.5">
-            <p id="appendix-E.2-1.5.1">Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".<a href="#appendix-E.2-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.5">
+            <p id="appendix-E.3-1.5.1">Suggested range and value for the registration in the IANA registry "CoAP Option Numbers".<a href="#appendix-E.3-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.6">
-            <p id="appendix-E.2-1.6.1">Updated references.<a href="#appendix-E.2-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.6">
+            <p id="appendix-E.3-1.6.1">Updated references.<a href="#appendix-E.3-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.2-1.7">
-            <p id="appendix-E.2-1.7.1">Editorial improvements.<a href="#appendix-E.2-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.3-1.7">
+            <p id="appendix-E.3-1.7.1">Editorial improvements.<a href="#appendix-E.3-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-11-12">
-<section id="appendix-E.3">
+<section id="appendix-E.4">
         <h3 id="name-version-11-to-12">
-<a href="#appendix-E.3" class="section-number selfRef">E.3. </a><a href="#name-version-11-to-12" class="section-name selfRef">Version -11 to -12</a>
+<a href="#appendix-E.4" class="section-number selfRef">E.4. </a><a href="#name-version-11-to-12" class="section-name selfRef">Version -11 to -12</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.3-1.1">
-            <p id="appendix-E.3-1.1.1">Changed CBOR type of 'ending' and 'exp' to be integer or float.<a href="#appendix-E.3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.4-1.1">
+            <p id="appendix-E.4-1.1.1">Changed CBOR type of 'ending' and 'exp' to be integer or float.<a href="#appendix-E.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.3-1.2">
-            <p id="appendix-E.3-1.2.1">Avoid limiting the informative response to this protocol.<a href="#appendix-E.3-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.4-1.2">
+            <p id="appendix-E.4-1.2.1">Avoid limiting the informative response to this protocol.<a href="#appendix-E.4-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.3-1.3">
-            <p id="appendix-E.3-1.3.1">Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.<a href="#appendix-E.3-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.4-1.3">
+            <p id="appendix-E.4-1.3.1">Transport identified by (scheme-id, authority) in the CRI of 'tpi_server'.<a href="#appendix-E.4-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.3-1.4">
-            <p id="appendix-E.3-1.4.1">Renamed 'sign_enc_alg' to 'gp_enc_alg', now aligned with draft-ietf-ace-key-groupcomm-oscore.<a href="#appendix-E.3-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.4-1.4">
+            <p id="appendix-E.4-1.4.1">Renamed 'sign_enc_alg' to 'gp_enc_alg', now aligned with draft-ietf-ace-key-groupcomm-oscore.<a href="#appendix-E.4-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.3-1.5">
-            <p id="appendix-E.3-1.5.1">Editorial improvements.<a href="#appendix-E.3-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.4-1.5">
+            <p id="appendix-E.4-1.5.1">Editorial improvements.<a href="#appendix-E.4-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-10-11">
-<section id="appendix-E.4">
+<section id="appendix-E.5">
         <h3 id="name-version-10-to-11">
-<a href="#appendix-E.4" class="section-number selfRef">E.4. </a><a href="#name-version-10-to-11" class="section-name selfRef">Version -10 to -11</a>
+<a href="#appendix-E.5" class="section-number selfRef">E.5. </a><a href="#name-version-10-to-11" class="section-name selfRef">Version -10 to -11</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.4-1.1">
-            <p id="appendix-E.4-1.1.1">Do not rule out original observation requests sent over multicast.<a href="#appendix-E.4-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.5-1.1">
+            <p id="appendix-E.5-1.1.1">Do not rule out original observation requests sent over multicast.<a href="#appendix-E.5-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.4-1.2">
-            <p id="appendix-E.4-1.2.1">Defined 'ending' parameter for the informative response payload.<a href="#appendix-E.4-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-1.2">
+            <p id="appendix-E.5-1.2.1">Defined 'ending' parameter for the informative response payload.<a href="#appendix-E.5-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.4-1.3">
-            <p id="appendix-E.4-1.3.1">Group observation data available on different sources can be removed.<a href="#appendix-E.4-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-1.3">
+            <p id="appendix-E.5-1.3.1">Group observation data available on different sources can be removed.<a href="#appendix-E.5-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.4-1.4">
-            <p id="appendix-E.4-1.4.1">Initial description of a scenario with a reverse-proxy.<a href="#appendix-E.4-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-1.4">
+            <p id="appendix-E.5-1.4.1">Initial description of a scenario with a reverse-proxy.<a href="#appendix-E.5-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.4-1.5">
-            <p id="appendix-E.4-1.5.1">Minor fixes in examples.<a href="#appendix-E.4-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-1.5">
+            <p id="appendix-E.5-1.5.1">Minor fixes in examples.<a href="#appendix-E.5-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.4-1.6">
-            <p id="appendix-E.4-1.6.1">Clarifications and editorial improvements.<a href="#appendix-E.4-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.5-1.6">
+            <p id="appendix-E.5-1.6.1">Clarifications and editorial improvements.<a href="#appendix-E.5-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-09-10">
-<section id="appendix-E.5">
+<section id="appendix-E.6">
         <h3 id="name-version-09-to-10">
-<a href="#appendix-E.5" class="section-number selfRef">E.5. </a><a href="#name-version-09-to-10" class="section-name selfRef">Version -09 to -10</a>
+<a href="#appendix-E.6" class="section-number selfRef">E.6. </a><a href="#name-version-09-to-10" class="section-name selfRef">Version -09 to -10</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.5-1.1">
-            <p id="appendix-E.5-1.1.1">Fixed section numbers of referred documents.<a href="#appendix-E.5-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.6-1.1">
+            <p id="appendix-E.6-1.1.1">Fixed section numbers of referred documents.<a href="#appendix-E.6-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.5-1.2">
-            <p id="appendix-E.5-1.2.1">Revised registration policies in the IANA considerations.<a href="#appendix-E.5-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.6-1.2">
+            <p id="appendix-E.6-1.2.1">Revised registration policies in the IANA considerations.<a href="#appendix-E.6-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.5-1.3">
-            <p id="appendix-E.5-1.3.1">Clarifications and editorial improvements.<a href="#appendix-E.5-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.6-1.3">
+            <p id="appendix-E.6-1.3.1">Clarifications and editorial improvements.<a href="#appendix-E.6-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-08-09">
-<section id="appendix-E.6">
+<section id="appendix-E.7">
         <h3 id="name-version-08-to-09">
-<a href="#appendix-E.6" class="section-number selfRef">E.6. </a><a href="#name-version-08-to-09" class="section-name selfRef">Version -08 to -09</a>
+<a href="#appendix-E.7" class="section-number selfRef">E.7. </a><a href="#name-version-08-to-09" class="section-name selfRef">Version -08 to -09</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.6-1.1">
-            <p id="appendix-E.6-1.1.1">Revised 'tp_info' also to use CRIs for transport information.<a href="#appendix-E.6-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.7-1.1">
+            <p id="appendix-E.7-1.1.1">Revised 'tp_info' also to use CRIs for transport information.<a href="#appendix-E.7-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.6-1.2">
-            <p id="appendix-E.6-1.2.1">Section restructuring: impact from proxies on rough counting of clients.<a href="#appendix-E.6-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-1.2">
+            <p id="appendix-E.7-1.2.1">Section restructuring: impact from proxies on rough counting of clients.<a href="#appendix-E.7-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.6-1.3">
-            <p id="appendix-E.6-1.3.1">Revised and repositioned text on deterministic phantom requests.<a href="#appendix-E.6-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-1.3">
+            <p id="appendix-E.7-1.3.1">Revised and repositioned text on deterministic phantom requests.<a href="#appendix-E.7-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.6-1.4">
-            <p id="appendix-E.6-1.4.1">Fixes in the examples with message exchanges.<a href="#appendix-E.6-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-1.4">
+            <p id="appendix-E.7-1.4.1">Fixes in the examples with message exchanges.<a href="#appendix-E.7-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.6-1.5">
-            <p id="appendix-E.6-1.5.1">Clarifications and editorial improvements.<a href="#appendix-E.6-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.7-1.5">
+            <p id="appendix-E.7-1.5.1">Clarifications and editorial improvements.<a href="#appendix-E.7-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-07-08">
-<section id="appendix-E.7">
+<section id="appendix-E.8">
         <h3 id="name-version-07-to-08">
-<a href="#appendix-E.7" class="section-number selfRef">E.7. </a><a href="#name-version-07-to-08" class="section-name selfRef">Version -07 to -08</a>
+<a href="#appendix-E.8" class="section-number selfRef">E.8. </a><a href="#name-version-07-to-08" class="section-name selfRef">Version -07 to -08</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.7-1.1">
-            <p id="appendix-E.7-1.1.1">Fixed the CDDL definition 'srv_addr' in 'tp_info'.<a href="#appendix-E.7-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.8-1.1">
+            <p id="appendix-E.8-1.1.1">Fixed the CDDL definition 'srv_addr' in 'tp_info'.<a href="#appendix-E.8-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.2">
-            <p id="appendix-E.7-1.2.1">Early mentioning that 'srv_addr' cannot instruct redirection.<a href="#appendix-E.7-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.2">
+            <p id="appendix-E.8-1.2.1">Early mentioning that 'srv_addr' cannot instruct redirection.<a href="#appendix-E.8-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.3">
-            <p id="appendix-E.7-1.3.1">The replay protection of multicast notifications is as per Group OSCORE.<a href="#appendix-E.7-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.3">
+            <p id="appendix-E.8-1.3.1">The replay protection of multicast notifications is as per Group OSCORE.<a href="#appendix-E.8-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.4">
-            <p id="appendix-E.7-1.4.1">Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.<a href="#appendix-E.7-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.4">
+            <p id="appendix-E.8-1.4.1">Consistently use the format uint for the Multicast-Response-Feedback-Divider Option.<a href="#appendix-E.8-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.5">
-            <p id="appendix-E.7-1.5.1">Fixed consumption of proxy-related options in a ticket request sent to the proxy.<a href="#appendix-E.7-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.5">
+            <p id="appendix-E.8-1.5.1">Fixed consumption of proxy-related options in a ticket request sent to the proxy.<a href="#appendix-E.8-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.6">
-            <p id="appendix-E.7-1.6.1">Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.<a href="#appendix-E.7-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.6">
+            <p id="appendix-E.8-1.6.1">Possible use of the option Proxy-Cri or Proxy-Scheme-Number in a ticket request.<a href="#appendix-E.8-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.7">
-            <p id="appendix-E.7-1.7.1">Explained non-provisioning of some parameters in self-managed OSCORE groups.<a href="#appendix-E.7-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.7">
+            <p id="appendix-E.8-1.7.1">Explained non-provisioning of some parameters in self-managed OSCORE groups.<a href="#appendix-E.8-1.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.8">
-            <p id="appendix-E.7-1.8.1">Use of 'exi' for relative expiration time in self-managed OSCORE groups.<a href="#appendix-E.7-1.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.8">
+            <p id="appendix-E.8-1.8.1">Use of 'exi' for relative expiration time in self-managed OSCORE groups.<a href="#appendix-E.8-1.8.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.9">
-            <p id="appendix-E.7-1.9.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-E.7-1.9.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.9">
+            <p id="appendix-E.8-1.9.1">Improved notation in the examples of message exchanges with proxy.<a href="#appendix-E.8-1.9.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.7-1.10">
-            <p id="appendix-E.7-1.10.1">Clarifications and editorial improvements.<a href="#appendix-E.7-1.10.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.8-1.10">
+            <p id="appendix-E.8-1.10.1">Clarifications and editorial improvements.<a href="#appendix-E.8-1.10.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-06-07">
-<section id="appendix-E.8">
+<section id="appendix-E.9">
         <h3 id="name-version-06-to-07">
-<a href="#appendix-E.8" class="section-number selfRef">E.8. </a><a href="#name-version-06-to-07" class="section-name selfRef">Version -06 to -07</a>
+<a href="#appendix-E.9" class="section-number selfRef">E.9. </a><a href="#name-version-06-to-07" class="section-name selfRef">Version -06 to -07</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.8-1.1">
-            <p id="appendix-E.8-1.1.1">Added more details on proxies that do not support the Multicast-Response-Feedback-Divider Option.<a href="#appendix-E.8-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.9-1.1">
+            <p id="appendix-E.9-1.1.1">Added more details on proxies that do not support the Multicast-Response-Feedback-Divider Option.<a href="#appendix-E.9-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.8-1.2">
-            <p id="appendix-E.8-1.2.1">Added more details on the reliability of the client rough counting.<a href="#appendix-E.8-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.9-1.2">
+            <p id="appendix-E.9-1.2.1">Added more details on the reliability of the client rough counting.<a href="#appendix-E.9-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.8-1.3">
-            <p id="appendix-E.8-1.3.1">Added more details on the unreliability of counting new clients, when the phantom request is obtained from other sources or is an OSCORE Deterministic Request.<a href="#appendix-E.8-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.9-1.3">
+            <p id="appendix-E.9-1.3.1">Added more details on the unreliability of counting new clients, when the phantom request is obtained from other sources or is an OSCORE Deterministic Request.<a href="#appendix-E.9-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.8-1.4">
-            <p id="appendix-E.8-1.4.1">Revised parameter naming.<a href="#appendix-E.8-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.9-1.4">
+            <p id="appendix-E.9-1.4.1">Revised parameter naming.<a href="#appendix-E.9-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.8-1.5">
-            <p id="appendix-E.8-1.5.1">Fixes in IANA considerations.<a href="#appendix-E.8-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.9-1.5">
+            <p id="appendix-E.9-1.5.1">Fixes in IANA considerations.<a href="#appendix-E.9-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.8-1.6">
-            <p id="appendix-E.8-1.6.1">Editorial improvements.<a href="#appendix-E.8-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.9-1.6">
+            <p id="appendix-E.9-1.6.1">Editorial improvements.<a href="#appendix-E.9-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-05-06">
-<section id="appendix-E.9">
+<section id="appendix-E.10">
         <h3 id="name-version-05-to-06">
-<a href="#appendix-E.9" class="section-number selfRef">E.9. </a><a href="#name-version-05-to-06" class="section-name selfRef">Version -05 to -06</a>
+<a href="#appendix-E.10" class="section-number selfRef">E.10. </a><a href="#name-version-05-to-06" class="section-name selfRef">Version -05 to -06</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.9-1.1">
-            <p id="appendix-E.9-1.1.1">Clarified rough counting of clients when a proxy is used<a href="#appendix-E.9-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.10-1.1">
+            <p id="appendix-E.10-1.1.1">Clarified rough counting of clients when a proxy is used<a href="#appendix-E.10-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.9-1.2">
-            <p id="appendix-E.9-1.2.1">IANA considerations: registration of target attribute "gp-obs"<a href="#appendix-E.9-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.10-1.2">
+            <p id="appendix-E.10-1.2.1">IANA considerations: registration of target attribute "gp-obs"<a href="#appendix-E.10-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.9-1.3">
-            <p id="appendix-E.9-1.3.1">Editorial improvements.<a href="#appendix-E.9-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.10-1.3">
+            <p id="appendix-E.10-1.3.1">Editorial improvements.<a href="#appendix-E.10-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-04-05">
-<section id="appendix-E.10">
+<section id="appendix-E.11">
         <h3 id="name-version-04-to-05">
-<a href="#appendix-E.10" class="section-number selfRef">E.10. </a><a href="#name-version-04-to-05" class="section-name selfRef">Version -04 to -05</a>
+<a href="#appendix-E.11" class="section-number selfRef">E.11. </a><a href="#name-version-04-to-05" class="section-name selfRef">Version -04 to -05</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.10-1.1">
-            <p id="appendix-E.10-1.1.1">If the phantom request is an OSCORE Deterministic Request, there is no parallel group observation for clients that lack support.<a href="#appendix-E.10-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.11-1.1">
+            <p id="appendix-E.11-1.1.1">If the phantom request is an OSCORE Deterministic Request, there is no parallel group observation for clients that lack support.<a href="#appendix-E.11-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.10-1.2">
-            <p id="appendix-E.10-1.2.1">Clarification on pre-configured clients.<a href="#appendix-E.10-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.11-1.2">
+            <p id="appendix-E.11-1.2.1">Clarification on pre-configured clients.<a href="#appendix-E.11-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.10-1.3">
-            <p id="appendix-E.10-1.3.1">Clarified early publication of phantom request.<a href="#appendix-E.10-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.11-1.3">
+            <p id="appendix-E.11-1.3.1">Clarified early publication of phantom request.<a href="#appendix-E.11-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.10-1.4">
-            <p id="appendix-E.10-1.4.1">Fixes in IANA considerations.<a href="#appendix-E.10-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.11-1.4">
+            <p id="appendix-E.11-1.4.1">Fixes in IANA considerations.<a href="#appendix-E.11-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.10-1.5">
-            <p id="appendix-E.10-1.5.1">Fixed example with proxy and Group OSCORE.<a href="#appendix-E.10-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.11-1.5">
+            <p id="appendix-E.11-1.5.1">Fixed example with proxy and Group OSCORE.<a href="#appendix-E.11-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.10-1.6">
-            <p id="appendix-E.10-1.6.1">Editorial improvements.<a href="#appendix-E.10-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.11-1.6">
+            <p id="appendix-E.11-1.6.1">Editorial improvements.<a href="#appendix-E.11-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-03-04">
-<section id="appendix-E.11">
+<section id="appendix-E.12">
         <h3 id="name-version-03-to-04">
-<a href="#appendix-E.11" class="section-number selfRef">E.11. </a><a href="#name-version-03-to-04" class="section-name selfRef">Version -03 to -04</a>
+<a href="#appendix-E.12" class="section-number selfRef">E.12. </a><a href="#name-version-03-to-04" class="section-name selfRef">Version -03 to -04</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.11-1.1">
-            <p id="appendix-E.11-1.1.1">Added a new section on prerequisites.<a href="#appendix-E.11-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.12-1.1">
+            <p id="appendix-E.12-1.1.1">Added a new section on prerequisites.<a href="#appendix-E.12-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.2">
-            <p id="appendix-E.11-1.2.1">Added a new section overviewing alternative variants.<a href="#appendix-E.11-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.2">
+            <p id="appendix-E.12-1.2.1">Added a new section overviewing alternative variants.<a href="#appendix-E.12-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.3">
-            <p id="appendix-E.11-1.3.1">Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.<a href="#appendix-E.11-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.3">
+            <p id="appendix-E.12-1.3.1">Consistent renaming of 'cli_addr' to 'cli_host' in 'tp_info'.<a href="#appendix-E.12-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.4">
-            <p id="appendix-E.11-1.4.1">Added pre-requirements for early retrieval of phantom request.<a href="#appendix-E.11-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.4">
+            <p id="appendix-E.12-1.4.1">Added pre-requirements for early retrieval of phantom request.<a href="#appendix-E.12-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.5">
-            <p id="appendix-E.11-1.5.1">Revised example with early retrieval of phantom request.<a href="#appendix-E.11-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.5">
+            <p id="appendix-E.12-1.5.1">Revised example with early retrieval of phantom request.<a href="#appendix-E.12-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.6">
-            <p id="appendix-E.11-1.6.1">Clarified use, rationale and example of phantom request as Deterministic Request.<a href="#appendix-E.11-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.6">
+            <p id="appendix-E.12-1.6.1">Clarified use, rationale and example of phantom request as Deterministic Request.<a href="#appendix-E.12-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.11-1.7">
-            <p id="appendix-E.11-1.7.1">Editorial improvements.<a href="#appendix-E.11-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.12-1.7">
+            <p id="appendix-E.12-1.7.1">Editorial improvements.<a href="#appendix-E.12-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-02-03">
-<section id="appendix-E.12">
+<section id="appendix-E.13">
         <h3 id="name-version-02-to-03">
-<a href="#appendix-E.12" class="section-number selfRef">E.12. </a><a href="#name-version-02-to-03" class="section-name selfRef">Version -02 to -03</a>
+<a href="#appendix-E.13" class="section-number selfRef">E.13. </a><a href="#name-version-02-to-03" class="section-name selfRef">Version -02 to -03</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.12-1.1">
-            <p id="appendix-E.12-1.1.1">Distinction between authentication credential and public key.<a href="#appendix-E.12-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.13-1.1">
+            <p id="appendix-E.13-1.1.1">Distinction between authentication credential and public key.<a href="#appendix-E.13-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.12-1.2">
-            <p id="appendix-E.12-1.2.1">Fixed processing of informative response at the client, when Group OSCORE is used.<a href="#appendix-E.12-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.13-1.2">
+            <p id="appendix-E.13-1.2.1">Fixed processing of informative response at the client, when Group OSCORE is used.<a href="#appendix-E.13-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.12-1.3">
-            <p id="appendix-E.12-1.3.1">Discussed scenarios with pre-configured address/port and Token value.<a href="#appendix-E.12-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.13-1.3">
+            <p id="appendix-E.13-1.3.1">Discussed scenarios with pre-configured address/port and Token value.<a href="#appendix-E.13-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-01-02">
-<section id="appendix-E.13">
+<section id="appendix-E.14">
         <h3 id="name-version-01-to-02">
-<a href="#appendix-E.13" class="section-number selfRef">E.13. </a><a href="#name-version-01-to-02" class="section-name selfRef">Version -01 to -02</a>
+<a href="#appendix-E.14" class="section-number selfRef">E.14. </a><a href="#name-version-01-to-02" class="section-name selfRef">Version -01 to -02</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.13-1.1">
-            <p id="appendix-E.13-1.1.1">Clarifications on client rough counting and IP multicast scope.<a href="#appendix-E.13-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.14-1.1">
+            <p id="appendix-E.14-1.1.1">Clarifications on client rough counting and IP multicast scope.<a href="#appendix-E.14-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.2">
-            <p id="appendix-E.13-1.2.1">The 'ph_req' parameter is optional in the informative response.<a href="#appendix-E.13-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.2">
+            <p id="appendix-E.14-1.2.1">The 'ph_req' parameter is optional in the informative response.<a href="#appendix-E.14-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.3">
-            <p id="appendix-E.13-1.3.1">New parameter 'next_not_before' for the informative response.<a href="#appendix-E.13-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.3">
+            <p id="appendix-E.14-1.3.1">New parameter 'next_not_before' for the informative response.<a href="#appendix-E.14-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.4">
-            <p id="appendix-E.13-1.4.1">Optimization when rekeying the self-managed OSCORE group.<a href="#appendix-E.13-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.4">
+            <p id="appendix-E.14-1.4.1">Optimization when rekeying the self-managed OSCORE group.<a href="#appendix-E.14-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.5">
-            <p id="appendix-E.13-1.5.1">Security considerations on unsecured multicast notifications.<a href="#appendix-E.13-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.5">
+            <p id="appendix-E.14-1.5.1">Security considerations on unsecured multicast notifications.<a href="#appendix-E.14-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.6">
-            <p id="appendix-E.13-1.6.1">Protection of the ticket request sent to a proxy.<a href="#appendix-E.13-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.6">
+            <p id="appendix-E.14-1.6.1">Protection of the ticket request sent to a proxy.<a href="#appendix-E.14-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.7">
-            <p id="appendix-E.13-1.7.1">RFC8126 terminology in IANA considerations.<a href="#appendix-E.13-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.7">
+            <p id="appendix-E.14-1.7.1">RFC8126 terminology in IANA considerations.<a href="#appendix-E.14-1.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.13-1.8">
-            <p id="appendix-E.13-1.8.1">Editorial improvements.<a href="#appendix-E.13-1.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.14-1.8">
+            <p id="appendix-E.14-1.8.1">Editorial improvements.<a href="#appendix-E.14-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="sec-00-01">
-<section id="appendix-E.14">
+<section id="appendix-E.15">
         <h3 id="name-version-00-to-01">
-<a href="#appendix-E.14" class="section-number selfRef">E.14. </a><a href="#name-version-00-to-01" class="section-name selfRef">Version -00 to -01</a>
+<a href="#appendix-E.15" class="section-number selfRef">E.15. </a><a href="#name-version-00-to-01" class="section-name selfRef">Version -00 to -01</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-E.14-1.1">
-            <p id="appendix-E.14-1.1.1">Simplified cancellation of the group observation, without using a phantom cancellation request.<a href="#appendix-E.14-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.15-1.1">
+            <p id="appendix-E.15-1.1.1">Simplified cancellation of the group observation, without using a phantom cancellation request.<a href="#appendix-E.15-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.14-1.2">
-            <p id="appendix-E.14-1.2.1">Aligned parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.<a href="#appendix-E.14-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.15-1.2">
+            <p id="appendix-E.15-1.2.1">Aligned parameter semantics with core-oscore-groupcomm and ace-key-groupcomm-oscore.<a href="#appendix-E.15-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.14-1.3">
-            <p id="appendix-E.14-1.3.1">Clarifications about self-managed OSCORE group and use of Deterministic Requests for cacheable OSCORE.<a href="#appendix-E.14-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.15-1.3">
+            <p id="appendix-E.15-1.3.1">Clarifications about self-managed OSCORE group and use of Deterministic Requests for cacheable OSCORE.<a href="#appendix-E.15-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.14-1.4">
-            <p id="appendix-E.14-1.4.1">New example with a proxy, Group OSCORE and a deterministic phantom request.<a href="#appendix-E.14-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.15-1.4">
+            <p id="appendix-E.15-1.4.1">New example with a proxy, Group OSCORE and a deterministic phantom request.<a href="#appendix-E.15-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-E.14-1.5">
-            <p id="appendix-E.14-1.5.1">Fixes in the examples and editorial improvements.<a href="#appendix-E.14-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-E.15-1.5">
+            <p id="appendix-E.15-1.5.1">Fixes in the examples and editorial improvements.<a href="#appendix-E.15-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

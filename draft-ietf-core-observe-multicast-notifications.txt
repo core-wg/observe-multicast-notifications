@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 22 October 2026                                                
+Expires: 1 January 2027                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                           20 April 2026
+                                                            30 June 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 October 2026.
+   This Internet-Draft will expire on 1 January 2027.
 
 Copyright Notice
 
@@ -138,20 +138,21 @@ Table of Contents
    Appendix C.  OSCORE Group Self-Managed by the Server
    Appendix D.  Phantom Request as Deterministic Request
    Appendix E.  Document Updates
-     E.1.  Version -13 to -14
-     E.2.  Version -12 to -13
-     E.3.  Version -11 to -12
-     E.4.  Version -10 to -11
-     E.5.  Version -09 to -10
-     E.6.  Version -08 to -09
-     E.7.  Version -07 to -08
-     E.8.  Version -06 to -07
-     E.9.  Version -05 to -06
-     E.10. Version -04 to -05
-     E.11. Version -03 to -04
-     E.12. Version -02 to -03
-     E.13. Version -01 to -02
-     E.14. Version -00 to -01
+     E.1.  Version -14 to -15
+     E.2.  Version -13 to -14
+     E.3.  Version -12 to -13
+     E.4.  Version -11 to -12
+     E.5.  Version -10 to -11
+     E.6.  Version -09 to -10
+     E.7.  Version -08 to -09
+     E.8.  Version -07 to -08
+     E.9.  Version -06 to -07
+     E.10. Version -05 to -06
+     E.11. Version -04 to -05
+     E.12. Version -03 to -04
+     E.13. Version -02 to -03
+     E.14. Version -01 to -02
+     E.15. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -1512,13 +1513,13 @@ Table of Contents
       OSCORE group, encoded as a CBOR text string or integer.  The HKDF
       Algorithm is specified by the HMAC Algorithm value, which is taken
       from the 'Value' column of the "COSE Algorithms" registry
-      [COSE.Algorithms].  For example, the HKDF Algorithm HKDF SHA-256
-      is specified as the HMAC Algorithm HMAC 256/256.
+      [IANA.COSE.Algorithms].  For example, the HKDF Algorithm HKDF
+      SHA-256 is specified as the HMAC Algorithm HMAC 256/256.
 
    *  Optionally, 'cred_fmt', with value the format of the
       authentication credentials used in the OSCORE group, encoded as a
       CBOR integer.  The value is taken from the 'Label' column of the
-      "COSE Header Parameters" Registry [COSE.Header.Parameters].
+      "COSE Header Parameters" Registry [IANA.COSE.Header.Parameters].
       Consistent with Section 2.4 of [I-D.ietf-core-oscore-groupcomm],
       acceptable values denote a format that provides the public key and
       a comprehensive set of information related to the public key
@@ -1539,12 +1540,12 @@ Table of Contents
       Algorithm used in the OSCORE group to encrypt messages protected
       with the group mode, encoded as a CBOR text string or integer.
       The value is taken from the 'Value' column of the "COSE
-      Algorithms" registry [COSE.Algorithms].
+      Algorithms" registry [IANA.COSE.Algorithms].
 
    *  Optionally, 'sign_alg', with value the Signature Algorithm used to
       sign messages in the OSCORE group, encoded as a CBOR text string
       or integer.  The value is taken from the 'Value' column of the
-      "COSE Algorithms" registry [COSE.Algorithms].
+      "COSE Algorithms" registry [IANA.COSE.Algorithms].
 
    *  Optionally, 'sign_params', encoded as a CBOR array and including
       the following two elements:
@@ -1553,13 +1554,13 @@ Table of Contents
          of the COSE capabilities array for the algorithm indicated in
          'sign_alg', as specified for that algorithm in the
          'Capabilities' column of the "COSE Algorithms" Registry
-         [COSE.Algorithms].
+         [IANA.COSE.Algorithms].
 
       -  'sign_key_type_capab': a CBOR array, with the same format and
          value of the COSE capabilities array for the COSE key type of
          the keys used with the algorithm indicated in 'sign_alg', as
          specified for that key type in the 'Capabilities' column of the
-         "COSE Key Types" Registry [COSE.Key.Types].
+         "COSE Key Types" Registry [IANA.COSE.Key.Types].
 
    The values of 'sign_alg', 'sign_params', and 'cred_fmt' provide an
    early knowledge of the format of authentication credentials as well
@@ -2201,7 +2202,7 @@ Table of Contents
 14.2.  CoAP Content-Formats Registry
 
    IANA is asked to add the following entry to the "CoAP Content-
-   Formats" registry [CoAP.Content.Formats] within the "Constrained
+   Formats" registry [IANA.CoAP.Content.Formats] within the "Constrained
    RESTful Environments (CoRE) Parameters" registry group.
 
    Content Type: application/informative-response+cbor
@@ -2215,7 +2216,7 @@ Table of Contents
 14.3.  CoAP Option Numbers Registry
 
    IANA is asked to enter the following option number to the "CoAP
-   Option Numbers" registry [CoAP.Option.Numbers] within the
+   Option Numbers" registry [IANA.CoAP.Option.Numbers] within the
    "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
                 +========+==================+============+
@@ -2237,7 +2238,7 @@ Table of Contents
 14.4.  Target Attributes Registry
 
    IANA is asked to register the following entry in the "Target
-   Attributes" registry [Target.Attributes] within the "Constrained
+   Attributes" registry [IANA.Target.Attributes] within the "Constrained
    RESTful Environments (CoRE) Parameters" registry group.
 
    *  Attribute Name: gp-obs
@@ -2364,31 +2365,6 @@ Table of Contents
 
 15.1.  Normative References
 
-   [CoAP.Content.Formats]
-              IANA, "CoAP Content-Formats",
-              <https://www.iana.org/assignments/core-parameters/core-
-              parameters.xhtml#content-formats>.
-
-   [CoAP.Option.Numbers]
-              IANA, "CoAP Option Numbers",
-              <https://www.iana.org/assignments/core-parameters/core-
-              parameters.xhtml#option-numbers>.
-
-   [COSE.Algorithms]
-              IANA, "COSE Algorithms",
-              <https://www.iana.org/assignments/cose/
-              cose.xhtml#algorithms>.
-
-   [COSE.Header.Parameters]
-              IANA, "COSE Header Parameters",
-              <https://www.iana.org/assignments/cose/cose.xhtml#header-
-              parameters>.
-
-   [COSE.Key.Types]
-              IANA, "COSE Key Types",
-              <https://www.iana.org/assignments/cose/cose.xhtml#key-
-              type>.
-
    [I-D.ietf-ace-key-groupcomm-oscore]
               Tiloca, M. and F. Palombini, "Key Management for Group
               Object Security for Constrained RESTful Environments
@@ -2399,11 +2375,10 @@ Table of Contents
               ietf-ace-key-groupcomm-oscore-21>.
 
    [I-D.ietf-cbor-edn-literals]
-              Bormann, C., "CBOR Extended Diagnostic Notation (EDN)",
-              Work in Progress, Internet-Draft, draft-ietf-cbor-edn-
-              literals-22, 6 April 2026,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-cbor-
-              edn-literals-22>.
+              Bormann, C., "Concise Diagnostic Notation (CDN)", Work in
+              Progress, Internet-Draft, draft-ietf-cbor-edn-literals-26,
+              15 June 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-cbor-edn-literals-26>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
@@ -2427,6 +2402,36 @@ Table of Contents
               Internet-Draft, draft-ietf-core-oscore-groupcomm-28, 23
               December 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-core-oscore-groupcomm-28>.
+
+   [IANA.CoAP.Content.Formats]
+              IANA, "CoAP Content-Formats",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#content-formats>.
+
+   [IANA.CoAP.Option.Numbers]
+              IANA, "CoAP Option Numbers",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#option-numbers>.
+
+   [IANA.COSE.Algorithms]
+              IANA, "COSE Algorithms",
+              <https://www.iana.org/assignments/cose/
+              cose.xhtml#algorithms>.
+
+   [IANA.COSE.Header.Parameters]
+              IANA, "COSE Header Parameters",
+              <https://www.iana.org/assignments/cose/cose.xhtml#header-
+              parameters>.
+
+   [IANA.COSE.Key.Types]
+              IANA, "COSE Key Types",
+              <https://www.iana.org/assignments/cose/cose.xhtml#key-
+              type>.
+
+   [IANA.Target.Attributes]
+              IANA, "Target Attributes",
+              <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#target-attributes>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2512,11 +2517,6 @@ Table of Contents
               DOI 10.17487/RFC9203, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9203>.
 
-   [Target.Attributes]
-              IANA, "Target Attributes",
-              <https://www.iana.org/assignments/core-parameters/core-
-              parameters.xhtml#target-attributes>.
-
 15.2.  Informative References
 
    [I-D.ietf-core-cacheable-oscore]
@@ -2533,9 +2533,9 @@ Table of Contents
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
               subscribe architecture for the Constrained Application
               Protocol (CoAP)", Work in Progress, Internet-Draft, draft-
-              ietf-core-coap-pubsub-19, 2 March 2026,
+              ietf-core-coap-pubsub-20, 3 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              coap-pubsub-19>.
+              coap-pubsub-20>.
 
    [I-D.ietf-core-coral]
               Amsüss, C. and T. Fossati, "The Constrained RESTful
@@ -2548,17 +2548,17 @@ Table of Contents
               Tiloca, M., Höglund, R., Amsüss, C., and F. Palombini,
               "Using Proxies for Observe Notifications as CoAP Multicast
               Responses", Work in Progress, Internet-Draft, draft-ietf-
-              core-multicast-notifications-proxy-00, 20 October 2025,
+              core-multicast-notifications-proxy-01, 22 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              multicast-notifications-proxy-00>.
+              multicast-notifications-proxy-01>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
-              Mattsson, J. P., Selander, G., Raza, S., Höglund, J., and
-              M. Furuhed, "CBOR Encoded X.509 Certificates (C509
-              Certificates)", Work in Progress, Internet-Draft, draft-
-              ietf-cose-cbor-encoded-cert-17, 2 March 2026,
+              Mattsson, J. P., Selander, G., Raza, S., Höglund, J.,
+              Furuhed, M., and L. Liao, "CBOR Encoded X.509 Certificates
+              (C509 Certificates)", Work in Progress, Internet-Draft,
+              draft-ietf-cose-cbor-encoded-cert-19, 11 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-17>.
+              cbor-encoded-cert-19>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
@@ -3252,7 +3252,11 @@ Appendix E.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-E.1.  Version -13 to -14
+E.1.  Version -14 to -15
+
+   *  Clarifications and editorial improvements.
+
+E.2.  Version -13 to -14
 
    *  Clarified expected roles in the OSCORE group for clients and
       server.
@@ -3274,7 +3278,7 @@ E.1.  Version -13 to -14
 
    *  Clarifications and editorial improvements.
 
-E.2.  Version -12 to -13
+E.3.  Version -12 to -13
 
    *  Content on proxies moved out to the new document draft-ietf-core-
       multicast-notifications-proxy.
@@ -3294,7 +3298,7 @@ E.2.  Version -12 to -13
 
    *  Editorial improvements.
 
-E.3.  Version -11 to -12
+E.4.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
@@ -3308,7 +3312,7 @@ E.3.  Version -11 to -12
 
    *  Editorial improvements.
 
-E.4.  Version -10 to -11
+E.5.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
 
@@ -3323,7 +3327,7 @@ E.4.  Version -10 to -11
 
    *  Clarifications and editorial improvements.
 
-E.5.  Version -09 to -10
+E.6.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -3331,7 +3335,7 @@ E.5.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-E.6.  Version -08 to -09
+E.7.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -3344,7 +3348,7 @@ E.6.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-E.7.  Version -07 to -08
+E.8.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -3372,7 +3376,7 @@ E.7.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-E.8.  Version -06 to -07
+E.9.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -3390,7 +3394,7 @@ E.8.  Version -06 to -07
 
    *  Editorial improvements.
 
-E.9.  Version -05 to -06
+E.10.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -3398,7 +3402,7 @@ E.9.  Version -05 to -06
 
    *  Editorial improvements.
 
-E.10.  Version -04 to -05
+E.11.  Version -04 to -05
 
    *  If the phantom request is an OSCORE Deterministic Request, there
       is no parallel group observation for clients that lack support.
@@ -3413,7 +3417,7 @@ E.10.  Version -04 to -05
 
    *  Editorial improvements.
 
-E.11.  Version -03 to -04
+E.12.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -3430,7 +3434,7 @@ E.11.  Version -03 to -04
 
    *  Editorial improvements.
 
-E.12.  Version -02 to -03
+E.13.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -3440,7 +3444,7 @@ E.12.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-E.13.  Version -01 to -02
+E.14.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -3458,7 +3462,7 @@ E.13.  Version -01 to -02
 
    *  Editorial improvements.
 
-E.14.  Version -00 to -01
+E.15.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
