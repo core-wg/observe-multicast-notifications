@@ -447,7 +447,7 @@ In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI o
 
 ### Transport-Independent Message Information  ### {#sssec-transport-independent-encoding}
 
-For both the parameters 'ph_req' and 'last_notif' in the informative response, the value of the CBOR byte string is the concatenation of the following components, in the order specified below.
+For both the parameters 'ph_req' and 'last_notif' in the informative response, the value of the CBOR byte string is the concatenation of the following components defined in {{Section 3 of RFC7252}}, in the order specified below.
 
 When defining the value of each component, "CoAP message" refers to the phantom observation request for the 'ph_req' parameter and to the corresponding latest multicast notification for the 'last_notif' parameter.
 
@@ -511,7 +511,7 @@ A client sends an observation request to the server as described in {{RFC7641}},
 
 In a particular setup, the information typically specified in the 'tp_info' parameter of the informative response (see {{ssec-server-side-informative}}) can be pre-configured on the server and the clients. For example, the destination multicast address and port number where to send multicast notifications for a group observation, as well as the associated Token value to use, can be set aside for particular tasks (e.g., enforcing observations of a specific resource). Alternative mechanisms can rely on using some bytes from the hash of the observation request as the last bytes of the multicast address or as part of the Token value.
 
-In such a particular setup, the client may also have an early knowledge of the phantom request, i.e., it will be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response Option {{RFC7967}} with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation.
+In such a particular setup, the client might also have an early knowledge of the phantom request, hence it would be possible for the server to safely omit the parameter 'ph_req' from the informative response to the observation request (see {{ssec-server-side-informative}}). In this case, the client can include a No-Response Option {{RFC7967}} with value 16 in its Observe registration request, which results in the server suppressing the informative response. As a consequence, the observation request only informs the server that there is one additional client interested to take part in the group observation.
 
 While the considered client is able to simply set up its multicast address and start receiving multicast notifications for the group observation, sending an observation request as above allows the server to increment the observer counter. This helps the server to assess the current number of clients interested in the group observation over time (e.g., by using the method defined in {{sec-rough-counting}}), which in turn can play a role in deciding to cancel the group observation (see {{ssec-server-side-cancellation}}).
 
@@ -529,23 +529,23 @@ Then, the client performs the following steps.
 
 1. The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:
 
-    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see {{sssec-transport-specific-encoding}}).
+    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server', within the 'tp_info' parameter in the informative response (see {{sssec-transport-specific-encoding}}).
 
       If the port number is not present in the CRI, the client MUST use as SRV_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
-    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
+    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details', within the 'tp_info' parameter in the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
       If the port number is not present in the CRI, the client MUST use as GRP_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
 2. The client rebuilds the phantom registration request as follows.
 
-   * The client uses the Token value T that is specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
+   * The client uses the Token value T that is specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_token' (see {{ssssec-udp-transport-specific}}).
 
    * If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.
 
    * If the 'ph_req' parameter is present in the informative response, the client uses the transport-independent information specified in the parameter.
 
-3. If the informative response includes the parameter 'ph_req' and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom request can, if available in a cache entry, be used to satisfy the original observation request. If this is not the case, the client SHOULD explicitly withdraw from the group observation.
+3. If the informative response includes the parameter 'ph_req' and the transport-independent information specified therein differs from the one in the original Observe registration request, then the client checks whether a response to the rebuilt phantom registration request can, if available in a cache entry, be used to satisfy the original observation request. If this is not the case, the client SHOULD explicitly withdraw from the group observation.
 
 4. The client stores the phantom registration request, as associated with the observation of the target resource. In particular, the client MUST use the Token value T of this phantom registration request as its own local Token value associated with that group observation, with respect to the server. The particular way to achieve this is implementation specific.
 
@@ -573,7 +573,7 @@ The client relies on the value of the Observe Option for notification reordering
 
 ## Cancellation ## {#ssec-client-side-cancellation}
 
-At a certain point in time, a client may no longer be interested in receiving further multicast notifications about a target resource. When this happens, the client can simply "forget" about being part of the group observation for that target resource, as per {{Section 3.6 of RFC7641}}.
+At a certain point in time, a client might no longer be interested in receiving further multicast notifications about a target resource. When this happens, the client can simply "forget" about being part of the group observation for that target resource, as per {{Section 3.6 of RFC7641}}.
 
 When, later on, the server sends the next multicast notification, the client will not recognize the Token value T in the message. Since the multicast notification is a Non-confirmable message, it is optional for the client to reject it with a Reset message (see {{Section 3.5 of RFC7641}}).
 
@@ -581,7 +581,7 @@ If the server has canceled a group observation as defined in {{ssec-server-side-
 
 # Web Linking # {#sec-web-linking}
 
-The possible use of multicast notifications in a group observation MAY be indicated by a target attribute "gp-obs" in a web link {{RFC8288}} to a resource, e.g., using a link-format document {{RFC6690}}.
+The possible use of multicast notifications in a group observation MAY be indicated by a target attribute "gp-obs" in a web link {{RFC8288}} to a resource, e.g., using a CoRE link-format document {{RFC6690}}.
 
 The "gp-obs" attribute is a hint, indicating that the server might send multicast notifications for observations of the resource targeted by the link. Note that this is simply a hint, i.e., it does not include any information required to participate in a group observation and to receive and process multicast notifications.
 
@@ -600,7 +600,7 @@ RES: 2.05 Content
 
 # Example # {#sec-example-no-security}
 
-The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
+The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , whose representation has value "1234".
 
 The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT. The server starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
@@ -610,9 +610,9 @@ The following notation is used for the payload of the informative responses:
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
-* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
+* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'PAYLOAD' denotes a CoAP payload. This refers to the latest multicast notification encoded by the 'last_notif' parameter.
+* 'PAYLOAD' denotes a CoAP payload. This refers to the latest multicast notification specified by the 'last_notif' parameter.
 
 ~~~~~~~~~~~ aasvg
 C1 --------------------- [ Unicast ] ------------------------> S  /r
@@ -681,7 +681,7 @@ C2 <-------------------- [ Unicast ] ------------------------- S
 |    / last_notif / 2 : bstr(0x45 | OPT | 0xff | PAYLOAD)      |
 |  }                                                           |
 |                                                              |
-|           ( The value of the resource /r changes to "5678" ) |
+|  ( The representation of the resource /r changes to "5678" ) |
 |                                                              |
 +--+                                                           |
 C1 |                                                           |
@@ -751,7 +751,7 @@ Then, the server computes the value Q = max(L, 0), where:
 
 Finally, the server sets Q as the value of the Feedback-Divider Option, which is sent within a successful multicast notification.
 
-If several multicast notifications are sent in a burst fashion, it is RECOMMENDED for the server to include the Feedback-Divider Option only in the first notification of such a burst.
+If several multicast notifications for the same group observation are sent in a burst fashion, it is RECOMMENDED for the server to include the Feedback-Divider Option only in the first notification of such a burst.
 
 ### Collection of Feedback
 
@@ -773,7 +773,7 @@ Once MAX_CONFIRMATION_WAIT seconds have passed, the server counts the R confirma
 
 Then, the server computes a feedback indicator as E = R * (2<sup>Q</sup>). According to what is defined by application policies, the server determines the next time when to ask clients for their confirmation, e.g., after a certain number of multicast notifications has been sent. For example, the decision can be influenced by the reception of no confirmations from the clients, i.e., R = 0, or by the value of the ratios (E/N) and (N/E).
 
-Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' may be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
+Finally, the server computes a new estimated count of the observers. To this end, the server first considers COUNT' as the current value of the observer counter at this point in time. Note that COUNT' could be greater than the value COUNT used at the beginning of this process, if the server has incremented the observer counter upon adding new clients to the group observation (see {{ssec-server-side-informative}}).
 
 In particular, the server computes the new estimated count value as COUNT' + ((E - N) / D), where D > 0 is an integer value used as dampener. This step has to be performed atomically. That is, until this step is completed, the server MUST hold the processing of an observation request for the same target resource from a new client. Finally, the server considers the result as the current observer counter, which can be taken into account for possibly canceling the group observation (see {{ssec-server-side-cancellation}}).
 
@@ -809,7 +809,7 @@ In addition to what is defined in {{sec-server-side}}, the CBOR map in the infor
 
 * 'sec_gp', with value the name of the OSCORE group, encoded as a CBOR text string.
 
-* Optionally, 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.
+* Optionally, 'as_uri', with value the URI of the authorization server associated with the Group Manager for the OSCORE group, encoded as a CBOR text string.
 
 * Optionally, 'hkdf', with value the HKDF Algorithm used in the OSCORE group, encoded as a CBOR text string or integer. The HKDF Algorithm is specified by the HMAC Algorithm value, which is taken from the 'Value' column of the "COSE Algorithms" registry {{IANA.COSE.Algorithms}}. For example, the HKDF Algorithm HKDF SHA-256 is specified as the HMAC Algorithm HMAC 256/256.
 
@@ -843,9 +843,11 @@ When using Group OSCORE to protect multicast notifications, the server performs 
 
 ### Registration ### {#ssec-server-side-request-oscore}
 
-The phantom registration request MUST be protected, by using Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
+The phantom registration request MUST be protected with Group OSCORE.
 
-The server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}} by using its Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1). Consistent with that, the OSCORE Option value in the phantom registration request specifies:
+The group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used. In particular, the server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}} by using its Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1).
+
+Consistent with that, the OSCORE Option value in the phantom registration request specifies:
 
 * In the 'kid' field, the Sender ID of the server in the OSCORE group.
 
@@ -869,21 +871,21 @@ Optionally, the informative response includes additional parameters that provide
 
 ### Notifications ### {#ssec-server-side-notifications-oscore}
 
-The server MUST protect every multicast notification for the target resource with Group OSCORE. In particular, the group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used.
+The server MUST protect every multicast notification for the target resource with Group OSCORE.
 
-The process described in {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE external_aad structures to encrypt and sign the multicast notification (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
+The group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used. In particular, the process described in {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}} applies, with the following additions when building the two OSCORE external_aad structures to encrypt and sign the multicast notification (see {{Section 3.4 of I-D.ietf-core-oscore-groupcomm}}).
 
-*  The 'request_kid' element contains the value of the 'kid' field in the OSCORE Option value of the phantom registration request, i.e., the Sender ID of the server.
+*  The 'request_kid' element contains the value of the 'kid' field in the OSCORE Option value of the protected phantom registration request.
 
-* The 'request_piv' element contains the value of the 'Partial IV' field in the OSCORE Option value of the phantom registration request, i.e., the Partial IV encoding the consumed Sender Sequence Number SN of the server.
+* The 'request_piv' element contains the value of the 'Partial IV' field in the OSCORE Option value of the protected phantom registration request.
 
-* The 'request_kid_context' element contains the value of the 'kid context' field in the OSCORE Option value of the phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.
+* The 'request_kid_context' element contains the value of the 'kid context' field in the OSCORE Option value of the protected phantom registration request, i.e., the Group Identifier value (Gid) of the OSCORE group used as ID Context.
 
 Note that these same values are used to protect each and every multicast notification sent for the target resource under this group observation.
 
 ### Cancellation ### {#ssec-server-side-cancellation-oscore}
 
-When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
+When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with the group mode of Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
@@ -929,7 +931,7 @@ Note that these same values are used to decrypt and verify each and every multic
 
 # Example with Group OSCORE # {#sec-example-with-security}
 
-The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , which has value "1234".
+The following example refers to two clients C1 and C2 that register to observe a resource /r at a server S, which has address SRV_ADDR and listens to the port number SRV_PORT. Before the following exchanges occur, no clients are observing the resource /r , whose representation has value "1234".
 
 The server S sends multicast notifications to the IP multicast address GRP_ADDR and port number GRP_PORT. The server starts the group observation upon receiving a registration request from a first client that wishes to start a traditional observation on the resource /r.
 
@@ -939,7 +941,9 @@ Pairwise communication over unicast is protected with OSCORE, while S protects m
 
 * C2 and S have a pairwise OSCORE Security Context. In particular, C2 has 'kid' = 0x02 as Sender ID and SN_2 = 201 (i.e., 0xc9) as Sender Sequence Number.
 
-* S is a member of the OSCORE group with name "myGroup" and with 'kid context' = 0x57ab2e as Group ID. In the OSCORE group, S has 'kid' = 0x05 as Sender ID and SN_5 = 501 (i.e., 0x01f5) as Sender Sequence Number.
+* C1, C2, and S are members of the OSCORE group with name "myGroup" and with 'kid context' = 0x57ab2e as Group ID.
+
+  In the OSCORE group, S has 'kid' = 0x05 as Sender ID and SN_5 = 501 (i.e., 0x01f5) as Sender Sequence Number.
 
 The following notation is used for the payload of the informative responses:
 
@@ -947,11 +951,11 @@ The following notation is used for the payload of the informative responses:
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
-* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
+* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'PAYLOAD' denotes an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
+* 'PAYLOAD' denotes an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'SIGN' denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request encoded by the 'ph_req' parameter, or to the corresponding latest multicast notification encoded by the 'last_notif' parameter.
+* 'SIGN' denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
 ~~~~~~~~~~~ aasvg
 C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
@@ -1071,7 +1075,7 @@ C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |    }                                                         |
 |  }                                                           |
 |                                                              |
-|           ( The value of the resource /r changes to "5678" ) |
+|  ( The representation of the resource /r changes to "5678" ) |
 |                                                              |
 +--+                                                           |
 C1 |                                                           |
@@ -1101,7 +1105,7 @@ The two external_aad structures used to encrypt and sign the multicast notificat
 
 # Informative Response Parameters {#informative-response-params}
 
-This document defines a number of fields used in the informative response defined in {{ssec-server-side-informative}}.
+This document defines a number of fields used in the informative response specified in {{ssec-server-side-informative}}.
 
 The table below summarizes them and specifies the CBOR key to use as abbreviation, instead of the full descriptive name. Note that the media type "application/informative-response+cbor" MUST be used when these fields are transported.
 
@@ -1131,7 +1135,7 @@ Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC 
 
 # Transport Protocol Information {#transport-protocol-identifiers}
 
-{{ssssec-udp-transport-specific}} defines the transport-specific information that the server has to specify as elements of 'tpi_details' within the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}, when CoAP responses are transported over UDP.
+{{ssssec-udp-transport-specific}} defines the transport-specific information that the server specifies as elements of 'tpi_details' within the 'tp_info' parameter of the informative response defined in {{ssec-server-side-informative}}, when CoAP responses are transported over UDP.
 
 {{table-transport-information}} defines the corresponding entry that {{iana-coap-transport-information}} registers in the "CoAP Transport Information" registry defined in this document.
 
@@ -1158,13 +1162,13 @@ If the method defined in {{sec-rough-counting}} is used, the server SHOULD NOT s
 
 ## Protected Communications
 
-If multicast notifications for an observed resource are protected using Group OSCORE as per {{sec-secured-notifications}}, it is ensured that those are securely bound to the phantom registration request that started the group observation of that resource. Furthermore, the following applies.
+If multicast notifications for an observed resource are protected using Group OSCORE (see {{sec-secured-notifications}}), it is ensured that those are securely bound to the phantom registration request that started the group observation of that resource. Furthermore, the following applies.
 
-* The original registration requests and related unicast (notification) responses MUST also be protected, including and especially the informative responses from the server. An exception is the case discussed in {{deterministic-phantom-Request}}, where the informative response from the server is not protected.
+* The original registration requests and related unicast (notification) responses are also protected, including and especially the informative responses from the server. An exception is the case discussed in {{deterministic-phantom-Request}}, where the informative response from the server is not protected.
 
   Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.
 
-* A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), MUST also be protected.
+* A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), is also be protected.
 
 # IANA Considerations # {#iana}
 
