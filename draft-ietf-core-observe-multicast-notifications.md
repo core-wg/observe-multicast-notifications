@@ -181,7 +181,7 @@ This document additionally defines the following terminology.
 
 * Traditional observation: a resource observation associated with a single observer client, as defined in {{RFC7641}}.
 
-* Group observation: a resource observation associated with a group of clients. The server sends notifications for the group-observed resource over IP multicast to all the observer clients.
+* Group observation: a resource observation associated with a group of clients. The server sends multicast notifications for the group-observed resource to all the observer clients at once. For example, such notifications can be transported over UDP and IP multicast.
 
 * Phantom request: the CoAP request message that the server would have received to start a group observation on one of its resources. A phantom request is generated inside the server and does not hit the wire.
 
@@ -205,7 +205,7 @@ In order to use multicast notifications as defined in this document, the followi
 
   That is, the method specified in this document is expected to be used in situations where sending individual notifications is not feasible, or is not preferred beyond a certain number of clients observing a target resource.
 
-  If applications arise where a negotiation between the clients and the server does make sense, those applications are welcome to specify additional means for clients to opt in for receiving multicast notifications.
+  If applications arise where a negotiation between the clients and the server does make sense, those applications can specify additional means for clients to opt in for receiving multicast notifications.
 
 # High-Level Overview of Available Variants # {#sec-variants}
 
@@ -239,7 +239,7 @@ The server initializes the counter to 0 when starting the group observation and 
 
 Assuming that the server is reachable at the address SRV_ADDR and port number SRV_PORT, the server starts a group observation on one of its resources as defined below. The server intends to send multicast notifications for the target resource to the multicast IP address GRP_ADDR and port number GRP_PORT.
 
-1. The server builds a phantom observation request, i.e., a GET request with an Observe Option set to 0 (register).
+1. The server composes a phantom observation request, i.e., a GET request with an Observe Option set to 0 (register).
 
 2. The server selects an available value T, from the Token space of a CoAP endpoint used for messages that have:
 
@@ -253,11 +253,11 @@ Assuming that the server is reachable at the address SRV_ADDR and port number SR
 
 4. Upon processing the self-generated phantom registration request, the server interprets it as an Observe registration request from the group of potential observer clients. In particular, from then on, the server MUST use T as its own local Token value associated with that observation, with respect to the (previous hop towards the) clients.
 
-5. The server does not immediately respond to the phantom observation request with a multicast notification sent on the wire. The server stores the phantom observation request as is, throughout the lifetime of the group observation.
+5. The server does not immediately reply to the phantom observation request with a multicast notification sent on the wire. The server stores the phantom observation request as is, throughout the lifetime of the group observation.
 
-6. The server builds a CoAP response message INIT_NOTIF as the initial multicast notification for the target resource, in response to the phantom observation request. This message is formatted like other multicast notifications (see {{ssec-server-side-notifications}}) and MUST include the current representation of the target resource as its payload.
+6. The server composes a CoAP response message INIT_NOTIF as the initial multicast notification for the target resource, in response to the phantom observation request. This message is formatted like other multicast notifications (see {{ssec-server-side-notifications}}) and MUST include the current representation of the target resource as its payload.
 
-   The server stores the message INIT_NOTIF and does not transmit it. The server considers this message as the latest multicast notification for the target resource, until it transmits a new multicast notification for that resource as a CoAP message on the wire, after which the server deletes the message INIT_NOTIF.
+   The server stores the message INIT_NOTIF and does not transmit it. The server considers this message as the latest multicast notification for the target resource, until it transmits a new multicast notification for that resource as a CoAP message on the wire, after which the server deletes the message INIT_NOTIF from its local storage.
 
 ## Informative Response ## {#ssec-server-side-informative}
 
@@ -277,7 +277,7 @@ When using the method specified in this document, the CBOR map conveyed as the p
 
    This parameter MAY be omitted if the phantom request is, in terms of transport-independent information, identical to the registration request from the client. Otherwise, this parameter MUST be included.
 
-   Note that the registration request from the client may indeed differ from the phantom observation request in terms of transport-independent information, but still be acceptable for the server to register the client as taking part in the group observation.
+   Note that the registration request from the client can indeed differ from the phantom observation request in terms of transport-independent information, but still be acceptable for the server to register the client as taking part in the group observation.
 
 * 'last_notif', with value the byte serialization of the transport-independent information of the latest multicast notification for the target resource, encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}. This parameter MAY be included.
 
