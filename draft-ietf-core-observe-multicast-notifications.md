@@ -287,16 +287,24 @@ When using the method specified in this document, the CBOR map conveyed as the p
 
 * 'ending', with value the time when the group observation of the target resource is planned to be canceled, encoded as a CBOR integer or as a CBOR floating-point number. The value is the number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC date/time, ignoring leap seconds, analogous to what is specified for NumericDate in {{Section 2 of RFC7519}}. This parameter MAY be included.
 
+The CBOR map conveyed as the payload of the informative response MAY include further parameters.
+
 The CDDL notation {{RFC8610}} provided below describes the payload of the informative response.
 
 ~~~~~~~~~~~ cddl
 informative_response_payload = {
-   0 => array, ; 'tp_info' (transport-specific information)
- ? 1 => bstr,  ; 'ph_req' (transport-independent information)
- ? 2 => bstr,  ; 'last_notif' (transport-independent information)
- ? 3 => uint,  ; 'next_not_before'
- ? 4 => ~time  ; 'ending'
+   0 => [1* tp_info_element],  ; 'tp_info'    (transport-specific
+                               ;               information)
+ ? 1 => bstr,                  ; 'ph_req'     (transport-independent
+                               ;               information)
+ ? 2 => bstr,                  ; 'last_notif' (transport-independent
+                               ;               information)
+ ? 3 => uint,                  ; 'next_not_before'
+ ? 4 => ~time                  ; 'ending'
+ * (int / tstr) => any
 }
+
+tp_info_element = any
 ~~~~~~~~~~~
 {: #informative-response-payload title="Format of the Informative Response Payload"}
 
@@ -1643,6 +1651,8 @@ Therefore, the following holds when a group observation for a target resource re
 {:removeinrfc}
 
 ## Version -14 to -15 ## {#sec-14-15}
+
+* Fixed CDDL notation of the payload of the informative response.
 
 * Update references.
 
