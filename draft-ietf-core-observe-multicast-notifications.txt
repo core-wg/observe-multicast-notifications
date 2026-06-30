@@ -2171,7 +2171,7 @@ Table of Contents
 
    *  A re-registration request, possibly including the Feedback-Divider
       Option to support the rough counting of clients (see Section 8),
-      is also be protected.
+      is also protected.
 
 14.  IANA Considerations
 
