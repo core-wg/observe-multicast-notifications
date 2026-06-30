@@ -711,7 +711,8 @@ Table of Contents
          observation request (see Section 4.3).
 
    The CDDL notation in Figure 3 describes the format of the 'tp_info'
-   CBOR array when CoAP is transported over UDP.
+   CBOR array when CoAP is transported over UDP.  The definition of
+   'scheme-id' and 'authority' is the same as in Figure 2.
 
    tp_info_coap_udp = [
      tpi_server: CRI-no-local, ; Source addressing information
@@ -720,6 +721,11 @@ Table of Contents
                                ; of the multicast notifications
      tpi_token: bstr           ; Token value of the phantom request and
                                ; associated multicast notifications
+   ]
+
+   CRI-no-local = [
+     scheme-id,
+     authority
    ]
 
         Figure 3: Format of 'tp_info' with UDP as Transport Protocol
@@ -3274,7 +3280,11 @@ Appendix E.  Document Updates
 
 E.1.  Version -14 to -15
 
-   *  Fixed CDDL notation of the payload of the informative response.
+   *  Fixed CDDL notations of
+
+      -  Payload of the informative response.
+
+      -  'tp_info_coap_udp'.
 
    *  Update references.
 
