@@ -587,7 +587,7 @@ The server S sends multicast notifications to the IP multicast address GRP_ADDR 
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section 3.4 of I-D.ietf-cbor-edn-literals}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
+* The application-extension identifier "cri" defined in {{Section 3.6 of I-D.ietf-cbor-edn-literals}} is used to notate a Concise Diagnostic Notation (CDN) literal for a CRI.
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
@@ -924,7 +924,7 @@ Pairwise communication over unicast is protected with OSCORE, while S protects m
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section 3.4 of I-D.ietf-cbor-edn-literals}} is used to notate a CBOR Extended Diagnostic Notation (EDN) literal for a CRI.
+* The application-extension identifier "cri" defined in {{Section 3.6 of I-D.ietf-cbor-edn-literals}} is used to notate a Concise Diagnostic Notation (CDN) literal for a CRI.
 
 * 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
@@ -1643,6 +1643,8 @@ Therefore, the following holds when a group observation for a target resource re
 {:removeinrfc}
 
 ## Version -14 to -15 ## {#sec-14-15}
+
+* Update references.
 
 * Clarifications and editorial improvements.
 
