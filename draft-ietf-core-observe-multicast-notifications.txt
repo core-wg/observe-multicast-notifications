@@ -2774,7 +2774,6 @@ A.2.  Introspection at the Multicast Notification Sender
    / ph_req /     1 : h'0160...528c', / elided for brevity /
    / last_notif / 2 : h'256105...4fa1', / elided for brevity /
    / ending /     4 : 2051251201
-
  }
 
     Figure 9: Group Observation Discovery with Server Introspection
@@ -2969,10 +2968,10 @@ Appendix C.  OSCORE Group Self-Managed by the Server
 
       Note that no information is provided as related to the AEAD
       Algorithm, or to the Pairwise Key Agreement Algorithm and its
-      parameters.  In fact, the clients and the server will never use
-      the pairwise mode of Group OSCORE as per Section 8 of
-      [I-D.ietf-core-oscore-groupcomm] and will not need to compute a
-      cofactor Diffie-Hellman shared secret in this OSCORE group.
+      parameters.  In fact, the clients and the server do not need to
+      use the pairwise mode of Group OSCORE as per Section 8 of
+      [I-D.ietf-core-oscore-groupcomm] and do not need to compute a
+      shared secret in this OSCORE group.
 
       It follows that:
 
@@ -3095,10 +3094,10 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    In particular, while it is analogous to the informative response
    defined in Section 4.2, this response has the following differences:
 
-   *  it additionally contains the parameters mentioned above, for the
+   *  It additionally contains the parameters mentioned above, for the
       next group keying material to be used; and
 
-   *  it MAY omit the 'tp_info' and 'ph_req' parameters, since the
+   *  It MAY omit the 'tp_info' and 'ph_req' parameters, since the
       associated information is immutable throughout the observation
       lifetime.
 
@@ -3124,9 +3123,9 @@ Appendix C.  OSCORE Group Self-Managed by the Server
    and Section 9.2.4), which results in the eventual re-registration of
    the clients that are still interested in the group observation.
 
-   Applications requiring backward security or forward security are
-   REQUIRED to use an actual group joining process (usually through a
-   dedicated Group Manager), e.g., the ACE joining procedure defined in
+   For applications that require backward security or forward security,
+   it is REQUIRED to use an actual group joining process through a
+   dedicated Group Manager, e.g., the ACE joining procedure defined in
    [I-D.ietf-ace-key-groupcomm-oscore].  The server can facilitate the
    clients by providing them with information about the OSCORE group to
    join, as described in Section 9.1.
@@ -3176,8 +3175,8 @@ Appendix D.  Phantom Request as Deterministic Request
    its self-generated deterministic phantom requests, then the server
    does not perform any Group OSCORE processing on it.  This opens for
    replying with an unprotected response, although not indicating any
-   OSCORE-related error.  In particular, the server MUST reply with an
-   informative response that MUST NOT be protected.
+   OSCORE-related error.  In particular, the server replies with an
+   informative response that is not protected.
 
    Note that the phantom registration request is, in terms of transport-
    independent information, identical to the same Deterministic Request
@@ -3221,8 +3220,8 @@ Appendix D.  Phantom Request as Deterministic Request
 
    If the optimization defined in Appendix C is also used, the
    'gp_material' element in the informative response from the server
-   MUST also include the following elements from the
-   Group_OSCORE_Input_Material object.
+   also includes the following elements from the
+   Group_OSCORE_Input_Material object:
 
    *  'alg', as per Section 6.3 of [I-D.ietf-ace-key-groupcomm-oscore].
 
@@ -3234,8 +3233,8 @@ Appendix D.  Phantom Request as Deterministic Request
 
    Note that, like in Appendix C, no information is provided as related
    to the Pairwise Key Agreement Algorithm and its parameters.  In fact,
-   the clients and the server will not need to compute a cofactor
-   Diffie-Hellman shared secret in this OSCORE group.  It follows that:
+   the clients and the server will not need to compute a shared secret
+   in this OSCORE group.  It follows that:
 
    *  In the Common Context of the Group OSCORE Security Context, the
       parameter Pairwise Key Agreement Algorithm is not set (see
