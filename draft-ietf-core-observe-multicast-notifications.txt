@@ -1107,9 +1107,9 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Section 3.4
-      of [I-D.ietf-cbor-edn-literals] is used to notate a CBOR Extended
-      Diagnostic Notation (EDN) literal for a CRI.
+   *  The application-extension identifier "cri" defined in Section 3.6
+      of [I-D.ietf-cbor-edn-literals] is used to notate a Concise
+      Diagnostic Notation (CDN) literal for a CRI.
 
    *  'bstr(X)' denotes a CBOR byte string with value the byte
       serialization of X, with '|' denoting byte concatenation.
@@ -1815,9 +1815,9 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Section 3.4
-      of [I-D.ietf-cbor-edn-literals] is used to notate a CBOR Extended
-      Diagnostic Notation (EDN) literal for a CRI.
+   *  The application-extension identifier "cri" defined in Section 3.6
+      of [I-D.ietf-cbor-edn-literals] is used to notate a Concise
+      Diagnostic Notation (CDN) literal for a CRI.
 
    *  'bstr(X)' denotes a CBOR byte string with value the byte
       serialization of X, with '|' denoting byte concatenation.
@@ -3253,6 +3253,8 @@ Appendix E.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 E.1.  Version -14 to -15
+
+   *  Update references.
 
    *  Clarifications and editorial improvements.
 
