@@ -1168,7 +1168,7 @@ If multicast notifications for an observed resource are protected using Group OS
 
   Protecting informative responses from the server prevents on-path active adversaries from altering the conveyed IP multicast address and serialized phantom registration request.
 
-* A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), is also be protected.
+* A re-registration request, possibly including the Feedback-Divider Option to support the rough counting of clients (see {{sec-rough-counting}}), is also protected.
 
 # IANA Considerations # {#iana}
 
