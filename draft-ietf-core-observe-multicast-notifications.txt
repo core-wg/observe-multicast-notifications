@@ -509,16 +509,25 @@ Table of Contents
       is specified for NumericDate in Section 2 of [RFC7519].  This
       parameter MAY be included.
 
+   The CBOR map conveyed as the payload of the informative response MAY
+   include further parameters.
+
    The CDDL notation [RFC8610] provided below describes the payload of
    the informative response.
 
    informative_response_payload = {
-      0 => array, ; 'tp_info' (transport-specific information)
-    ? 1 => bstr,  ; 'ph_req' (transport-independent information)
-    ? 2 => bstr,  ; 'last_notif' (transport-independent information)
-    ? 3 => uint,  ; 'next_not_before'
-    ? 4 => ~time  ; 'ending'
+      0 => [1* tp_info_element],  ; 'tp_info'    (transport-specific
+                                  ;               information)
+    ? 1 => bstr,                  ; 'ph_req'     (transport-independent
+                                  ;               information)
+    ? 2 => bstr,                  ; 'last_notif' (transport-independent
+                                  ;               information)
+    ? 3 => uint,                  ; 'next_not_before'
+    ? 4 => ~time                  ; 'ending'
+    * (int / tstr) => any
    }
+
+   tp_info_element = any
 
             Figure 1: Format of the Informative Response Payload
 
@@ -3256,6 +3265,8 @@ Appendix E.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 E.1.  Version -14 to -15
+
+   *  Fixed CDDL notation of the payload of the informative response.
 
    *  Update references.
 
