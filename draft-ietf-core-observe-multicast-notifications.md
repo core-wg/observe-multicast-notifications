@@ -110,6 +110,12 @@ normative:
     date: false
     title: Target Attributes
     target: https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#target-attributes
+  IANA.URI.Schemes:
+    author:
+      org: IANA
+    date: false
+    title: Uniform Resource Identifier (URI) Schemes
+    target: https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml#uri-schemes-1
 
 informative:
   I-D.ietf-core-coap-pubsub:
@@ -318,14 +324,14 @@ The CBOR array specified in the 'tp_info' parameter of an informative response i
 
 ~~~~~~~~~~~ cddl
 tp_info = [
-    tpi_server: CRI-no-local, ; Addressing information of the server
-  ? tpi_details               ; Further information about the request
+    tpi_server: CRI-no-local,  ; Addressing information of the server
+  ? tpi_details                ; Further information about the request
 ]
 
 tpi_details = (
-  + elements ; The number, format, and encoding of the elements
-             ; depend on the scheme-id and authority of the CRI
-             ; specified as tpi_server
+  + elements  ; The number, format, and encoding of the elements
+              ; depend on the scheme-id and authority of the CRI
+              ; specified by tpi_server
 )
 
 CRI-no-local = [
@@ -358,7 +364,7 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   This element specifies a CRI {{I-D.ietf-core-href}}, of which both 'scheme' and 'authority' are given, while 'path', 'query', and 'fragment' are not given.
 
-  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding registered URI scheme, per the associated entry in the "Uniform Resource Identifier (URI) Schemes" registry defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}.
+  Consistent with {{Section 5.1.1 of I-D.ietf-core-href}}, the CRI scheme is given as a negative integer 'scheme-id'. In particular, a 'scheme-id' with value ID denotes the CRI scheme that has CRI scheme number equal to (-1 - ID). The latter identifies the corresponding registered URI scheme, per the associated entry in the "Uniform Resource Identifier (URI) Schemes" registry {{IANA.URI.Schemes}} defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}.
 
   The combination of URI scheme and 'authority' component determines the CoAP transport used to distribute multicast notifications for the group observation. Note that:
 
@@ -372,7 +378,7 @@ The following holds for the two elements 'tpi_server' and 'tpi_details'.
 
   The exact format of 'tpi_details' depends on the CoAP transport, which is identified according to the CRI conveyed by the 'tpi_server' element, as described above.
 
-  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements MUST be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.
+  In the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}}, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements MUST be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.
 
 {{transport-protocol-identifiers}} defines an entry to be registered in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the full encoding of the 'tp_info' CBOR array is as defined in {{ssssec-udp-transport-specific}}.
 
@@ -382,13 +388,13 @@ If a future specification defines the use of CoAP multicast notifications transp
 
 * Register an entry in the "CoAP Transport Information" registry defined in {{iana-coap-transport-information}} of this document.
 
-* Register an entry in the "Uniform Resource Identifier (URI) Schemes" registry defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}, where the value in the 'CRI Scheme Number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and by elements in 'tpi_details'.
+* Register an entry in the "Uniform Resource Identifier (URI) Schemes" registry {{IANA.URI.Schemes}} defined in {{RFC7595}} and updated in {{Section 11.1 of I-D.ietf-core-href}}, where the value in the 'CRI Scheme Number' column is (-1 - ID). In particular, ID is the negative integer to be used as 'scheme-id' for CRIs conveyed by the 'tpi_server' element and possibly by elements in 'tpi_details'.
 
 #### UDP Transport-Specific Information  ### {#ssssec-udp-transport-specific}
 
 When CoAP multicast notifications are transported over UDP as per {{RFC7252}} and {{I-D.ietf-core-groupcomm-bis}}, the server specifies the 'tp_info' CBOR array as follows.
 
-* In the 'tpi_server' element, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys addressing information of the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.
+* In the 'tpi_server' element, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys addressing information pertaining to the server, i.e., the source addressing information of the multicast notifications that are sent for the group observation.
 
   This information consists of the IP address SRV_ADDR (expressed as a literal or as a host-name to be resolved) and the port number SRV_PORT of the server hosting the target resource, from where the server will send multicast notifications for the target resource.
 
