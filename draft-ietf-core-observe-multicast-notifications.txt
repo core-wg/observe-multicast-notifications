@@ -551,14 +551,14 @@ Table of Contents
    response is formatted according to the following CDDL notation.
 
    tp_info = [
-       tpi_server: CRI-no-local, ; Addressing information of the server
-     ? tpi_details               ; Further information about the request
+       tpi_server: CRI-no-local,  ; Addressing information of the server
+     ? tpi_details                ; Further information about the request
    ]
 
    tpi_details = (
-     + elements ; The number, format, and encoding of the elements
-                ; depend on the scheme-id and authority of the CRI
-                ; specified as tpi_server
+     + elements  ; The number, format, and encoding of the elements
+                 ; depend on the scheme-id and authority of the CRI
+                 ; specified by tpi_server
    )
 
    CRI-no-local = [
@@ -605,8 +605,9 @@ Table of Contents
       a 'scheme-id' with value ID denotes the CRI scheme that has CRI
       scheme number equal to (-1 - ID).  The latter identifies the
       corresponding registered URI scheme, per the associated entry in
-      the "Uniform Resource Identifier (URI) Schemes" registry defined
-      in [RFC7595] and updated in Section 11.1 of [I-D.ietf-core-href].
+      the "Uniform Resource Identifier (URI) Schemes" registry
+      [IANA.URI.Schemes] defined in [RFC7595] and updated in
+      Section 11.1 of [I-D.ietf-core-href].
 
       The combination of URI scheme and 'authority' component determines
       the CoAP transport used to distribute multicast notifications for
@@ -639,11 +640,11 @@ Table of Contents
       'tpi_server' element, as described above.
 
       In the "CoAP Transport Information" registry defined in
-      Section 14.6 of this document, the entry corresponding to the
-      identified CoAP transport specifies the list of elements composing
-      'tpi_details' for that transport, as indicated in the 'Transport
-      Information Details' column.  Within 'tpi_details', its elements
-      MUST be ordered according to what is specified in the 'Transport
+      Section 14.6, the entry corresponding to the identified CoAP
+      transport specifies the list of elements composing 'tpi_details'
+      for that transport, as indicated in the 'Transport Information
+      Details' column.  Within 'tpi_details', its elements MUST be
+      ordered according to what is specified in the 'Transport
       Information Details' column of the "CoAP Transport Information"
       registry.
 
@@ -665,11 +666,12 @@ Table of Contents
       defined in Section 14.6 of this document.
 
    *  Register an entry in the "Uniform Resource Identifier (URI)
-      Schemes" registry defined in [RFC7595] and updated in Section 11.1
-      of [I-D.ietf-core-href], where the value in the 'CRI Scheme
-      Number' column is (-1 - ID).  In particular, ID is the negative
-      integer to be used as 'scheme-id' for CRIs conveyed by the
-      'tpi_server' element and by elements in 'tpi_details'.
+      Schemes" registry [IANA.URI.Schemes] defined in [RFC7595] and
+      updated in Section 11.1 of [I-D.ietf-core-href], where the value
+      in the 'CRI Scheme Number' column is (-1 - ID).  In particular, ID
+      is the negative integer to be used as 'scheme-id' for CRIs
+      conveyed by the 'tpi_server' element and possibly by elements in
+      'tpi_details'.
 
 4.2.1.1.  UDP Transport-Specific Information
 
@@ -678,9 +680,10 @@ Table of Contents
    'tp_info' CBOR array as follows.
 
    *  In the 'tpi_server' element, the CRI has 'scheme-id' with value -1
-      ("coap"), while 'authority' conveys addressing information of the
-      server, i.e., the source addressing information of the multicast
-      notifications that are sent for the group observation.
+      ("coap"), while 'authority' conveys addressing information
+      pertaining to the server, i.e., the source addressing information
+      of the multicast notifications that are sent for the group
+      observation.
 
       This information consists of the IP address SRV_ADDR (expressed as
       a literal or as a host-name to be resolved) and the port number
@@ -2444,6 +2447,11 @@ Table of Contents
               IANA, "Target Attributes",
               <https://www.iana.org/assignments/core-parameters/core-
               parameters.xhtml#target-attributes>.
+
+   [IANA.URI.Schemes]
+              IANA, "Uniform Resource Identifier (URI) Schemes",
+              <https://www.iana.org/assignments/uri-schemes/uri-
+              schemes.xhtml#uri-schemes-1>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
