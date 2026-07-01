@@ -227,7 +227,7 @@ The rest of this section provides an overview of the available variants to enfor
 
 * Variant with end-to-end security - Messages pertaining to the group observation are protected end-to-end between the clients and the server, by using the security protocol Group OSCORE {{I-D.ietf-core-oscore-groupcomm}}. This case is defined in {{sec-secured-notifications}}. An example is provided in {{sec-example-with-security}}.
 
-  If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Consequently, all the clients are able to compute the same protected phantom request to use (see {{deterministic-phantom-Request}}).
+  If the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the possible early distribution of the phantom request can specifically make available its smaller, plain version. Consequently, all the clients are able to produce the same protected phantom request to use (see {{deterministic-phantom-Request}}).
 
 # Server-Side Requirements # {#sec-server-side}
 
@@ -1621,9 +1621,9 @@ For instance, the clients can be pre-configured with the phantom observation req
 
 Then, the clients can set up the multicast address and group observation for listening to multicast notifications.
 
-If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}) and the OSCORE group supports the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the server and clients in the OSCORE group can also independently compute the protected phantom observation request.
+If Group OSCORE is used to protect the group observation (see {{sec-secured-notifications}}) and the OSCORE group supports the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}}, then the server and clients in the OSCORE group can also independently produce the protected phantom observation request.
 
-In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all computing the same protected Deterministic Request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
+In such a case, the unprotected version of the phantom observation request can be made available to the clients as a smaller, plain CoAP message. As above, this can be pre-configured on the clients, or they can obtain it through dedicated means (see {{appendix-different-sources}}). In either case, the clients and the server can independently protect the plain CoAP message by using the approach defined in {{Section 3 of I-D.ietf-core-cacheable-oscore}}, thus all produce the same protected Deterministic Request. The latter is used as the actual phantom observation request that the protected multicast notifications will match under the group observation in question.
 
 When receiving the Deterministic Request, the server can clearly understand what is happening. In fact, as the result of an early check, the server recognizes the phantom request among the stored ones. This relies on a byte-by-byte comparison of the incoming message minus the transport-related fields, i.e., by considering only: i) the outer REST code; ii) the outer options; and iii) the ciphertext from the message payload.
 
@@ -1643,7 +1643,9 @@ If the optimization defined in {{self-managed-oscore-group}} is also used, the '
 
 * 'alg', as per {{Section 6.3 of I-D.ietf-ace-key-groupcomm-oscore}}.
 
-* 'det_senderId' and 'det_hash_alg', defined in {{Section 4 of I-D.ietf-core-cacheable-oscore}}. These specify the Sender ID of the Deterministic Client in the OSCORE group and the hash algorithm used to compute Deterministic Requests (see {{Section 3.4.1 of I-D.ietf-core-cacheable-oscore}}).
+* 'det_senderId', encoded as a CBOR byte string. This parameter specifies the Sender ID of the Deterministic Client in the OSCORE group.
+
+* 'det_hash_alg', encoded as a CBOR integer or text string. This parameter specifies the hash algorithm used in the OSCORE group to produce Deterministic Requests. This parameter takes values from the "Value" column of the "COSE Algorithms" Registry {{IANA.COSE.Algorithms}}.
 
 Note that, like in {{self-managed-oscore-group}}, no information is provided as related to the Pairwise Key Agreement Algorithm and its parameters. In fact, the clients and the server will not need to compute a shared secret in this OSCORE group. It follows that:
 
