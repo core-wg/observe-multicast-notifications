@@ -509,7 +509,7 @@ Table of Contents
       [I-D.ietf-core-multicast-notifications-proxy]), this avoids such
       unnecessary delays at the proxy if the proxy is the intended
       recipient and consumer of the informative response, in turn
-      avoiding delays for clients in obtaining a first multicast
+      avoiding delays for the clients in obtaining a first multicast
       notification.
 
    *  'next_not_before', with value the number of seconds that will
