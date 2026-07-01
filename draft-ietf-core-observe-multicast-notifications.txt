@@ -795,11 +795,11 @@ Table of Contents
       whole set of clients taking part in the group observation of that
       resource.
 
-      The Token value T is specified by an element of 'tpi_details'
-      within the 'tp_info' parameter, in the informative response sent
-      to the observer clients.  In particular, when transporting CoAP
-      over UDP, the Token value is specified by the element 'tpi_token'
-      (see Section 4.2.1.1).
+      The Token value T is specified by an element of 'tpi_details',
+      within the 'tp_info' parameter of the informative response sent to
+      the observer clients.  In particular, when transporting CoAP over
+      UDP, the Token value is specified by the element 'tpi_token' (see
+      Section 4.2.1.1).
 
    *  It MUST be sent from the same IP address SRV_ADDR and port number
       SRV_PORT where the corresponding informative responses are sent
@@ -812,16 +812,16 @@ Table of Contents
       address (see [I-D.ietf-core-groupcomm-bis]).
 
       The addressing information above is provided to the observer
-      clients through the CRI specified by the element 'tpi_server'
-      within the 'tp_info' parameter, in the informative response (see
+      clients through the CRI specified by the element 'tpi_server',
+      within the 'tp_info' parameter of the informative response (see
       Section 4.2.1).
 
    *  It MUST be sent to the IP multicast address GRP_ADDR and port
       number GRP_PORT.
 
       The addressing information above is provided to the observer
-      clients through the CRI specified by an element of 'tpi_details'
-      within the 'tp_info' parameter, in the informative response.  In
+      clients through the CRI specified by an element of 'tpi_details',
+      within the 'tp_info' parameter of the informative response.  In
       particular, when transporting CoAP over UDP, the CRI is conveyed
       by the element 'tpi_client' (see Section 4.2.1.1).
 
@@ -962,7 +962,7 @@ Table of Contents
        *  As source address and port number, the server address SRV_ADDR
           and port number SRV_PORT intended for accessing the target
           resource.  These are specified by the CRI conveyed by the
-          element 'tpi_server', within the 'tp_info' parameter in the
+          element 'tpi_server', within the 'tp_info' parameter of the
           informative response (see Section 4.2.1).
 
           If the port number is not present in the CRI, the client MUST
@@ -973,7 +973,7 @@ Table of Contents
        *  As destination address and port number, the IP multicast
           address GRP_ADDR and port number GRP_PORT.  These are
           specified by the CRI conveyed by a dedicated element of
-          'tpi_details', within the 'tp_info' parameter in the
+          'tpi_details', within the 'tp_info' parameter of the
           informative response.  In particular, when transporting CoAP
           over UDP, such an element is 'tpi_client' (see
           Section 4.2.1.1).
@@ -986,8 +986,8 @@ Table of Contents
    2.  The client rebuilds the phantom registration request as follows.
 
        *  The client uses the Token value T that is specified by a
-          dedicated element of 'tpi_details' within the 'tp_info'
-          parameter, in the informative response.  In particular, when
+          dedicated element of 'tpi_details', within the 'tp_info'
+          parameter of the informative response.  In particular, when
           transporting CoAP over UDP, such an element is 'tpi_token'
           (see Section 4.2.1.1).
 
@@ -1672,7 +1672,7 @@ Table of Contents
    Note that, in terms of transport-independent information, the
    registration request from the client typically differs from the
    phantom request.  Thus, the server has to include the 'ph_req'
-   parameter in the informative response.  An exception is the case
+   parameter of the informative response.  An exception is the case
    discussed in Appendix D.
 
    Similarly, the value of the CBOR byte string in the 'last_notif'
