@@ -565,7 +565,7 @@ Then, the client performs the following steps.
 
 6. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.
 
-   Note that the multicast notification rebuilt at Step 5 specifies a maximum age that is relative to the time when the server composed it, i.e., not to the time when the server sent the present informative response. Consequently, the client considers the rebuilt multicast notification fresh for an amount of time longer than the one intended by the server. However, the next multicast notification sent for the group observation will supersede the rebuilt one and will indicate a reliable maximum age that the client can refer to.
+   Note that the multicast notification rebuilt at Step 5 specifies a maximum age that is relative to the time when the server composed the notification, i.e., not to the time when the server sent the present informative response. Consequently, the client could consider the rebuilt multicast notification fresh beyond the point in time that was intended by the server. However, the next multicast notification sent for the group observation will supersede the rebuilt one and will indicate a reliable maximum age that the client can refer to.
 
 7. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
 
