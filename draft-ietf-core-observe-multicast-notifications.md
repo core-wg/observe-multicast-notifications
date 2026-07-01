@@ -293,7 +293,7 @@ When using the method specified in this document, the CBOR map conveyed as the p
 
   This parameter SHOULD be included, in order to avoid unnecessary delays for the client in obtaining a first multicast notification and possibly populating its cache.
 
-  In network setups where a proxy is deployed between the clients and the server (see {{I-D.ietf-core-multicast-notifications-proxy}}), this avoids such unnecessary delays at the proxy if the proxy is the intended recipient and consumer of the informative response, in turn avoiding delays for clients in obtaining a first multicast notification.
+  In network setups where a proxy is deployed between the clients and the server (see {{I-D.ietf-core-multicast-notifications-proxy}}), this avoids such unnecessary delays at the proxy if the proxy is the intended recipient and consumer of the informative response, in turn avoiding delays for the clients in obtaining a first multicast notification.
 
 * 'next_not_before', with value the number of seconds that will minimally elapse before the server sends the next multicast notification for the group observation of the target resource, encoded as a CBOR unsigned integer. This parameter MAY be included.
 
