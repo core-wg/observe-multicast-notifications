@@ -1591,7 +1591,11 @@ The server stores the message INIT_NOTIF and does not transmit it. The server co
 <p id="section-4.2-5">When using the method specified in this document, the CBOR map conveyed as the payload of the informative response includes the following parameters with the semantics defined below. Other specifications may define different uses of the informative response for providing alternative information that is relevant to other protocols and applications.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2-6.1">
-            <p id="section-4.2-6.1.1">'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications that are bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>. This parameter <span class="bcp14">MUST</span> be included.<a href="#section-4.2-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-6.1.1">'tp_info', with value a CBOR array. This includes the transport-specific information required to correctly receive multicast notifications that are bound to the phantom observation request. Typically, this comprises the Token value associated with the group observation, as well as the source and destination addressing information of the related multicast notifications. The CBOR array is formatted as defined in <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>.<a href="#section-4.2-6.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-6.1.2">
+This parameter <span class="bcp14">MAY</span> be omitted in particular setups where the server is aware that effective transport-specific information is available to clients through alternative means than the 'tp_info' parameter of the informative response. For example, this could be the case in particular scenarios where notifications are protected end-to-end between the server and clients using Group OSCORE (hence, in a way suitable to send those over multicast), but they are ultimately delivered to observer clients over a unicast transport, e.g., through a proxy.<a href="#section-4.2-6.1.2" class="pilcrow">¶</a></p>
+<p id="section-4.2-6.1.3">
+Otherwise, such as in the setup considered in this document, this parameter <span class="bcp14">MUST</span> be included.<a href="#section-4.2-6.1.3" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-6.2">
             <p id="section-4.2-6.2.1">'ph_req', with value the byte serialization of the transport-independent information of the phantom observation request (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>), encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in <a href="#sssec-transport-independent-encoding" class="auto internal xref">Section 4.2.2</a>.<a href="#section-4.2-6.2.1" class="pilcrow">¶</a></p>
@@ -1619,7 +1623,7 @@ This information can help a new client to align itself with the server's timelin
           <div class="lang-cddl sourcecode" id="section-4.2-9.1">
 <pre>
 informative_response_payload = {
-   0 =&gt; [1* tp_info_element],  ; 'tp_info'    (transport-specific
+ ? 0 =&gt; [1* tp_info_element],  ; 'tp_info'    (transport-specific
                                ;               information)
  ? 1 =&gt; bstr,                  ; 'ph_req'     (transport-independent
                                ;               information)
@@ -1720,7 +1724,7 @@ The exact format of 'tpi_details' depends on the CoAP transport, which is identi
 In the "CoAP Transport Information" registry defined in <a href="#iana-coap-transport-information" class="auto internal xref">Section 14.6</a>, the entry corresponding to the identified CoAP transport specifies the list of elements composing 'tpi_details' for that transport, as indicated in the 'Transport Information Details' column. Within 'tpi_details', its elements <span class="bcp14">MUST</span> be ordered according to what is specified in the 'Transport Information Details' column of the "CoAP Transport Information" registry.<a href="#section-4.2.1-4.2.3" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-4.2.1-5"><a href="#transport-protocol-identifiers" class="auto internal xref">Section 12</a> defines an entry to be registered in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, the full encoding of the 'tp_info' CBOR array is as defined in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-5"><a href="#transport-protocol-identifiers" class="auto internal xref">Section 12</a> defines an entry to be registered in the "CoAP Transport Information" registry, for the transport "CoAP over UDP". When such a transport is used, i.e., CoAP responses are transported over UDP as per <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>, the full encoding of the 'tp_info' CBOR array is defined in <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>.<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.2.1-6">If a future specification defines the use of CoAP multicast notifications transported over different transport protocols, then that specification must perform the following actions, unless those have been already performed for different reasons:<a href="#section-4.2.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2.1-7.1">
@@ -1746,20 +1750,22 @@ In the "CoAP Transport Information" registry defined in <a href="#iana-coap-tran
 This information consists of the IP address SRV_ADDR (expressed as a literal or as a host-name to be resolved) and the port number SRV_PORT of the server hosting the target resource, from where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.1.2" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.2.1.1-2.2">
-                <p id="section-4.2.1.1-2.2.1">The 'tpi_details' element <span class="bcp14">MUST</span> be present and in turn includes the following two elements:<a href="#section-4.2.1.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.2.1.1-2.2.1">The 'tpi_details' element <span class="bcp14">MAY</span> be omitted in particular setups where the server is aware that effective client-side transport-specific information is available to clients through alternative means than the 'tp_info' parameter of the informative response.<a href="#section-4.2.1.1-2.2.1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-2.2.2">
+Otherwise, such as in the setup considered in this document, this element <span class="bcp14">MUST</span> be present and it includes the following two elements:<a href="#section-4.2.1.1-2.2.2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.1.1-2.2.2.1">
-                    <p id="section-4.2.1.1-2.2.2.1.1">'tpi_client' is a CRI, with the same format of 'tpi_server' (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). In particular, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys the destination addressing information of the multicast notifications that the server sends for the group observation.<a href="#section-4.2.1.1-2.2.2.1.1" class="pilcrow">¶</a></p>
-<p id="section-4.2.1.1-2.2.2.1.2">
-This information consists of the IP multicast address GRP_ADDR (expressed as a literal or as a host-name to be resolved) and the port number GRP_PORT, where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.2.2.1.2" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.1.1-2.2.3.1">
+                    <p id="section-4.2.1.1-2.2.3.1.1">'tpi_client' is a CRI, with the same format of 'tpi_server' (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>). In particular, the CRI has 'scheme-id' with value -1 ("coap"), while 'authority' conveys the destination addressing information of the multicast notifications that the server sends for the group observation.<a href="#section-4.2.1.1-2.2.3.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-2.2.3.1.2">
+This information consists of the IP multicast address GRP_ADDR (expressed as a literal or as a host-name to be resolved) and the port number GRP_PORT, where the server will send multicast notifications for the target resource.<a href="#section-4.2.1.1-2.2.3.1.2" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-4.2.1.1-2.2.2.2">
-                    <p id="section-4.2.1.1-2.2.2.2.1">'tpi_token' is a CBOR byte string, whose value is the Token value of the phantom observation request generated by the server (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>).<a href="#section-4.2.1.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-4.2.1.1-2.2.3.2">
+                    <p id="section-4.2.1.1-2.2.3.2.1">'tpi_token' is a CBOR byte string, whose value is the Token value of the phantom observation request generated by the server (see <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>). Note that the same Token value is used for the multicast notifications bound to that phantom observation request (see <a href="#ssec-server-side-notifications" class="auto internal xref">Section 4.3</a>).<a href="#section-4.2.1.1-2.2.3.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
             </ul>
-<p id="section-4.2.1.1-3">The CDDL notation in <a href="#tp-info-udp" class="auto internal xref">Figure 3</a> describes the format of the 'tp_info' CBOR array when CoAP is transported over UDP. The definition of 'scheme-id' and 'authority' is the same as in <a href="#tp-info-general" class="auto internal xref">Figure 2</a>.<a href="#section-4.2.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-3">The CDDL notation in <a href="#tp-info-udp" class="auto internal xref">Figure 3</a> describes the format of the 'tp_info' CBOR array when CoAP is transported over UDP, according to this document. The definition of 'scheme-id' and 'authority' is the same as in <a href="#tp-info-general" class="auto internal xref">Figure 2</a>.<a href="#section-4.2.1.1-3" class="pilcrow">¶</a></p>
 <span id="name-format-of-tp_info-with-udp-"></span><div id="tp-info-udp">
 <figure id="figure-3">
               <div class="lang-cddl sourcecode" id="section-4.2.1.1-4.1">
@@ -1783,7 +1789,7 @@ CRI-no-local = [
 <a href="#name-format-of-tp_info-with-udp-" class="selfRef">Format of 'tp_info' with UDP as Transport Protocol</a>
               </figcaption></figure>
 </div>
-<p id="section-4.2.1.1-5">The CBOR diagnostic notation in <a href="#tp-info-udp-example" class="auto internal xref">Figure 4</a> provides an example of the 'tp_info' CBOR array when CoAP is transported over UDP.<a href="#section-4.2.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.2.1.1-5">The CBOR diagnostic notation in <a href="#tp-info-udp-example" class="auto internal xref">Figure 4</a> provides an example of the 'tp_info' CBOR array when CoAP is transported over UDP, according to this document.<a href="#section-4.2.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.2.1.1-6">In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the default port number when CoAP is transported over UDP), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.<a href="#section-4.2.1.1-6" class="pilcrow">¶</a></p>
 <span id="name-example-of-tp_info-with-udp"></span><div id="tp-info-udp-example">
 <figure id="figure-4">
@@ -1858,12 +1864,12 @@ The Token value T is specified by an element of 'tpi_details', within the 'tp_in
 <p id="section-4.3-2.4.2">
 Note that, in most cases, such SRV_ADDR and SRV_PORT are those to which original observation requests are sent to by clients (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>), unless those requests are sent to a multicast address (see <span>[<a href="#I-D.ietf-core-groupcomm-bis" class="cite xref">I-D.ietf-core-groupcomm-bis</a>]</span>).<a href="#section-4.3-2.4.2" class="pilcrow">¶</a></p>
 <p id="section-4.3-2.4.3">
-The addressing information above is provided to the observer clients through the CRI specified by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-4.3-2.4.3" class="pilcrow">¶</a></p>
+The addressing information above is conveyed through the CRI specified by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-4.3-2.4.3" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.3-2.5">
             <p id="section-4.3-2.5.1">It <span class="bcp14">MUST</span> be sent to the IP multicast address GRP_ADDR and port number GRP_PORT.<a href="#section-4.3-2.5.1" class="pilcrow">¶</a></p>
 <p id="section-4.3-2.5.2">
-The addressing information above is provided to the observer clients through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-4.3-2.5.2" class="pilcrow">¶</a></p>
+The addressing information above is conveyed through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-4.3-2.5.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-4.3-3">For each target resource with an active group observation, the server <span class="bcp14">MUST</span> store the latest multicast notification.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
@@ -1934,12 +1940,12 @@ The addressing information above is provided to the observer clients through the
             <p id="section-5.2-6.1.1">The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:<a href="#section-5.2-6.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2-6.1.2.1">
-                <p id="section-5.2-6.1.2.1.1">As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-6.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-5.2-6.1.2.1.1">As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are conveyed through the CRI specified by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see <a href="#sssec-transport-specific-encoding" class="auto internal xref">Section 4.2.1</a>).<a href="#section-5.2-6.1.2.1.1" class="pilcrow">¶</a></p>
 <p id="section-5.2-6.1.2.1.2">
 If the port number is not present in the CRI, the client <span class="bcp14">MUST</span> use as SRV_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).<a href="#section-5.2-6.1.2.1.2" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.2-6.1.2.2">
-                <p id="section-5.2-6.1.2.2.1">As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-6.1.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-5.2-6.1.2.2.1">As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are conveyed through the CRI specified by a dedicated element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-5.2-6.1.2.2.1" class="pilcrow">¶</a></p>
 <p id="section-5.2-6.1.2.2.2">
 If the port number is not present in the CRI, the client <span class="bcp14">MUST</span> use as GRP_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).<a href="#section-5.2-6.1.2.2.2" class="pilcrow">¶</a></p>
 </li>
@@ -2618,7 +2624,7 @@ At the time of writing this specification, acceptable formats of authentication 
               </ul>
 </li>
             <li class="normal" id="section-9.3.1-4.3">
-              <p id="section-9.3.1-4.3.1">If decryption and verification of the phantom registration request fail, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation.<a href="#section-9.3.1-4.3.1" class="pilcrow">¶</a></p>
+              <p id="section-9.3.1-4.3.1">If decryption and verification of the phantom registration request fail, the client <span class="bcp14">MAY</span> try sending a new registration request to the server (see <a href="#ssec-client-side-request" class="auto internal xref">Section 5.1</a>). If the client chooses not to, then the client <span class="bcp14">SHOULD</span> explicitly withdraw from the group observation. Exceptions apply, for example, in particular setups where effective transport-specific information is available to clients through alternative means than the 'tp_info' parameter of the informative response.<a href="#section-9.3.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-9.3.1-5">After successful decryption and verification, the client performs Step 3 in <a href="#ssec-client-side-informative" class="auto internal xref">Section 5.2</a>, considering the decrypted phantom registration request.<a href="#section-9.3.1-5" class="pilcrow">¶</a></p>
@@ -4223,29 +4229,40 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-E.1-1.1">
-            <p id="appendix-E.1-1.1.1">Clarifications:<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.1.1">Updated semantic of informative response:<a href="#appendix-E.1-1.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-E.1-1.1.2.1">
-                <p id="appendix-E.1-1.1.2.1.1">Message processing with Group OSCORE: the phantom registration request is typically protected with the group mode, with the exceptional case of Deterministic Requests.<a href="#appendix-E.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="appendix-E.1-1.1.2.1.1">Admit absence of 'tp_info' in particular setups.<a href="#appendix-E.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="appendix-E.1-1.1.2.2">
+                <p id="appendix-E.1-1.1.2.2.1">When using CoAP over UDP, admit the absence of 'tpi_details' in particular setups.<a href="#appendix-E.1-1.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
           <li class="normal" id="appendix-E.1-1.2">
-            <p id="appendix-E.1-1.2.1">Fixed CDDL notations of<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.2.1">Clarifications:<a href="#appendix-E.1-1.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-E.1-1.2.2.1">
-                <p id="appendix-E.1-1.2.2.1.1">Payload of the informative response.<a href="#appendix-E.1-1.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="appendix-E.1-1.2.2.2">
-                <p id="appendix-E.1-1.2.2.2.1">'tp_info_coap_udp'.<a href="#appendix-E.1-1.2.2.2.1" class="pilcrow">¶</a></p>
+                <p id="appendix-E.1-1.2.2.1.1">Message processing with Group OSCORE: the phantom registration request is typically protected with the group mode, with the exceptional case of Deterministic Requests.<a href="#appendix-E.1-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
           <li class="normal" id="appendix-E.1-1.3">
-            <p id="appendix-E.1-1.3.1">Update references.<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.3.1">Fixed CDDL notations of<a href="#appendix-E.1-1.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-E.1-1.3.2.1">
+                <p id="appendix-E.1-1.3.2.1.1">Payload of the informative response.<a href="#appendix-E.1-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="appendix-E.1-1.3.2.2">
+                <p id="appendix-E.1-1.3.2.2.1">'tp_info_coap_udp'.<a href="#appendix-E.1-1.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
 </li>
           <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.4.1">Update references.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.1-1.5">
+            <p id="appendix-E.1-1.5.1">Clarifications and editorial improvements.<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

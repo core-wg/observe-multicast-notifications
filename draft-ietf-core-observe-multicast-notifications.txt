@@ -465,7 +465,19 @@ Table of Contents
       Typically, this comprises the Token value associated with the
       group observation, as well as the source and destination
       addressing information of the related multicast notifications.
-      The CBOR array is formatted as defined in Section 4.2.1.  This
+      The CBOR array is formatted as defined in Section 4.2.1.
+
+      This parameter MAY be omitted in particular setups where the
+      server is aware that effective transport-specific information is
+      available to clients through alternative means than the 'tp_info'
+      parameter of the informative response.  For example, this could be
+      the case in particular scenarios where notifications are protected
+      end-to-end between the server and clients using Group OSCORE
+      (hence, in a way suitable to send those over multicast), but they
+      are ultimately delivered to observer clients over a unicast
+      transport, e.g., through a proxy.
+
+      Otherwise, such as in the setup considered in this document, this
       parameter MUST be included.
 
    *  'ph_req', with value the byte serialization of the transport-
@@ -516,7 +528,7 @@ Table of Contents
    the informative response.
 
    informative_response_payload = {
-      0 => [1* tp_info_element],  ; 'tp_info'    (transport-specific
+    ? 0 => [1* tp_info_element],  ; 'tp_info'    (transport-specific
                                   ;               information)
     ? 1 => bstr,                  ; 'ph_req'     (transport-independent
                                   ;               information)
@@ -652,7 +664,7 @@ Table of Contents
    Information" registry, for the transport "CoAP over UDP".  When such
    a transport is used, i.e., CoAP responses are transported over UDP as
    per [RFC7252] and [I-D.ietf-core-groupcomm-bis], the full encoding of
-   the 'tp_info' CBOR array is as defined in Section 4.2.1.1.
+   the 'tp_info' CBOR array is defined in Section 4.2.1.1.
 
    If a future specification defines the use of CoAP multicast
    notifications transported over different transport protocols, then
@@ -690,8 +702,14 @@ Table of Contents
       SRV_PORT of the server hosting the target resource, from where the
       server will send multicast notifications for the target resource.
 
-   *  The 'tpi_details' element MUST be present and in turn includes the
-      following two elements:
+   *  The 'tpi_details' element MAY be omitted in particular setups
+      where the server is aware that effective client-side transport-
+      specific information is available to clients through alternative
+      means than the 'tp_info' parameter of the informative response.
+
+      Otherwise, such as in the setup considered in this document, this
+      element MUST be present and it includes the following two
+      elements:
 
       -  'tpi_client' is a CRI, with the same format of 'tpi_server'
          (see Section 4.2.1).  In particular, the CRI has 'scheme-id'
@@ -711,8 +729,9 @@ Table of Contents
          observation request (see Section 4.3).
 
    The CDDL notation in Figure 3 describes the format of the 'tp_info'
-   CBOR array when CoAP is transported over UDP.  The definition of
-   'scheme-id' and 'authority' is the same as in Figure 2.
+   CBOR array when CoAP is transported over UDP, according to this
+   document.  The definition of 'scheme-id' and 'authority' is the same
+   as in Figure 2.
 
    tp_info_coap_udp = [
      tpi_server: CRI-no-local, ; Source addressing information
@@ -731,7 +750,8 @@ Table of Contents
         Figure 3: Format of 'tp_info' with UDP as Transport Protocol
 
    The CBOR diagnostic notation in Figure 4 provides an example of the
-   'tp_info' CBOR array when CoAP is transported over UDP.
+   'tp_info' CBOR array when CoAP is transported over UDP, according to
+   this document.
 
    In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted
    in the CRI of 'tpi_server' as it is the default port number when CoAP
@@ -811,19 +831,18 @@ Table of Contents
       Section 5.1), unless those requests are sent to a multicast
       address (see [I-D.ietf-core-groupcomm-bis]).
 
-      The addressing information above is provided to the observer
-      clients through the CRI specified by the element 'tpi_server',
-      within the 'tp_info' parameter of the informative response (see
-      Section 4.2.1).
+      The addressing information above is conveyed through the CRI
+      specified by the element 'tpi_server', within the 'tp_info'
+      parameter of the informative response (see Section 4.2.1).
 
    *  It MUST be sent to the IP multicast address GRP_ADDR and port
       number GRP_PORT.
 
-      The addressing information above is provided to the observer
-      clients through the CRI specified by an element of 'tpi_details',
-      within the 'tp_info' parameter of the informative response.  In
-      particular, when transporting CoAP over UDP, the CRI is conveyed
-      by the element 'tpi_client' (see Section 4.2.1.1).
+      The addressing information above is conveyed through the CRI
+      specified by an element of 'tpi_details', within the 'tp_info'
+      parameter of the informative response.  In particular, when
+      transporting CoAP over UDP, the CRI is conveyed by the element
+      'tpi_client' (see Section 4.2.1.1).
 
    For each target resource with an active group observation, the server
    MUST store the latest multicast notification.
@@ -961,7 +980,7 @@ Table of Contents
 
        *  As source address and port number, the server address SRV_ADDR
           and port number SRV_PORT intended for accessing the target
-          resource.  These are specified by the CRI conveyed by the
+          resource.  These are conveyed through the CRI specified by the
           element 'tpi_server', within the 'tp_info' parameter of the
           informative response (see Section 4.2.1).
 
@@ -971,8 +990,8 @@ Table of Contents
           5683 when the transport is CoAP over UDP).
 
        *  As destination address and port number, the IP multicast
-          address GRP_ADDR and port number GRP_PORT.  These are
-          specified by the CRI conveyed by a dedicated element of
+          address GRP_ADDR and port number GRP_PORT.  These are conveyed
+          through the CRI specified by a dedicated element of
           'tpi_details', within the 'tp_info' parameter of the
           informative response.  In particular, when transporting CoAP
           over UDP, such an element is 'tpi_client' (see
@@ -1771,6 +1790,10 @@ Table of Contents
       fail, the client MAY try sending a new registration request to the
       server (see Section 5.1).  If the client chooses not to, then the
       client SHOULD explicitly withdraw from the group observation.
+      Exceptions apply, for example, in particular setups where
+      effective transport-specific information is available to clients
+      through alternative means than the 'tp_info' parameter of the
+      informative response.
 
    After successful decryption and verification, the client performs
    Step 3 in Section 5.2, considering the decrypted phantom registration
@@ -3294,6 +3317,13 @@ Appendix E.  Document Updates
    This section is to be removed before publishing as an RFC.
 
 E.1.  Version -14 to -15
+
+   *  Updated semantic of informative response:
+
+      -  Admit absence of 'tp_info' in particular setups.
+
+      -  When using CoAP over UDP, admit the absence of 'tpi_details' in
+         particular setups.
 
    *  Clarifications:
 
