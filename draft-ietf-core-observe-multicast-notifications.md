@@ -489,6 +489,8 @@ Given an ongoing group observation for a target resource, the server sends multi
 
 For each target resource with an active group observation, the server MUST store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF composed at Step 6 of {{ssec-server-side-request}}.
 
+It can happen that the stored latest multicast notification for a group observation reaches an age that is greater than its indicated maximum age, i.e., the option value of its Inner Max-Age Option, if present, or 60 seconds otherwise (see {{Section 5.6.1 of RFC7252}}). When this happens, the server MUST compose and send a new multicast notification for the same group observation, whose payload specifies the current representation of the target resource.
+
 ## Congestion Control ## {#ssec-server-side-congestion}
 
 In order to not cause congestion, the server ought to conservatively control the sending of multicast notifications. In particular:
@@ -562,6 +564,8 @@ Then, the client performs the following steps.
    * The transport-independent information specified in the 'last_notif' parameter of the informative response.
 
 6. If the informative response includes the parameter 'last_notif', the client processes the multicast notification rebuilt at Step 5 as defined in {{Section 3.2 of RFC7641}}. In particular, the value of the Observe Option is used as initial baseline for notification reordering in this group observation.
+
+   Note that the multicast notification rebuilt at Step 5 specifies a maximum age that is relative to the time when the server composed it, i.e., not to the time when the server sent the present informative response. Consequently, the client considers the rebuilt multicast notification fresh for an amount of time longer than the one intended by the server. However, the next multicast notification sent for the group observation will supersede the rebuilt one and will indicate a reliable maximum age that the client can refer to.
 
 7. If a traditional observation to the target resource is ongoing, the client MAY silently cancel it without notifying the server.
 
@@ -1676,11 +1680,13 @@ Therefore, the following holds when a group observation for a target resource re
 
 ## Version -14 to -15 ## {#sec-14-15}
 
-* Updated semantic of informative response:
+* Updated semantics of informative response:
 
   * Admit absence of 'tp_info' in particular setups.
 
   * When using CoAP over UDP, admit the absence of 'tpi_details' in particular setups.
+
+* Behavior/considerations related to the maximum age of notifications conveyed in the 'last_notif' parameter of an informative response.
 
 * Clarifications:
 
