@@ -567,7 +567,7 @@ Then, the client performs the following steps.
 
 In addition to 'tpi_server', further elements of the 'tp_info' array can convey a CRI. The client MUST treat any CRI within the 'tp_info' array as invalid, if the 'authority' component is a host-name such that, when resolved, its combination with the URI scheme indicates multiple transports (see {{sssec-transport-specific-encoding}}). As a possible way to verify if that is the case, the client can rely on DNS resolution (e.g., as defined in {{RFC9953}}).
 
-If any of the expected fields in the informative response are absent, malformed, or invalid, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
+If any of the expected fields in the informative response are absent, malformed, or invalid, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation. Exceptions apply, for example, in particular setups where effective transport-specific information is available to clients through alternative means than the 'tp_info' parameter of the informative response.
 
 {{appendix-different-sources}} describes possible alternative ways for clients to retrieve the phantom registration request and other information related to a group observation.
 
@@ -917,7 +917,7 @@ After completing Step 2, in any other case than the one discussed in {{determini
 
    - The client stores the values of the 'kid', 'Partial IV', and 'kid context' fields from the OSCORE Option value of the phantom registration request.
 
-* If decryption and verification of the phantom registration request fail, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation. Exceptions apply, for example, in particular setups where effective transport-specific information is available to clients through alternative means than the 'tp_info' parameter of the informative response.
+* If decryption and verification of the phantom registration request fail, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
 
 After successful decryption and verification, the client performs Step 3 in {{ssec-client-side-informative}}, considering the decrypted phantom registration request.
 
