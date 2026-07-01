@@ -499,7 +499,18 @@ Table of Contents
       independent information of the latest multicast notification for
       the target resource, encoded as a CBOR byte string.  The value of
       the CBOR byte string is formatted as defined in Section 4.2.2.
-      This parameter MAY be included.
+
+      This parameter SHOULD be included, in order to avoid unnecessary
+      delays for the client in obtaining a first multicast notification
+      and possibly populating its cache.
+
+      In network setups where a proxy is deployed between the clients
+      and the server (see
+      [I-D.ietf-core-multicast-notifications-proxy]), this avoids such
+      unnecessary delays at the proxy if the proxy is the intended
+      recipient and consumer of the informative response, in turn
+      avoiding delays for clients in obtaining a first multicast
+      notification.
 
    *  'next_not_before', with value the number of seconds that will
       minimally elapse before the server sends the next multicast
@@ -3346,6 +3357,9 @@ E.1.  Version -14 to -15
    *  Behavior/considerations related to the maximum age of
       notifications conveyed in the 'last_notif' parameter of an
       informative response.
+
+   *  The 'last_notif' parameter should be included in the informative
+      response.
 
    *  Clarifications:
 
