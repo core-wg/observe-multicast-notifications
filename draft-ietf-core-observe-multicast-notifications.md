@@ -465,7 +465,7 @@ When defining the value of each component, "CoAP message" refers to the phantom 
 
 ## Notifications ## {#ssec-server-side-notifications}
 
-Upon a change in the status of the target resource under group observation, the server sends a multicast notification intended to all the clients taking part in the group observation of that resource. In particular, each such multicast notification is formatted as follows.
+Given an ongoing group observation for a target resource, the server sends multicast notifications intended to all the clients taking part in the group observation. In particular, each such multicast notification is formatted as follows.
 
 * It MUST be a Non-confirmable message.
 
