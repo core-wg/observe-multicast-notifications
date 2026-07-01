@@ -487,7 +487,7 @@ Given an ongoing group observation for a target resource, the server sends multi
 
   The addressing information above is conveyed through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
-For each target resource with an active group observation, the server MUST store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of {{ssec-server-side-request}}.
+For each target resource with an active group observation, the server MUST store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF composed at Step 6 of {{ssec-server-side-request}}.
 
 ## Congestion Control ## {#ssec-server-side-congestion}
 
@@ -873,7 +873,7 @@ The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom 
 
 Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter of the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
-Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of {{ssec-server-side-request}}.
+Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF composed at Step 6 of {{ssec-server-side-request}}.
 
 Optionally, the informative response includes additional parameters that provide information about the OSCORE group to join (see {{sec-inf-response}}).
 
