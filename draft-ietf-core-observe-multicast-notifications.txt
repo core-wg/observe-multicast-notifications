@@ -1063,7 +1063,10 @@ Table of Contents
    malformed, or invalid, the client MAY try sending a new registration
    request to the server (see Section 5.1).  If the client chooses not
    to, then the client SHOULD explicitly withdraw from the group
-   observation.
+   observation.  Exceptions apply, for example, in particular setups
+   where effective transport-specific information is available to
+   clients through alternative means than the 'tp_info' parameter of the
+   informative response.
 
    Appendix A describes possible alternative ways for clients to
    retrieve the phantom registration request and other information
@@ -1790,10 +1793,6 @@ Table of Contents
       fail, the client MAY try sending a new registration request to the
       server (see Section 5.1).  If the client chooses not to, then the
       client SHOULD explicitly withdraw from the group observation.
-      Exceptions apply, for example, in particular setups where
-      effective transport-specific information is available to clients
-      through alternative means than the 'tp_info' parameter of the
-      informative response.
 
    After successful decryption and verification, the client performs
    Step 3 in Section 5.2, considering the decrypted phantom registration
