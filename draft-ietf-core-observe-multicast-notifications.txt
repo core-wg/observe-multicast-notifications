@@ -845,7 +845,7 @@ Table of Contents
 
    For each target resource with an active group observation, the server
    MUST store the latest multicast notification.  This applies also to
-   the initial multicast notification INIT_NOTIF built at Step 6 of
+   the initial multicast notification INIT_NOTIF composed at Step 6 of
    Section 4.1.
 
 4.4.  Congestion Control
@@ -1701,8 +1701,8 @@ Table of Contents
    Similarly, the value of the CBOR byte string in the 'last_notif'
    parameter encodes the latest multicast notification as a message
    protected with Group OSCORE (see Section 9.2.3).  This applies also
-   to the initial multicast notification INIT_NOTIF built at Step 6 of
-   Section 4.1.
+   to the initial multicast notification INIT_NOTIF composed at Step 6
+   of Section 4.1.
 
    Optionally, the informative response includes additional parameters
    that provide information about the OSCORE group to join (see

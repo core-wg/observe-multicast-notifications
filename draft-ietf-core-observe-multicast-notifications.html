@@ -1872,7 +1872,7 @@ The addressing information above is conveyed through the CRI specified by the el
 The addressing information above is conveyed through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-4.3-2.5.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.3-3">For each target resource with an active group observation, the server <span class="bcp14">MUST</span> store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">For each target resource with an active group observation, the server <span class="bcp14">MUST</span> store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF composed at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-server-side-congestion">
@@ -2556,7 +2556,7 @@ At the time of writing this specification, acceptable formats of authentication 
 </li>
           </ul>
 <p id="section-9.2.2-3">Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter of the informative response. An exception is the case discussed in <a href="#deterministic-phantom-Request" class="auto internal xref">Appendix D</a>.<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-9.2.2-4">Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see <a href="#ssec-server-side-notifications-oscore" class="auto internal xref">Section 9.2.3</a>). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-9.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-9.2.2-4">Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see <a href="#ssec-server-side-notifications-oscore" class="auto internal xref">Section 9.2.3</a>). This applies also to the initial multicast notification INIT_NOTIF composed at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-9.2.2-4" class="pilcrow">¶</a></p>
 <p id="section-9.2.2-5">Optionally, the informative response includes additional parameters that provide information about the OSCORE group to join (see <a href="#sec-inf-response" class="auto internal xref">Section 9.1</a>).<a href="#section-9.2.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
