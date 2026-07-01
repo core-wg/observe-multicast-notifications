@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 1 January 2027                                                 
+Expires: 2 January 2027                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                            30 June 2026
+                                                             1 July 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2027.
+   This Internet-Draft will expire on 2 January 2027.
 
 Copyright Notice
 
@@ -341,7 +341,7 @@ Table of Contents
       concept of Deterministic Client [I-D.ietf-core-cacheable-oscore],
       then the possible early distribution of the phantom request can
       specifically make available its smaller, plain version.
-      Consequently, all the clients are able to compute the same
+      Consequently, all the clients are able to produce the same
       protected phantom request to use (see Appendix D).
 
 4.  Server-Side Requirements
@@ -3149,7 +3149,7 @@ Appendix D.  Phantom Request as Deterministic Request
    If Group OSCORE is used to protect the group observation (see
    Section 9) and the OSCORE group supports the concept of Deterministic
    Client [I-D.ietf-core-cacheable-oscore], then the server and clients
-   in the OSCORE group can also independently compute the protected
+   in the OSCORE group can also independently produce the protected
    phantom observation request.
 
    In such a case, the unprotected version of the phantom observation
@@ -3158,10 +3158,10 @@ Appendix D.  Phantom Request as Deterministic Request
    they can obtain it through dedicated means (see Appendix A).  In
    either case, the clients and the server can independently protect the
    plain CoAP message by using the approach defined in Section 3 of
-   [I-D.ietf-core-cacheable-oscore], thus all computing the same
-   protected Deterministic Request.  The latter is used as the actual
-   phantom observation request that the protected multicast
-   notifications will match under the group observation in question.
+   [I-D.ietf-core-cacheable-oscore], thus all produce the same protected
+   Deterministic Request.  The latter is used as the actual phantom
+   observation request that the protected multicast notifications will
+   match under the group observation in question.
 
    When receiving the Deterministic Request, the server can clearly
    understand what is happening.  In fact, as the result of an early
@@ -3225,11 +3225,15 @@ Appendix D.  Phantom Request as Deterministic Request
 
    *  'alg', as per Section 6.3 of [I-D.ietf-ace-key-groupcomm-oscore].
 
-   *  'det_senderId' and 'det_hash_alg', defined in Section 4 of
-      [I-D.ietf-core-cacheable-oscore].  These specify the Sender ID of
-      the Deterministic Client in the OSCORE group and the hash
-      algorithm used to compute Deterministic Requests (see
-      Section 3.4.1 of [I-D.ietf-core-cacheable-oscore]).
+   *  'det_senderId', encoded as a CBOR byte string.  This parameter
+      specifies the Sender ID of the Deterministic Client in the OSCORE
+      group.
+
+   *  'det_hash_alg', encoded as a CBOR integer or text string.  This
+      parameter specifies the hash algorithm used in the OSCORE group to
+      produce Deterministic Requests.  This parameter takes values from
+      the "Value" column of the "COSE Algorithms" Registry
+      [IANA.COSE.Algorithms].
 
    Note that, like in Appendix C, no information is provided as related
    to the Pairwise Key Agreement Algorithm and its parameters.  In fact,
