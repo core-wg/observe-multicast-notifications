@@ -1872,7 +1872,7 @@ The addressing information above is conveyed through the CRI specified by the el
 The addressing information above is conveyed through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see <a href="#ssssec-udp-transport-specific" class="auto internal xref">Section 4.2.1.1</a>).<a href="#section-4.3-2.5.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.3-3">For each target resource with an active group observation, the server <span class="bcp14">MUST</span> store the latest multicast notification.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">For each target resource with an active group observation, the server <span class="bcp14">MUST</span> store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of <a href="#ssec-server-side-request" class="auto internal xref">Section 4.1</a>.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ssec-server-side-congestion">

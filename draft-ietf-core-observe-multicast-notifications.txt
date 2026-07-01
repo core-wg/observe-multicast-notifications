@@ -844,7 +844,9 @@ Table of Contents
       'tpi_client' (see Section 4.2.1.1).
 
    For each target resource with an active group observation, the server
-   MUST store the latest multicast notification.
+   MUST store the latest multicast notification.  This applies also to
+   the initial multicast notification INIT_NOTIF built at Step 6 of
+   Section 4.1.
 
 4.4.  Congestion Control
 
