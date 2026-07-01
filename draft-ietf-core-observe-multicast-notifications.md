@@ -289,7 +289,11 @@ When using the method specified in this document, the CBOR map conveyed as the p
 
    Note that the registration request from the client can indeed differ from the phantom observation request in terms of transport-independent information, but still be acceptable for the server to register the client as taking part in the group observation.
 
-* 'last_notif', with value the byte serialization of the transport-independent information of the latest multicast notification for the target resource, encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}. This parameter MAY be included.
+* 'last_notif', with value the byte serialization of the transport-independent information of the latest multicast notification for the target resource, encoded as a CBOR byte string. The value of the CBOR byte string is formatted as defined in {{sssec-transport-independent-encoding}}.
+
+  This parameter SHOULD be included, in order to avoid unnecessary delays for the client in obtaining a first multicast notification and possibly populating its cache.
+
+  In network setups where a proxy is deployed between the clients and the server (see {{I-D.ietf-core-multicast-notifications-proxy}}), this avoids such unnecessary delays at the proxy if the proxy is the intended recipient and consumer of the informative response, in turn avoiding delays for clients in obtaining a first multicast notification.
 
 * 'next_not_before', with value the number of seconds that will minimally elapse before the server sends the next multicast notification for the group observation of the target resource, encoded as a CBOR unsigned integer. This parameter MAY be included.
 
@@ -1687,6 +1691,8 @@ Therefore, the following holds when a group observation for a target resource re
   * When using CoAP over UDP, admit the absence of 'tpi_details' in particular setups.
 
 * Behavior/considerations related to the maximum age of notifications conveyed in the 'last_notif' parameter of an informative response.
+
+* The 'last_notif' parameter should be included in the informative response.
 
 * Clarifications:
 
