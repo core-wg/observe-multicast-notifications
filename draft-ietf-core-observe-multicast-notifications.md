@@ -469,17 +469,17 @@ Upon a change in the status of the target resource under group observation, the 
 
   That is, every multicast notification for a target resource is not bound to the observation requests from the different clients, but instead to the phantom registration request associated with the whole set of clients taking part in the group observation of that resource.
 
-  The Token value T is specified by an element of 'tpi_details' within the 'tp_info' parameter, in the informative response sent to the observer clients. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
+  The Token value T is specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response sent to the observer clients. In particular, when transporting CoAP over UDP, the Token value is specified by the element 'tpi_token' (see {{ssssec-udp-transport-specific}}).
 
 * It MUST be sent from the same IP address SRV_ADDR and port number SRV_PORT where the corresponding informative responses are sent from by the server (see {{ssec-server-side-informative}}). That is, redirection MUST NOT be used.
 
   Note that, in most cases, such SRV_ADDR and SRV_PORT are those to which original observation requests are sent to by clients (see {{ssec-client-side-request}}), unless those requests are sent to a multicast address (see {{I-D.ietf-core-groupcomm-bis}}).
 
-  The addressing information above is provided to the observer clients through the CRI specified by the element 'tpi_server' within the 'tp_info' parameter, in the informative response (see {{sssec-transport-specific-encoding}}).
+  The addressing information above is provided to the observer clients through the CRI specified by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see {{sssec-transport-specific-encoding}}).
 
 * It MUST be sent to the IP multicast address GRP_ADDR and port number GRP_PORT.
 
-  The addressing information above is provided to the observer clients through the CRI specified by an element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
+  The addressing information above is provided to the observer clients through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
 For each target resource with an active group observation, the server MUST store the latest multicast notification.
 
@@ -529,17 +529,17 @@ Then, the client performs the following steps.
 
 1. The client configures an observation of the target resource. To this end, it relies on a CoAP endpoint used for messages having:
 
-    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server', within the 'tp_info' parameter in the informative response (see {{sssec-transport-specific-encoding}}).
+    - As source address and port number, the server address SRV_ADDR and port number SRV_PORT intended for accessing the target resource. These are specified by the CRI conveyed by the element 'tpi_server', within the 'tp_info' parameter of the informative response (see {{sssec-transport-specific-encoding}}).
 
       If the port number is not present in the CRI, the client MUST use as SRV_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
-    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details', within the 'tp_info' parameter in the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_client' (see {{ssssec-udp-transport-specific}}).
+    - As destination address and port number, the IP multicast address GRP_ADDR and port number GRP_PORT. These are specified by the CRI conveyed by a dedicated element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
       If the port number is not present in the CRI, the client MUST use as GRP_PORT the default port number defined for the identified CoAP transport (e.g., the default port number is 5683 when the transport is CoAP over UDP).
 
 2. The client rebuilds the phantom registration request as follows.
 
-   * The client uses the Token value T that is specified by a dedicated element of 'tpi_details' within the 'tp_info' parameter, in the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_token' (see {{ssssec-udp-transport-specific}}).
+   * The client uses the Token value T that is specified by a dedicated element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, such an element is 'tpi_token' (see {{ssssec-udp-transport-specific}}).
 
    * If the 'ph_req' parameter is not present in the informative response, the client uses the transport-independent information from its original Observe registration request.
 
@@ -865,7 +865,7 @@ The value of the CBOR byte string in the 'ph_req' parameter encodes the phantom 
 
 * A payload is always present, as the ciphertext followed by the countersignature.
 
-Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter in the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
+Note that, in terms of transport-independent information, the registration request from the client typically differs from the phantom request. Thus, the server has to include the 'ph_req' parameter of the informative response. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
 Similarly, the value of the CBOR byte string in the 'last_notif' parameter encodes the latest multicast notification as a message protected with Group OSCORE (see {{ssec-server-side-notifications-oscore}}). This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of {{ssec-server-side-request}}.
 
