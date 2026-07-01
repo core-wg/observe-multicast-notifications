@@ -1636,7 +1636,7 @@ Table of Contents
    participating endpoints using Group OSCORE also support the concept
    of Deterministic Client [I-D.ietf-core-cacheable-oscore] and the
    protected phantom request is computed using the pairwise mode of
-   Group OSCORE (see Section 3 of [I-D.ietf-core-cacheable-oscore]).
+   Group OSCORE.
 
    In accordance with the group mode of Group OSCORE, the server
    protects the phantom registration request as defined in Section 7.1
@@ -1740,11 +1740,9 @@ Table of Contents
    considered malformed.  An exception is the case discussed in
    Appendix D.
 
-   After completing Step 2, the client considers the rebuilt phantom
-   registration request protected with Group OSCORE.  If the phantom
-   registration request is protected with the group mode of Group OSCORE
-   (see Section 9.2.1), the client decrypts and verifies the rebuilt
-   phantom registration request as defined in Section 7.2 of
+   After completing Step 2, in any other case than the one discussed in
+   Appendix D, the client decrypts and verifies the rebuilt phantom
+   registration request as defined in Section 7.2 of
    [I-D.ietf-core-oscore-groupcomm], with the following differences.
 
    *  The client MUST NOT perform any replay check.  That is, the client
@@ -1777,11 +1775,6 @@ Table of Contents
    After successful decryption and verification, the client performs
    Step 3 in Section 5.2, considering the decrypted phantom registration
    request.
-
-   The decryption and verification steps discussed above do not apply in
-   the case discussed in Appendix D, where the phantom registration
-   request is protected with the pairwise mode of Group OSCORE (see
-   Section 3 of [I-D.ietf-core-cacheable-oscore]).
 
    If the informative response includes the parameter 'last_notif', the
    client also decrypts and verifies the latest multicast notification
@@ -3172,7 +3165,7 @@ Appendix D.  Phantom Request as Deterministic Request
    message.  As above, this can be pre-configured on the clients, or
    they can obtain it through dedicated means (see Appendix A).  In
    either case, the clients and the server can independently protect the
-   plain CoAP message by using the approach defined in Section 3 of
+   plain CoAP message by using the approach defined in
    [I-D.ietf-core-cacheable-oscore], thus all produce the same protected
    Deterministic Request.  The latter is used as the actual phantom
    observation request that the protected multicast notifications will
