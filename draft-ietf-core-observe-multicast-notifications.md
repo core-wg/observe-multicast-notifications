@@ -487,7 +487,7 @@ Given an ongoing group observation for a target resource, the server sends multi
 
   The addressing information above is conveyed through the CRI specified by an element of 'tpi_details', within the 'tp_info' parameter of the informative response. In particular, when transporting CoAP over UDP, the CRI is conveyed by the element 'tpi_client' (see {{ssssec-udp-transport-specific}}).
 
-For each target resource with an active group observation, the server MUST store the latest multicast notification.
+For each target resource with an active group observation, the server MUST store the latest multicast notification. This applies also to the initial multicast notification INIT_NOTIF built at Step 6 of {{ssec-server-side-request}}.
 
 ## Congestion Control ## {#ssec-server-side-congestion}
 
