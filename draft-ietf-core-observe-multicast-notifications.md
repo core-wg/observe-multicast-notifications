@@ -843,9 +843,11 @@ When using Group OSCORE to protect multicast notifications, the server performs 
 
 ### Registration ### {#ssec-server-side-request-oscore}
 
-The phantom registration request MUST be protected with Group OSCORE.
+The phantom registration request MUST be protected with Group OSCORE, using the group mode of Group OSCORE (see {{Section 7 of I-D.ietf-core-oscore-groupcomm}}).
 
-The group mode of Group OSCORE defined in {{Section 7 of I-D.ietf-core-oscore-groupcomm}} MUST be used. In particular, the server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}} by using its Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1).
+An exception is the case discussed in {{deterministic-phantom-Request}}, where the participating endpoints using Group OSCORE also support the concept of Deterministic Client {{I-D.ietf-core-cacheable-oscore}} and the protected phantom request is computed using the pairwise mode of Group OSCORE (see {{Section 3 of I-D.ietf-core-cacheable-oscore}}).
+
+In accordance with the group mode of Group OSCORE, the server protects the phantom registration request as defined in {{Section 7.1 of I-D.ietf-core-oscore-groupcomm}} by using its own Sender Context, i.e., like if it was the actual sender. As a consequence, the server consumes the current value of its Sender Sequence Number SN in the OSCORE group and hence updates it to SN* = (SN + 1).
 
 Consistent with that, the OSCORE Option value in the phantom registration request specifies:
 
@@ -897,7 +899,7 @@ Upon receiving the informative response from the server, the client performs the
 
 When performing Step 2, the client expects the 'ph_req' parameter to be included in the informative response, which is otherwise considered malformed. An exception is the case discussed in {{deterministic-phantom-Request}}.
 
-Once completed Step 2, the client decrypts and verifies the rebuilt phantom registration request as defined in {{Section 7.2 of I-D.ietf-core-oscore-groupcomm}}, with the following differences.
+After completing Step 2, the client considers the rebuilt phantom registration request protected with Group OSCORE. If the phantom registration request is protected with the group mode of Group OSCORE (see {{ssec-server-side-request-oscore}}), the client decrypts and verifies the rebuilt phantom registration request as defined in {{Section 7.2 of I-D.ietf-core-oscore-groupcomm}}, with the following differences.
 
 * The client MUST NOT perform any replay check. That is, the client skips Step 3 in {{Section 8.2 of RFC8613}}.
 
@@ -912,6 +914,8 @@ Once completed Step 2, the client decrypts and verifies the rebuilt phantom regi
 * If decryption and verification of the phantom registration request fail, the client MAY try sending a new registration request to the server (see {{ssec-client-side-request}}). If the client chooses not to, then the client SHOULD explicitly withdraw from the group observation.
 
 After successful decryption and verification, the client performs Step 3 in {{ssec-client-side-informative}}, considering the decrypted phantom registration request.
+
+The decryption and verification steps discussed above do not apply in the case discussed in {{deterministic-phantom-Request}}, where the phantom registration request is protected with the pairwise mode of Group OSCORE (see {{Section 3 of I-D.ietf-core-cacheable-oscore}}).
 
 If the informative response includes the parameter 'last_notif', the client also decrypts and verifies the latest multicast notification rebuilt at Step 5 in {{ssec-client-side-informative}}, just like it would for the multicast notifications transmitted as CoAP messages on the wire (see {{ssec-client-side-notifications-oscore}}). If decryption and verification succeed, the client proceeds with Step 6, considering the decrypted latest multicast notification. Otherwise, the client proceeds to Step 7.
 
@@ -1667,6 +1671,10 @@ Therefore, the following holds when a group observation for a target resource re
 {:removeinrfc}
 
 ## Version -14 to -15 ## {#sec-14-15}
+
+* Clarifications:
+
+  * Message processing with Group OSCORE: the phantom registration request is typically protected with the group mode, with the exceptional case of Deterministic Requests.
 
 * Fixed CDDL notations of
 
