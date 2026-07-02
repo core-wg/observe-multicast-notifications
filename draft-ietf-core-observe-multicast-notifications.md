@@ -124,6 +124,7 @@ informative:
   I-D.ietf-core-cacheable-oscore:
   I-D.ietf-cose-cbor-encoded-cert:
   I-D.ietf-core-multicast-notifications-proxy:
+  I-D.ietf-ace-group-oscore-profile:
   RFC5280:
   RFC6690:
   RFC7519:
@@ -267,7 +268,7 @@ Assuming that the server is reachable at the address SRV_ADDR and port number SR
 
 ## Informative Response ## {#ssec-server-side-informative}
 
-After having started a group observation on a target resource, the server proceeds as follows.
+After having started a group observation for a target resource, the server proceeds as follows.
 
 For each traditional observation ongoing on the target resource, the server MAY cancel that observation. Then, the server considers the corresponding clients as now taking part in the group observation, for which it increases the corresponding observer counter accordingly.
 
@@ -1162,6 +1163,84 @@ Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC 
 
 Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
+# Operational Considerations # {#sec-operational-considerations}
+
+This section compiles the operational considerations that hold for this document.
+
+## Logging
+
+When performing its normal operations, it is desirable that the server produces timestamped logs about the following, to the extent afforded by its available memory, computing, and energy resources:
+
+* The start of a group observation, as corresponding to the issue and local processing of a phantom observation request (see {{ssec-server-side-request}}).
+
+* The release and retraction of group observation data as available through different means (see {{appendix-different-sources}}).
+
+* The addition of a new client as a participant in a group observation, with the consequent sending of an informative response (see {{ssec-server-side-informative}}).
+
+* The execution of a procedure to (roughly) assess the number of clients that are still participating in a group observation, together with the settings and the outcome of such procedure (e.g., see {{sec-rough-counting}}).
+
+* The evolution of the (rough) number of clients participating in a group observation throughout its duration.
+
+* The termination of a group observation (see {{ssec-server-side-cancellation}}).
+
+A group observation can be effectively characterized by the target resource, the phantom registration request, and the transport-specific information according to which multicast notifications are sent for that group observation.
+
+Although log entries are produced by the server, the storage, management, controlled sharing, and disposal of logs are entrusted to a designated storage point that can be the server itself or instead a separate trusted entity.
+
+Besides what is compiled above, the server could produce additional information to log. Further details about what the server logs, with what granularity, and based on what triggering events and conditions are application-specific and left to operators to define.
+
+The server MUST NOT log any secret or confidential information pertaining to a group observation. For example, if Group OSCORE is used to protect multicast notifications (see {{sec-secured-notifications}}), such information includes:
+
+* The OSCORE Master Secret used in the OSCORE group.
+
+* The symmetric keying material derived from the OSCORE Master Secret and used in the OSCORE group, i.e., the Sender/Recipient Keys.
+
+* The Signature Encryption Key used in the OSCORE group.
+
+* The private key associated with the server's authentication credential used in the group.
+
+* Rekeying messages that are exchanged in the group.
+
+* If applicable, administrative keying material used to protect the group rekeying process.
+
+It is up to the application to specify for how long a log entry is retained from the time of its creation and until its deletion. Different retention policies could be enforced for different group observations. For a given group observation, the oldest log entries are expected to be those deleted first, and different retention policies could be enforced depending on whether the group observation is currently ongoing or has been terminated.
+
+It is out of the scope of this document what specific semantics and data model are used by the server for producing and processing the logs. Specific semantics and data models can be defined by applications and future specifications.
+
+It is expected that the logs produced are made available for secure access by authorized external management applications and operators.
+
+In particular, logged information could be retrieved in the following ways.
+
+* By accessing logs at the designated storage point through polling. This can occur in an occasional, regular, or event-driven way.
+
+* Through notifications sent by the designated storage point according to an operator-defined frequency.
+
+* Through notifications asynchronously sent by the designated storage point, throttling them in order to prevent congestion and duplication and to not create attack vectors.
+
+From the perspective of an individual management application or network operator, knowledge gained from the logged information can be useful for planning, adjusting, and (fine-)tuning the allocation of network resources. Also, it can help understand how to (re-)configure the server in terms of which pre-conditions have to be met for starting a group observation for a target resource.
+
+Some of the logged information can be privacy-sensitive. This especially holds for the metadata about a client, i.e., addressing information of the client and, when applicable, (an identifier of) the client's authentication credential that is used to authenticate with the server when using secure communication. If external management applications and operators obtain such metadata, they become able to track a given client, as to its interactions with one or multiple servers and its participation in group observations under such servers.
+
+Therefore, the logged information that is effectively provided to external management applications and operators SHOULD be redacted by the designated storage point, by omitting any privacy-sensitive information element that could enable or facilitate the impairment of clients' privacy, e.g., by tracking clients across different group observations and different servers. Exceptions could apply, e.g., if the designated storage point can verify that the management application or operator in question is specifically authorized to obtain such privacy-sensitive information and appropriately entitled to obtain it according to enforced privacy policies.
+
+## Management and Distribution of Keying Material
+
+When using Group OSCORE to protect multicast notifications, the management and distribution of the keying material used in the OSCORE group is entrusted to the Group Manager that is responsible for the group.
+
+A possible realization of Group Manager is the one defined {{I-D.ietf-ace-key-groupcomm-oscore}}. In such case, the server can optionally help clients, by including in the informative response additional information for joining the group through the responsible Group Manager (see {{sec-inf-response}}).
+
+{{self-managed-oscore-group}} describes how, in simple settings, the server can be responsible to set up and manage the OSCORE group, acting as the corresponding Group Manager.
+
+## Access Control
+
+In order to enforce access control for a client accessing a target resource, it is fundamentally required that secure communication is used between the client and the server hosting the resource, with the server authenticating the client.
+
+This particularly applies to traditional observation requests that are sent protected to the server and result in a protected response like the informative response.
+
+When receiving such a protected request, the server can enforce access control after having successfully authenticated the requesting client, according to the access rights that are granted to the client's identity.
+
+In particular, access control can be enforced by using the ACE framework {{RFC9200}}, with a granularity that takes into account the resource specifically targeted at the server, the operation requested by sending a request to that resource, and the specific permission(s) that the requesting client is authorized to have according to its corresponding access token. Furthermore, the interactions between a client and the server are secured as per the specific transport profile of ACE used, such as {{RFC9203}} and {{I-D.ietf-ace-group-oscore-profile}}.
+
 # Security Considerations # {#sec-security-considerations}
 
 In addition to the security considerations from {{RFC7252}}, {{RFC7641}}, {{I-D.ietf-core-groupcomm-bis}}, {{RFC8613}}, and {{I-D.ietf-core-oscore-groupcomm}}, the following considerations hold for this document.
@@ -1703,6 +1782,8 @@ Therefore, the following holds when a group observation for a target resource re
   * Payload of the informative response.
 
   * 'tp_info_coap_udp'.
+
+* Added Operational Considerations.
 
 * Update references.
 
