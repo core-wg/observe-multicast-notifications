@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 2 January 2027                                                 
+Expires: 3 January 2027                                                 
                                                             F. Palombini
                                                              Ericsson AB
-                                                             1 July 2026
+                                                             2 July 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 January 2027.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -114,20 +114,24 @@ Table of Contents
    10. Example with Group OSCORE
    11. Informative Response Parameters
    12. Transport Protocol Information
-   13. Security Considerations
-     13.1.  Unprotected Communications
-     13.2.  Protected Communications
-   14. IANA Considerations
-     14.1.  Media Type Registrations
-     14.2.  CoAP Content-Formats Registry
-     14.3.  CoAP Option Numbers Registry
-     14.4.  Target Attributes Registry
-     14.5.  Informative Response Parameters Registry
-     14.6.  CoAP Transport Information Registry
-     14.7.  Expert Review Instructions
-   15. References
-     15.1.  Normative References
-     15.2.  Informative References
+   13. Operational Considerations
+     13.1.  Logging
+     13.2.  Management and Distribution of Keying Material
+     13.3.  Access Control
+   14. Security Considerations
+     14.1.  Unprotected Communications
+     14.2.  Protected Communications
+   15. IANA Considerations
+     15.1.  Media Type Registrations
+     15.2.  CoAP Content-Formats Registry
+     15.3.  CoAP Option Numbers Registry
+     15.4.  Target Attributes Registry
+     15.5.  Informative Response Parameters Registry
+     15.6.  CoAP Transport Information Registry
+     15.7.  Expert Review Instructions
+   16. References
+     16.1.  Normative References
+     16.2.  Informative References
    Appendix A.  Different Sources for Group Observation Data
      A.1.  Topic Discovery in Publish-Subscribe Settings
      A.2.  Introspection at the Multicast Notification Sender
@@ -428,7 +432,7 @@ Table of Contents
 
 4.2.  Informative Response
 
-   After having started a group observation on a target resource, the
+   After having started a group observation for a target resource, the
    server proceeds as follows.
 
    For each traditional observation ongoing on the target resource, the
@@ -448,7 +452,7 @@ Table of Contents
 
    The Content-Format of the informative response is set to
    "application/informative-response+cbor", which is registered in
-   Section 14.2.  The payload of the informative response is a CBOR map,
+   Section 15.2.  The payload of the informative response is a CBOR map,
    whose fields use the CBOR abbreviations that are defined in
    Section 11.
 
@@ -652,7 +656,7 @@ Table of Contents
       Those elements are specified in the 'Transport Information
       Details' column of the "CoAP Transport Information" registry for
       the entry associated with the identified CoAP transport (see
-      Section 14.6)
+      Section 15.6)
 
    *  The 'tpi_details' element MAY be present and specifies transport-
       specific information related to a pertinent request message, i.e.,
@@ -663,7 +667,7 @@ Table of Contents
       'tpi_server' element, as described above.
 
       In the "CoAP Transport Information" registry defined in
-      Section 14.6, the entry corresponding to the identified CoAP
+      Section 15.6, the entry corresponding to the identified CoAP
       transport specifies the list of elements composing 'tpi_details'
       for that transport, as indicated in the 'Transport Information
       Details' column.  Within 'tpi_details', its elements MUST be
@@ -686,7 +690,7 @@ Table of Contents
       convey, their encoding, and their semantics.
 
    *  Register an entry in the "CoAP Transport Information" registry
-      defined in Section 14.6 of this document.
+      defined in Section 15.6 of this document.
 
    *  Register an entry in the "Uniform Resource Identifier (URI)
       Schemes" registry [IANA.URI.Schemes] defined in [RFC7595] and
@@ -991,7 +995,7 @@ Table of Contents
    i.e., the information conveyed by 'tpi_details', according to what is
    specified in the 'Transport Information Details' column of the "CoAP
    Transport Information" registry for the entry associated with the
-   identified CoAP transport (see Section 14.6).
+   identified CoAP transport (see Section 15.6).
 
    Then, the client performs the following steps.
 
@@ -2156,7 +2160,7 @@ Table of Contents
    parameter of the informative response defined in Section 4.2, when
    CoAP responses are transported over UDP.
 
-   Table 3 defines the corresponding entry that Section 14.6 registers
+   Table 3 defines the corresponding entry that Section 15.6 registers
    in the "CoAP Transport Information" registry defined in this
    document.
 
@@ -2172,14 +2176,182 @@ Table of Contents
    Note to RFC Editor: In the table above, please replace "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
-13.  Security Considerations
+13.  Operational Considerations
+
+   This section compiles the operational considerations that hold for
+   this document.
+
+13.1.  Logging
+
+   When performing its normal operations, it is desirable that the
+   server produces timestamped logs about the following, to the extent
+   afforded by its available memory, computing, and energy resources:
+
+   *  The start of a group observation, as corresponding to the issue
+      and local processing of a phantom observation request (see
+      Section 4.1).
+
+   *  The release and retraction of group observation data as available
+      through different means (see Appendix A).
+
+   *  The addition of a new client as a participant in a group
+      observation, with the consequent sending of an informative
+      response (see Section 4.2).
+
+   *  The execution of a procedure to (roughly) assess the number of
+      clients that are still participating in a group observation,
+      together with the settings and the outcome of such procedure
+      (e.g., see Section 8).
+
+   *  The evolution of the (rough) number of clients participating in a
+      group observation throughout its duration.
+
+   *  The termination of a group observation (see Section 4.5).
+
+   A group observation can be effectively characterized by the target
+   resource, the phantom registration request, and the transport-
+   specific information according to which multicast notifications are
+   sent for that group observation.
+
+   Although log entries are produced by the server, the storage,
+   management, controlled sharing, and disposal of logs are entrusted to
+   a designated storage point that can be the server itself or instead a
+   separate trusted entity.
+
+   Besides what is compiled above, the server could produce additional
+   information to log.  Further details about what the server logs, with
+   what granularity, and based on what triggering events and conditions
+   are application-specific and left to operators to define.
+
+   The server MUST NOT log any secret or confidential information
+   pertaining to a group observation.  For example, if Group OSCORE is
+   used to protect multicast notifications (see Section 9), such
+   information includes:
+
+   *  The OSCORE Master Secret used in the OSCORE group.
+
+   *  The symmetric keying material derived from the OSCORE Master
+      Secret and used in the OSCORE group, i.e., the Sender/Recipient
+      Keys.
+
+   *  The Signature Encryption Key used in the OSCORE group.
+
+   *  The private key associated with the server's authentication
+      credential used in the group.
+
+   *  Rekeying messages that are exchanged in the group.
+
+   *  If applicable, administrative keying material used to protect the
+      group rekeying process.
+
+   It is up to the application to specify for how long a log entry is
+   retained from the time of its creation and until its deletion.
+   Different retention policies could be enforced for different group
+   observations.  For a given group observation, the oldest log entries
+   are expected to be those deleted first, and different retention
+   policies could be enforced depending on whether the group observation
+   is currently ongoing or has been terminated.
+
+   It is out of the scope of this document what specific semantics and
+   data model are used by the server for producing and processing the
+   logs.  Specific semantics and data models can be defined by
+   applications and future specifications.
+
+   It is expected that the logs produced are made available for secure
+   access by authorized external management applications and operators.
+
+   In particular, logged information could be retrieved in the following
+   ways.
+
+   *  By accessing logs at the designated storage point through polling.
+      This can occur in an occasional, regular, or event-driven way.
+
+   *  Through notifications sent by the designated storage point
+      according to an operator-defined frequency.
+
+   *  Through notifications asynchronously sent by the designated
+      storage point, throttling them in order to prevent congestion and
+      duplication and to not create attack vectors.
+
+   From the perspective of an individual management application or
+   network operator, knowledge gained from the logged information can be
+   useful for planning, adjusting, and (fine-)tuning the allocation of
+   network resources.  Also, it can help understand how to
+   (re-)configure the server in terms of which pre-conditions have to be
+   met for starting a group observation for a target resource.
+
+   Some of the logged information can be privacy-sensitive.  This
+   especially holds for the metadata about a client, i.e., addressing
+   information of the client and, when applicable, (an identifier of)
+   the client's authentication credential that is used to authenticate
+   with the server when using secure communication.  If external
+   management applications and operators obtain such metadata, they
+   become able to track a given client, as to its interactions with one
+   or multiple servers and its participation in group observations under
+   such servers.
+
+   Therefore, the logged information that is effectively provided to
+   external management applications and operators SHOULD be redacted by
+   the designated storage point, by omitting any privacy-sensitive
+   information element that could enable or facilitate the impairment of
+   clients' privacy, e.g., by tracking clients across different group
+   observations and different servers.  Exceptions could apply, e.g., if
+   the designated storage point can verify that the management
+   application or operator in question is specifically authorized to
+   obtain such privacy-sensitive information and appropriately entitled
+   to obtain it according to enforced privacy policies.
+
+13.2.  Management and Distribution of Keying Material
+
+   When using Group OSCORE to protect multicast notifications, the
+   management and distribution of the keying material used in the OSCORE
+   group is entrusted to the Group Manager that is responsible for the
+   group.
+
+   A possible realization of Group Manager is the one defined
+   [I-D.ietf-ace-key-groupcomm-oscore].  In such case, the server can
+   optionally help clients, by including in the informative response
+   additional information for joining the group through the responsible
+   Group Manager (see Section 9.1).
+
+   Appendix C describes how, in simple settings, the server can be
+   responsible to set up and manage the OSCORE group, acting as the
+   corresponding Group Manager.
+
+13.3.  Access Control
+
+   In order to enforce access control for a client accessing a target
+   resource, it is fundamentally required that secure communication is
+   used between the client and the server hosting the resource, with the
+   server authenticating the client.
+
+   This particularly applies to traditional observation requests that
+   are sent protected to the server and result in a protected response
+   like the informative response.
+
+   When receiving such a protected request, the server can enforce
+   access control after having successfully authenticated the requesting
+   client, according to the access rights that are granted to the
+   client's identity.
+
+   In particular, access control can be enforced by using the ACE
+   framework [RFC9200], with a granularity that takes into account the
+   resource specifically targeted at the server, the operation requested
+   by sending a request to that resource, and the specific permission(s)
+   that the requesting client is authorized to have according to its
+   corresponding access token.  Furthermore, the interactions between a
+   client and the server are secured as per the specific transport
+   profile of ACE used, such as [RFC9203] and
+   [I-D.ietf-ace-group-oscore-profile].
+
+14.  Security Considerations
 
    In addition to the security considerations from [RFC7252], [RFC7641],
    [I-D.ietf-core-groupcomm-bis], [RFC8613], and
    [I-D.ietf-core-oscore-groupcomm], the following considerations hold
    for this document.
 
-13.1.  Unprotected Communications
+14.1.  Unprotected Communications
 
    If communications are not protected, the server might not be able to
    effectively authenticate a new client when it registers as an
@@ -2211,7 +2383,7 @@ Table of Contents
    of still interested clients and thus to inappropriately continue the
    group observation.
 
-13.2.  Protected Communications
+14.2.  Protected Communications
 
    If multicast notifications for an observed resource are protected
    using Group OSCORE (see Section 9), it is ensured that those are
@@ -2233,14 +2405,14 @@ Table of Contents
       Option to support the rough counting of clients (see Section 8),
       is also protected.
 
-14.  IANA Considerations
+15.  IANA Considerations
 
    This document has the following actions for IANA.
 
    Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
-14.1.  Media Type Registrations
+15.1.  Media Type Registrations
 
    This document registers the media type "application/informative-
    response+cbor" for error messages as informative response defined in
@@ -2258,7 +2430,7 @@ Table of Contents
    *  Encoding considerations: Must be encoded as a CBOR map containing
       the parameters defined in Section 4.2 of [RFC-XXXX].
 
-   *  Security considerations: See Section 13 of [RFC-XXXX].
+   *  Security considerations: See Section 14 of [RFC-XXXX].
 
    *  Interoperability considerations: N/A
 
@@ -2284,7 +2456,7 @@ Table of Contents
 
    *  Provisional registration: No
 
-14.2.  CoAP Content-Formats Registry
+15.2.  CoAP Content-Formats Registry
 
    IANA is asked to add the following entry to the "CoAP Content-
    Formats" registry [IANA.CoAP.Content.Formats] within the "Constrained
@@ -2298,7 +2470,7 @@ Table of Contents
 
    Reference: [RFC-XXXX]
 
-14.3.  CoAP Option Numbers Registry
+15.3.  CoAP Option Numbers Registry
 
    IANA is asked to enter the following option number to the "CoAP
    Option Numbers" registry [IANA.CoAP.Option.Numbers] within the
@@ -2320,7 +2492,7 @@ Table of Contents
    registered option number.  Then, please delete this paragraph and the
    previous paragraph.
 
-14.4.  Target Attributes Registry
+15.4.  Target Attributes Registry
 
    IANA is asked to register the following entry in the "Target
    Attributes" registry [IANA.Target.Attributes] within the "Constrained
@@ -2335,7 +2507,7 @@ Table of Contents
 
    *  Reference: Section 6 of [RFC-XXXX]
 
-14.5.  Informative Response Parameters Registry
+15.5.  Informative Response Parameters Registry
 
    This document establishes the "Informative Response Parameters"
    registry within the "Constrained RESTful Environments (CoRE)
@@ -2344,7 +2516,7 @@ Table of Contents
    The registration policy is either "Private Use", "Standards Action
    with Expert Review", or "Specification Required" or "Expert Review"
    per [RFC8126].  "Expert Review" guidelines are provided in
-   Section 14.7.
+   Section 15.7.
 
    All assignments according to "Standards Action with Expert Review"
    are made on a "Standards Action" basis per Section 4.9 of [RFC8126]
@@ -2383,14 +2555,14 @@ Table of Contents
 
    This registry has been initially populated by the entries in Table 2.
 
-14.6.  CoAP Transport Information Registry
+15.6.  CoAP Transport Information Registry
 
    This document establishes the "CoAP Transport Information" registry
    within the "Constrained RESTful Environments (CoRE) Parameters"
    registry group.
 
    The registration policy is "Expert Review" [RFC8126].  "Expert
-   Review" guidelines are provided in Section 14.7.
+   Review" guidelines are provided in Section 15.7.
 
    The columns of this registry are:
 
@@ -2410,7 +2582,7 @@ Table of Contents
 
    This registry has been initially populated by the entry in Table 3.
 
-14.7.  Expert Review Instructions
+15.7.  Expert Review Instructions
 
    "Standards Action with Expert Review", "Specification Required", and
    "Expert Review" are three of the registration policies defined for
@@ -2446,9 +2618,9 @@ Table of Contents
       used on, and the number of code points left that encode to that
       size.
 
-15.  References
+16.  References
 
-15.1.  Normative References
+16.1.  Normative References
 
    [I-D.ietf-ace-key-groupcomm-oscore]
               Tiloca, M. and F. Palombini, "Key Management for Group
@@ -2607,7 +2779,17 @@ Table of Contents
               DOI 10.17487/RFC9203, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9203>.
 
-15.2.  Informative References
+16.2.  Informative References
+
+   [I-D.ietf-ace-group-oscore-profile]
+              Tiloca, M., Höglund, R., and F. Palombini, "The Group
+              Object Security for Constrained RESTful Environments
+              (Group OSCORE) Profile of the Authentication and
+              Authorization for Constrained Environments (ACE)
+              Framework", Work in Progress, Internet-Draft, draft-ietf-
+              ace-group-oscore-profile-06, 2 March 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
+              group-oscore-profile-06>.
 
    [I-D.ietf-core-cacheable-oscore]
               Amsüss, C. and M. Tiloca, "End-to-End Protected and
@@ -2623,9 +2805,9 @@ Table of Contents
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
               subscribe architecture for the Constrained Application
               Protocol (CoAP)", Work in Progress, Internet-Draft, draft-
-              ietf-core-coap-pubsub-20, 3 June 2026,
+              ietf-core-coap-pubsub-21, 2 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              coap-pubsub-20>.
+              coap-pubsub-21>.
 
    [I-D.ietf-core-coral]
               Amsüss, C. and T. Fossati, "The Constrained RESTful
@@ -3372,6 +3554,8 @@ E.1.  Version -14 to -15
       -  Payload of the informative response.
 
       -  'tp_info_coap_udp'.
+
+   *  Added Operational Considerations.
 
    *  Update references.
 
