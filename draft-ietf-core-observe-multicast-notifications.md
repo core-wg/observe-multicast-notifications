@@ -1436,7 +1436,7 @@ Response:
                tp_info_client <coap://[ff35:30:2001:db8::123]>,
                tp_info_token "7b"^^xsd::hexBinary,
                ph_req "0160.."^^xsd::hexBinary,
-               last_notif "256105.."^^xsd::hexBinary,
+               last_notif "456105.."^^xsd::hexBinary,
                ending "2051251201"^^xsd::unsignedLong,
            ]
     ]
@@ -1778,7 +1778,7 @@ Therefore, the following holds when a group observation for a target resource re
 
   * The 5.03 termination response is a reply to the phantom request.
 
-* Fixed examples in CBOR diagnostic notation.
+* Fixed examples in CBOR diagnostic notation and of discovery in a pub-sub scenario.
 
 * Fixes in the example of message exchange with Group OSCORE:
 
