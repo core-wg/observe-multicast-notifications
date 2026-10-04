@@ -511,7 +511,7 @@ In order to not cause congestion, the server ought to conservatively control the
 
 At a certain point in time, the server might want to cancel a group observation of a target resource. For instance, the server realizes that no clients or not enough clients are interested in taking part in the group observation anymore. {{sec-rough-counting}} defines a possible approach that the server can use to make an assessment in this respect. Another reason is that the group observation has reached its ending time, as originally scheduled by the server.
 
-In order to cancel the group observation, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated. The response has the same Token value T of the phantom registration request, it has no payload, and it does not include an Observe Option.
+In order to cancel the group observation, the server sends a multicast response with response code 5.03 (Service Unavailable), signaling that the group observation has been terminated. The response is effectively a reply to the phantom registration request, hence it has the same Token value T of the phantom registration request. The response has no payload and does not include an Observe Option.
 
 The server sends the response to the same multicast IP address GRP_ADDR and port number GRP_PORT used to send the multicast notifications related to the target resource. Finally, the server releases the memory and network resources allocated for the group observation, and it especially frees up the Token value T used at its CoAP endpoint.
 
@@ -1763,6 +1763,10 @@ Therefore, the following holds when a group observation for a target resource re
 ## Version -15 to -16 ## {#sec-15-16}
 
 * Defined cri'X' as custom notation.
+
+* Clarifications:
+
+  * The 5.03 termination response is a reply to the phantom request.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
