@@ -1816,17 +1816,17 @@ CRI-no-local = [
 <figure id="figure-4">
               <div class="lang-cbor-diag sourcecode" id="section-4.2.1.1-7.1">
 <pre>
-[ / tp_info /
-  [ / tpi_server /
-    -1,        / scheme-id -- equivalent to "coap" /
-    h'20010db80000000000000000000000ab'  / host-ip /
-  ],
-  [ / tpi_client /
-    -1,        / scheme-id -- equivalent to "coap" /
-    h'ff35003020010db80000000000000023', / host-ip /
-    61616                                   / port /
-  ],
-  h'7b'                                / tpi_token /
+[/ tp_info /
+ [/ tpi_server /
+  -1,         / scheme-id -- equivalent to "coap" /
+  [h'20010db80000000000000000000000ab'  / host-ip /]
+ ],
+ [/ tpi_client /
+  -1,         / scheme-id -- equivalent to "coap" /
+  [h'ff35003020010db80000000000000023', / host-ip /
+   61616                                   / port /]
+ ],
+ h'7b'                                / tpi_token /
 ]
 </pre>
 </div>
@@ -3995,17 +3995,17 @@ Content-Format: application/informative-response+cbor
 
 {
   / tp_info /    0 : [
-                      [ / tpi_server /
-                       -1, / scheme-id -- equivalent to "coap" /
-                        h'20010db80000000000000000000000ab' / host-ip /
-                      ],
-                      [ / tpi_client /
-                       -1, / scheme-id -- equivalent to "coap" /
-                       h'ff35003020010db80000000000000023', / host-ip /
-                       61616 / port /
-                      ],
-                      h'7b' / tpi_token /
-                     ],
+    [/ tpi_server /
+     -1,         / scheme-id -- equivalent to "coap" /
+     [h'20010db80000000000000000000000ab'  / host-ip /]
+    ],
+    [/ tpi_client /
+     -1,          / scheme-id -- equivalent to "coap" /
+     [h'ff35003020010db80000000000000023',  / host-ip /
+      61616                                    / port /]
+    ],
+    h'7b' / tpi_token /
+  ],
   / ph_req /     1 : h'0160...528c', / elided for brevity /
   / last_notif / 2 : h'256105...4fa1', / elided for brevity /
   / ending /     4 : 2051251201
@@ -4376,10 +4376,13 @@ The server <span class="bcp14">MAY</span> use the same self-managed OSCORE group
             </ul>
 </li>
           <li class="normal" id="appendix-E.1-1.4">
-            <p id="appendix-E.1-1.4.1">Fixes in the example of message exchange with Group OSCORE:<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-E.1-1.4.1">Fixed examples in CBOR diagnostic notation.<a href="#appendix-E.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-E.1-1.5">
+            <p id="appendix-E.1-1.5.1">Fixes in the example of message exchange with Group OSCORE:<a href="#appendix-E.1-1.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-E.1-1.4.2.1">
-                <p id="appendix-E.1-1.4.2.1.1">Integer abbreviations of 'join_uri' and 'sec_gp'.<a href="#appendix-E.1-1.4.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-E.1-1.5.2.1">
+                <p id="appendix-E.1-1.5.2.1.1">Integer abbreviations of 'join_uri' and 'sec_gp'.<a href="#appendix-E.1-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>

@@ -775,17 +775,17 @@ Table of Contents
    is transported over UDP), GRP_ADDR is ff35:30:2001:db8::23, and
    GRP_PORT is 61616.
 
-   [ / tp_info /
-     [ / tpi_server /
-       -1,        / scheme-id -- equivalent to "coap" /
-       h'20010db80000000000000000000000ab'  / host-ip /
-     ],
-     [ / tpi_client /
-       -1,        / scheme-id -- equivalent to "coap" /
-       h'ff35003020010db80000000000000023', / host-ip /
-       61616                                   / port /
-     ],
-     h'7b'                                / tpi_token /
+   [/ tp_info /
+    [/ tpi_server /
+     -1,         / scheme-id -- equivalent to "coap" /
+     [h'20010db80000000000000000000000ab'  / host-ip /]
+    ],
+    [/ tpi_client /
+     -1,         / scheme-id -- equivalent to "coap" /
+     [h'ff35003020010db80000000000000023', / host-ip /
+      61616                                   / port /]
+    ],
+    h'7b'                                / tpi_token /
    ]
 
        Figure 4: Example of 'tp_info' with UDP as Transport Protocol
@@ -3002,34 +3002,34 @@ A.2.  Introspection at the Multicast Notification Sender
    already known Token value of intercepted multicast notifications
    associated with a phantom registration request.
 
- Request:
+   Request:
 
- GET </.well-known/core/mc-sender?token=6464>
+   GET </.well-known/core/mc-sender?token=6464>
 
- Response:
+   Response:
 
- 2.05 Content
- Content-Format: application/informative-response+cbor
+   2.05 Content
+   Content-Format: application/informative-response+cbor
 
- {
-   / tp_info /    0 : [
-                       [ / tpi_server /
-                        -1, / scheme-id -- equivalent to "coap" /
-                         h'20010db80000000000000000000000ab' / host-ip /
-                       ],
-                       [ / tpi_client /
-                        -1, / scheme-id -- equivalent to "coap" /
-                        h'ff35003020010db80000000000000023', / host-ip /
-                        61616 / port /
-                       ],
-                       h'7b' / tpi_token /
-                      ],
-   / ph_req /     1 : h'0160...528c', / elided for brevity /
-   / last_notif / 2 : h'256105...4fa1', / elided for brevity /
-   / ending /     4 : 2051251201
- }
+   {
+     / tp_info /    0 : [
+       [/ tpi_server /
+        -1,         / scheme-id -- equivalent to "coap" /
+        [h'20010db80000000000000000000000ab'  / host-ip /]
+       ],
+       [/ tpi_client /
+        -1,          / scheme-id -- equivalent to "coap" /
+        [h'ff35003020010db80000000000000023',  / host-ip /
+         61616                                    / port /]
+       ],
+       h'7b' / tpi_token /
+     ],
+     / ph_req /     1 : h'0160...528c', / elided for brevity /
+     / last_notif / 2 : h'256105...4fa1', / elided for brevity /
+     / ending /     4 : 2051251201
+   }
 
-    Figure 9: Group Observation Discovery with Server Introspection
+      Figure 9: Group Observation Discovery with Server Introspection
 
    For example, a network sniffer could offer sending such a request
    when unknown multicast notifications are seen in the network.
@@ -3550,6 +3550,8 @@ E.1.  Version -15 to -16
 
       -  The 5.03 termination response is a reply to the phantom
          request.
+
+   *  Fixed examples in CBOR diagnostic notation.
 
    *  Fixes in the example of message exchange with Group OSCORE:
 
