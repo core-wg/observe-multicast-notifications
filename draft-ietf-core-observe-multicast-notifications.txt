@@ -142,21 +142,22 @@ Table of Contents
    Appendix C.  OSCORE Group Self-Managed by the Server
    Appendix D.  Phantom Request as Deterministic Request
    Appendix E.  Document Updates
-     E.1.  Version -14 to -15
-     E.2.  Version -13 to -14
-     E.3.  Version -12 to -13
-     E.4.  Version -11 to -12
-     E.5.  Version -10 to -11
-     E.6.  Version -09 to -10
-     E.7.  Version -08 to -09
-     E.8.  Version -07 to -08
-     E.9.  Version -06 to -07
-     E.10. Version -05 to -06
-     E.11. Version -04 to -05
-     E.12. Version -03 to -04
-     E.13. Version -02 to -03
-     E.14. Version -01 to -02
-     E.15. Version -00 to -01
+     E.1.  Version -15 to -16
+     E.2.  Version -14 to -15
+     E.3.  Version -13 to -14
+     E.4.  Version -12 to -13
+     E.5.  Version -11 to -12
+     E.6.  Version -10 to -11
+     E.7.  Version -09 to -10
+     E.8.  Version -08 to -09
+     E.9.  Version -07 to -08
+     E.10. Version -06 to -07
+     E.11. Version -05 to -06
+     E.12. Version -04 to -05
+     E.13. Version -03 to -04
+     E.14. Version -02 to -03
+     E.15. Version -01 to -02
+     E.16. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -1186,19 +1187,19 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Section 3.6
-      of [I-D.ietf-cbor-edn-literals] is used to notate a Concise
-      Diagnostic Notation (CDN) literal for a CRI.
+   *  cri'X' denotes a CRI corresponding to the URI X, i.e., a CRI that
+      can be converted to the URI X using the procedure defined in
+      Section 6.1 of [I-D.ietf-core-href].
 
-   *  'bstr(X)' denotes a CBOR byte string with value the byte
+   *  bstr(X) denotes a CBOR byte string with value the byte
       serialization of X, with '|' denoting byte concatenation.
 
-   *  'OPT' denotes a sequence of CoAP options.  This refers to the
+   *  OPT denotes a sequence of CoAP options.  This refers to the
       phantom registration request specified by the 'ph_req' parameter,
       or to the corresponding latest multicast notification specified by
       the 'last_notif' parameter.
 
-   *  'PAYLOAD' denotes a CoAP payload.  This refers to the latest
+   *  PAYLOAD denotes a CoAP payload.  This refers to the latest
       multicast notification specified by the 'last_notif' parameter.
 
    C1 --------------------- [ Unicast ] ------------------------> S  /r
@@ -1903,24 +1904,24 @@ Table of Contents
    The following notation is used for the payload of the informative
    responses:
 
-   *  The application-extension identifier "cri" defined in Section 3.6
-      of [I-D.ietf-cbor-edn-literals] is used to notate a Concise
-      Diagnostic Notation (CDN) literal for a CRI.
+   *  cri'X' denotes a CRI corresponding to the URI X, i.e., a CRI that
+      can be converted to the URI X using the procedure defined in
+      Section 6.1 of [I-D.ietf-core-href].
 
-   *  'bstr(X)' denotes a CBOR byte string with value the byte
+   *  bstr(X) denotes a CBOR byte string with value the byte
       serialization of X, with '|' denoting byte concatenation.
 
-   *  'OPT' denotes a sequence of CoAP options.  This refers to the
+   *  OPT denotes a sequence of CoAP options.  This refers to the
       phantom registration request specified by the 'ph_req' parameter,
       or to the corresponding latest multicast notification specified by
       the 'last_notif' parameter.
 
-   *  'PAYLOAD' denotes an encrypted CoAP payload.  This refers to the
+   *  PAYLOAD denotes an encrypted CoAP payload.  This refers to the
       phantom registration request specified by the 'ph_req' parameter,
       or to the corresponding latest multicast notification specified by
       the 'last_notif' parameter.
 
-   *  'SIGN' denotes the countersignature appended to an encrypted CoAP
+   *  SIGN denotes the countersignature appended to an encrypted CoAP
       payload.  This refers to the phantom registration request
       specified by the 'ph_req' parameter, or to the corresponding
       latest multicast notification specified by the 'last_notif'
@@ -2630,12 +2631,6 @@ Table of Contents
               Internet-Draft, draft-ietf-ace-key-groupcomm-oscore-21, 14
               March 2026, <https://datatracker.ietf.org/doc/html/draft-
               ietf-ace-key-groupcomm-oscore-21>.
-
-   [I-D.ietf-cbor-edn-literals]
-              Bormann, C., "Concise Diagnostic Notation (CDN)", Work in
-              Progress, Internet-Draft, draft-ietf-cbor-edn-literals-28,
-              29 September 2026, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-cbor-edn-literals-28>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
@@ -3526,7 +3521,11 @@ Appendix E.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-E.1.  Version -14 to -15
+E.1.  Version -15 to -16
+
+   *  Defined cri'X' as custom notation.
+
+E.2.  Version -14 to -15
 
    *  Updated semantics of informative response:
 
@@ -3560,7 +3559,7 @@ E.1.  Version -14 to -15
 
    *  Clarifications and editorial improvements.
 
-E.2.  Version -13 to -14
+E.3.  Version -13 to -14
 
    *  Clarified expected roles in the OSCORE group for clients and
       server.
@@ -3582,7 +3581,7 @@ E.2.  Version -13 to -14
 
    *  Clarifications and editorial improvements.
 
-E.3.  Version -12 to -13
+E.4.  Version -12 to -13
 
    *  Content on proxies moved out to the new document draft-ietf-core-
       multicast-notifications-proxy.
@@ -3602,7 +3601,7 @@ E.3.  Version -12 to -13
 
    *  Editorial improvements.
 
-E.4.  Version -11 to -12
+E.5.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
@@ -3616,7 +3615,7 @@ E.4.  Version -11 to -12
 
    *  Editorial improvements.
 
-E.5.  Version -10 to -11
+E.6.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
 
@@ -3631,7 +3630,7 @@ E.5.  Version -10 to -11
 
    *  Clarifications and editorial improvements.
 
-E.6.  Version -09 to -10
+E.7.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -3639,7 +3638,7 @@ E.6.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-E.7.  Version -08 to -09
+E.8.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -3652,7 +3651,7 @@ E.7.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-E.8.  Version -07 to -08
+E.9.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -3680,7 +3679,7 @@ E.8.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-E.9.  Version -06 to -07
+E.10.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -3698,7 +3697,7 @@ E.9.  Version -06 to -07
 
    *  Editorial improvements.
 
-E.10.  Version -05 to -06
+E.11.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -3706,7 +3705,7 @@ E.10.  Version -05 to -06
 
    *  Editorial improvements.
 
-E.11.  Version -04 to -05
+E.12.  Version -04 to -05
 
    *  If the phantom request is an OSCORE Deterministic Request, there
       is no parallel group observation for clients that lack support.
@@ -3721,7 +3720,7 @@ E.11.  Version -04 to -05
 
    *  Editorial improvements.
 
-E.12.  Version -03 to -04
+E.13.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -3738,7 +3737,7 @@ E.12.  Version -03 to -04
 
    *  Editorial improvements.
 
-E.13.  Version -02 to -03
+E.14.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -3748,7 +3747,7 @@ E.13.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-E.14.  Version -01 to -02
+E.15.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -3766,7 +3765,7 @@ E.14.  Version -01 to -02
 
    *  Editorial improvements.
 
-E.15.  Version -00 to -01
+E.16.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
