@@ -111,6 +111,7 @@ Table of Contents
      9.3.  Client-Side Requirements
        9.3.1.  Informative Response
        9.3.2.  Notifications
+       9.3.3.  Cancellation
    10. Example with Group OSCORE
    11. Informative Response Parameters
    12. Transport Protocol Information
@@ -1781,6 +1782,11 @@ Table of Contents
    Sequence Number as Partial IV to protect the error response and MUST
    include the Partial IV in the OSCORE Option value of the response.
 
+   Upon leaving or before re-joining an OSCORE group, the server MUST
+   cancel all the ongoing group observations on its resources such that
+   the related phantom observation requests were protected for that
+   group.
+
 9.3.  Client-Side Requirements
 
    When using Group OSCORE to protect multicast notifications, the
@@ -1870,6 +1876,16 @@ Table of Contents
    Note that these same values are used to decrypt and verify each and
    every multicast notification received for the target resource under
    this group observation.
+
+9.3.3.  Cancellation
+
+   Upon leaving or before re-joining an OSCORE group, the client MUST
+   terminate all the ongoing group observations that it is participating
+   in and such that the related phantom observation requests were
+   protected for that group.
+
+   In particular, the client simply "forgets" about being part of those
+   group observations, as per Section 3.6 of [RFC7641].
 
 10.  Example with Group OSCORE
 
@@ -3526,6 +3542,9 @@ Appendix E.  Document Updates
 E.1.  Version -15 to -16
 
    *  Defined cri'X' as custom notation.
+
+   *  If Group OSCORE is used, group observations are canceled when
+      leaving or re-joining an OSCORE group.
 
    *  Clarifications:
 
