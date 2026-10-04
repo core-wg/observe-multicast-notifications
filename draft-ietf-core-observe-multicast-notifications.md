@@ -1025,6 +1025,26 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |                                                              |
 |                      ( S creates a group observation of /r ) |
 |                                                              |
+|                           ( S prepares the initial multicast |
+|                              notification INIT_NOTIF below ) |
+|                                                              |
+|                        2.05 Content                          |
+|                        Token: 0x7b                           |
+|                        Observe: 0                            |
+|                        OSCORE: [kid:0x05, Partial IV:0x01f6] |
+|                        Max-Age: 0                            |
+|                        <Other class U/I options>             |
+|                        0xff                                  |
+|                        Encrypted_payload {                   |
+|                          0x45 (2.05 Content),                |
+|                          Observe: - (empty),                 |
+|                          Payload: "1234"                     |
+|                        }                                     |
+|                        <Countersignature>                    |
+|                                                              |
+|                           ( S steps SN_5 in the Group OSCORE |
+|                             Security Context: SN_5 <-- 503 ) |
+|                                                              |
 |                          ( S increments the observer counter |
 |                            for the group observation of /r ) |
 |                                                              |
@@ -1108,8 +1128,8 @@ C2 |       (Destination address/port: GRP_ADDR/GRP_PORT)       |
 +--+                                                           |
 |    2.05 (Content)                                            |
 |    Token: 0x7b                                               |
-|    Observe: 2                                                |
-|    OSCORE: [kid:0x05, Partial IV:0x01f6]                     |
+|    Observe: 1                                                |
+|    OSCORE: [kid:0x05, Partial IV:0x01f7]                     |
 |    Max-Age: 0                                                |
 |    <Other class U/I options>                                 |
 |    0xff                                                      |
@@ -1785,6 +1805,8 @@ Therefore, the following holds when a group observation for a target resource re
   * Integer abbreviations of 'join_uri' and 'sec_gp'.
 
   * Outer response code of the informative responses.
+
+  * The server consumes a Partial IV when producing INIT_NOTIF.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
