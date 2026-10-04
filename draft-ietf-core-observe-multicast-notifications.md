@@ -1029,7 +1029,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |                            for the group observation of /r ) |
 |                                                              |
 C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
-|  2.05 (Content)                                              |
+|  2.04 (Changed)                                              |
 |  Token: 0x4a                                                 |
 |  OSCORE: - (empty)                                           |
 |  Max-Age: 0                                                  |
@@ -1073,7 +1073,7 @@ C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |                            for the group observation of /r ) |
 |                                                              |
 C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
-|  2.05 (Content)                                              |
+|  2.04 (Changed)                                              |
 |  Token: 0x01                                                 |
 |  OSCORE: - (empty)                                           |
 |  Max-Age: 0                                                  |
@@ -1783,6 +1783,8 @@ Therefore, the following holds when a group observation for a target resource re
 * Fixes in the example of message exchange with Group OSCORE:
 
   * Integer abbreviations of 'join_uri' and 'sec_gp'.
+
+  * Outer response code of the informative responses.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
