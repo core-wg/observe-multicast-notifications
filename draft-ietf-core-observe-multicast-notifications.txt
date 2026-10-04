@@ -923,8 +923,9 @@ Table of Contents
    In order to cancel the group observation, the server sends a
    multicast response with response code 5.03 (Service Unavailable),
    signaling that the group observation has been terminated.  The
-   response has the same Token value T of the phantom registration
-   request, it has no payload, and it does not include an Observe
+   response is effectively a reply to the phantom registration request,
+   hence it has the same Token value T of the phantom registration
+   request.  The response has no payload and does not include an Observe
    Option.
 
    The server sends the response to the same multicast IP address
@@ -3524,6 +3525,11 @@ Appendix E.  Document Updates
 E.1.  Version -15 to -16
 
    *  Defined cri'X' as custom notation.
+
+   *  Clarifications:
+
+      -  The 5.03 termination response is a reply to the phantom
+         request.
 
 E.2.  Version -14 to -15
 
