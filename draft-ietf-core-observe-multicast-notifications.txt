@@ -1991,7 +1991,7 @@ Table of Contents
    |                            for the group observation of /r ) |
    |                                                              |
    C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
-   |  2.05 (Content)                                              |
+   |  2.04 (Changed)                                              |
    |  Token: 0x4a                                                 |
    |  OSCORE: - (empty)                                           |
    |  Max-Age: 0                                                  |
@@ -2035,7 +2035,7 @@ Table of Contents
    |                            for the group observation of /r ) |
    |                                                              |
    C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
-   |  2.05 (Content)                                              |
+   |  2.04 (Changed)                                              |
    |  Token: 0x01                                                 |
    |  OSCORE: - (empty)                                           |
    |  Max-Age: 0                                                  |
@@ -3556,6 +3556,8 @@ E.1.  Version -15 to -16
    *  Fixes in the example of message exchange with Group OSCORE:
 
       -  Integer abbreviations of 'join_uri' and 'sec_gp'.
+
+      -  Outer response code of the informative responses.
 
 E.2.  Version -14 to -15
 
