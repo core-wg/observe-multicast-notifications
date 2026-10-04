@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 4 January 2027                                                 
+Expires: 7 April 2027                                                   
                                                             F. Palombini
                                                              Ericsson AB
-                                                             3 July 2026
+                                                          4 October 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2027.
+   This Internet-Draft will expire on 7 April 2027.
 
 Copyright Notice
 
@@ -2633,9 +2633,9 @@ Table of Contents
 
    [I-D.ietf-cbor-edn-literals]
               Bormann, C., "Concise Diagnostic Notation (CDN)", Work in
-              Progress, Internet-Draft, draft-ietf-cbor-edn-literals-26,
-              15 June 2026, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-cbor-edn-literals-26>.
+              Progress, Internet-Draft, draft-ietf-cbor-edn-literals-28,
+              29 September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-cbor-edn-literals-28>.
 
    [I-D.ietf-core-groupcomm-bis]
               Dijk, E. and M. Tiloca, "Group Communication for the
@@ -2787,19 +2787,18 @@ Table of Contents
               (Group OSCORE) Profile of the Authentication and
               Authorization for Constrained Environments (ACE)
               Framework", Work in Progress, Internet-Draft, draft-ietf-
-              ace-group-oscore-profile-06, 2 March 2026,
+              ace-group-oscore-profile-07, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              group-oscore-profile-06>.
+              group-oscore-profile-07>.
 
    [I-D.ietf-core-cacheable-oscore]
               Amsüss, C. and M. Tiloca, "End-to-End Protected and
-              Cacheable Responses for the Constrained Application
-              Protocol (CoAP) using Group Object Security for
+              Cacheable CoAP Responses using Group Object Security for
               Constrained RESTful Environments (Group OSCORE)", Work in
               Progress, Internet-Draft, draft-ietf-core-cacheable-
-              oscore-01, 2 March 2026,
+              oscore-02, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              cacheable-oscore-01>.
+              cacheable-oscore-02>.
 
    [I-D.ietf-core-coap-pubsub]
               Jimenez, J., Koster, M., and A. Keränen, "A publish-
@@ -2820,25 +2819,25 @@ Table of Contents
               Tiloca, M., Höglund, R., Amsüss, C., and F. Palombini,
               "Using Proxies for Observe Notifications as CoAP Multicast
               Responses", Work in Progress, Internet-Draft, draft-ietf-
-              core-multicast-notifications-proxy-01, 22 April 2026,
+              core-multicast-notifications-proxy-02, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              multicast-notifications-proxy-01>.
+              multicast-notifications-proxy-02>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J.,
               Furuhed, M., and L. Liao, "CBOR Encoded X.509 Certificates
               (C509 Certificates)", Work in Progress, Internet-Draft,
-              draft-ietf-cose-cbor-encoded-cert-20, 30 June 2026,
+              draft-ietf-cose-cbor-encoded-cert-21, 24 September 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-cose-
-              cbor-encoded-cert-20>.
+              cbor-encoded-cert-21>.
 
    [I-D.tiloca-core-oscore-discovery]
               Tiloca, M., Amsüss, C., and P. Van der Stok, "Discovery of
               OSCORE Groups with the CoRE Resource Directory", Work in
               Progress, Internet-Draft, draft-tiloca-core-oscore-
-              discovery-19, 2 March 2026,
+              discovery-20, 2 September 2026,
               <https://datatracker.ietf.org/doc/html/draft-tiloca-core-
-              oscore-discovery-19>.
+              oscore-discovery-20>.
 
    [MOBICOM99]
               Ni, S., Tseng, Y., Chen, Y., and J. Sheu, "The Broadcast
@@ -3786,9 +3785,9 @@ E.15.  Version -00 to -01
 Acknowledgments
 
    The authors sincerely thank Carsten Bormann, Klaus Hartke, Jaime
-   Jiménez, Adrian Kastrati, Matthias Kovatsch⁩, John Preuß Mattsson,
-   Jim Schaad, Ludwig Seitz, and Göran Selander for their comments and
-   feedback.
+   Jiménez, Adrian Kastrati, Matthias Kovatsch⁩, Alexander Pelov, John
+   Preuß Mattsson, Jim Schaad, Ludwig Seitz, and Göran Selander for
+   their comments and feedback.
 
    The work on this document has been partly supported by the Sweden's
    Innovation Agency VINNOVA and the Celtic-Next projects CRITISEC and
