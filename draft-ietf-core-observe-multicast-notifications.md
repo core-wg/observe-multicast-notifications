@@ -58,7 +58,6 @@ normative:
   I-D.ietf-core-oscore-groupcomm:
   I-D.ietf-ace-key-groupcomm-oscore:
   I-D.ietf-core-href:
-  I-D.ietf-cbor-edn-literals:
   RFC4944:
   RFC6838:
   RFC7120:
@@ -621,13 +620,13 @@ The server S sends multicast notifications to the IP multicast address GRP_ADDR 
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section 3.6 of I-D.ietf-cbor-edn-literals}} is used to notate a Concise Diagnostic Notation (CDN) literal for a CRI.
+* cri'X' denotes a CRI corresponding to the URI X, i.e., a CRI that can be converted to the URI X using the procedure defined in {{Section 6.1 of I-D.ietf-core-href}}.
 
-* 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
+* bstr(X) denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
-* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
+* OPT denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'PAYLOAD' denotes a CoAP payload. This refers to the latest multicast notification specified by the 'last_notif' parameter.
+* PAYLOAD denotes a CoAP payload. This refers to the latest multicast notification specified by the 'last_notif' parameter.
 
 ~~~~~~~~~~~ aasvg
 C1 --------------------- [ Unicast ] ------------------------> S  /r
@@ -964,15 +963,15 @@ Pairwise communication over unicast is protected with OSCORE, while S protects m
 
 The following notation is used for the payload of the informative responses:
 
-* The application-extension identifier "cri" defined in {{Section 3.6 of I-D.ietf-cbor-edn-literals}} is used to notate a Concise Diagnostic Notation (CDN) literal for a CRI.
+* cri'X' denotes a CRI corresponding to the URI X, i.e., a CRI that can be converted to the URI X using the procedure defined in {{Section 6.1 of I-D.ietf-core-href}}.
 
-* 'bstr(X)' denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
+* bstr(X) denotes a CBOR byte string with value the byte serialization of X, with '\|' denoting byte concatenation.
 
-* 'OPT' denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
+* OPT denotes a sequence of CoAP options. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'PAYLOAD' denotes an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
+* PAYLOAD denotes an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
-* 'SIGN' denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
+* SIGN denotes the countersignature appended to an encrypted CoAP payload. This refers to the phantom registration request specified by the 'ph_req' parameter, or to the corresponding latest multicast notification specified by the 'last_notif' parameter.
 
 ~~~~~~~~~~~ aasvg
 C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
@@ -1760,6 +1759,10 @@ Therefore, the following holds when a group observation for a target resource re
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -15 to -16 ## {#sec-15-16}
+
+* Defined cri'X' as custom notation.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
