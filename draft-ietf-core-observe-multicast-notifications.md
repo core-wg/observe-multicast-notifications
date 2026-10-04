@@ -1050,8 +1050,8 @@ C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |                              PAYLOAD | SIGN),                |
 |      / last_notif / 2 : bstr(0x45 | OPT | 0xff |             |
 |                              PAYLOAD | SIGN),                |
-|      / join_uri /   4 : "coap://myGM/ace-group/myGroup",     |
-|      / sec_gp /     5 : "myGroup"                            |
+|      / join_uri /   5 : "coap://myGM/ace-group/myGroup",     |
+|      / sec_gp /     6 : "myGroup"                            |
 |    }                                                         |
 |  }                                                           |
 |                                                              |
@@ -1094,8 +1094,8 @@ C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |                              PAYLOAD | SIGN),                |
 |      / last_notif / 2 : bstr(0x45 | OPT | 0xff |             |
 |                              PAYLOAD | SIGN),                |
-|      / join_uri /   4 : "coap://myGM/ace-group/myGroup",     |
-|      / sec_gp /     5 : "myGroup"                            |
+|      / join_uri /   5 : "coap://myGM/ace-group/myGroup",     |
+|      / sec_gp /     6 : "myGroup"                            |
 |    }                                                         |
 |  }                                                           |
 |                                                              |
@@ -1777,6 +1777,10 @@ Therefore, the following holds when a group observation for a target resource re
 * Clarifications:
 
   * The 5.03 termination response is a reply to the phantom request.
+
+* Fixes in the example of message exchange with Group OSCORE:
+
+  * Integer abbreviations of 'join_uri' and 'sec_gp'.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
