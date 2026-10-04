@@ -2973,7 +2973,7 @@ A.1.  Topic Discovery in Publish-Subscribe Settings
                   tp_info_client <coap://[ff35:30:2001:db8::123]>,
                   tp_info_token "7b"^^xsd::hexBinary,
                   ph_req "0160.."^^xsd::hexBinary,
-                  last_notif "256105.."^^xsd::hexBinary,
+                  last_notif "456105.."^^xsd::hexBinary,
                   ending "2051251201"^^xsd::unsignedLong,
               ]
        ]
@@ -3551,7 +3551,8 @@ E.1.  Version -15 to -16
       -  The 5.03 termination response is a reply to the phantom
          request.
 
-   *  Fixed examples in CBOR diagnostic notation.
+   *  Fixed examples in CBOR diagnostic notation and of discovery in a
+      pub-sub scenario.
 
    *  Fixes in the example of message exchange with Group OSCORE:
 
