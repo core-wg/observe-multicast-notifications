@@ -440,17 +440,17 @@ The CBOR diagnostic notation in {{tp-info-udp-example}} provides an example of t
 In the example, SRV_ADDR is 2001:db8::ab, SRV_PORT is 5683 (omitted in the CRI of 'tpi_server' as it is the default port number when CoAP is transported over UDP), GRP_ADDR is ff35:30:2001:db8::23, and GRP_PORT is 61616.
 
 ~~~~~~~~~~~ cbor-diag
-[ / tp_info /
-  [ / tpi_server /
-    -1,        / scheme-id -- equivalent to "coap" /
-    h'20010db80000000000000000000000ab'  / host-ip /
-  ],
-  [ / tpi_client /
-    -1,        / scheme-id -- equivalent to "coap" /
-    h'ff35003020010db80000000000000023', / host-ip /
-    61616                                   / port /
-  ],
-  h'7b'                                / tpi_token /
+[/ tp_info /
+ [/ tpi_server /
+  -1,         / scheme-id -- equivalent to "coap" /
+  [h'20010db80000000000000000000000ab'  / host-ip /]
+ ],
+ [/ tpi_client /
+  -1,         / scheme-id -- equivalent to "coap" /
+  [h'ff35003020010db80000000000000023', / host-ip /
+   61616                                   / port /]
+ ],
+ h'7b'                                / tpi_token /
 ]
 ~~~~~~~~~~~
 {: #tp-info-udp-example title="Example of 'tp_info' with UDP as Transport Protocol"}
@@ -1465,17 +1465,17 @@ Content-Format: application/informative-response+cbor
 
 {
   / tp_info /    0 : [
-                      [ / tpi_server /
-                       -1, / scheme-id -- equivalent to "coap" /
-                        h'20010db80000000000000000000000ab' / host-ip /
-                      ],
-                      [ / tpi_client /
-                       -1, / scheme-id -- equivalent to "coap" /
-                       h'ff35003020010db80000000000000023', / host-ip /
-                       61616 / port /
-                      ],
-                      h'7b' / tpi_token /
-                     ],
+    [/ tpi_server /
+     -1,         / scheme-id -- equivalent to "coap" /
+     [h'20010db80000000000000000000000ab'  / host-ip /]
+    ],
+    [/ tpi_client /
+     -1,          / scheme-id -- equivalent to "coap" /
+     [h'ff35003020010db80000000000000023',  / host-ip /
+      61616                                    / port /]
+    ],
+    h'7b' / tpi_token /
+  ],
   / ph_req /     1 : h'0160...528c', / elided for brevity /
   / last_notif / 2 : h'256105...4fa1', / elided for brevity /
   / ending /     4 : 2051251201
@@ -1777,6 +1777,8 @@ Therefore, the following holds when a group observation for a target resource re
 * Clarifications:
 
   * The 5.03 termination response is a reply to the phantom request.
+
+* Fixed examples in CBOR diagnostic notation.
 
 * Fixes in the example of message exchange with Group OSCORE:
 
