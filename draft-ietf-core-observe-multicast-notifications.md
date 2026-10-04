@@ -903,6 +903,8 @@ Note that these same values are used to protect each and every multicast notific
 
 When canceling a group observation as defined in {{ssec-server-side-cancellation}}, the multicast response with error code 5.03 (Service Unavailable) is protected with the group mode of Group OSCORE, as per {{Section 7.3 of I-D.ietf-core-oscore-groupcomm}}. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
+Upon leaving or before re-joining an OSCORE group, the server MUST cancel all the ongoing group observations on its resources such that the related phantom observation requests were protected for that group.
+
 ## Client-Side Requirements ## {#sec-client-side-with-security}
 
 When using Group OSCORE to protect multicast notifications, the client performs as described in {{sec-client-side}}, with the following differences.
@@ -944,6 +946,12 @@ For both decryption and signature verification, the client MUST set the external
 * The 'request_kid_context' element takes the value of the 'kid context' field from the OSCORE Option value of the phantom registration request (see {{ssec-client-side-informative-oscore}}).
 
 Note that these same values are used to decrypt and verify each and every multicast notification received for the target resource under this group observation.
+
+### Cancellation ### {#ssec-client-side-cancellation-oscore}
+
+Upon leaving or before re-joining an OSCORE group, the client MUST terminate all the ongoing group observations that it is participating in and such that the related phantom observation requests were protected for that group.
+
+In particular, the client simply "forgets" about being part of those group observations, as per {{Section 3.6 of RFC7641}}.
 
 # Example with Group OSCORE # {#sec-example-with-security}
 
@@ -1763,6 +1771,8 @@ Therefore, the following holds when a group observation for a target resource re
 ## Version -15 to -16 ## {#sec-15-16}
 
 * Defined cri'X' as custom notation.
+
+* If Group OSCORE is used, group observations are canceled when leaving or re-joining an OSCORE group.
 
 * Clarifications:
 
