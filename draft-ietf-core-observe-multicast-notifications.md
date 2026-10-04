@@ -1699,7 +1699,7 @@ Before the keying material has expired, the server can send a multicast response
 
 * It MAY omit the 'tp_info' and 'ph_req' parameters, since the associated information is immutable throughout the observation lifetime.
 
-The response has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
+The response is effectively a reply to the phantom registration request, hence it has the same Token value T of the phantom registration request and it does not include an Observe Option. The server MUST use its own Sender Sequence Number as Partial IV to protect the error response and MUST include the Partial IV in the OSCORE Option value of the response.
 
 When some clients leave the OSCORE group and forget about the group observation, the server does not have to provide the remaining clients with any stale Sender IDs, as normally required for Group OSCORE (see {{Section 12.2 of I-D.ietf-core-oscore-groupcomm}}). In fact, only two entities in the group have a Sender ID, i.e., the server and possibly the Deterministic Client, if the optimization defined in this appendix is combined with the use of phantom requests as Deterministic Requests (see {{deterministic-phantom-Request}}). In particular, both of them never change their Sender ID during the group lifetime and they both remain part of the group until the group ceases to exist.
 
