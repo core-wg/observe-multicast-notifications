@@ -3338,11 +3338,12 @@ Appendix C.  OSCORE Group Self-Managed by the Server
       associated information is immutable throughout the observation
       lifetime.
 
-   The response has the same Token value T of the phantom registration
-   request and it does not include an Observe Option.  The server MUST
-   use its own Sender Sequence Number as Partial IV to protect the error
-   response and MUST include the Partial IV in the OSCORE Option value
-   of the response.
+   The response is effectively a reply to the phantom registration
+   request, hence it has the same Token value T of the phantom
+   registration request and it does not include an Observe Option.  The
+   server MUST use its own Sender Sequence Number as Partial IV to
+   protect the error response and MUST include the Partial IV in the
+   OSCORE Option value of the response.
 
    When some clients leave the OSCORE group and forget about the group
    observation, the server does not have to provide the remaining
