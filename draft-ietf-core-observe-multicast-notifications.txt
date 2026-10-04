@@ -2012,8 +2012,8 @@ Table of Contents
    |                              PAYLOAD | SIGN),                |
    |      / last_notif / 2 : bstr(0x45 | OPT | 0xff |             |
    |                              PAYLOAD | SIGN),                |
-   |      / join_uri /   4 : "coap://myGM/ace-group/myGroup",     |
-   |      / sec_gp /     5 : "myGroup"                            |
+   |      / join_uri /   5 : "coap://myGM/ace-group/myGroup",     |
+   |      / sec_gp /     6 : "myGroup"                            |
    |    }                                                         |
    |  }                                                           |
    |                                                              |
@@ -2056,8 +2056,8 @@ Table of Contents
    |                              PAYLOAD | SIGN),                |
    |      / last_notif / 2 : bstr(0x45 | OPT | 0xff |             |
    |                              PAYLOAD | SIGN),                |
-   |      / join_uri /   4 : "coap://myGM/ace-group/myGroup",     |
-   |      / sec_gp /     5 : "myGroup"                            |
+   |      / join_uri /   5 : "coap://myGM/ace-group/myGroup",     |
+   |      / sec_gp /     6 : "myGroup"                            |
    |    }                                                         |
    |  }                                                           |
    |                                                              |
@@ -3550,6 +3550,10 @@ E.1.  Version -15 to -16
 
       -  The 5.03 termination response is a reply to the phantom
          request.
+
+   *  Fixes in the example of message exchange with Group OSCORE:
+
+      -  Integer abbreviations of 'join_uri' and 'sec_gp'.
 
 E.2.  Version -14 to -15
 
