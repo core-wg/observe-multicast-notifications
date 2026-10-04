@@ -630,7 +630,7 @@ The following notation is used for the payload of the informative responses:
 
 ~~~~~~~~~~~ aasvg
 C1 --------------------- [ Unicast ] ------------------------> S  /r
-|  GET                                                         |
+|  0.01 (GET)                                                  |
 |  Token: 0x4a                                                 |
 |  Observe: 0 (register)                                       |
 |  Uri-Path: "r"                                               |
@@ -644,7 +644,7 @@ C1 --------------------- [ Unicast ] ------------------------> S  /r
 |       /                                                      |
 |       \                                                      |
 |        `---------------------------------------------------> |  /r
-|                                       GET                    |
+|                                       0.01 (GET)             |
 |                                       Token: 0x7b            |
 |                                       Observe: 0 (register)  |
 |                                       Uri-Path: "r"          |
@@ -652,15 +652,26 @@ C1 --------------------- [ Unicast ] ------------------------> S  /r
 |                                                              |
 |                      ( S creates a group observation of /r ) |
 |                                                              |
+|                           ( S prepares the initial multicast |
+|                              notification INIT_NOTIF below ) |
+|                                                              |
+|                                              2.05 (Content)  |
+|                                              Token: 0x7b     |
+|                                              Observe: 0      |
+|                                              <Other options> |
+|                                              0xff            |
+|                                              Payload: "1234" |
+|                                                              |
 |                          ( S increments the observer counter |
 |                            for the group observation of /r ) |
 |                                                              |
 C1 <-------------------- [ Unicast ] ------------------------- S
-|  5.03                                                        |
+|  5.03 (Service Unavailable)                                  |
 |  Token: 0x4a                                                 |
 |  Content-Format: application/informative-response+cbor       |
 |  Max-Age: 0                                                  |
 |  <Other options>                                             |
+|  0xff                                                        |
 |  Payload: {                                                  |
 |    / tp_info /    0 : [                                      |
 |                        cri'coap://SRV_ADDR:SRV_PORT/',       |
@@ -671,7 +682,7 @@ C1 <-------------------- [ Unicast ] ------------------------- S
 |  }                                                           |
 |                                                              |
 C2 --------------------- [ Unicast ] ------------------------> S  /r
-|  GET                                                         |
+|  0.01 (GET)                                                  |
 |  Token: 0x01                                                 |
 |  Observe: 0 (register)                                       |
 |  Uri-Path: "r"                                               |
@@ -681,11 +692,12 @@ C2 --------------------- [ Unicast ] ------------------------> S  /r
 |                           for the group observation of /r )  |
 |                                                              |
 C2 <-------------------- [ Unicast ] ------------------------- S
-|  5.03                                                        |
+|  5.03 (Service Unavailable)                                  |
 |  Token: 0x01                                                 |
 |  Content-Format: application/informative-response+cbor       |
 |  Max-Age: 0                                                  |
 |  <Other options>                                             |
+|  0xff                                                        |
 |  Payload: {                                                  |
 |    / tp_info /    0 : [                                      |
 |                        cri'coap://SRV_ADDR:SRV_PORT/',       |
@@ -702,10 +714,11 @@ C1 |                                                           |
    | <------------------ [ Multicast ] ----------------------- S
 C2 |      ( Destination address/port: GRP_ADDR/GRP_PORT )      |
 +--+                                                           |
-|    2.05                                                      |
+|    2.05 (Content)                                            |
 |    Token: 0x7b                                               |
-|    Observe: 11                                               |
+|    Observe: 1                                                |
 |    <Other options>                                           |
+|    0xff                                                      |
 |    Payload: "5678"                                           |
 |                                                              |
 ~~~~~~~~~~~
@@ -990,7 +1003,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
-|    0x01 (GET),                                               |
+|    0.01 (GET),                                               |
 |    Observe: 0 (register),                                    |
 |    Uri-Path: "r",                                            |
 |    <Other class E options>                                   |
@@ -1012,7 +1025,7 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |                        <Other class U/I options>             |
 |                        0xff                                  |
 |                        Encrypted_payload {                   |
-|                          0x01 (GET),                         |
+|                          0.01 (GET),                         |
 |                          Observe: 0 (register),              |
 |                          Uri-Path: "r",                      |
 |                          <Other class E options>             |
@@ -1028,16 +1041,17 @@ C1 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |                           ( S prepares the initial multicast |
 |                              notification INIT_NOTIF below ) |
 |                                                              |
-|                        2.05 Content                          |
+|                        2.05 (Content)                        |
 |                        Token: 0x7b                           |
 |                        Observe: 0                            |
 |                        OSCORE: [kid:0x05, Partial IV:0x01f6] |
-|                        Max-Age: 0                            |
 |                        <Other class U/I options>             |
 |                        0xff                                  |
 |                        Encrypted_payload {                   |
-|                          0x45 (2.05 Content),                |
+|                          2.05 (Content),                     |
 |                          Observe: - (empty),                 |
+|                          <Other class E options>,            |
+|                          0xff,                               |
 |                          Payload: "1234"                     |
 |                        }                                     |
 |                        <Countersignature>                    |
@@ -1083,7 +1097,7 @@ C2 ---------------- [ Unicast w/ OSCORE ]  ------------------> S  /r
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
-|    0x01 (GET),                                               |
+|    0.01 (GET),                                               |
 |    Observe: 0 (register),                                    |
 |    Uri-Path: "r",                                            |
 |    <Other class E options>                                   |
@@ -1799,6 +1813,8 @@ Therefore, the following holds when a group observation for a target resource re
   * The 5.03 termination response is a reply to the phantom request.
 
 * Fixed examples in CBOR diagnostic notation and of discovery in a pub-sub scenario.
+
+* Fixes and notation improvement in the example of unsecured message exchange.
 
 * Fixes in the example of message exchange with Group OSCORE:
 
