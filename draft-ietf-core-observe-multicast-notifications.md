@@ -1066,7 +1066,6 @@ C1 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.04 (Changed)                                              |
 |  Token: 0x4a                                                 |
 |  OSCORE: - (empty)                                           |
-|  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff                                                        |
 |  Encrypted_payload {                                         |
@@ -1110,7 +1109,6 @@ C2 <--------------- [ Unicast w/ OSCORE ] -------------------- S
 |  2.04 (Changed)                                              |
 |  Token: 0x01                                                 |
 |  OSCORE: - (empty)                                           |
-|  Max-Age: 0                                                  |
 |  <Other class U/I options>                                   |
 |  0xff,                                                       |
 |  Encrypted_payload {                                         |
