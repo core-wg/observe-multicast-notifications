@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 8 April 2027                                                   
+Expires: 12 April 2027                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                          5 October 2026
+                                                          9 October 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 April 2027.
+   This Internet-Draft will expire on 12 April 2027.
 
 Copyright Notice
 
@@ -2532,7 +2532,7 @@ Table of Contents
                 | TBD18  | Feedback-Divider | [RFC-XXXX] |
                 +--------+------------------+------------+
 
-                    Table 4: Registrations in the CoAP
+                    Table 4: Registration in the CoAP
                          Option Numbers Registry
 
    For the Feedback-Divider Option, the preferred value range is 0-255.
