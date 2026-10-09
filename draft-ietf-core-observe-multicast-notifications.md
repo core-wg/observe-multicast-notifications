@@ -1364,7 +1364,7 @@ IANA is asked to enter the following option number to the "CoAP Option Numbers" 
 
 | Number | Name             | Reference |
 | TBD18  | Feedback-Divider | {{&SELF}} |
-{: align="center" title="Registrations in the CoAP Option Numbers Registry"}
+{: align="center" title="Registration in the CoAP Option Numbers Registry"}
 
 For the Feedback-Divider Option, the preferred value range is 0-255. In particular, 18 is the preferred option number.
 
