@@ -1278,7 +1278,7 @@ This particularly applies to traditional observation requests that are sent prot
 
 When receiving such a protected request, the server can enforce access control after having successfully authenticated the requesting client, according to the access rights that are granted to the client's identity.
 
-In particular, access control can be enforced by using the ACE framework {{RFC9200}}, with a granularity that takes into account the resource specifically targeted at the server, the operation requested by sending a request to that resource, and the specific permission(s) that the requesting client is authorized to have according to its corresponding access token. Furthermore, the interactions between a client and the server are secured as per the specific transport profile of ACE used, such as {{RFC9203}} and {{I-D.ietf-ace-group-oscore-profile}}.
+In particular, access control can be enforced by using the ACE framework {{RFC9200}}, with a granularity that takes into account the resource specifically targeted at the server, the operation requested by sending a request to that resource, and the specific permission(s) that the requesting client is authorized to have according to its corresponding access token. Furthermore, the interactions between a client and the server are secured as per the specific transport profile of ACE used, for example {{RFC9203}} or {{I-D.ietf-ace-group-oscore-profile}}.
 
 # Security Considerations # {#sec-security-considerations}
 
