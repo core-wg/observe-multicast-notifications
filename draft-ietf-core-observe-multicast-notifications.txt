@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 12 April 2027                                                  
+Expires: 21 April 2027                                                  
                                                             F. Palombini
                                                              Ericsson AB
-                                                          9 October 2026
+                                                         18 October 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2027.
+   This Internet-Draft will expire on 21 April 2027.
 
 Copyright Notice
 
@@ -2391,7 +2391,7 @@ Table of Contents
    that the requesting client is authorized to have according to its
    corresponding access token.  Furthermore, the interactions between a
    client and the server are secured as per the specific transport
-   profile of ACE used, such as [RFC9203] and
+   profile of ACE used, for example [RFC9203] or
    [I-D.ietf-ace-group-oscore-profile].
 
 14.  Security Considerations
