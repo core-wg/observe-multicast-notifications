@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 21 April 2027                                                  
+Expires: 5 May 2027                                                     
                                                             F. Palombini
                                                              Ericsson AB
-                                                         18 October 2026
+                                                         1 November 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2027.
+   This Internet-Draft will expire on 5 May 2027.
 
 Copyright Notice
 
@@ -115,24 +115,28 @@ Table of Contents
    10. Example with Group OSCORE
    11. Informative Response Parameters
    12. Transport Protocol Information
-   13. Operational Considerations
-     13.1.  Logging
-     13.2.  Management and Distribution of Keying Material
-     13.3.  Access Control
-   14. Security Considerations
-     14.1.  Unprotected Communications
-     14.2.  Protected Communications
-   15. IANA Considerations
-     15.1.  Media Type Registrations
-     15.2.  CoAP Content-Formats Registry
-     15.3.  CoAP Option Numbers Registry
-     15.4.  Target Attributes Registry
-     15.5.  Informative Response Parameters Registry
-     15.6.  CoAP Transport Information Registry
-     15.7.  Expert Review Instructions
-   16. References
-     16.1.  Normative References
-     16.2.  Informative References
+   13. Implementation Status
+     13.1.  Implementation #1
+     13.2.  Implementation #2
+     13.3.  Interoperability
+   14. Operational Considerations
+     14.1.  Logging
+     14.2.  Management and Distribution of Keying Material
+     14.3.  Access Control
+   15. Security Considerations
+     15.1.  Unprotected Communications
+     15.2.  Protected Communications
+   16. IANA Considerations
+     16.1.  Media Type Registrations
+     16.2.  CoAP Content-Formats Registry
+     16.3.  CoAP Option Numbers Registry
+     16.4.  Target Attributes Registry
+     16.5.  Informative Response Parameters Registry
+     16.6.  CoAP Transport Information Registry
+     16.7.  Expert Review Instructions
+   17. References
+     17.1.  Normative References
+     17.2.  Informative References
    Appendix A.  Different Sources for Group Observation Data
      A.1.  Topic Discovery in Publish-Subscribe Settings
      A.2.  Introspection at the Multicast Notification Sender
@@ -454,7 +458,7 @@ Table of Contents
 
    The Content-Format of the informative response is set to
    "application/informative-response+cbor", which is registered in
-   Section 15.2.  The payload of the informative response is a CBOR map,
+   Section 16.2.  The payload of the informative response is a CBOR map,
    whose fields use the CBOR abbreviations that are defined in
    Section 11.
 
@@ -658,7 +662,7 @@ Table of Contents
       Those elements are specified in the 'Transport Information
       Details' column of the "CoAP Transport Information" registry for
       the entry associated with the identified CoAP transport (see
-      Section 15.6)
+      Section 16.6)
 
    *  The 'tpi_details' element MAY be present and specifies transport-
       specific information related to a pertinent request message, i.e.,
@@ -669,7 +673,7 @@ Table of Contents
       'tpi_server' element, as described above.
 
       In the "CoAP Transport Information" registry defined in
-      Section 15.6, the entry corresponding to the identified CoAP
+      Section 16.6, the entry corresponding to the identified CoAP
       transport specifies the list of elements composing 'tpi_details'
       for that transport, as indicated in the 'Transport Information
       Details' column.  Within 'tpi_details', its elements MUST be
@@ -692,7 +696,7 @@ Table of Contents
       convey, their encoding, and their semantics.
 
    *  Register an entry in the "CoAP Transport Information" registry
-      defined in Section 15.6 of this document.
+      defined in Section 16.6 of this document.
 
    *  Register an entry in the "Uniform Resource Identifier (URI)
       Schemes" registry [IANA.URI.Schemes] defined in [RFC7595] and
@@ -998,7 +1002,7 @@ Table of Contents
    i.e., the information conveyed by 'tpi_details', according to what is
    specified in the 'Transport Information Details' column of the "CoAP
    Transport Information" registry for the entry associated with the
-   identified CoAP transport (see Section 15.6).
+   identified CoAP transport (see Section 16.6).
 
    Then, the client performs the following steps.
 
@@ -2210,7 +2214,7 @@ Table of Contents
    parameter of the informative response defined in Section 4.2, when
    CoAP responses are transported over UDP.
 
-   Table 3 defines the corresponding entry that Section 15.6 registers
+   Table 3 defines the corresponding entry that Section 16.6 registers
    in the "CoAP Transport Information" registry defined in this
    document.
 
@@ -2226,12 +2230,220 @@ Table of Contents
    Note to RFC Editor: In the table above, please replace "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
-13.  Operational Considerations
+13.  Implementation Status
+
+   This section is to be removed before publishing as an RFC.
+
+   Note to RFC Editor: when deleting this section, please also delete
+   RFC 7942 from the references of this document.
+
+   (Boilerplate as per Section 2.1 of [RFC7942]:)
+
+   This section records the status of known implementations of the
+   protocol defined by this specification at the time of posting of this
+   Internet-Draft, and is based on a proposal described in [RFC7942].
+   The description of implementations in this section is intended to
+   assist the IETF in its decision processes in progressing drafts to
+   RFCs.  Please note that the listing of any individual implementation
+   here does not imply endorsement by the IETF.  Furthermore, no effort
+   has been spent to verify the information presented here that was
+   supplied by IETF contributors.  This is not intended as, and must not
+   be construed to be, a catalog of available implementations or their
+   features.  Readers are advised to note that other implementations may
+   exist.
+
+   According to [RFC7942], "this will allow reviewers and working groups
+   to assign due consideration to documents that have the benefit of
+   running code, which may serve as evidence of valuable experimentation
+   and feedback that have made the implemented protocols more mature.
+   It is up to the individual working groups to use this information as
+   they see fit".
+
+13.1.  Implementation #1
+
+   *  Author: Adrian Kastrati
+
+   *  Responsible organization: RISE Research Institutes of Sweden AB
+
+   *  Implementation's name: CoAP Observe Multicast Notifications for
+      Eclipse Californium
+
+   *  Available at: https://github.com/rikard-sics/californium/tree/
+      multicast-notifications
+
+   *  Description: Implementation in Java, building on Eclipse
+      Californium, see:
+
+      -  https://github.com/eclipse-californium/californium
+
+      -  https://eclipse.dev/californium/
+
+   *  Implementation's level of maturity: prototype
+
+   *  The implementation supports:
+
+      -  Server side:
+
+         o  Self-sending of a phantom registration request to start a
+            group observation, upon receiving a first traditional
+            Observe registration request from any client.
+
+         o  Sending of a 5.03 informative response in reply to
+            traditional Observe registration requests from any client.
+
+         o  Sending of multicast notifications to the clients
+            participating in an ongoing group observation.
+
+      -  Client side:
+
+         o  Dynamic setup as a participant in a group observation, per
+            the information received in a 5.03 informative response.
+
+         o  Reception and processing of multicast notifications
+            pertaining to an ongoing and set group observation.
+
+      -  Possible use of secure communication:
+
+         o  OSCORE to protect the original registration requests and the
+            corresponding 5.03 error responses.
+
+         o  Group OSCORE to protect the phantom registration request and
+            the corresponding multicast notifications.
+
+   *  Version compatibility: From version -14 onwards.
+
+   *  Licensing: according to the same dual license of Eclipse
+      Californium, i.e., according to the "Eclipse Distribution License
+      1.0" and the "Eclipse Public License 2.0".  See:
+
+      -  https://github.com/eclipse-californium/californium/blob/main/
+         LICENSE
+
+      -  https://www.eclipse.org/org/documents/edl-v10.php
+
+      -  https://www.eclipse.org/legal/epl-2.0/
+
+   *  Contact information: Rikard Höglund - rikard.hoglund@ri.se
+
+   *  Information last updated on: 2026-09-07
+
+13.2.  Implementation #2
+
+   *  Author: Alexander Pelov
+
+   *  Responsible organization: IMT Atlantique
+
+   *  Implementation's name: CoAP Observe Multicast Notifications for
+      libcoap
+
+   *  Description: Implementation in C, building on libcoap, see:
+
+      -  https://github.com/obgm/libcoap
+
+      -  https://libcoap.net/
+
+   *  Implementation's level of maturity: prototype
+
+   *  The implementation supports:
+
+      -  Server side:
+
+         o  Self-sending of a phantom registration request to start a
+            group observation, upon receiving a first traditional
+            Observe registration request from any client.
+
+         o  Sending of a 5.03 informative response in reply to
+            traditional Observe registration requests from any client.
+
+         o  Sending of multicast notifications to the clients
+            participating in an ongoing group observation.
+
+      -  Client side:
+
+         o  Dynamic setup as a participant in a group observation, per
+            the information received in a 5.03 informative response.
+
+         o  Reception and processing of multicast notifications
+            pertaining to an ongoing and set group observation.
+
+      -  Possible use of secure communication:
+
+         o  OSCORE to protect the original registration requests and the
+            corresponding 5.03 error responses.
+
+         o  Group OSCORE to protect the phantom registration request and
+            the corresponding multicast notifications.
+
+   *  Version compatibility: From version -15 onwards.
+
+   *  Licensing: According to the same licence of libcoap, of which use
+      is permitted under the terms of the simplified BSD 2-Clause
+      license.  It includes public domain software. libcoap binaries may
+      also include open-source software with their respective licensing
+      terms.  For further details, see
+      https://github.com/obgm/libcoap/blob/develop/LICENSE
+
+   *  Contact information: Alexander Pelov - alexander.pelov@imt-
+      atlantique.fr
+
+   *  Information last updated on: 2026-09-07
+
+13.3.  Interoperability
+
+   The two implementations mentioned in Section 13.1 and Section 13.2
+   have successfully completed interoperability tests.
+
+   A first round of interoperability tests occurred specifically for
+   version -15 of the Internet Draft during the IETF 126 meeting in
+   Vienna (Austria) in July 2026, limited to a test scenario without
+   secure communication.
+
+   Latest rounds of interoperability tests occurred specifically for
+   version -15 in the following monthts, considering test scenarios with
+   and without secure communication.
+
+   The scenarios considered during the interoperability tests are as
+   follows:
+
+   *  The server hosts a single resource that supports group
+      observation.
+
+   *  Within the payload of the 5.03 informative response, the CBOR map
+      conveys the parameters 'tp_info', 'ph_req', and 'last_notif'.
+
+   *  Test scenarios:
+
+      -  Without secure communication.
+
+      -  With secure communication.
+
+         o  OSCORE protects the original registration requests and the
+            corresponding 5.03 error responses.
+
+         o  Group OSCORE protects the phantom registration request and
+            the corresponding multicast notifications.
+
+   *  For both test scenarios with and without secure communication, the
+      following setups were considered:
+
+      -  1 Java server and 3 Java clients
+
+      -  1 Java server and 3 C clients
+
+      -  1 C server and 3 C clients
+
+      -  1 C server and 3 Java clients
+
+      For both test scenarios, further setups were also considered,
+      where some of the 3 clients were C clients and some were Java
+      clients.
+
+14.  Operational Considerations
 
    This section compiles the operational considerations that hold for
    this document.
 
-13.1.  Logging
+14.1.  Logging
 
    When performing its normal operations, it is desirable that the
    server produces timestamped logs about the following, to the extent
@@ -2351,7 +2563,7 @@ Table of Contents
    obtain such privacy-sensitive information and appropriately entitled
    to obtain it according to enforced privacy policies.
 
-13.2.  Management and Distribution of Keying Material
+14.2.  Management and Distribution of Keying Material
 
    When using Group OSCORE to protect multicast notifications, the
    management and distribution of the keying material used in the OSCORE
@@ -2368,7 +2580,7 @@ Table of Contents
    responsible to set up and manage the OSCORE group, acting as the
    corresponding Group Manager.
 
-13.3.  Access Control
+14.3.  Access Control
 
    In order to enforce access control for a client accessing a target
    resource, it is fundamentally required that secure communication is
@@ -2394,14 +2606,14 @@ Table of Contents
    profile of ACE used, for example [RFC9203] or
    [I-D.ietf-ace-group-oscore-profile].
 
-14.  Security Considerations
+15.  Security Considerations
 
    In addition to the security considerations from [RFC7252], [RFC7641],
    [I-D.ietf-core-groupcomm-bis], [RFC8613], and
    [I-D.ietf-core-oscore-groupcomm], the following considerations hold
    for this document.
 
-14.1.  Unprotected Communications
+15.1.  Unprotected Communications
 
    If communications are not protected, the server might not be able to
    effectively authenticate a new client when it registers as an
@@ -2433,7 +2645,7 @@ Table of Contents
    of still interested clients and thus to inappropriately continue the
    group observation.
 
-14.2.  Protected Communications
+15.2.  Protected Communications
 
    If multicast notifications for an observed resource are protected
    using Group OSCORE (see Section 9), it is ensured that those are
@@ -2455,14 +2667,14 @@ Table of Contents
       Option to support the rough counting of clients (see Section 8),
       is also protected.
 
-15.  IANA Considerations
+16.  IANA Considerations
 
    This document has the following actions for IANA.
 
    Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
-15.1.  Media Type Registrations
+16.1.  Media Type Registrations
 
    This document registers the media type "application/informative-
    response+cbor" for error messages as informative response defined in
@@ -2480,7 +2692,7 @@ Table of Contents
    *  Encoding considerations: Must be encoded as a CBOR map containing
       the parameters defined in Section 4.2 of [RFC-XXXX].
 
-   *  Security considerations: See Section 14 of [RFC-XXXX].
+   *  Security considerations: See Section 15 of [RFC-XXXX].
 
    *  Interoperability considerations: N/A
 
@@ -2506,7 +2718,7 @@ Table of Contents
 
    *  Provisional registration: No
 
-15.2.  CoAP Content-Formats Registry
+16.2.  CoAP Content-Formats Registry
 
    IANA is asked to add the following entry to the "CoAP Content-
    Formats" registry [IANA.CoAP.Content.Formats] within the "Constrained
@@ -2520,7 +2732,7 @@ Table of Contents
 
    Reference: [RFC-XXXX]
 
-15.3.  CoAP Option Numbers Registry
+16.3.  CoAP Option Numbers Registry
 
    IANA is asked to enter the following option number to the "CoAP
    Option Numbers" registry [IANA.CoAP.Option.Numbers] within the
@@ -2542,7 +2754,7 @@ Table of Contents
    registered option number.  Then, please delete this paragraph and the
    previous paragraph.
 
-15.4.  Target Attributes Registry
+16.4.  Target Attributes Registry
 
    IANA is asked to register the following entry in the "Target
    Attributes" registry [IANA.Target.Attributes] within the "Constrained
@@ -2557,7 +2769,7 @@ Table of Contents
 
    *  Reference: Section 6 of [RFC-XXXX]
 
-15.5.  Informative Response Parameters Registry
+16.5.  Informative Response Parameters Registry
 
    This document establishes the "Informative Response Parameters"
    registry within the "Constrained RESTful Environments (CoRE)
@@ -2566,7 +2778,7 @@ Table of Contents
    The registration policy is either "Private Use", "Standards Action
    with Expert Review", or "Specification Required" or "Expert Review"
    per [RFC8126].  "Expert Review" guidelines are provided in
-   Section 15.7.
+   Section 16.7.
 
    All assignments according to "Standards Action with Expert Review"
    are made on a "Standards Action" basis per Section 4.9 of [RFC8126]
@@ -2605,14 +2817,14 @@ Table of Contents
 
    This registry has been initially populated by the entries in Table 2.
 
-15.6.  CoAP Transport Information Registry
+16.6.  CoAP Transport Information Registry
 
    This document establishes the "CoAP Transport Information" registry
    within the "Constrained RESTful Environments (CoRE) Parameters"
    registry group.
 
    The registration policy is "Expert Review" [RFC8126].  "Expert
-   Review" guidelines are provided in Section 15.7.
+   Review" guidelines are provided in Section 16.7.
 
    The columns of this registry are:
 
@@ -2632,7 +2844,7 @@ Table of Contents
 
    This registry has been initially populated by the entry in Table 3.
 
-15.7.  Expert Review Instructions
+16.7.  Expert Review Instructions
 
    "Standards Action with Expert Review", "Specification Required", and
    "Expert Review" are three of the registration policies defined for
@@ -2668,9 +2880,9 @@ Table of Contents
       used on, and the number of code points left that encode to that
       size.
 
-16.  References
+17.  References
 
-16.1.  Normative References
+17.1.  Normative References
 
    [I-D.ietf-ace-key-groupcomm-oscore]
               Tiloca, M. and F. Palombini, "Key Management for Group
@@ -2823,7 +3035,7 @@ Table of Contents
               DOI 10.17487/RFC9203, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9203>.
 
-16.2.  Informative References
+17.2.  Informative References
 
    [I-D.ietf-ace-group-oscore-profile]
               Tiloca, M., Höglund, R., and F. Palombini, "The Group
@@ -2904,6 +3116,11 @@ Table of Contents
    [RFC7519]  Jones, M., Bradley, J., and N. Sakimura, "JSON Web Token
               (JWT)", RFC 7519, DOI 10.17487/RFC7519, May 2015,
               <https://www.rfc-editor.org/rfc/rfc7519>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <https://www.rfc-editor.org/rfc/rfc7942>.
 
    [RFC8392]  Jones, M., Wahlstroem, E., Erdtman, S., and H. Tschofenig,
               "CBOR Web Token (CWT)", RFC 8392, DOI 10.17487/RFC8392,
@@ -3596,6 +3813,10 @@ E.1.  Version -15 to -16
       -  Outer response code of the informative responses.
 
       -  The server consumes a Partial IV when producing INIT_NOTIF.
+
+   *  Added "Implementation Status" section.
+
+   *  Editorial improvements.
 
 E.2.  Version -14 to -15
 
