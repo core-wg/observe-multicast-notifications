@@ -2394,12 +2394,12 @@ Table of Contents
    have successfully completed interoperability tests.
 
    A first round of interoperability tests occurred specifically for
-   version -15 of the Internet Draft during the IETF 126 meeting in
+   version -15 of the Internet-Draft during the IETF 126 meeting in
    Vienna (Austria) in July 2026, limited to a test scenario without
    secure communication.
 
    Latest rounds of interoperability tests occurred specifically for
-   version -15 in the following monthts, considering test scenarios with
+   version -15 in the following months, considering test scenarios with
    and without secure communication.
 
    The scenarios considered during the interoperability tests are as
