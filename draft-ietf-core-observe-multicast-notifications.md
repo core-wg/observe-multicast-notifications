@@ -1202,6 +1202,145 @@ Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC 
 
 Note to RFC Editor: In the table above, please replace "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
+# Implementation Status
+{:removeinrfc}
+
+Note to RFC Editor: when deleting this section, please also delete RFC 7942 from the references of this document.
+
+{::boilerplate rfc7942info}
+
+## Implementation \#1 # {#sec-implementation-1}
+
+* Author: Adrian Kastrati
+
+* Responsible organization: RISE Research Institutes of Sweden AB
+
+* Implementation's name: CoAP Observe Multicast Notifications for Eclipse Californium
+
+* Available at: https://github.com/rikard-sics/californium/tree/multicast-notifications
+
+* Description: Implementation in Java, building on Eclipse Californium, see:
+
+  * https://github.com/eclipse-californium/californium
+
+  * https://eclipse.dev/californium/
+
+* Implementation's level of maturity: prototype
+
+* The implementation supports:
+
+  * Server side:
+
+    * Self-sending of a phantom registration request to start a group observation, upon receiving a first traditional Observe registration request from any client.
+
+    * Sending of a 5.03 informative response in reply to traditional Observe registration requests from any client.
+
+    * Sending of multicast notifications to the clients participating in an ongoing group observation.
+
+  * Client side:
+
+    * Dynamic setup as a participant in a group observation, per the information received in a 5.03 informative response.
+
+    * Reception and processing of multicast notifications pertaining to an ongoing and set group observation.
+
+  * Possible use of secure communication:
+
+    * OSCORE to protect the original registration requests and the corresponding 5.03 error responses.
+
+    * Group OSCORE to protect the phantom registration request and the corresponding multicast notifications.
+
+* Version compatibility: From version -14 onwards.
+
+* Licensing: according to the same dual license of Eclipse Californium, i.e., according to the "Eclipse Distribution License 1.0" and the "Eclipse Public License 2.0". See:
+
+  * https://github.com/eclipse-californium/californium/blob/main/LICENSE
+  * https://www.eclipse.org/org/documents/edl-v10.php
+  * https://www.eclipse.org/legal/epl-2.0/
+
+* Contact information: Rikard Höglund - rikard.hoglund@ri.se
+
+* Information last updated on: 2026-09-07
+
+## Implementation \#2 # {#sec-implementation-2}
+
+* Author: Alexander Pelov
+
+* Responsible organization: IMT Atlantique
+
+* Implementation's name: CoAP Observe Multicast Notifications for libcoap
+
+* Description: Implementation in C, building on libcoap, see:
+
+  * https://github.com/obgm/libcoap
+
+  * https://libcoap.net/
+
+* Implementation's level of maturity: prototype
+
+* The implementation supports:
+
+  * Server side:
+
+    * Self-sending of a phantom registration request to start a group observation, upon receiving a first traditional Observe registration request from any client.
+
+    * Sending of a 5.03 informative response in reply to traditional Observe registration requests from any client.
+
+    * Sending of multicast notifications to the clients participating in an ongoing group observation.
+
+  * Client side:
+
+    * Dynamic setup as a participant in a group observation, per the information received in a 5.03 informative response.
+
+    * Reception and processing of multicast notifications pertaining to an ongoing and set group observation.
+
+  * Possible use of secure communication:
+
+    * OSCORE to protect the original registration requests and the corresponding 5.03 error responses.
+
+    * Group OSCORE to protect the phantom registration request and the corresponding multicast notifications.
+
+* Version compatibility: From version -15 onwards.
+
+* Licensing: According to the same licence of libcoap, of which use is permitted under the terms of the simplified BSD 2-Clause license. It includes public domain software. libcoap binaries may also include open-source software with their respective licensing terms. For further details, see https://github.com/obgm/libcoap/blob/develop/LICENSE
+
+* Contact information: Alexander Pelov - alexander.pelov@imt-atlantique.fr
+
+* Information last updated on: 2026-09-07
+
+## Interoperability
+
+The two implementations mentioned in {{sec-implementation-1}} and {{sec-implementation-2}} have successfully completed interoperability tests.
+
+A first round of interoperability tests occurred specifically for version -15 of the Internet Draft during the IETF 126 meeting in Vienna (Austria) in July 2026, limited to a test scenario without secure communication.
+
+Latest rounds of interoperability tests occurred specifically for version -15 in the following monthts, considering test scenarios with and without secure communication.
+
+The scenarios considered during the interoperability tests are as follows:
+
+* The server hosts a single resource that supports group observation.
+
+* Within the payload of the 5.03 informative response, the CBOR map conveys the parameters 'tp_info', 'ph_req', and 'last_notif'.
+
+* Test scenarios:
+
+  * Without secure communication.
+
+  * With secure communication.
+    * OSCORE protects the original registration requests and the corresponding 5.03 error responses.
+    * Group OSCORE protects the phantom registration request and the corresponding multicast notifications.
+
+* For both test scenarios with and without secure communication, the following setups were considered:
+
+  * 1 Java server and 3 Java clients
+
+  * 1 Java server and 3 C clients
+
+  * 1 C server and 3 C clients
+
+  * 1 C server and 3 Java clients
+
+  For both test scenarios, further setups were also considered, where some of the 3 clients were C clients and some were Java clients.
+
 # Operational Considerations # {#sec-operational-considerations}
 
 This section compiles the operational considerations that hold for this document.
@@ -1821,6 +1960,10 @@ Therefore, the following holds when a group observation for a target resource re
   * Outer response code of the informative responses.
 
   * The server consumes a Partial IV when producing INIT_NOTIF.
+
+* Added "Implementation Status" section.
+
+* Editorial improvements.
 
 ## Version -14 to -15 ## {#sec-14-15}
 
