@@ -1311,9 +1311,9 @@ Note to RFC Editor: when deleting this section, please also delete RFC 7942 from
 
 The two implementations mentioned in {{sec-implementation-1}} and {{sec-implementation-2}} have successfully completed interoperability tests.
 
-A first round of interoperability tests occurred specifically for version -15 of the Internet Draft during the IETF 126 meeting in Vienna (Austria) in July 2026, limited to a test scenario without secure communication.
+A first round of interoperability tests occurred specifically for version -15 of the Internet-Draft during the IETF 126 meeting in Vienna (Austria) in July 2026, limited to a test scenario without secure communication.
 
-Latest rounds of interoperability tests occurred specifically for version -15 in the following monthts, considering test scenarios with and without secure communication.
+Latest rounds of interoperability tests occurred specifically for version -15 in the following months, considering test scenarios with and without secure communication.
 
 The scenarios considered during the interoperability tests are as follows:
 
