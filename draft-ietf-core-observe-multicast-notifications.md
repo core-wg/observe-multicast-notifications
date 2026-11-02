@@ -1259,7 +1259,7 @@ Note to RFC Editor: when deleting this section, please also delete RFC 7942 from
 
 * Contact information: Rikard Höglund - rikard.hoglund@ri.se
 
-* Information last updated on: 2026-09-07
+* Information last updated on: 2026-11-02
 
 ## Implementation \#2 # {#sec-implementation-2}
 
@@ -1269,11 +1269,15 @@ Note to RFC Editor: when deleting this section, please also delete RFC 7942 from
 
 * Implementation's name: CoAP Observe Multicast Notifications for libcoap
 
+* Available at: https://github.com/apelov/coap-multicast-notifications
+
 * Description: Implementation in C, building on libcoap, see:
 
   * https://github.com/obgm/libcoap
 
   * https://libcoap.net/
+
+  Group OSCORE support is taken from the libcoap fork at https://github.com/mrdeep1/libcoap (branch "oscore_group", mirrored at https://github.com/apelov/libcoap), with local patches included in the repository of the implementation.
 
 * Implementation's level of maturity: prototype
 
@@ -1301,11 +1305,17 @@ Note to RFC Editor: when deleting this section, please also delete RFC 7942 from
 
 * Version compatibility: From version -15 onwards.
 
-* Licensing: According to the same licence of libcoap, of which use is permitted under the terms of the simplified BSD 2-Clause license. It includes public domain software. libcoap binaries may also include open-source software with their respective licensing terms. For further details, see https://github.com/obgm/libcoap/blob/develop/LICENSE
+* Licensing: according to the MIT License, see:
+
+  * https://github.com/apelov/coap-multicast-notifications/blob/main/LICENSE
+
+  The patches to libcoap included in the repository are offered under the same license of libcoap, i.e., the simplified BSD 2-Clause license, see:
+
+  * https://github.com/obgm/libcoap/blob/develop/LICENSE
 
 * Contact information: Alexander Pelov - alexander.pelov@imt-atlantique.fr
 
-* Information last updated on: 2026-09-07
+* Information last updated on: 2026-11-02
 
 ## Interoperability
 
@@ -1938,6 +1948,10 @@ Therefore, the following holds when a group observation for a target resource re
 
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
+
+## Version -16 to -17 ## {#sec-16-17}
+
+* Fixes in the "Implementation Status" section.
 
 ## Version -15 to -16 ## {#sec-15-16}
 
