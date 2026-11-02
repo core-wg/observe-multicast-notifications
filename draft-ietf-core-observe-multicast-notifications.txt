@@ -6,10 +6,10 @@ CoRE Working Group                                             M. Tiloca
 Internet-Draft                                                R. Höglund
 Updates: 7252, 7641 (if approved)                                RISE AB
 Intended status: Standards Track                               C. Amsüss
-Expires: 5 May 2027                                                     
+Expires: 6 May 2027                                                     
                                                             F. Palombini
                                                              Ericsson AB
-                                                         1 November 2026
+                                                         2 November 2026
 
 
            Observe Notifications as CoAP Multicast Responses
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 May 2027.
+   This Internet-Draft will expire on 6 May 2027.
 
 Copyright Notice
 
@@ -147,22 +147,23 @@ Table of Contents
    Appendix C.  OSCORE Group Self-Managed by the Server
    Appendix D.  Phantom Request as Deterministic Request
    Appendix E.  Document Updates
-     E.1.  Version -15 to -16
-     E.2.  Version -14 to -15
-     E.3.  Version -13 to -14
-     E.4.  Version -12 to -13
-     E.5.  Version -11 to -12
-     E.6.  Version -10 to -11
-     E.7.  Version -09 to -10
-     E.8.  Version -08 to -09
-     E.9.  Version -07 to -08
-     E.10. Version -06 to -07
-     E.11. Version -05 to -06
-     E.12. Version -04 to -05
-     E.13. Version -03 to -04
-     E.14. Version -02 to -03
-     E.15. Version -01 to -02
-     E.16. Version -00 to -01
+     E.1.  Version -16 to -17
+     E.2.  Version -15 to -16
+     E.3.  Version -14 to -15
+     E.4.  Version -13 to -14
+     E.5.  Version -12 to -13
+     E.6.  Version -11 to -12
+     E.7.  Version -10 to -11
+     E.8.  Version -09 to -10
+     E.9.  Version -08 to -09
+     E.10. Version -07 to -08
+     E.11. Version -06 to -07
+     E.12. Version -05 to -06
+     E.13. Version -04 to -05
+     E.14. Version -03 to -04
+     E.15. Version -02 to -03
+     E.16. Version -01 to -02
+     E.17. Version -00 to -01
    Acknowledgments
    Authors' Addresses
 
@@ -2325,7 +2326,7 @@ Table of Contents
 
    *  Contact information: Rikard Höglund - rikard.hoglund@ri.se
 
-   *  Information last updated on: 2026-09-07
+   *  Information last updated on: 2026-11-02
 
 13.2.  Implementation #2
 
@@ -2336,11 +2337,19 @@ Table of Contents
    *  Implementation's name: CoAP Observe Multicast Notifications for
       libcoap
 
+   *  Available at: https://github.com/apelov/coap-multicast-
+      notifications
+
    *  Description: Implementation in C, building on libcoap, see:
 
       -  https://github.com/obgm/libcoap
 
       -  https://libcoap.net/
+
+      Group OSCORE support is taken from the libcoap fork at
+      https://github.com/mrdeep1/libcoap (branch "oscore_group",
+      mirrored at https://github.com/apelov/libcoap), with local patches
+      included in the repository of the implementation.
 
    *  Implementation's level of maturity: prototype
 
@@ -2376,17 +2385,21 @@ Table of Contents
 
    *  Version compatibility: From version -15 onwards.
 
-   *  Licensing: According to the same licence of libcoap, of which use
-      is permitted under the terms of the simplified BSD 2-Clause
-      license.  It includes public domain software. libcoap binaries may
-      also include open-source software with their respective licensing
-      terms.  For further details, see
-      https://github.com/obgm/libcoap/blob/develop/LICENSE
+   *  Licensing: according to the MIT License, see:
+
+      -  https://github.com/apelov/coap-multicast-
+         notifications/blob/main/LICENSE
+
+      The patches to libcoap included in the repository are offered
+      under the same license of libcoap, i.e., the simplified BSD
+      2-Clause license, see:
+
+      -  https://github.com/obgm/libcoap/blob/develop/LICENSE
 
    *  Contact information: Alexander Pelov - alexander.pelov@imt-
       atlantique.fr
 
-   *  Information last updated on: 2026-09-07
+   *  Information last updated on: 2026-11-02
 
 13.3.  Interoperability
 
@@ -3075,9 +3088,9 @@ Table of Contents
               Tiloca, M., Höglund, R., Amsüss, C., and F. Palombini,
               "Using Proxies for Observe Notifications as CoAP Multicast
               Responses", Work in Progress, Internet-Draft, draft-ietf-
-              core-multicast-notifications-proxy-02, 6 July 2026,
+              core-multicast-notifications-proxy-03, 2 November 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-core-
-              multicast-notifications-proxy-02>.
+              multicast-notifications-proxy-03>.
 
    [I-D.ietf-cose-cbor-encoded-cert]
               Mattsson, J. P., Selander, G., Raza, S., Höglund, J.,
@@ -3788,7 +3801,11 @@ Appendix E.  Document Updates
 
    This section is to be removed before publishing as an RFC.
 
-E.1.  Version -15 to -16
+E.1.  Version -16 to -17
+
+   *  Fixes in the "Implementation Status" section.
+
+E.2.  Version -15 to -16
 
    *  Defined cri'X' as custom notation.
 
@@ -3818,7 +3835,7 @@ E.1.  Version -15 to -16
 
    *  Editorial improvements.
 
-E.2.  Version -14 to -15
+E.3.  Version -14 to -15
 
    *  Updated semantics of informative response:
 
@@ -3852,7 +3869,7 @@ E.2.  Version -14 to -15
 
    *  Clarifications and editorial improvements.
 
-E.3.  Version -13 to -14
+E.4.  Version -13 to -14
 
    *  Clarified expected roles in the OSCORE group for clients and
       server.
@@ -3874,7 +3891,7 @@ E.3.  Version -13 to -14
 
    *  Clarifications and editorial improvements.
 
-E.4.  Version -12 to -13
+E.5.  Version -12 to -13
 
    *  Content on proxies moved out to the new document draft-ietf-core-
       multicast-notifications-proxy.
@@ -3894,7 +3911,7 @@ E.4.  Version -12 to -13
 
    *  Editorial improvements.
 
-E.5.  Version -11 to -12
+E.6.  Version -11 to -12
 
    *  Changed CBOR type of 'ending' and 'exp' to be integer or float.
 
@@ -3908,7 +3925,7 @@ E.5.  Version -11 to -12
 
    *  Editorial improvements.
 
-E.6.  Version -10 to -11
+E.7.  Version -10 to -11
 
    *  Do not rule out original observation requests sent over multicast.
 
@@ -3923,7 +3940,7 @@ E.6.  Version -10 to -11
 
    *  Clarifications and editorial improvements.
 
-E.7.  Version -09 to -10
+E.8.  Version -09 to -10
 
    *  Fixed section numbers of referred documents.
 
@@ -3931,7 +3948,7 @@ E.7.  Version -09 to -10
 
    *  Clarifications and editorial improvements.
 
-E.8.  Version -08 to -09
+E.9.  Version -08 to -09
 
    *  Revised 'tp_info' also to use CRIs for transport information.
 
@@ -3944,7 +3961,7 @@ E.8.  Version -08 to -09
 
    *  Clarifications and editorial improvements.
 
-E.9.  Version -07 to -08
+E.10.  Version -07 to -08
 
    *  Fixed the CDDL definition 'srv_addr' in 'tp_info'.
 
@@ -3972,7 +3989,7 @@ E.9.  Version -07 to -08
 
    *  Clarifications and editorial improvements.
 
-E.10.  Version -06 to -07
+E.11.  Version -06 to -07
 
    *  Added more details on proxies that do not support the Multicast-
       Response-Feedback-Divider Option.
@@ -3990,7 +4007,7 @@ E.10.  Version -06 to -07
 
    *  Editorial improvements.
 
-E.11.  Version -05 to -06
+E.12.  Version -05 to -06
 
    *  Clarified rough counting of clients when a proxy is used
 
@@ -3998,7 +4015,7 @@ E.11.  Version -05 to -06
 
    *  Editorial improvements.
 
-E.12.  Version -04 to -05
+E.13.  Version -04 to -05
 
    *  If the phantom request is an OSCORE Deterministic Request, there
       is no parallel group observation for clients that lack support.
@@ -4013,7 +4030,7 @@ E.12.  Version -04 to -05
 
    *  Editorial improvements.
 
-E.13.  Version -03 to -04
+E.14.  Version -03 to -04
 
    *  Added a new section on prerequisites.
 
@@ -4030,7 +4047,7 @@ E.13.  Version -03 to -04
 
    *  Editorial improvements.
 
-E.14.  Version -02 to -03
+E.15.  Version -02 to -03
 
    *  Distinction between authentication credential and public key.
 
@@ -4040,7 +4057,7 @@ E.14.  Version -02 to -03
    *  Discussed scenarios with pre-configured address/port and Token
       value.
 
-E.15.  Version -01 to -02
+E.16.  Version -01 to -02
 
    *  Clarifications on client rough counting and IP multicast scope.
 
@@ -4058,7 +4075,7 @@ E.15.  Version -01 to -02
 
    *  Editorial improvements.
 
-E.16.  Version -00 to -01
+E.17.  Version -00 to -01
 
    *  Simplified cancellation of the group observation, without using a
       phantom cancellation request.
